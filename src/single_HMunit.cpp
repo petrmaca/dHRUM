@@ -299,8 +299,13 @@ void single_HMunit::surface_retention() {
   // if(tstRM == 469) std::cout << RetOut << " ps " << prev_SurS << " e " << EvapSR <<std::endl;
   set_varValue(prev_SurS, tstRM, ts_type::SURS);
 
-  prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
-    (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT) + get_dta(tstRM, ts_type::PREC));
+  if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
+    prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
+      (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT));
+  } else {
+    prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
+      (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT) + get_dta(tstRM, ts_type::PREC));
+      }
 
   set_varValue(EvapSR, tstRM, ts_type::AET);
   set_varValue(RetOut,tstRM,ts_type::PREF);
@@ -401,7 +406,6 @@ void single_HMunit::fast_response() {
     if(ifrb == 0) {
       help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC);
     } else help_State = help_State + get_outFastRes((ifrb-1));
-
     set_stateFastRes(help_State,ifrb);
     set_outFastRes(helpFastOut,ifrb);
   }
@@ -421,22 +425,24 @@ void single_HMunit::interception_NoSnow() {
 
   numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
 
+  EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  prevCanS = prevCanS - EvapCanop;
   OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
   prevCanS = prevCanS - OverflowCan;
-  EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
-  prevCanS = prevCanS - EvapCanop;
   CanOut = std::min((prevCanS / get_par(par_HRUtype::CAN_ST) * EvapCanop),prevCanS);
   prevCanS = prevCanS - CanOut;
   set_varValue(prevCanS, tstRM, ts_type::CANS);
 
   prevCanS =  prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT));
 
-  OverflowStem = std::max((prevSteS - get_par(par_HRUtype::CAN_ST)),0.0);
-  prevSteS = prevSteS - OverflowStem;
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
   EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
   prevSteS = prevSteS - EvapStem;
+
+  OverflowStem = std::max((prevSteS - get_par(par_HRUtype::CAN_ST)),0.0);
+  prevSteS = prevSteS - OverflowStem;
+
   StemOut = std::min((prevCanS) / get_par(par_HRUtype::CAN_ST) * EvapStem, prevSteS);
   prevSteS = prevSteS - StemOut;
   set_varValue(prevSteS, tstRM, ts_type::STES);
