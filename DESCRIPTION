@@ -1,13 +1,17 @@
 Package: dHRUM
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: dHRUM - distributed Hydrological Response Units Model
+Version: 0.1.2
+Author: Petr Maca
+Maintainer: Petr Maca <maca@fzp.czu.cz>
+Description: The R interface to dHRUM - distributed Hydrological Response Units Model.
+    It initializes dHRUM with given number of single HRUs with known IDs and areas, 
+    enable to set inputs and parameters to all single HRUs, 
+    run dHRU model, gather data on states and fluxes spatially averaged for the catchment
+    from all single HRUs.
+License: MIT + file license
 Encoding: UTF-8
 LazyData: true
 Imports: Rcpp (>= 1.0.4.6)
 LinkingTo: Rcpp
+RoxygenNote: 7.1.0
