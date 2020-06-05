@@ -1,2 +1,2 @@
 # dHRUM
-dHRUM dirtibute Hydrological Response unit Model
+A repo for dHRUM  -- dstributed Hydrological Response unit Model
