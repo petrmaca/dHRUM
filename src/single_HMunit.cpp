@@ -427,7 +427,10 @@ void single_HMunit::interception_NoSnow() {
   EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
   prevCanS = prevCanS - EvapCanop;
   CanOut = std::min((prevCanS / get_par(par_HRUtype::CAN_ST) * EvapCanop),prevCanS);
-  prevCanS =  prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - CanOut;
+  prevCanS = prevCanS - CanOut;
+  set_varValue(prevCanS, tstRM, ts_type::CANS);
+
+  prevCanS =  prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT));
 
   OverflowStem = std::max((prevSteS - get_par(par_HRUtype::CAN_ST)),0.0);
   prevSteS = prevSteS - OverflowStem;
@@ -435,20 +438,22 @@ void single_HMunit::interception_NoSnow() {
   EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
   prevSteS = prevSteS - EvapStem;
   StemOut = std::min((prevCanS) / get_par(par_HRUtype::CAN_ST) * EvapStem, prevSteS);
-  prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan) - StemOut;
+  prevSteS = prevSteS - StemOut;
+  set_varValue(prevSteS, tstRM, ts_type::STES);
+
+  prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan);
 
   set_varValue((CanOut + OverflowCan), tstRM, ts_type::CANF);
-  set_varValue(prevCanS, tstRM, ts_type::CANS);
   set_varValue(EvapCanop, tstRM, ts_type::EVAC);
 
   set_varValue((StemOut + OverflowStem), tstRM, ts_type::STEF);
-  set_varValue(prevSteS, tstRM, ts_type::STES);
   set_varValue(EvapStem, tstRM, ts_type::EVAS);
 
   Througf = (OverflowCan + CanOut) * get_par(par_HRUtype::CSDIV) + StemOut + OverflowStem;
 
   set_varValue(Througf, tstRM, ts_type::TROF);
-  set_varValue((prevCanS + prevSteS),tstRM,ts_type::INTS);
+
+  set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
 
   return ;
 }
@@ -472,6 +477,8 @@ void single_HMunit::interception_WithSnow() {
   prevCanS = prevCanS - EvapCanop;
   //  CanOut = (prevCanS - OverflowCan) / get_par(par_HRUtype::CAN_ST) * EvapCanop;
   //  prevCanS =  prevCanS + (get_dta(tstRM, ts_type::SNOW) + get_dta(tstRM, ts_type::MELT))- OverflowCan - CanOut - EvapCanop;
+  set_varValue(prevCanS, tstRM, ts_type::CANS);
+
   prevCanS =  prevCanS + get_par(par_HRUtype::SDIV) * get_dta(tstRM, ts_type::MELT);
 
   OverflowStem = std::max((prevSteS - get_par(par_HRUtype::CAN_ST)),0.0);
@@ -481,22 +488,24 @@ void single_HMunit::interception_WithSnow() {
   prevSteS = prevSteS - EvapStem;
   //  StemOut = (prevCanS - OverflowCan) / get_par(par_HRUtype::CAN_ST) * EvapStem;
   //  prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan) - EvapStem - StemOut;
+  set_varValue(prevSteS, tstRM, ts_type::STES);
+
   prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * get_dta(tstRM, ts_type::MELT);
 
   //  set_varValue((CanOut + OverflowCan), tstRM, ts_type::CANF);
   set_varValue(0.0, tstRM, ts_type::CANF);
-  set_varValue(prevCanS, tstRM, ts_type::CANS);
+
   set_varValue(EvapCanop, tstRM, ts_type::EVAC);
 
   set_varValue((OverflowCan + OverflowStem), tstRM, ts_type::STEF);
   // set_varValue(0.0, tstRM, ts_type::STEF);
-  set_varValue(prevSteS, tstRM, ts_type::STES);
   set_varValue(EvapStem, tstRM, ts_type::EVAS);
 
   //  Througf = (OverflowCan + CanOut) * get_par(par_HRUtype::CSDIV) + StemOut + OverflowStem;
 
   set_varValue(Througf, tstRM, ts_type::TROF);
-  set_varValue((prevCanS + prevSteS),tstRM,ts_type::INTS);
+  // set_varValue((prevCanS + prevSteS),tstRM,ts_type::INTS);
+  set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
 
   //   std::cout <<  " prevCanS " << prevCanS << " EvapCanop " << EvapCanop << "\n";
   return ;
