@@ -68,8 +68,9 @@ void dHRUM::setInputsToAllHrus(std::string namesFilePath) {
   //  {
 #pragma omp parallel for
   for(unsigned it=0; it<dimHM; it++) {
-    //                std::cout << "Loading the input data  to HRU ID " << it << std::endl;
+                    // std::cout << "Loading the input data  to HRU ID " << it << std::endl;
     //    dHruVec[it].set_paramsToSim(parsToLoad);
+
     dHruVec[it].read_InputFromFile(namesFilePath.c_str());
     //  dHruVec[it].set_PetVars(50.1,pet_Type::OUDIN);
     //  dHruVec[it].calc_Pet();

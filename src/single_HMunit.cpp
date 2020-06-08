@@ -654,8 +654,9 @@ void single_HMunit::run_HB() {
 void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
 
   hdata dta(val, numDTA);
-  //  std::cout << "Initializing the hdata setup " << get_numdta() << std::endl;
+    // std::cout << "Initializing the hdata setup " << get_numdta() << " ups numDTA "<< numDTA << std::endl;
   set_data(dta,ts_type::PREC);
+  // std::cout << " prec ok\n";
   set_data(dta,ts_type::AET);
   set_data(dta,ts_type::PET);
   //!< Snow melting process DDM
@@ -674,6 +675,7 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   //!< Surface retention
   set_data(dta,ts_type::SURS);
   set_data(dta,ts_type::PREF);
+  // std::cout << " precf ok\n";
   //!< soil percolation
   set_data(dta,ts_type::EVBS);
   set_data(dta,ts_type::SOIS);
@@ -684,10 +686,11 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   //!< Fast runoff response
   set_data(dta,ts_type::DIRR);
   set_data(dta,ts_type::TOTR);
+  // std::cout << " tor ok\n";
 
-  get_numdta();
+  // get_numdta();
 
-    // std::cout << "The total number of initialized time intervals is " << get_numdta() << " ." << std::endl;
+     // std::cout << "The total number of initialized time intervals is " << get_numdta() << " ." << std::endl;
 
   return ;
 
@@ -705,6 +708,8 @@ void single_HMunit::load_data_PT(const hdata& prec_input, const hdata& temp_inpu
 
   helpnumDTA = prec_input.size();
 
+  // std::cout << "ups size " << prec_input.size() << "\n";
+
   if(helpnumDTA != temp_input.size()) {
     std::cout << "Different number of time intervals in precipitation input " << prec_input.size() \
               << " the temperature input has " << temp_input.size() << " inputs." << std::endl;
@@ -713,9 +718,13 @@ void single_HMunit::load_data_PT(const hdata& prec_input, const hdata& temp_inpu
   }
   //  numberSel val = -99999.9;
   //  numberSel val = 0;
+  // std::cout << "\n init inputs 1\n";
   init_inputs(val, helpnumDTA);
+  // std::cout << "\n init inputs 2\n";
   set_data_prec_temp(prec_input,temp_input);
+  // std::cout << "\n PT data inputs 1\n";
   set_calender(inYear,inMonth,inDay,helpnumDTA);
+  // std::cout << "\n class 1\n";
 
   return ;
 
@@ -873,21 +882,21 @@ void single_HMunit::read_InputFromFile(const std::string& Filet) {
   std::string line;
 
   hdata helpTemp, helpPrec;
-
+// std::cout << "strating opening\n";
   infilet.open(Filet.c_str());
   if(infilet.is_open()) {
     while (std::getline(infilet, line)) ++numLinesInFile;
-    //    std::cout << "Number of lines in file: " << Filet.c_str() << " equals to " << numLinesInFile << "." << std::endl;
+     // std::cout << "Number of lines in file: " << Filet.c_str() << " equals to " << numLinesInFile << "." << std::endl;
     if(line.empty()) numLinesInFile--;// if last line is empty.
-    //    std::cout << "Number of lines in file: " << Filet.c_str() << " equals to " << numLinesInFile << "." << std::endl;
+        // std::cout << "Number of lines in file: " << Filet.c_str() << " equals to " << numLinesInFile << "." << std::endl;
     infilet.clear();
     infilet.seekg (0, std::ios::beg);
     infilet >> helpInitYear >> helpInitMonth >>helpInitDay;
-    //    std::cout << helpInitYear << " " << helpInitMonth << " " << helpInitDay << std::endl;
+        // std::cout << helpInitYear << " " << helpInitMonth << " " << helpInitDay << std::endl;
     numLinesInFile--;
     helpTemp.resize(numLinesInFile);
     helpPrec.resize(numLinesInFile);
-    //    std::cout << "Number of lines in file: " << Filet.c_str() << " equals to " << numLinesInFile << "." << std::endl;
+        // std::cout << "foor loop Number of lines in file: " << Filet.c_str() << " equals to " << numLinesInFile << "." << std::endl;
     for(unsigned it=0; it<numLinesInFile; it++) {
       std::string lineVal;
       if(it==0) getline(infilet,lineVal);// reading the first line with year month  day
@@ -895,10 +904,12 @@ void single_HMunit::read_InputFromFile(const std::string& Filet) {
       std::stringstream valueBuffer(lineVal);
       valueBuffer >> helpTemp[it] >> helpPrec[it];
     }
-    //    std::cout <<std::endl << helpPrec[0] << " " << helpTemp[0] << " size " << helpPrec.size() << std::endl;
+        // std::cout <<std::endl << helpPrec[0] << " " << helpTemp[0] << " size " << helpPrec.size() << std::endl;
     infilet.close();
-
+// std::cout << "load_data";
     load_data_PT(helpPrec,helpTemp,0.0,helpInitYear,helpInitMonth,helpInitDay);
+
+    // std::cout << "\nload_data loade";
 
   } else {
 
