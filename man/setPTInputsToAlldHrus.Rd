@@ -2,12 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{setPTInputsToAlldHrus}
 \alias{setPTInputsToAlldHrus}
-\title{Sets the Precipitation and temperature vectors to dHRU.}
+\title{Sets the Precipitation, Temperature vectors to dHRUM and init's the date using beg. of period.}
 \usage{
 setPTInputsToAlldHrus(dHRUM_ptr, Prec, Temp, inDate)
 }
 \arguments{
-\item{dHRUM_ptr}{pointer to dHRU instance}
+\item{dHRUM_ptr}{pointer to dHRUM instance}
 
 \item{Prec}{vector of values of precipitation}
 
@@ -16,8 +16,8 @@ setPTInputsToAlldHrus(dHRUM_ptr, Prec, Temp, inDate)
 \item{inDate}{the first date of simulation period}
 }
 \description{
-Setting the similar vecotr of Precipitation and temperature to all single HRU.
-Setting the calender using the first date fo period
+Setting the similar vector of Precipitation and temperature to all single HRU.
+Setting the calender using the first date fo period using the first date of period
 }
 \examples{
 nHrus <- 2

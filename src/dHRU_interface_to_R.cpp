@@ -575,10 +575,10 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
   return  ;
 }
 
-//' Sets the Precipitation and temperature vectors to dHRUM.
+//' Sets the Precipitation, Temperature vectors to dHRUM and init's the date using beg. of period.
 //'
 //' Setting the similar vector of Precipitation and temperature to all single HRU.
-//' Setting the calender using the first date fo period using the first date opf period
+//' Setting the calender using the first date fo period using the first date of period
 //'
 //' @param dHRUM_ptr pointer to dHRUM instance
 //' @param Prec vector of values of precipitation
