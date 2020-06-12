@@ -26,7 +26,7 @@ Rcpp::XPtr<dHRUM> initdHruModel(numberDta dimdHru, Rcpp::NumericVector vecAreas,
 
   unsigned vecArSize = vecAreas.size();
   unsigned vecIdNamesSize = hrusIDs.size();
-  if(!((dimdHru == vecArSize) && (dimdHru == vecIdNamesSize) && (vecIdNamesSize == vecIdNamesSize))) {
+  if(!((dimdHru == vecArSize) && (dimdHru == vecIdNamesSize) && (vecIdNamesSize == vecArSize))) {
     Rcpp::stop("\nThe dim of dHRU single HRU units does not correspond to the length of Areas or Ids.\n");
   } else {
     single_HMunit sHRU_to_VEC;
