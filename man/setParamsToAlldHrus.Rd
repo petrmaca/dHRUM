@@ -7,14 +7,14 @@
 setParamsToAlldHrus(dHRUM_ptr, ParsVec, ParsNames)
 }
 \arguments{
-\item{dHRUM_ptr}{pointer to dHRU instance}
+\item{dHRUM_ptr}{pointer to dHRUM instance}
 
 \item{ParsVec}{vector of values of parameters}
 
 \item{ParsNames}{a charater vector of parameter names}
 }
 \description{
-Setting of params to dHRU.
+Setting of params to dHRUM.
 }
 \examples{
 nHrus <- 200

@@ -2,18 +2,18 @@
 % Please edit documentation in R/RcppExports.R
 \name{getOutput}
 \alias{getOutput}
-\title{Provides with dHRU outputs on ts}
+\title{Provides dHRUM outputs - time series}
 \usage{
 getOutput(dHRUM_ptr)
 }
 \arguments{
-\item{dHRU_ptr}{pointer to dHRU instance}
+\item{dHRU_ptr}{pointer to dHRUM instance}
 }
 \value{
 a list with matrix of caldata \code{[,1:4]} and hdata ts variables \code{[,5:27]} and names of vars
 }
 \description{
-return matrix with state varibles and fluxes averadged over basin area.
+return matrix with state variables and fluxes averaged over basin area.
 }
 \examples{
 nHrus <- 200

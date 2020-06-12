@@ -1,13 +1,13 @@
 #include <Rcpp.h>
 #include "dHRUM.h"
 
-//' Initialization of dHRU pointer to a dHRU model
+//' Initialization of dHRU pointer to a dHRUM
 //'
-//' Creates pointer instance of dHRU Model for the catchment.
-//' initializes a dimension of dHRUM controled by the number of single Hru, areas of all single HRU's,
-//' and ID's of all single HRU units.
+//' Creates pointer instance of dHRUM for the catchment.
+//' initializes a dimension of dHRUM controled by the number of single Hru, areas of all single Hrus,
+//' and ID's of all single Hrus.
 //'
-//' @param dimdHru a single \code{numberDta} number of single HRU units.
+//' @param dimdHru a single \code{numberDta} number of single Hrus.
 //' @param vecAreas a \code{numeric vector} of size \code{dimHru} of Areas for all single HRUs on dHRU.
 //' @param hrusIDs a \code{character vector} of size \code{dimHru} of Id's for all single HRUs on dHRU.
 //' @return dHRU_ptr pointer to dHru instance.
@@ -49,7 +49,8 @@ Rcpp::XPtr<dHRUM> initdHruModel(numberDta dimdHru, Rcpp::NumericVector vecAreas,
   }
   return Rcpp::XPtr<dHRUM>(dHRUM_ptr);
 }
-//' Sets similar input data obtained from file to all single HRUs for dHRU instance.
+
+//' Sets similar input data obtained from file to all single Hrus at dHRUM instance.
 //'
 //' Loads the data from file to a single dHRU instance created  the \code{initdHruModel(nHrus,Areas,IdsHrus)} function
 //' All iputs are same for each single HRU unit. File has on its first row YYYY MM DD,
@@ -75,11 +76,12 @@ void setInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namInpFilet) {
   return dHRUM_ptr.get()->setInputsToAllHrus(namInpFilet);
 
 }
+
 //' Sets the similar values of params to dHRU model for all single HRUs.
 //'
-//' Setting of params to dHRU.
+//' Setting of params to dHRUM.
 //'
-//' @param dHRUM_ptr pointer to dHRU instance
+//' @param dHRUM_ptr pointer to dHRUM instance
 //' @param ParsVec vector of values of parameters
 //' @param ParsNames a charater vector of parameter names
 //' @export
@@ -225,12 +227,13 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
     }
  return  ;
 }
-//' Calculates the values of Potetial evpotranspiration on all singleHrus
+
+//' Calculates the values of Potential evapotranspiration on all singleHrus
 //'
 //' Setting of Pet method is done by \code{PetTypeStr}, methods implemented are: \code{Oudin}, \code{Hamon}
 //'
 //'
-//' @param dHRU_ptr pointer to dHRU instance
+//' @param dHRU_ptr pointer to dHRUM instance
 //' @param Latitude single number for Oudin method
 //' @param PetTypeStr variable on selection of PET models
 //' @export
@@ -277,12 +280,13 @@ void calcPetToAllHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, numberSel Latitude, std::stri
   return dHRUM_ptr.get()->calcPetToAllHrus(Latitude, myPetType);
 
 }
-//' Calculates the values of fluxes and state variables for all Hrus in dHru
+
+//' Calculates the values of fluxes and state variables for all Hrus in dHRUM
 //'
-//' Updating the states ad values of all ts varibles in all single Hrus of dHRU
+//' Updating the states ad values of all ts variables in all single Hrus of dHRUM
 //'
 //'
-//' @param dHRU_ptr pointer to dHRU instance
+//' @param dHRU_ptr pointer to dHRUM instance
 //' @export
 //' @examples
 //' nHrus <- 200
@@ -302,6 +306,7 @@ void calcHBInAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr) {
   return dHRUM_ptr.get()->calcHbToAllHrus();
 
 }
+
 //' Calculates catchment spatially averaged hydrological balance
 //'
 //' Calculates catchment spatial average for fluxes and state variables
@@ -356,12 +361,13 @@ void printToFile(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namOutFilet) {
   return dHRUM_ptr.get()->printAllDta(namOutFilet);
 
 }
-//' Provides with dHRU outputs on ts
+
+//' Provides dHRUM outputs - time series
 //'
-//' return matrix with state varibles and fluxes averadged over basin area.
+//' return matrix with state variables and fluxes averaged over basin area.
 //'
 //'
-//' @param dHRU_ptr pointer to dHRU instance
+//' @param dHRU_ptr pointer to dHRUM instance
 //' @return a list with matrix of caldata \code{[,1:4]} and hdata ts variables \code{[,5:27]} and names of vars
 //' @export
 //' @examples
@@ -568,6 +574,7 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
   }
   return  ;
 }
+
 //' Sets the Precipitation and temperature vectors to dHRU.
 //'
 //' Setting the similar vecotr of Precipitation and temperature to all single HRU.
@@ -621,6 +628,7 @@ void setPTInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Prec
 
   return  ;
 }
+
 //' Sets the Precipitation, Temperature, and Date vectors to dHRU.
 //'
 //' Setting the similar vectors of Precipitation and Temperature

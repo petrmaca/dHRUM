@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{setInputsToAlldHrus}
 \alias{setInputsToAlldHrus}
-\title{Sets similar input data obtained from file to all single HRUs for dHRU instance.}
+\title{Sets similar input data obtained from file to all single Hrus at dHRUM instance.}
 \usage{
 setInputsToAlldHrus(dHRUM_ptr, namInpFilet)
 }

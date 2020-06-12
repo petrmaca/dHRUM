@@ -2,15 +2,15 @@
 % Please edit documentation in R/RcppExports.R
 \name{calcHBInAlldHrus}
 \alias{calcHBInAlldHrus}
-\title{Calculates the values of fluxes and state variables for all Hrus in dHru}
+\title{Calculates the values of fluxes and state variables for all Hrus in dHRUM}
 \usage{
 calcHBInAlldHrus(dHRUM_ptr)
 }
 \arguments{
-\item{dHRU_ptr}{pointer to dHRU instance}
+\item{dHRU_ptr}{pointer to dHRUM instance}
 }
 \description{
-Updating the states ad values of all ts varibles in all single Hrus of dHRU
+Updating the states ad values of all ts variables in all single Hrus of dHRUM
 }
 \examples{
 nHrus <- 200

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{calcPetToAllHrus}
 \alias{calcPetToAllHrus}
-\title{Calculates the values of Potetial evpotranspiration on all singleHrus}
+\title{Calculates the values of Potential evapotranspiration on all singleHrus}
 \usage{
 calcPetToAllHrus(dHRUM_ptr, Latitude, PetTypeStr)
 }
@@ -11,7 +11,7 @@ calcPetToAllHrus(dHRUM_ptr, Latitude, PetTypeStr)
 
 \item{PetTypeStr}{variable on selection of PET models}
 
-\item{dHRU_ptr}{pointer to dHRU instance}
+\item{dHRU_ptr}{pointer to dHRUM instance}
 }
 \description{
 Setting of Pet method is done by \code{PetTypeStr}, methods implemented are: \code{Oudin}, \code{Hamon}

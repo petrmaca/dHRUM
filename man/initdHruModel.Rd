@@ -2,12 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{initdHruModel}
 \alias{initdHruModel}
-\title{Initialization of dHRU pointer to a dHRU model}
+\title{Initialization of dHRU pointer to a dHRUM}
 \usage{
 initdHruModel(dimdHru, vecAreas, hrusIDs)
 }
 \arguments{
-\item{dimdHru}{a single \code{numberDta} number of single HRU units.}
+\item{dimdHru}{a single \code{numberDta} number of single Hrus.}
 
 \item{vecAreas}{a \code{numeric vector} of size \code{dimHru} of Areas for all single HRUs on dHRU.}
 
@@ -17,9 +17,9 @@ initdHruModel(dimdHru, vecAreas, hrusIDs)
 dHRU_ptr pointer to dHru instance.
 }
 \description{
-Creates pointer instance of dHRU Model for the catchment.
-initializes a dimension of dHRUM controled by the number of single Hru, areas of all single HRU's,
-and ID's of all single HRU units.
+Creates pointer instance of dHRUM for the catchment.
+initializes a dimension of dHRUM controled by the number of single Hru, areas of all single Hrus,
+and ID's of all single Hrus.
 }
 \examples{
 nHrus <- 200
