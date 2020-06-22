@@ -135,6 +135,17 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// setParsToDistdHRUM
+void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF);
+RcppExport SEXP _dHRUM_setParsToDistdHRUM(SEXP dHRUM_ptrSEXP, SEXP ParsDFSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type ParsDF(ParsDFSEXP);
+    setParsToDistdHRUM(dHRUM_ptr, ParsDF);
+    return R_NilValue;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_initdHruModel", (DL_FUNC) &_dHRUM_initdHruModel, 3},
@@ -148,6 +159,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_setParamsToOnedHru", (DL_FUNC) &_dHRUM_setParamsToOnedHru, 4},
     {"_dHRUM_setPTInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTInputsToAlldHrus, 4},
     {"_dHRUM_setPTDateInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTDateInputsToAlldHrus, 4},
+    {"_dHRUM_setParsToDistdHRUM", (DL_FUNC) &_dHRUM_setParsToDistdHRUM, 2},
     {NULL, NULL, 0}
 };
 

@@ -105,9 +105,9 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
     Rcpp::stop("\n and  is diferent then required number of dHRU Par Values.\n");
   } else {
      std::vector<std::string>  parNameStr = Rcpp::as<std::vector<std::string> >(ParsNames);
-     std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF","ADIV","CDIV", \
-                                   "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR", \
-                                   "DDFA","TMEL","RETCAP"};
+     // std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF","ADIV","CDIV", \
+     //                               "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR", \
+     //                               "DDFA","TMEL","RETCAP"};
      for(unsigned it=0; it<numParsNames;it++ ){
        if ( std::find(allParNames.begin(), allParNames.end(), parNameStr[it]) == allParNames.end()) {
         Rcpp::Rcout << "\nSomething wrong on item " << (it+1) << "\n";
@@ -445,9 +445,9 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
     Rcpp::stop("\n and  is diferent then required number of dHRU Par Values.\n");
   } else {
     std::vector<std::string>  parNameStr = Rcpp::as<std::vector<std::string> >(ParsNames);
-    std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF","ADIV","CDIV", \
-                                          "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR", \
-                                          "DDFA","TMEL","RETCAP"};
+//   std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF","ADIV","CDIV", \
+//                                          "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR", \
+//                                          "DDFA","TMEL","RETCAP"};
     for(unsigned it=0; it<numParsNames;it++ ){
       if ( std::find(allParNames.begin(), allParNames.end(), parNameStr[it]) == allParNames.end()) {
         Rcpp::Rcout << "\nSomething wrong on item " << (it+1) << "\n";
@@ -695,4 +695,28 @@ void setPTDateInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector 
 
   return  ;
 
+}
+
+//' Sets the values of params to dHRU model with many Hrus.
+//'
+//' Setting of vectors of params to all HRUs for distributed dHRUM.
+//'
+//' @param dHRUM_ptr pointer to dHRU instance
+//' @param
+//' @export
+//' @examples
+//' nHrus <- 200
+//' Areas <- runif(nHrus,min = 1,max  = 10)
+//' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+//' filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
+//' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
+//' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+//' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+//' setParamsToOnedHru(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),0)
+// [[Rcpp::export]]
+void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
+
+
+  return  ;
 }

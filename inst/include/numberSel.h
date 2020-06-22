@@ -3,6 +3,7 @@
 
 #include <iomanip>
 #include <limits>
+#include <string>
 
 // Type for numbers selector
 
@@ -29,5 +30,9 @@ enum class par_HRUtype {B_SOIL, C_MAX, B_EVAP, SMAX, KS, KF, ADIV, CDIV, SDIV, C
 const par_HRUtype all_pars[]{par_HRUtype::B_SOIL, par_HRUtype::C_MAX, par_HRUtype::B_EVAP, par_HRUtype::SMAX, par_HRUtype::KS, par_HRUtype::KF,      \
                              par_HRUtype::ADIV, par_HRUtype::CDIV, par_HRUtype::SDIV, par_HRUtype::CAN_ST, par_HRUtype::STEM_ST, par_HRUtype::CSDIV, \
                              par_HRUtype::TETR, par_HRUtype::DDFA, par_HRUtype::TMEL, par_HRUtype::RETCAP};
+
+const std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF","ADIV","CDIV", \
+                                      "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR", \
+                                      "DDFA","TMEL","RETCAP"};
 
 #endif // NUMBERSEL_H_INCLUDED
