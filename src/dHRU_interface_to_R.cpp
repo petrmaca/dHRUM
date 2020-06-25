@@ -722,6 +722,8 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
   dimDHRUM = dHRUM_ptr->getdHRUdim();//Should it be added into the dHRUM class??
   numColsParsMat = ParsDF.length();
   // Rcpp::Rcout <<dimDHRUM << " dimhru " << numColsParsMat << "nomclos \n";
+  //ToDo check on number of cols for ParsDF smaller and equal to number of pars
+  // and bigger than 0
   for(unsigned it=0;it<dimDHRUM; it++){
     // helpVec;
      for(unsigned colIt=0;colIt<numColsParsMat; colIt++){
