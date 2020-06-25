@@ -719,15 +719,14 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
 
   Rcpp::CharacterVector ParNams;
   unsigned dimDHRUM=0, numColsParsMat=0;
-  dimDHRUM = dHRUM_ptr->getdHRUdim();
-
+  dimDHRUM = dHRUM_ptr->getdHRUdim();//Should it be added into the dHRUM class??
+  numColsParsMat = ParsDF.length();
+  // Rcpp::Rcout <<dimDHRUM << " dimhru " << numColsParsMat << "nomclos \n";
   for(unsigned it=0;it<dimDHRUM; it++){
      for(unsigned colIt=0;colIt<numColsParsMat; colIt++){
        //forming a vector of params for given Hru with Id it
      }
-
   }
-
 
   return  ;
 }
