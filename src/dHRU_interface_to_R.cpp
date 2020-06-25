@@ -702,7 +702,7 @@ void setPTDateInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector 
 //' Setting of vectors of params to all HRUs for distributed dHRUM.
 //'
 //' @param dHRUM_ptr pointer to dHRU instance
-//' @param
+//' @param ParsDF data.frame of parametrs cols show parameters, rows show the Hrus
 //' @export
 //' @examples
 //' nHrus <- 200
@@ -723,6 +723,7 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
   numColsParsMat = ParsDF.length();
   // Rcpp::Rcout <<dimDHRUM << " dimhru " << numColsParsMat << "nomclos \n";
   for(unsigned it=0;it<dimDHRUM; it++){
+    // helpVec;
      for(unsigned colIt=0;colIt<numColsParsMat; colIt++){
        //forming a vector of params for given Hru with Id it
      }
