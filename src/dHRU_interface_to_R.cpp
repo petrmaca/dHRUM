@@ -717,6 +717,17 @@ void setPTDateInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector 
 // [[Rcpp::export]]
 void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
 
+  Rcpp::CharacterVector ParNams;
+  unsigned dimDHRUM=0, numColsParsMat=0;
+  dimDHRUM = dHRUM_ptr->getdHRUdim();
+
+  for(unsigned it=0;it<dimDHRUM; it++){
+     for(unsigned colIt=0;colIt<numColsParsMat; colIt++){
+       //forming a vector of params for given Hru with Id it
+     }
+
+  }
+
 
   return  ;
 }
