@@ -418,3 +418,12 @@ void params::p_param() {
 
 }
 
+/** \brief Getting the number of params
+ *
+ *
+ */
+unsigned params::g_numPars() {
+
+  return(numPars);
+
+}

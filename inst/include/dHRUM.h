@@ -52,7 +52,7 @@ private:
   numberDta dimHM;//!< Number of single HRU objects
   numberSel basinArea;//!< The total basin area
   hdata Areas;//!< Arrays of Areas of all single HRUs
-  numberDta numTs;
+  numberDta numTs;//!< Number of time intervals
 
   data_HB_1d basinDta;//!< The HB data on all basin
 

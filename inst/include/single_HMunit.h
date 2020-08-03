@@ -47,6 +47,7 @@ class single_HMunit {
 
   void set_params();//!< Setter on params of single pdm unit
   numberSel get_par(const par_HRUtype& _parType);//!< Getter of single one parameter on single pdm unit
+  unsigned get_numPars();//!< Getter for number of parameters
 
   void set_ZeroinitStates(const unsigned& numres);//!< The setter of initial states of state variables
   void set_ZeroStates();//!< The setter of zero states of state variables

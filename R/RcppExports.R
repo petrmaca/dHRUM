@@ -259,7 +259,7 @@ setPTDateInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, DateVec) {
 #' Setting of vectors of params to all HRUs for distributed dHRUM.
 #'
 #' @param dHRUM_ptr pointer to dHRU instance
-#' @param
+#' @param ParsDF data.frame of parametrs cols show parameters, rows show the Hrus
 #' @export
 #' @examples
 #' nHrus <- 200

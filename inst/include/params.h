@@ -19,8 +19,8 @@ class params {
   void s_params(const numberSel& dta,par_HRUtype _parType);//!< The setting of model parameters
   numberSel g_par(const par_HRUtype& _parType);//!< The getting of model parameters
 
-  unsigned g_numFastRes();
-  void s_numFastRes(const unsigned& numRes);
+  unsigned g_numFastRes();//!< Get the number of fast reservoirs
+  void s_numFastRes(const unsigned& numRes);//!< set number of fast reservoirs
 
 
   void s_parLoadToCalib(std::vector<std::pair<numberSel,par_HRUtype>>& parsToLoad);
@@ -29,6 +29,7 @@ class params {
 
   void p_param();
 
+  unsigned g_numPars();//!< Get the number of parameters
 
  protected:
 

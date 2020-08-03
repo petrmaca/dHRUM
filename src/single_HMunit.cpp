@@ -973,3 +973,10 @@ void single_HMunit::load_calData(const caldata& yyear, const caldata& mmonth, co
   return ;
 
 }
+
+
+unsigned single_HMunit::get_numPars(){
+
+ return (par_HRU.g_numPars());
+
+}
