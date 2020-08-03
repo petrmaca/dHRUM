@@ -44,6 +44,8 @@ class dHRUM {
   numberDta getdHRUdim();
   void load_CalDataToAllHrus(const caldata& yyear, const caldata& mmonth, const caldata& dday);
   void load_PrecTempToAllHrus(const hdata& Prec, const hdata& Temp);
+  unsigned get_singleHRUnumPars(unsigned Id);
+  void set_numPars();
 
 protected:
 
@@ -53,6 +55,7 @@ private:
   numberSel basinArea;//!< The total basin area
   hdata Areas;//!< Arrays of Areas of all single HRUs
   numberDta numTs;//!< Number of time intervals
+  caldata numParsAllHRus;//< Vector with Numbers of params
 
   data_HB_1d basinDta;//!< The HB data on all basin
 

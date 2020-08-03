@@ -439,8 +439,11 @@ Rcpp::List getOutput(Rcpp::XPtr<dHRUM> dHRUM_ptr){
 void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec, Rcpp::CharacterVector ParsNames, unsigned singleHruId) {
   unsigned numParsNames = ParsNames.size();
   unsigned numParsVals = ParsVec.size();
+  unsigned numPars1Hru;
 
-  if((numParsNames!=numParsVals) || (numParsNames>15) || (numParsVals>15)) {
+  numPars1Hru = dHRUM_ptr.get()->get_singleHRUnumPars(singleHruId);
+
+  if((numParsNames!=numParsVals) || (numParsNames>numPars1Hru) || (numParsVals>numPars1Hru)) {
     Rcpp::Rcout << "The number of names of params is " << numParsNames <<"\n";
     Rcpp::stop("\n and  is diferent then required number of dHRU Par Values.\n");
   } else {
@@ -717,16 +720,32 @@ void setPTDateInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector 
 // [[Rcpp::export]]
 void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
 
-  Rcpp::CharacterVector ParNams;
   unsigned dimDHRUM=0, numColsParsMat=0;
-  dimDHRUM = dHRUM_ptr->getdHRUdim();//Should it be added into the dHRUM class??
+  dimDHRUM = dHRUM_ptr.get()->getdHRUdim();//Should it be added into the dHRUM class??
   numColsParsMat = ParsDF.length();
   // Rcpp::Rcout <<dimDHRUM << " dimhru " << numColsParsMat << "nomclos \n";
   //ToDo check on number of cols for ParsDF smaller and equal to number of pars
   // and bigger than 0
- // if(numColsParsMat >)
+  // checking the correct number of params to load
   for(unsigned it=0;it<dimDHRUM; it++){
-    // helpVec;
+    if(numColsParsMat > dHRUM_ptr.get()->get_singleHRUnumPars(it)){
+      Rcpp::Rcout << "The single HRU with Id " << dHRUM_ptr.get()->getSingleHruId(it) << " have different number of params.\n";
+      Rcpp::stop("\nWrong size number of parameters.\n");
+      }
+    }
+
+  Rcpp::CharacterVector ParsNames = ParsDF.names();
+  ParsNames = ParsDF.names();
+  std::vector<std::string>  parNameStr = Rcpp::as<std::vector<std::string> >(ParsNames);
+  for(unsigned it=0; it<numColsParsMat;it++ ){
+    if ( std::find(allParNames.begin(), allParNames.end(), parNameStr[it]) == allParNames.end()) {
+      Rcpp::Rcout << "Something wrong parameter names on item " << (it+1) << "\n";
+      Rcpp::stop("\nWrong names of Par Values.\n");
+    }
+  }
+
+  for(unsigned it=0;it<dimDHRUM; it++){
+    // std::vector<> helpVecPar;
      for(unsigned colIt=0;colIt<numColsParsMat; colIt++){
        //forming a vector of params for given Hru with Id it
      }

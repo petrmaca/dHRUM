@@ -5,6 +5,7 @@ dHRUM::dHRUM(): dHruVec(),
   basinArea(0),
   Areas(0),
   numTs(0),
+  numParsAllHRus(0),
   basinDta() {
   //ctor
 }
@@ -18,15 +19,16 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   basinArea(0),
   Areas(0),
   numTs(0),
+  numParsAllHRus(0),
   basinDta() {
 
   dHruVec = other.dHruVec;
   dimHM = other.dimHM;
   basinArea = other.basinArea;
   Areas = other.Areas;
-  basinDta = other.basinDta;
   numTs = other.numTs;
-
+  numParsAllHRus = other.numParsAllHRus;
+  basinDta = other.basinDta;
 }
 
 dHRUM& dHRUM::operator=(const dHRUM& rhs) {
@@ -36,8 +38,9 @@ dHRUM& dHRUM::operator=(const dHRUM& rhs) {
     dimHM = rhs.dimHM;
     basinArea = rhs.basinArea;
     Areas = rhs.Areas;
-    basinDta = rhs.basinDta;
     numTs = rhs.numTs;
+    numParsAllHRus = rhs.numParsAllHRus;
+    basinDta = rhs.basinDta;
   }
   return *this;
 }
@@ -347,5 +350,22 @@ void dHRUM::load_PrecTempToAllHrus(const hdata& Prec, const hdata& Temp) {
   }
 
   return ;
+
+}
+unsigned dHRUM::get_singleHRUnumPars(unsigned Id){
+
+  return (dHruVec[Id].get_numPars());
+
+}
+
+void dHRUM::set_numPars() {
+
+  numParsAllHRus.resize(dimHM);
+
+#pragma omp parallel for
+  for(unsigned it=0;it<dimHM;it++){
+    numParsAllHRus[it] = get_singleHRUnumPars(it);
+    std::cout <<"The nunumber of params for HRU unit "<< it<< " is " << get_singleHRUnumPars(it) << std::endl;
+  }
 
 }
