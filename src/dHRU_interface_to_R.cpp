@@ -739,16 +739,33 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
   std::vector<std::string>  parNameStr = Rcpp::as<std::vector<std::string> >(ParsNames);
   for(unsigned it=0; it<numColsParsMat;it++ ){
     if ( std::find(allParNames.begin(), allParNames.end(), parNameStr[it]) == allParNames.end()) {
-      Rcpp::Rcout << "Something wrong parameter names on item " << (it+1) << "\n";
+      Rcpp::Rcout << "\nSomething wrong parameter names on item " << (it+1) << "\n";
       Rcpp::stop("\nWrong names of Par Values.\n");
     }
   }
 
   for(unsigned it=0;it<dimDHRUM; it++){
     // std::vector<> helpVecPar;
+    //
+    // DataFrame myFunc(DataFrame& x) {
+    //   ...
+    //
+    // // Suppose I need to get the 10th row
+    // int nCols=x.size();
+    //   NumericVector y(nCols);
+    //   for (int j=0; j<nCols;j++) {
+    //     NumericVector column = x[j] ;
+    //     y[i] = column[9] ;
+    //   }
+    //
+    //   ...
+    // }
+
      for(unsigned colIt=0;colIt<numColsParsMat; colIt++){
        //forming a vector of params for given Hru with Id it
      }
+
+     // dHRUM_ptr.get()->setParamsToOneHru(ParsToLoad,singleHruId);
   }
 
   return  ;
