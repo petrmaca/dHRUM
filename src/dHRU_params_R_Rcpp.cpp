@@ -359,27 +359,12 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
   }
 
   for(unsigned it=0;it<dimDHRUM; it++){
-    // std::vector<> helpVecPar;
-    //
-    // DataFrame myFunc(DataFrame& x) {
-    //   ...
-    //
-    // // Suppose I need to get the 10th row
-    // int nCols=x.size();
-    //   NumericVector y(nCols);
-    //   for (int j=0; j<nCols;j++) {
-    //     NumericVector column = x[j] ;
-    //     y[i] = column[9] ;
-    //   }
-    //
-    //   ...
-    // }
-
-    for(unsigned colIt=0;colIt<numColsParsMat; colIt++){
-      //forming a vector of params for given Hru with Id it
+    Rcpp::NumericVector ParsVec(numColsParsMat);
+    for(unsigned cl=0;cl<numColsParsMat;cl++){
+     Rcpp::NumericVector ParVectsCols =  ParsDF[cl];
+      ParsVec[cl] = ParVectsCols[it];
     }
-
-    // dHRUM_ptr.get()->setParamsToOneHru(ParsToLoad,singleHruId);
+    setParamsToOnedHru( dHRUM_ptr, ParsVec, ParsNames, it);
   }
 
   return  ;
