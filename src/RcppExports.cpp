@@ -6,54 +6,6 @@
 
 using namespace Rcpp;
 
-// initdHruModel
-Rcpp::XPtr<dHRUM> initdHruModel(numberDta dimdHru, Rcpp::NumericVector vecAreas, Rcpp::StringVector hrusIDs);
-RcppExport SEXP _dHRUM_initdHruModel(SEXP dimdHruSEXP, SEXP vecAreasSEXP, SEXP hrusIDsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< numberDta >::type dimdHru(dimdHruSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type vecAreas(vecAreasSEXP);
-    Rcpp::traits::input_parameter< Rcpp::StringVector >::type hrusIDs(hrusIDsSEXP);
-    rcpp_result_gen = Rcpp::wrap(initdHruModel(dimdHru, vecAreas, hrusIDs));
-    return rcpp_result_gen;
-END_RCPP
-}
-// setInputsToAlldHrus
-void setInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namInpFilet);
-RcppExport SEXP _dHRUM_setInputsToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP namInpFiletSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
-    Rcpp::traits::input_parameter< std::string >::type namInpFilet(namInpFiletSEXP);
-    setInputsToAlldHrus(dHRUM_ptr, namInpFilet);
-    return R_NilValue;
-END_RCPP
-}
-// setParamsToAlldHrus
-void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec, Rcpp::CharacterVector ParsNames);
-RcppExport SEXP _dHRUM_setParamsToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP ParsVecSEXP, SEXP ParsNamesSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ParsVec(ParsVecSEXP);
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type ParsNames(ParsNamesSEXP);
-    setParamsToAlldHrus(dHRUM_ptr, ParsVec, ParsNames);
-    return R_NilValue;
-END_RCPP
-}
-// calcPetToAllHrus
-void calcPetToAllHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, numberSel Latitude, std::string PetTypeStr);
-RcppExport SEXP _dHRUM_calcPetToAllHrus(SEXP dHRUM_ptrSEXP, SEXP LatitudeSEXP, SEXP PetTypeStrSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
-    Rcpp::traits::input_parameter< numberSel >::type Latitude(LatitudeSEXP);
-    Rcpp::traits::input_parameter< std::string >::type PetTypeStr(PetTypeStrSEXP);
-    calcPetToAllHrus(dHRUM_ptr, Latitude, PetTypeStr);
-    return R_NilValue;
-END_RCPP
-}
 // calcHBInAlldHrus
 void calcHBInAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr);
 RcppExport SEXP _dHRUM_calcHBInAlldHrus(SEXP dHRUM_ptrSEXP) {
@@ -74,38 +26,14 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// printToFile
-void printToFile(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namOutFilet);
-RcppExport SEXP _dHRUM_printToFile(SEXP dHRUM_ptrSEXP, SEXP namOutFiletSEXP) {
+// setInputsToAlldHrus
+void setInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namInpFilet);
+RcppExport SEXP _dHRUM_setInputsToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP namInpFiletSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
-    Rcpp::traits::input_parameter< std::string >::type namOutFilet(namOutFiletSEXP);
-    printToFile(dHRUM_ptr, namOutFilet);
-    return R_NilValue;
-END_RCPP
-}
-// getOutput
-Rcpp::List getOutput(Rcpp::XPtr<dHRUM> dHRUM_ptr);
-RcppExport SEXP _dHRUM_getOutput(SEXP dHRUM_ptrSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
-    rcpp_result_gen = Rcpp::wrap(getOutput(dHRUM_ptr));
-    return rcpp_result_gen;
-END_RCPP
-}
-// setParamsToOnedHru
-void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec, Rcpp::CharacterVector ParsNames, unsigned singleHruId);
-RcppExport SEXP _dHRUM_setParamsToOnedHru(SEXP dHRUM_ptrSEXP, SEXP ParsVecSEXP, SEXP ParsNamesSEXP, SEXP singleHruIdSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ParsVec(ParsVecSEXP);
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type ParsNames(ParsNamesSEXP);
-    Rcpp::traits::input_parameter< unsigned >::type singleHruId(singleHruIdSEXP);
-    setParamsToOnedHru(dHRUM_ptr, ParsVec, ParsNames, singleHruId);
+    Rcpp::traits::input_parameter< std::string >::type namInpFilet(namInpFiletSEXP);
+    setInputsToAlldHrus(dHRUM_ptr, namInpFilet);
     return R_NilValue;
 END_RCPP
 }
@@ -135,6 +63,66 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// initdHruModel
+Rcpp::XPtr<dHRUM> initdHruModel(numberDta dimdHru, Rcpp::NumericVector vecAreas, Rcpp::StringVector hrusIDs);
+RcppExport SEXP _dHRUM_initdHruModel(SEXP dimdHruSEXP, SEXP vecAreasSEXP, SEXP hrusIDsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< numberDta >::type dimdHru(dimdHruSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type vecAreas(vecAreasSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type hrusIDs(hrusIDsSEXP);
+    rcpp_result_gen = Rcpp::wrap(initdHruModel(dimdHru, vecAreas, hrusIDs));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getOutput
+Rcpp::List getOutput(Rcpp::XPtr<dHRUM> dHRUM_ptr);
+RcppExport SEXP _dHRUM_getOutput(SEXP dHRUM_ptrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    rcpp_result_gen = Rcpp::wrap(getOutput(dHRUM_ptr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// printToFile
+void printToFile(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namOutFilet);
+RcppExport SEXP _dHRUM_printToFile(SEXP dHRUM_ptrSEXP, SEXP namOutFiletSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< std::string >::type namOutFilet(namOutFiletSEXP);
+    printToFile(dHRUM_ptr, namOutFilet);
+    return R_NilValue;
+END_RCPP
+}
+// setParamsToAlldHrus
+void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec, Rcpp::CharacterVector ParsNames);
+RcppExport SEXP _dHRUM_setParamsToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP ParsVecSEXP, SEXP ParsNamesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ParsVec(ParsVecSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type ParsNames(ParsNamesSEXP);
+    setParamsToAlldHrus(dHRUM_ptr, ParsVec, ParsNames);
+    return R_NilValue;
+END_RCPP
+}
+// setParamsToOnedHru
+void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec, Rcpp::CharacterVector ParsNames, unsigned singleHruId);
+RcppExport SEXP _dHRUM_setParamsToOnedHru(SEXP dHRUM_ptrSEXP, SEXP ParsVecSEXP, SEXP ParsNamesSEXP, SEXP singleHruIdSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ParsVec(ParsVecSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type ParsNames(ParsNamesSEXP);
+    Rcpp::traits::input_parameter< unsigned >::type singleHruId(singleHruIdSEXP);
+    setParamsToOnedHru(dHRUM_ptr, ParsVec, ParsNames, singleHruId);
+    return R_NilValue;
+END_RCPP
+}
 // setParsToDistdHRUM
 void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF);
 RcppExport SEXP _dHRUM_setParsToDistdHRUM(SEXP dHRUM_ptrSEXP, SEXP ParsDFSEXP) {
@@ -146,20 +134,32 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// calcPetToAllHrus
+void calcPetToAllHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, numberSel Latitude, std::string PetTypeStr);
+RcppExport SEXP _dHRUM_calcPetToAllHrus(SEXP dHRUM_ptrSEXP, SEXP LatitudeSEXP, SEXP PetTypeStrSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< numberSel >::type Latitude(LatitudeSEXP);
+    Rcpp::traits::input_parameter< std::string >::type PetTypeStr(PetTypeStrSEXP);
+    calcPetToAllHrus(dHRUM_ptr, Latitude, PetTypeStr);
+    return R_NilValue;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_dHRUM_initdHruModel", (DL_FUNC) &_dHRUM_initdHruModel, 3},
-    {"_dHRUM_setInputsToAlldHrus", (DL_FUNC) &_dHRUM_setInputsToAlldHrus, 2},
-    {"_dHRUM_setParamsToAlldHrus", (DL_FUNC) &_dHRUM_setParamsToAlldHrus, 3},
-    {"_dHRUM_calcPetToAllHrus", (DL_FUNC) &_dHRUM_calcPetToAllHrus, 3},
     {"_dHRUM_calcHBInAlldHrus", (DL_FUNC) &_dHRUM_calcHBInAlldHrus, 1},
     {"_dHRUM_gatherHBdata", (DL_FUNC) &_dHRUM_gatherHBdata, 1},
-    {"_dHRUM_printToFile", (DL_FUNC) &_dHRUM_printToFile, 2},
-    {"_dHRUM_getOutput", (DL_FUNC) &_dHRUM_getOutput, 1},
-    {"_dHRUM_setParamsToOnedHru", (DL_FUNC) &_dHRUM_setParamsToOnedHru, 4},
+    {"_dHRUM_setInputsToAlldHrus", (DL_FUNC) &_dHRUM_setInputsToAlldHrus, 2},
     {"_dHRUM_setPTInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTInputsToAlldHrus, 4},
     {"_dHRUM_setPTDateInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTDateInputsToAlldHrus, 4},
+    {"_dHRUM_initdHruModel", (DL_FUNC) &_dHRUM_initdHruModel, 3},
+    {"_dHRUM_getOutput", (DL_FUNC) &_dHRUM_getOutput, 1},
+    {"_dHRUM_printToFile", (DL_FUNC) &_dHRUM_printToFile, 2},
+    {"_dHRUM_setParamsToAlldHrus", (DL_FUNC) &_dHRUM_setParamsToAlldHrus, 3},
+    {"_dHRUM_setParamsToOnedHru", (DL_FUNC) &_dHRUM_setParamsToOnedHru, 4},
     {"_dHRUM_setParsToDistdHRUM", (DL_FUNC) &_dHRUM_setParsToDistdHRUM, 2},
+    {"_dHRUM_calcPetToAllHrus", (DL_FUNC) &_dHRUM_calcPetToAllHrus, 3},
     {NULL, NULL, 0}
 };
 
