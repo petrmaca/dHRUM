@@ -1,5 +1,5 @@
 #ifndef SINGLE_HMUNIT_H
-#define SINGLE_HMUNIT
+#define SINGLE_HMUNIT_H
 
 #include <fstream>
 #include <iostream>

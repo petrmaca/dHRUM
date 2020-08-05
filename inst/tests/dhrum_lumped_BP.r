@@ -4,14 +4,16 @@ Areas <- 4300000
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhruBP <- initdHruModel(nHrus,Areas,IdsHrus)
 
-filname2 = "../tests/indata/BP_1960_01_01.txt"
+filname2 = "../dHRUM/inst/tests/indata/BP_1960_01_01.txt"
 setInputsToAlldHrus(dhruBP, filname2)
 # Hamon PET
 calcPetToAllHrus(dhruBP,50.1,"Hamon")
 # Oudin PET
 # calPetToAllHrus(dHRU_ptr = dhruBP,50.1,"Oudin")
 
-ParBP =readRDS(file="../tests/param0dBrejl.rds")
+attach(what = "data/Amalie_lumped_dHRUM.rda")
+Par_dHRUm_Amalie_lumped$pars[1,]
+ParBP = Par_dHRUm_Amalie_lumped$pars[1,1:15]
 setParamsToAlldHrus(dhruBP,as.numeric(ParBP[1,]),names(ParBP))
 calcHBInAlldHrus(dhruBP)
 gatherHBdata(dhruBP)
@@ -58,3 +60,4 @@ names(dF1) <- dta1$VarsNams
 
 plot(dF$PREF,dF1$PREF)
 sum(dF$PREF-dF1$PREF)
+
