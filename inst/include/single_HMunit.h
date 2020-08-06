@@ -80,6 +80,7 @@ class single_HMunit {
 
   void setIdHru(const std::string& IdToSet);
   std::string getIdHru();
+  void print_Pars();
 
 protected:
 

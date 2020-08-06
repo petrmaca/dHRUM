@@ -46,6 +46,7 @@ class dHRUM {
   void load_PrecTempToAllHrus(const hdata& Prec, const hdata& Temp);
   unsigned get_singleHRUnumPars(unsigned Id);
   void set_numPars();
+  void print_Pars();
 
 protected:
 

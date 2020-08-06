@@ -980,3 +980,11 @@ unsigned single_HMunit::get_numPars(){
  return (par_HRU.g_numPars());
 
 }
+
+void single_HMunit::print_Pars() {
+
+  par_HRU.p_param();
+
+  return ;
+
+}
