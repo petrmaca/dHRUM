@@ -983,6 +983,8 @@ unsigned single_HMunit::get_numPars(){
 
 void single_HMunit::print_Pars() {
 
+  std::cout << "\nThe HRU ID " << getIdHru() << std::endl;
+
   par_HRU.p_param();
 
   return ;

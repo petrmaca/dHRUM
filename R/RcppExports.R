@@ -236,6 +236,7 @@ setParamsToOnedHru <- function(dHRUM_ptr, ParsVec, ParsNames, singleHruId) {
 #'
 #' @param dHRUM_ptr pointer to dHRU instance
 #' @param ParsDF data.frame of parametrs cols show parameters, rows show the Hrus
+#' @params PrintPars if TRUE than params are printed
 #' @export
 #' @examples
 #' nHrus <- 200
@@ -247,8 +248,8 @@ setParamsToOnedHru <- function(dHRUM_ptr, ParsVec, ParsNames, singleHruId) {
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToOnedHru(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),0)
-setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF) {
-    invisible(.Call(`_dHRUM_setParsToDistdHRUM`, dHRUM_ptr, ParsDF))
+setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
+    invisible(.Call(`_dHRUM_setParsToDistdHRUM`, dHRUM_ptr, ParsDF, PrintPars))
 }
 
 #' Calculates the values of Potential evapotranspiration on all singleHrus

@@ -124,13 +124,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // setParsToDistdHRUM
-void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF);
-RcppExport SEXP _dHRUM_setParsToDistdHRUM(SEXP dHRUM_ptrSEXP, SEXP ParsDFSEXP) {
+void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, bool PrintPars);
+RcppExport SEXP _dHRUM_setParsToDistdHRUM(SEXP dHRUM_ptrSEXP, SEXP ParsDFSEXP, SEXP PrintParsSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type ParsDF(ParsDFSEXP);
-    setParsToDistdHRUM(dHRUM_ptr, ParsDF);
+    Rcpp::traits::input_parameter< bool >::type PrintPars(PrintParsSEXP);
+    setParsToDistdHRUM(dHRUM_ptr, ParsDF, PrintPars);
     return R_NilValue;
 END_RCPP
 }
@@ -158,7 +159,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_printToFile", (DL_FUNC) &_dHRUM_printToFile, 2},
     {"_dHRUM_setParamsToAlldHrus", (DL_FUNC) &_dHRUM_setParamsToAlldHrus, 3},
     {"_dHRUM_setParamsToOnedHru", (DL_FUNC) &_dHRUM_setParamsToOnedHru, 4},
-    {"_dHRUM_setParsToDistdHRUM", (DL_FUNC) &_dHRUM_setParsToDistdHRUM, 2},
+    {"_dHRUM_setParsToDistdHRUM", (DL_FUNC) &_dHRUM_setParsToDistdHRUM, 3},
     {"_dHRUM_calcPetToAllHrus", (DL_FUNC) &_dHRUM_calcPetToAllHrus, 3},
     {NULL, NULL, 0}
 };

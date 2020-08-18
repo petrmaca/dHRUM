@@ -320,6 +320,7 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
 //'
 //' @param dHRUM_ptr pointer to dHRU instance
 //' @param ParsDF data.frame of parametrs cols show parameters, rows show the Hrus
+//' @params PrintPars if TRUE than params are printed
 //' @export
 //' @examples
 //' nHrus <- 200
@@ -332,7 +333,7 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
 //' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 //' setParamsToOnedHru(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),0)
 // [[Rcpp::export]]
-void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
+void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, bool PrintPars) {
 
   unsigned dimDHRUM=0, numColsParsMat=0;
   dimDHRUM = dHRUM_ptr.get()->getdHRUdim();//Should it be added into the dHRUM class??
@@ -359,6 +360,7 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
   }
 // #pragma omp parallel for
   for(unsigned it=0;it<dimDHRUM; it++){
+    // Rcpp::Rcout << it << "\n";
     Rcpp::NumericVector ParsVec(numColsParsMat);
     for(unsigned cl=0;cl<numColsParsMat;cl++){
      Rcpp::NumericVector ParVectsCols =  ParsDF[cl];
@@ -367,7 +369,7 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
     setParamsToOnedHru( dHRUM_ptr, ParsVec, ParsNames, it);
   }
 
-  dHRUM_ptr.get()->print_Pars();
+  if(PrintPars) dHRUM_ptr.get()->print_Pars();
 
   return  ;
 }
