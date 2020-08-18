@@ -65,9 +65,9 @@ gatherHBdata <- function(dHRUM_ptr) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
-#' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
-setInputsToAlldHrus <- function(dHRUM_ptr, namInpFilet) {
-    invisible(.Call(`_dHRUM_setInputsToAlldHrus`, dHRUM_ptr, namInpFilet))
+#' setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
+setPTInputsToAlldHrusFromFile <- function(dHRUM_ptr, namInpFilet) {
+    invisible(.Call(`_dHRUM_setPTInputsToAlldHrusFromFile`, dHRUM_ptr, namInpFilet))
 }
 
 #' Sets the Precipitation, Temperature vectors to dHRUM and init's the date using beg. of period.
@@ -230,7 +230,7 @@ setParamsToOnedHru <- function(dHRUM_ptr, ParsVec, ParsNames, singleHruId) {
     invisible(.Call(`_dHRUM_setParamsToOnedHru`, dHRUM_ptr, ParsVec, ParsNames, singleHruId))
 }
 
-#' Sets the values of params to dHRU model using data.frame of params as inputs.
+#' Sets the values of params to distributed dHRU model using data.frame of params as inputs.
 #'
 #' Setting of vectors of params to all HRUs for distributed dHRUM.
 #'

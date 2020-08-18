@@ -17,9 +17,9 @@
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 //' filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
-//' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
+//' setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 // [[Rcpp::export]]
-void setInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namInpFilet) {
+void setPTInputsToAlldHrusFromFile(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namInpFilet) {
   // Rcpp::Rcout << "Input data fully loaded.";
   // See comment on returning pointer
   //https://stackoverflow.com/questions/59384221/proper-way-to-return-a-pointer-to-a-new-object-from-an-rcpp-function

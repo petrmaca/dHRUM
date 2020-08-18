@@ -26,14 +26,14 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// setInputsToAlldHrus
-void setInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namInpFilet);
-RcppExport SEXP _dHRUM_setInputsToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP namInpFiletSEXP) {
+// setPTInputsToAlldHrusFromFile
+void setPTInputsToAlldHrusFromFile(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namInpFilet);
+RcppExport SEXP _dHRUM_setPTInputsToAlldHrusFromFile(SEXP dHRUM_ptrSEXP, SEXP namInpFiletSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
     Rcpp::traits::input_parameter< std::string >::type namInpFilet(namInpFiletSEXP);
-    setInputsToAlldHrus(dHRUM_ptr, namInpFilet);
+    setPTInputsToAlldHrusFromFile(dHRUM_ptr, namInpFilet);
     return R_NilValue;
 END_RCPP
 }
@@ -151,7 +151,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_calcHBInAlldHrus", (DL_FUNC) &_dHRUM_calcHBInAlldHrus, 1},
     {"_dHRUM_gatherHBdata", (DL_FUNC) &_dHRUM_gatherHBdata, 1},
-    {"_dHRUM_setInputsToAlldHrus", (DL_FUNC) &_dHRUM_setInputsToAlldHrus, 2},
+    {"_dHRUM_setPTInputsToAlldHrusFromFile", (DL_FUNC) &_dHRUM_setPTInputsToAlldHrusFromFile, 2},
     {"_dHRUM_setPTInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTInputsToAlldHrus, 4},
     {"_dHRUM_setPTDateInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTDateInputsToAlldHrus, 4},
     {"_dHRUM_initdHruModel", (DL_FUNC) &_dHRUM_initdHruModel, 3},

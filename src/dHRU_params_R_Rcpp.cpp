@@ -314,7 +314,7 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
   return  ;
 }
 
-//' Sets the values of params to dHRU model using data.frame of params as inputs.
+//' Sets the values of params to distributed dHRU model using data.frame of params as inputs.
 //'
 //' Setting of vectors of params to all HRUs for distributed dHRUM.
 //'
@@ -361,7 +361,7 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
   std::vector<std::string>  parNameStr = Rcpp::as<std::vector<std::string> >(ParsNames);
   for(unsigned it=0; it<numColsParsMat;it++ ){
     if ( std::find(allParNames.begin(), allParNames.end(), parNameStr[it]) == allParNames.end()) {
-      Rcpp::Rcout << "\nSomething wrong parameter names on item " << (it+1) << "\n";
+      Rcpp::Rcout << "\nSomething wrong on parameter names in item " << (it+1) << "\n";
       Rcpp::stop("\nWrong names of Par Values.\n");
     }
   }
