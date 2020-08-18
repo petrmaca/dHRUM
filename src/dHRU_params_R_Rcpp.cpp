@@ -357,7 +357,7 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
       Rcpp::stop("\nWrong names of Par Values.\n");
     }
   }
-
+// #pragma omp parallel for
   for(unsigned it=0;it<dimDHRUM; it++){
     Rcpp::NumericVector ParsVec(numColsParsMat);
     for(unsigned cl=0;cl<numColsParsMat;cl++){
@@ -366,6 +366,8 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF) {
     }
     setParamsToOnedHru( dHRUM_ptr, ParsVec, ParsNames, it);
   }
+
+  dHRUM_ptr.get()->print_Pars();
 
   return  ;
 }
