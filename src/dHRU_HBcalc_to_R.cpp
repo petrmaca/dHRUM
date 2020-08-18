@@ -6,7 +6,7 @@
 //' Updating the states ad values of all ts variables in all single Hrus of dHRUM
 //'
 //'
-//' @param dHRU_ptr pointer to dHRUM instance
+//' @param dHRUM_ptr pointer to dHRUM instance
 //' @export
 //' @examples
 //' nHrus <- 200

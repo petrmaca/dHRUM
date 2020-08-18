@@ -7,11 +7,11 @@
 calcPetToAllHrus(dHRUM_ptr, Latitude, PetTypeStr)
 }
 \arguments{
+\item{dHRUM_ptr}{pointer to dHRUM instance}
+
 \item{Latitude}{single number for Oudin method}
 
 \item{PetTypeStr}{variable on selection of PET models}
-
-\item{dHRU_ptr}{pointer to dHRUM instance}
 }
 \description{
 Setting of Pet method is done by \code{PetTypeStr}, methods implemented are: \code{Oudin}, \code{Hamon}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{setPTInputsToAlldHrus}
 \alias{setPTInputsToAlldHrus}
-\title{Sets the Precipitation, Temperature vectors to dHRUM and init's the date using beg. of period.}
+\title{Sets the similar Precipitation, Temperature vectors to dHRUM and init's the date using beg. of period.}
 \usage{
 setPTInputsToAlldHrus(dHRUM_ptr, Prec, Temp, inDate)
 }

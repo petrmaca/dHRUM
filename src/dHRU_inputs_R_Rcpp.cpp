@@ -3,13 +3,13 @@
 
 //' Sets similar input data obtained from file to all single Hrus at dHRUM instance.
 //'
-//' Loads the data from file to a single dHRU instance created  the \code{initdHruModel(nHrus,Areas,IdsHrus)} function
-//' All iputs are same for each single HRU unit. File has on its first row YYYY MM DD,
+//' Loads the data from file to a single dHRUM instance created  the \code{initdHruModel(nHrus,Areas,IdsHrus)} function
+//' All inputs are same for each single HRU unit. File has on its first row YYYY MM DD,
 //' remaining columns should have Temperature and Precipitation data.
 //'
 //'
-//' @param dHRU_ptr pointer to dHRU instance
-//' @param namInpFilet a chacter vector to a single file with input data to dHRUM.
+//' @param dHRUM_ptr pointer to dHRU instance
+//' @param namInpFilet a character vector to a single file with input data to dHRUM.
 //' @export
 //' @examples
 //' nHrus <- 200
@@ -28,7 +28,7 @@ void setPTInputsToAlldHrusFromFile(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namI
 
 }
 
-//' Sets the Precipitation, Temperature vectors to dHRUM and init's the date using beg. of period.
+//' Sets the similar Precipitation, Temperature vectors to dHRUM and init's the date using beg. of period.
 //'
 //' Setting the similar vector of Precipitation and temperature to all single HRU.
 //' Setting the calender using the first date fo period using the first date of period
@@ -82,7 +82,7 @@ void setPTInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Prec
   return  ;
 }
 
-//' Sets the Precipitation, Temperature, and Date vectors to dHRU.
+//' Sets the similar Precipitation, Temperature, and Date vectors to dHRU.
 //'
 //' Setting the similar vectors of Precipitation and Temperature
 //' to all single HRUs of dHRU. Loading the Date vector  from vector like variable.

@@ -6,7 +6,7 @@
 //' Setting of Pet method is done by \code{PetTypeStr}, methods implemented are: \code{Oudin}, \code{Hamon}
 //'
 //'
-//' @param dHRU_ptr pointer to dHRUM instance
+//' @param dHRUM_ptr pointer to dHRUM instance
 //' @param Latitude single number for Oudin method
 //' @param PetTypeStr variable on selection of PET models
 //' @export

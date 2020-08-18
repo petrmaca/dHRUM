@@ -7,7 +7,7 @@
 calcHBInAlldHrus(dHRUM_ptr)
 }
 \arguments{
-\item{dHRU_ptr}{pointer to dHRUM instance}
+\item{dHRUM_ptr}{pointer to dHRUM instance}
 }
 \description{
 Updating the states ad values of all ts variables in all single Hrus of dHRUM

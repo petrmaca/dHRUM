@@ -320,7 +320,7 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
 //'
 //' @param dHRUM_ptr pointer to dHRU instance
 //' @param ParsDF data.frame of parametrs cols show parameters, rows show the Hrus
-//' @params PrintPars if TRUE than params are printed
+//' @param PrintPars if TRUE than params are printed
 //' @export
 //' @examples
 //' nHrus <- 200

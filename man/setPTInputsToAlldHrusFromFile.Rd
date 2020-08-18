@@ -7,13 +7,13 @@
 setPTInputsToAlldHrusFromFile(dHRUM_ptr, namInpFilet)
 }
 \arguments{
-\item{namInpFilet}{a chacter vector to a single file with input data to dHRUM.}
+\item{dHRUM_ptr}{pointer to dHRU instance}
 
-\item{dHRU_ptr}{pointer to dHRU instance}
+\item{namInpFilet}{a character vector to a single file with input data to dHRUM.}
 }
 \description{
-Loads the data from file to a single dHRU instance created  the \code{initdHruModel(nHrus,Areas,IdsHrus)} function
-All iputs are same for each single HRU unit. File has on its first row YYYY MM DD,
+Loads the data from file to a single dHRUM instance created  the \code{initdHruModel(nHrus,Areas,IdsHrus)} function
+All inputs are same for each single HRU unit. File has on its first row YYYY MM DD,
 remaining columns should have Temperature and Precipitation data.
 }
 \examples{

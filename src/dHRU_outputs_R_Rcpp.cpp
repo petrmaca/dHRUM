@@ -6,8 +6,8 @@
 //' return matrix with state variables and fluxes averaged over basin area.
 //'
 //'
-//' @param dHRU_ptr pointer to dHRUM instance
-//' @return a list with matrix of caldata \code{[,1:4]} and hdata ts variables \code{[,5:27]} and names of vars
+//' @param dHRUM_ptr pointer to dHRUM instance
+//' @return list with matrix of caldata \code{[,1:4]} and hdata ts variables \code{[,5:27]} and names of vars
 //' @export
 //' @examples
 //' nHrus <- 200

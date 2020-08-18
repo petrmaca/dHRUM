@@ -6,7 +6,7 @@
 #' Updating the states ad values of all ts variables in all single Hrus of dHRUM
 #'
 #'
-#' @param dHRU_ptr pointer to dHRUM instance
+#' @param dHRUM_ptr pointer to dHRUM instance
 #' @export
 #' @examples
 #' nHrus <- 200
@@ -51,13 +51,13 @@ gatherHBdata <- function(dHRUM_ptr) {
 
 #' Sets similar input data obtained from file to all single Hrus at dHRUM instance.
 #'
-#' Loads the data from file to a single dHRU instance created  the \code{initdHruModel(nHrus,Areas,IdsHrus)} function
-#' All iputs are same for each single HRU unit. File has on its first row YYYY MM DD,
+#' Loads the data from file to a single dHRUM instance created  the \code{initdHruModel(nHrus,Areas,IdsHrus)} function
+#' All inputs are same for each single HRU unit. File has on its first row YYYY MM DD,
 #' remaining columns should have Temperature and Precipitation data.
 #'
 #'
-#' @param dHRU_ptr pointer to dHRU instance
-#' @param namInpFilet a chacter vector to a single file with input data to dHRUM.
+#' @param dHRUM_ptr pointer to dHRU instance
+#' @param namInpFilet a character vector to a single file with input data to dHRUM.
 #' @export
 #' @examples
 #' nHrus <- 200
@@ -70,7 +70,7 @@ setPTInputsToAlldHrusFromFile <- function(dHRUM_ptr, namInpFilet) {
     invisible(.Call(`_dHRUM_setPTInputsToAlldHrusFromFile`, dHRUM_ptr, namInpFilet))
 }
 
-#' Sets the Precipitation, Temperature vectors to dHRUM and init's the date using beg. of period.
+#' Sets the similar Precipitation, Temperature vectors to dHRUM and init's the date using beg. of period.
 #'
 #' Setting the similar vector of Precipitation and temperature to all single HRU.
 #' Setting the calender using the first date fo period using the first date of period
@@ -92,7 +92,7 @@ setPTInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, inDate) {
     invisible(.Call(`_dHRUM_setPTInputsToAlldHrus`, dHRUM_ptr, Prec, Temp, inDate))
 }
 
-#' Sets the Precipitation, Temperature, and Date vectors to dHRU.
+#' Sets the similar Precipitation, Temperature, and Date vectors to dHRU.
 #'
 #' Setting the similar vectors of Precipitation and Temperature
 #' to all single HRUs of dHRU. Loading the Date vector  from vector like variable.
@@ -124,7 +124,7 @@ setPTDateInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, DateVec) {
 #' @param dimdHru a single \code{numberDta} number of single Hrus.
 #' @param vecAreas a \code{numeric vector} of size \code{dimHru} of Areas for all single HRUs on dHRU.
 #' @param hrusIDs a \code{character vector} of size \code{dimHru} of Id's for all single HRUs on dHRU.
-#' @return dHRU_ptr pointer to dHru instance.
+#' @return dHRUM_ptr pointer to dHru instance.
 #' @export
 #' @examples
 #' nHrus <- 200
@@ -140,8 +140,8 @@ initdHruModel <- function(dimdHru, vecAreas, hrusIDs) {
 #' return matrix with state variables and fluxes averaged over basin area.
 #'
 #'
-#' @param dHRU_ptr pointer to dHRUM instance
-#' @return a list with matrix of caldata \code{[,1:4]} and hdata ts variables \code{[,5:27]} and names of vars
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @return list with matrix of caldata \code{[,1:4]} and hdata ts variables \code{[,5:27]} and names of vars
 #' @export
 #' @examples
 #' nHrus <- 200
@@ -236,7 +236,7 @@ setParamsToOnedHru <- function(dHRUM_ptr, ParsVec, ParsNames, singleHruId) {
 #'
 #' @param dHRUM_ptr pointer to dHRU instance
 #' @param ParsDF data.frame of parametrs cols show parameters, rows show the Hrus
-#' @params PrintPars if TRUE than params are printed
+#' @param PrintPars if TRUE than params are printed
 #' @export
 #' @examples
 #' nHrus <- 200
@@ -264,7 +264,7 @@ setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
 #' Setting of Pet method is done by \code{PetTypeStr}, methods implemented are: \code{Oudin}, \code{Hamon}
 #'
 #'
-#' @param dHRU_ptr pointer to dHRUM instance
+#' @param dHRUM_ptr pointer to dHRUM instance
 #' @param Latitude single number for Oudin method
 #' @param PetTypeStr variable on selection of PET models
 #' @export

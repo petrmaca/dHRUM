@@ -14,7 +14,7 @@ initdHruModel(dimdHru, vecAreas, hrusIDs)
 \item{hrusIDs}{a \code{character vector} of size \code{dimHru} of Id's for all single HRUs on dHRU.}
 }
 \value{
-dHRU_ptr pointer to dHru instance.
+dHRUM_ptr pointer to dHru instance.
 }
 \description{
 Creates pointer instance of dHRUM for the catchment.

@@ -7,10 +7,10 @@
 getOutput(dHRUM_ptr)
 }
 \arguments{
-\item{dHRU_ptr}{pointer to dHRUM instance}
+\item{dHRUM_ptr}{pointer to dHRUM instance}
 }
 \value{
-a list with matrix of caldata \code{[,1:4]} and hdata ts variables \code{[,5:27]} and names of vars
+list with matrix of caldata \code{[,1:4]} and hdata ts variables \code{[,5:27]} and names of vars
 }
 \description{
 return matrix with state variables and fluxes averaged over basin area.

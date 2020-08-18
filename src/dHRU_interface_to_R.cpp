@@ -10,7 +10,7 @@
 //' @param dimdHru a single \code{numberDta} number of single Hrus.
 //' @param vecAreas a \code{numeric vector} of size \code{dimHru} of Areas for all single HRUs on dHRU.
 //' @param hrusIDs a \code{character vector} of size \code{dimHru} of Id's for all single HRUs on dHRU.
-//' @return dHRU_ptr pointer to dHru instance.
+//' @return dHRUM_ptr pointer to dHru instance.
 //' @export
 //' @examples
 //' nHrus <- 200

@@ -10,6 +10,8 @@ setParsToDistdHRUM(dHRUM_ptr, ParsDF, PrintPars)
 \item{dHRUM_ptr}{pointer to dHRU instance}
 
 \item{ParsDF}{data.frame of parametrs cols show parameters, rows show the Hrus}
+
+\item{PrintPars}{if TRUE than params are printed}
 }
 \description{
 Setting of vectors of params to all HRUs for distributed dHRUM.
