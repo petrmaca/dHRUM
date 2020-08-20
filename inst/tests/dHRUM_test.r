@@ -206,3 +206,23 @@ ParDF[,2] <- seq(1:nHrus)
 setParsToDistdHRUM(dhrus, ParDF, FALSE)
 ParDF[,3] <- seq(1:nHrus)
 setParsToDistdHRUM(dhrus, ParDF, TRUE)
+
+nHrus <- 10
+Areas <- runif(nHrus,min = 1,max  = 100)
+IdsHrus <- paste0("ID",seq(1:length(Areas)))
+dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+
+datDF=data.frame(HruId=c(1,2,3))
+setPTInputsToDistdHRUM(dhrus,DataDF = datDF)
+
+nHrus <- 3
+Areas <- runif(nHrus,min = 1,max  = 100)
+IdsHrus <- paste0("ID",seq(1:length(Areas)))
+dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+
+datDF=data.frame(HruId=c(1,2,3,3))
+setPTInputsToDistdHRUM(dhrus,DataDF = datDF)
+
+datDF=data.frame(HruId=c(1,1,2,2,3,3))
+setPTInputsToDistdHRUM(dhrus,DataDF = datDF)
+

@@ -115,6 +115,24 @@ setPTDateInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, DateVec) {
     invisible(.Call(`_dHRUM_setPTDateInputsToAlldHrus`, dHRUM_ptr, Prec, Temp, DateVec))
 }
 
+#' Sets the distributed Precipitation, Temperature vectors to distributed dHRUM and init's the date using beg. of period.
+#'
+#' Setting the different vector of Precipitation and temperature to all single HRU.
+#' Setting the calender using the first date fo period using the first date of period
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @param DataDF dataframe with DTM, Precipitation, Temperature, and HRU Ids
+#' @export
+#' @examples
+#' nHrus <- 2
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#'
+setPTInputsToDistdHRUM <- function(dHRUM_ptr, DataDF) {
+    invisible(.Call(`_dHRUM_setPTInputsToDistdHRUM`, dHRUM_ptr, DataDF))
+}
+
 #' Initialization of dHRU pointer to a dHRUM
 #'
 #' Creates pointer instance of dHRUM for the catchment.

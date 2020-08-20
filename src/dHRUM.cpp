@@ -368,6 +368,8 @@ void dHRUM::set_numPars() {
     std::cout <<"The number of params for HRU unit "<< it<< " is " << get_singleHRUnumPars(it) << std::endl;
   }
 
+  return;
+
 }
 
 void dHRUM::print_Pars() {
@@ -376,5 +378,15 @@ void dHRUM::print_Pars() {
     dHruVec[it].print_Pars();
   }
 
+  return;
+
+}
+
+
+void dHRUM::loadPTInputsToOneHru(hdata Prec, hdata Temp, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay, unsigned HruIt) {
+
+  dHruVec[HruIt].load_data_PT(Prec,Temp,val,inYear,inMonth,inDay);
+
+  return;
 
 }

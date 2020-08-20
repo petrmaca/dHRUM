@@ -149,3 +149,72 @@ void setPTDateInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector 
   return  ;
 
 }
+
+//' Sets the distributed Precipitation, Temperature vectors to distributed dHRUM and init's the date using beg. of period.
+//'
+//' Setting the different vector of Precipitation and temperature to all single HRU.
+//' Setting the calender using the first date fo period using the first date of period
+//'
+//' @param dHRUM_ptr pointer to dHRUM instance
+//' @param DataDF dataframe with DTM, Precipitation, Temperature, and HRU Ids
+//' @export
+//' @examples
+//' nHrus <- 2
+//' Areas <- runif(nHrus,min = 1,max  = 10)
+//' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+//'
+// [[Rcpp::export]]
+void setPTInputsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame DataDF) {
+
+  Rcpp::CharacterVector HruIdVec = DataDF["HruId"];
+  Rcpp::NumericVector Prec = DataDF["P"];
+  Rcpp::NumericVector Temp = DataDF["T"];
+  Rcpp::DateVector DateVec = DataDF["DTM"];
+
+
+  unsigned nDatInOneHru = 0, nHrusDF = 0, ndat =0;
+
+  std::unordered_set<SEXP> uniqueHRUs(HruIdVec.begin(),HruIdVec.end());
+  nHrusDF = uniqueHRUs.size();
+
+  Rcpp::Rcout << "the number of HruId in Df: " << nHrusDF << "\n";
+  if(nHrusDF != ((unsigned) dHRUM_ptr.get()->getdHRUdim())){
+    Rcpp::stop("\n Different number of Hru's in data.framne and dHRUM.\n");
+  }
+
+  nDatInOneHru = std::count(HruIdVec.begin(),HruIdVec.end(),HruIdVec[0]);
+  // std::cout << ndat;
+  ndat = nDatInOneHru * nHrusDF;
+
+  if(ndat != DataDF.nrows()){
+    Rcpp::stop("\n Different and non constant number of ts data in data.framne for Hrus.\n");
+  }
+  Rcpp::Rcout << "the number of al ts data: " << ndat << "\n";
+
+  Rcpp::Date myDat = Rcpp::Date(DateVec[0]);
+
+  unsigned myear= 0, mmonth = 0, mday = 0;
+  myear = (unsigned) myDat.getYear();
+  mmonth = (unsigned) myDat.getMonth();
+  mday = (unsigned) myDat.getDay();
+
+  unsigned TScounter = 0;
+  for(unsigned int itHru=0; itHru < nHrusDF;itHru++) {
+    hdata mPrec(1,1), mTemp(1,1);
+    mPrec.resize(nDatInOneHru);
+    mTemp.resize(nDatInOneHru);
+    for(unsigned int ts=0;ts<nDatInOneHru;ts++) {
+      mPrec[ts] = Prec[TScounter];
+      mTemp[ts] = Temp[TScounter];
+      // myear[it] = (unsigned) DateVec[it].getYear();
+      TScounter++;
+    }
+    dHRUM_ptr.get()->loadPTInputsToOneHru(mPrec,mTemp,0,myear,mmonth,mday,itHru);
+  }
+
+  dHRUM_ptr.get()->initdHRUbasinDTA();
+
+  return ;
+
+}
