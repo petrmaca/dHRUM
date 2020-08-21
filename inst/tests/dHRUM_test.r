@@ -226,3 +226,19 @@ setPTInputsToDistdHRUM(dhrus,DataDF = datDF)
 datDF=data.frame(HruId=c(1,1,2,2,3,3))
 setPTInputsToDistdHRUM(dhrus,DataDF = datDF)
 
+
+require(dHRUM)
+nHrus <- 3
+Areas <- runif(nHrus,min = 1,max  = 100)
+IdsHrus <- paste0("ID",seq(1:length(Areas)))
+dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+
+datDF=data.frame(DTM=c(as.Date("2020-01-01"),
+                       as.Date("2020-01-01"),
+                       as.Date("2020-01-01")),
+                       T=c(1,2,3),
+                       P=c(20,10,1),
+                       HruId=c(1,2,3))
+
+setPTInputsToDistdHRUM(dhrus,datDF)
+

@@ -172,13 +172,12 @@ void setPTInputsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame DataDF)
   Rcpp::NumericVector Temp = DataDF["T"];
   Rcpp::DateVector DateVec = DataDF["DTM"];
 
-
   unsigned nDatInOneHru = 0, nHrusDF = 0, ndat =0;
 
   std::unordered_set<SEXP> uniqueHRUs(HruIdVec.begin(),HruIdVec.end());
   nHrusDF = uniqueHRUs.size();
 
-  Rcpp::Rcout << "the number of HruId in Df: " << nHrusDF << "\n";
+  // Rcpp::Rcout << "the number of HruId in Df: " << nHrusDF << "\n";
   if(nHrusDF != ((unsigned) dHRUM_ptr.get()->getdHRUdim())){
     Rcpp::stop("\n Different number of Hru's in data.framne and dHRUM.\n");
   }
@@ -190,7 +189,7 @@ void setPTInputsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame DataDF)
   if(ndat != DataDF.nrows()){
     Rcpp::stop("\n Different and non constant number of ts data in data.framne for Hrus.\n");
   }
-  Rcpp::Rcout << "the number of al ts data: " << ndat << "\n";
+  // Rcpp::Rcout << "The number of all ts data: " << ndat << "\n";
 
   Rcpp::Date myDat = Rcpp::Date(DateVec[0]);
 
