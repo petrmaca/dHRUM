@@ -5,7 +5,7 @@ IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhruBP <- initdHruModel(nHrus,Areas,IdsHrus)
 
 filname2 = "../dHRUM/inst/tests/indata/BP_1960_01_01.txt"
-setInputsToAlldHrus(dhruBP, filname2)
+setPTInputsToAlldHrusFromFile(dhruBP, filname2)
 # Hamon PET
 calcPetToAllHrus(dhruBP,50.1,"Hamon")
 # Oudin PET
