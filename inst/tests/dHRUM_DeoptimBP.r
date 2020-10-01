@@ -6,9 +6,9 @@ Areas <- runif(nHrus,min = 1,max  = 100)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 
-filname2 = "./indata/BP_1960_01_01.txt"
+filname2 = "../dHRUM/inst/tests/indata/BP_1960_01_01.txt"
 
-setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
+setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
 
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 500, B_EVAP = 1,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.3,
@@ -110,9 +110,9 @@ BP_df=cbind(ID=rep("KL",times=n_ens))
 ParBest[1,] = as.numeric(u$optim$bestmem)
 ParBest
 
-  
+
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParBest[1,]),names(ParDF))
-  
+
   # for( i in 1:1000){
 calcHBInAlldHrus(dHRUM_ptr = dhrus)
 gatherHBdata(dHRUM_ptr = dhrus)
