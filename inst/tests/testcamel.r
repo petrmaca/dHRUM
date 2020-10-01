@@ -17,7 +17,7 @@ gaugeChars <- fread(paste0(paste0(pathToCamel,"/basin_metadata/gauge_information
 
 gaugeChars[523:524,]
 
-i <- 523
+i <- 1
 nt <- 2000
 nseVec <- c()
 kgeVec <- c()

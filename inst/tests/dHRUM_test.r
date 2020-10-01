@@ -1,6 +1,6 @@
 sessionInfo()
 library(dHRUM)
-nHrus <- 10
+nHrus <-  200
 Areas <- runif(nHrus,min = 1,max  = 100)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
