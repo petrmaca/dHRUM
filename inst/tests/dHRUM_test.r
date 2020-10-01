@@ -49,7 +49,7 @@ dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 
 filname2 = "../dHRUM/inst/tests/indata/BP_1960_01_01.txt"
 
-setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
+setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
   SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
