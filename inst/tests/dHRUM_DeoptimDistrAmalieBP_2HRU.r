@@ -2,7 +2,7 @@ sessionInfo()
 library(dHRUM)
 nHrus <- 2
 # Areas <- runif(nHrus,min = 1,max  = 100)
-Areas <- c(1.92,2.5)
+Areas <- c(2.5,1.92)#les 1.92 Zem_puda 2.5
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 
@@ -103,10 +103,28 @@ plot(dF$DIRR, type='l')
 plot(dF$SOIS, type='l')
 plot(dF$GROS, type='l')
 simBest=as.numeric(quantile(dF$TOTR,probs=(1-p_OBS), na.rm = TRUE))
+
+
 plot(RmBP, simBest)
 
-plot(p_OBS,RmBP, pch=19)
+plot(p_OBS,RmBP, pch=19, main = "Brejlský potok - kalibrace dHRUM - 2 HRU",xlab="P(Qm)", ylab="Qm [mm/den]")
 points(p_OBS,simBest,col="red",pch=19)
+grid()
 
 ParBest[1:nPars1HRU]
 ParBest[(nPars1HRU+1):(2*nPars1HRU)]
+
+Par1 = myPar[1:nPars1HRU]
+Par2 = as.numeric(myPar[(nPars1HRU+1):(2*nPars1HRU)])
+
+require(data.table)
+pars=data.table(ParDF1)
+
+ParDF11=ParDF1
+ParDF11[1,] = ParBest[1:nPars1HRU]
+
+ParDF11=rbind(ParDF11,ParBest[(nPars1HRU+1):(2*nPars1HRU)])
+
+pars2hru_bp <-cbind(ParDF11,Areas=c(2.50, 1.92))
+
+saveRDS(pars2hru_bp,file = "./data/Params/Amalie/BP_2HRU.rds")
