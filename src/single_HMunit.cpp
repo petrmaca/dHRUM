@@ -586,10 +586,13 @@ void single_HMunit::interception_snow() {
 
   if(get_dta(tstRM, ts_type::TEMP) > get_par(par_HRUtype::TMEL)) {
     Snow_melt = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prevSnoS);
-    if(Snow_melt <0) std::cout  <<"negative melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
+     if(Snow_melt <0) std::cout  <<"negative melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
   } else Snow_melt = 0.0;
 
-  prevSnoS = prevSnoS + Snoww - Snow_melt;
+  if ((prevSnoS + Snoww - Snow_melt)<0){
+    prevSnoS = 0.0;
+    Snow_melt = prevSnoS + Snoww;
+  } else prevSnoS = prevSnoS + Snoww - Snow_melt;
 
   //   std::cout << " prevSnoS " << prevSnoS << " MELT " << Snow_melt<< " ";
 

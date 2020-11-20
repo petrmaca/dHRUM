@@ -102,6 +102,7 @@ plot(dF$BASF, type='l')
 plot(dF$DIRR, type='l')
 plot(dF$SOIS, type='l')
 plot(dF$GROS, type='l')
+plot(dF$SNOW, type='l')
 simBest=as.numeric(quantile(dF$TOTR,probs=(1-p_OBS), na.rm = TRUE))
 
 
