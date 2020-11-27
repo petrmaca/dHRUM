@@ -34,7 +34,7 @@ class params {
  protected:
 
  private:
-  //!< The PDM parametrization based on the Pareto distribution
+  //!< The parameters for single HMunit
   unsigned numPars;//!<  The number of model parameters
   pdata pars;//!< The values of parameters on given HRU
   pdata up_pars;//!< The upper bounds of parameters
