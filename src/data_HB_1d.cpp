@@ -644,7 +644,7 @@ void data_HB_1d::s_Pet_Pars(const numberSel& newLatitude, const pet_Type& newPeT
 
 void data_HB_1d::OudinPET() {
 
-  numberSel dec = 0.0, rad_Latid = Latitude / 180 / M_PI, ndy = 365, dr = 0.0, omega = 0.0, Ra = 0.0, GlSoCo = 0.0820;
+  numberSel dec = 0.0, rad_Latid = Latitude / 180 * M_PI, ndy = 365, dr = 0.0, omega = 0.0, Ra = 0.0, GlSoCo = 0.0820;
 
   for(unsigned tst=0; tst<numTS; tst++) {
     if( leap_Check_Year(year[tst]) ) ndy = 366;
@@ -669,7 +669,7 @@ void data_HB_1d::OudinPET() {
 
 void data_HB_1d::HamonPET() {
 
-  numberSel dec = 0.0, rad_Latid = Latitude / 180 / M_PI, ndy = 365, Nn = 0.0, omega = 0.0, Esat = 0.0;
+  numberSel dec = 0.0, rad_Latid = Latitude / 180 * M_PI, ndy = 365, Nn = 0.0, omega = 0.0, Esat = 0.0;
 
   for(unsigned tst=0; tst<numTS; tst++) {
     if(leap_Check_Year(year[tst])) ndy = 366;
