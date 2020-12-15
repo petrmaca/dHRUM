@@ -16,6 +16,7 @@ calcPetToAllHrus(dhruBP,50.1,"Oudin")
 attach(what = "data/Amalie_lumped_dHRUM.rda")
 Par_dHRUm_Amalie_lumped$pars[1,]
 ParBP = Par_dHRUm_Amalie_lumped$pars[1,1:15]
+ParBP=BP_df[1,1:15]
 setParamsToAlldHrus(dhruBP,as.numeric(ParBP[1,]),names(ParBP))
 calcHBInAlldHrus(dhruBP)
 gatherHBdata(dhruBP)
