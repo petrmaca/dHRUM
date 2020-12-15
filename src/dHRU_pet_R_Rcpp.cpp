@@ -42,7 +42,7 @@ void calcPetToAllHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, numberSel Latitude, std::stri
   switch(s_mapStringToPet_Type[PetTypeStr]) {
   case pet_Type::OUDIN:
     myPetType = pet_Type::OUDIN;
-    // Rcpp::Rcout << "\n oudinddd \n";
+   // Rcpp::Rcout << "\n oudinddd \n";
     break;
   case pet_Type::HAMON:
     myPetType = pet_Type::HAMON;

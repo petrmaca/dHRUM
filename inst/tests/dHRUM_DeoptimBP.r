@@ -9,18 +9,18 @@ dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 filname2 = "../dHRUM/inst/tests/indata/BP_1960_01_01.txt"
 
 setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
-calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Oudin")
 
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 500, B_EVAP = 1,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.3,
 SDIV = 0.3, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
 RETCAP = 2 )
 
-ParDFup = data.frame( B_SOIL = 2, C_MAX = 100, B_EVAP = 2,  KS = 0.4, KF = 0.7, ADIV = 0.9, CDIV = 0.3,
-                      SDIV = 0.3, CAN_ST = 4., STEM_ST = 5., CSDIV = 0.8, TETR = 0.5, DDFA = 5, TMEL = 0.0,
-                      RETCAP = 20 )
+ParDFup = data.frame( B_SOIL = 2, C_MAX = 300, B_EVAP = 2,  KS = 0.4, KF = 0.8, ADIV = 0.9, CDIV = 0.3,
+                      SDIV = 0.3, CAN_ST = 2.25, STEM_ST = 1.6, CSDIV = 0.8, TETR = 0.5, DDFA = 5, TMEL = 0.0,
+                      RETCAP = 6 )
 
-ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 5, B_EVAP = 0.5,  KS = 0.002, KF = 0.2, ADIV = 0.01, CDIV = 0.05,
-                       SDIV = 0.01, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -8.0,
+ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 5, B_EVAP = 0.5,  KS = 0.001, KF = 0.4, ADIV = 0.01, CDIV = 0.05,
+                       SDIV = 0.01, CAN_ST = 0.25, STEM_ST = 0.25, CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -8.0,
                        RETCAP = 2 )
 ParBest = ParDF
   # set_Params_TodHru(dHRU_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
@@ -54,7 +54,8 @@ mae = function(myPar){
   dF <-data.frame(dta$outDta)
   names(dF) <- dta$VarsNams
   simRM=as.numeric(quantile(dF$TOTR,probs=(1-p_OBS), na.rm = TRUE))
-  mymae =as.double(sum(abs(simRM - RmBP)))
+  # mymae =as.double(sum(abs(simRM - RmBP)))
+  mymae =as.double(sum((simRM - RmBP)^2))
   # # mymae=NA
   # if(is.na(mymae)) mymae = 9999
   # (return as.double(mymae))
@@ -69,7 +70,7 @@ decntr<-DEoptim.control(VTR = 0, strategy = 2, bs = FALSE, NP = 200,
                 initialpop = NULL, storepopfrom = itermaxW + 1,
                 storepopfreq = 1, p = 0.2, c = 0, reltol = sqrt(.Machine$double.eps),
                 steptol = itermaxW)
-n_ens=25
+n_ens=2
 parsBPmatrix=matrix(0,nrow=n_ens, ncol=ncol(ParBest))
 for(i in 1:n_ens){
   u=DEoptim( lower=as.numeric(ParDFlow[1,]), upper=as.numeric(ParDFup[1,]), fn=mae, control = decntr)
@@ -81,9 +82,10 @@ for(i in 1:n_ens){
 BP_df = data.frame(parsBPmatrix)
 names(BP_df) = names(ParBest)
 BP_df=cbind(BP_df,ID=rep("BP",times=n_ens))
-save(BP_df,file="par_dHRUM_lumped_PET_HAMON_50_1_BP.rda")
+# save(BP_df,file="par_dHRUM_lumped_PET_HAMON_50_1_BP.rda")
+save(BP_df,file="par_dHRUM_lumped_PET_Oudin_50_1_BP.rda")
 
-load("par_dHRUM_lumped_PET_HAMON_50_1_BP.rda")
+load("par_dHRUM_lumped_PET_Oudin_50_1_BP.rda")
 BP_df
 
 A=4.7*1000*1000## plocha BP
@@ -104,11 +106,11 @@ Par_dHRUm_Amalie_lumped = list(
 
 save(Par_dHRUm_Amalie_lumped ,file = "Amalie_lumped_dHRUM.rda")
 Par_dHRUm_Amalie_lumped$areaM2$BP
-BP_df=cbind(ID=rep("KL",times=n_ens))
+BP_df=cbind(ID=rep("BP",times=n_ens))
 
 
 ParBest[1,] = as.numeric(u$optim$bestmem)
-ParBest
+ParBest[1,] =BP_df[1,1:15]
 
 
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParBest[1,]),names(ParDF))
@@ -177,5 +179,6 @@ plot(RmBP, simBest)
 plot(p_OBS,RmBP, pch=19)
 points(p_OBS,simBest,col="red",pch=19)
 
+(RmBP-simBest)/RmBP*100
 
 saveRDS(file="./data/basin_params/BP/dHRUM_lumped_BP_03.rds",ParBest)

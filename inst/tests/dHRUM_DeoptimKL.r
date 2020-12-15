@@ -6,7 +6,7 @@ Areas <- runif(nHrus,min = 1,max  = 100)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 
-filname2 = "../tests/indata/KL_1960_01_01.txt"
+filname2 = "/home/hubert/prg/dHRUM/dHRUM/inst/tests/indata/KL_1960_01_01_noDate.txt"
 TPdta = read.table(filname2)
 
 prec=TPdta$V1
@@ -15,15 +15,15 @@ setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, inDate = as.Date("1960/01
 calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
 
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 1,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.3,
-                    SDIV = 0.3, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
+                    SDIV = 0.3, CAN_ST = 4, STEM_ST = 3., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
                     RETCAP = 10 )
 
-ParDFup = data.frame( B_SOIL = 2, C_MAX = 200, B_EVAP = 2,  KS = 0.4, KF = 0.7, ADIV = 0.9, CDIV = 0.3,
-                      SDIV = 0.3, CAN_ST = 4., STEM_ST = 4., CSDIV = 0.8, TETR = 0.5, DDFA = 5, TMEL = 0.0,
-                      RETCAP = 15 )
-ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 5, B_EVAP = 0.5,  KS = 0.002, KF = 0.2, ADIV = 0.01, CDIV = 0.05,
-                       SDIV = 0.01, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -8.0,
-                       RETCAP = 2 )
+ParDFup = data.frame( B_SOIL = 2, C_MAX = 350, B_EVAP = 2,  KS = 0.5, KF = 0.9, ADIV = 0.9, CDIV = 0.48,
+                      SDIV = 0.48, CAN_ST = 4.8, STEM_ST = 2.9, CSDIV = 0.8, TETR = 0.5, DDFA = 5, TMEL = 0.0,
+                      RETCAP = 20)
+ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 50, B_EVAP = 0.25,  KS = 0.003, KF = 0.3, ADIV = 0.01, CDIV = 0.01,
+                       SDIV = 0.01, CAN_ST = 1.4, STEM_ST = 1.4, CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -6.0,
+                       RETCAP = 6 )
 
 ParBest = ParDF
   # set_Params_TodHru(dHRU_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
@@ -61,7 +61,7 @@ mae = function(myPar){
   dF <-data.frame(dta$outDta)
   names(dF) <- dta$VarsNams
   simRM=as.numeric(quantile(dF$TOTR,probs=(1-p_OBS), na.rm = TRUE))
-  mymae =as.double(sum(abs(simRM - RmKL)))
+  mymae =as.double(sum((simRM - RmKL)^2))
   # # mymae=NA
   # if(is.na(mymae)) mymae = 9999
   # (return as.double(mymae))
@@ -75,7 +75,7 @@ decntr<-DEoptim.control(VTR = 0, strategy = 2, bs = FALSE, NP = 200,
                 initialpop = NULL, storepopfrom = itermaxW + 1,
                 storepopfreq = 1, p = 0.2, c = 0, reltol = sqrt(.Machine$double.eps),
                 steptol = itermaxW)
-n_ens=25
+n_ens=2
 parsKLmatrix=matrix(0,nrow=n_ens, ncol=ncol(ParBest))
 for(i in 1:n_ens){
 
@@ -164,11 +164,52 @@ dFF[DTM>as.Date("1999-01-01"),.(GW=mean(GW),SO=mean(SO),SR=mean(SR), SOSR=mean(S
 simBest=as.numeric(quantile(dF$TOTR,probs=(1-p_OBS), na.rm = TRUE))
 
 simBest=as.numeric(quantile(dF$TOTR,probs=(1-p_OBS), na.rm = TRUE))
-  plot(RmBP, simBest)
+  plot(RmKL, simBest)
 
-plot(p_OBS,RmBP, pch=19)
+plot(p_OBS,RmKL, pch=19)
 points(p_OBS,simBest,col="red",pch=19)
+
+RmKL-simBest
+dny
 
 saveRDS(file="../dHRUM/data/basin_params/KL/dHRUM_lumped_KL_01.rds",ParBest)
 
 # readRDS("../tests/param0dKL.rds")
+
+
+dta=readRDS("./inst/tests/indata/StepProSimulace.rds")
+dtaKL=dta[DTM>"1979-12-31" &  DTM<"2011-01-01" & ID=='KL',]
+
+nHrus <- 1
+A=3.28*1000*1000
+IdsHrus <- paste0("ID",seq(1:length(Areas)))
+dhruKL1 <- initdHruModel(nHrus,Areas,IdsHrus)
+setPTDateInputsToAlldHrus(dhruKL1,Prec = dtaBP$P,Temp = dtaBP$T,DateVec = dtaBP$DTM)
+calcPetToAllHrus(dhruKL1,Latitude = 50.1,PetTypeStr = "Oudin")
+
+ParBest[1,] = as.numeric(KL_df[1,1:15])
+ParBest
+
+KL_df
+
+
+setParamsToAlldHrus(dhruKL1,as.numeric(ParBest[1,]),names(ParBest))
+calcHBInAlldHrus(dhruKL1)
+gatherHBdata(dhruKL1)
+dta1 <- getOutput(dhruKL1)
+dF <-data.frame(dta1$outDta)
+names(dF) <- dta1$VarsNams
+DFDT=as.data.table(dF)
+
+DFDT[,DTM:=as.Date(paste(YEAR,MONTH,DAY,sep="-")),]
+DFDT[,DTM:=as.Date(paste(YEAR,MONTH,DAY,sep="-")),]
+dfShort=DFDT[DTM>"1980-01-01" & DTM<"2011-01-01",]
+# na.omit(dfShort)
+dfShort=DFDT[DTM>"1980-01-01" & DTM<"2011-01-01",Aet:=AET+EVBS+EVAS]
+dfShort=na.omit(dfShort)
+dtM=dfShort[,.(PRM=sum(PREC),AETM=sum(Aet),PETM=sum(PET),SO=mean(SOIS),D=sum(DIRR),BF=sum(BASF),R=sum(TOTR)),by=.(MONTH,YEAR)]
+# dtM=na.omit(dtM)
+MdatKL=dtM[,.(P=median(PRM),PET=median(PETM),AET=median(AETM),SOIL=median(SO),DR=median(D),BF=median(BF),R=median(R)),by=.(MONTH)]
+MdatKL
+saveRDS(file = "../../kl_m.rds",MdatKL)
+
