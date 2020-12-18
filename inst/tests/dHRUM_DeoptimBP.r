@@ -92,7 +92,7 @@ A=4.7*1000*1000## plocha BP
 Par_dHRUm_BP_lumped= list(
   pars =BP_df,
   areaM2 = A,
-  Pet_type = "Hamon",
+  Pet_type = "Oudin",
   latitude =50.1
 )
 pars=rbind(Par_dHRUm_BP_lumped$pars,Par_dHRUm_KL_lumped$pars)
@@ -100,7 +100,7 @@ pars=rbind(Par_dHRUm_BP_lumped$pars,Par_dHRUm_KL_lumped$pars)
 Par_dHRUm_Amalie_lumped = list(
   pars =pars,
   areaM2 = data.frame(BP= 4700000, KL = 3280000),
-  Pet_type = "Hamon",
+  Pet_type = "Oudin",
   latitude =50.1
 )
 
