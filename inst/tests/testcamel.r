@@ -8,8 +8,8 @@ library(data.table)
 
 pathToCamel <- "/home/hubert/Camels/basin_timeseries_v1p2_metForcing_obsFlow/basin_dataset_public_v1p2/"
 # pathToForcing <- "basin_mean_forcing/maurer/"
-#pathToForcing <-"basin_mean_forcing/daymet/"
-pathToForcing <- "basin_mean_forcing/nldas/"
+pathToForcing <-"basin_mean_forcing/daymet/"
+# pathToForcing <- "basin_mean_forcing/nldas/"
 pathToObsQ <- "usgs_streamflow/"
 
 basinChrs <- fread(paste0(paste0(pathToCamel,"/basin_metadata/basin_physical_characteristics.txt")))
@@ -24,9 +24,9 @@ kgeVec <- c()
 for(i in 1:nrow(gaugeChars)){
   ifelse((gaugeChars$GAGE_ID[i]<10000000), gChrs <-paste0(0,gaugeChars$GAGE_ID[i]), gChrs <- paste0(gaugeChars$GAGE_ID[i]))
   ifelse((gaugeChars$HUC_02[i]<10), HUc <-paste0(0,gaugeChars$HUC_02[i],"/"), HUc <- paste0(gaugeChars$HUC_02[i],"/"))
-  # dtaFC <- read.table(paste0(pathToCamel,pathToForcing,HUc,gChrs,"_lump_cida_forcing_leap.txt"), skip = 4)
+  dtaFC <- read.table(paste0(pathToCamel,pathToForcing,HUc,gChrs,"_lump_cida_forcing_leap.txt"), skip = 4)
   # dtaFC <- read.table(paste0(pathToCamel,pathToForcing,HUc,gChrs,"_lump_maurer_forcing_leap.txt"), skip = 4)
-  dtaFC <- read.table(paste0(pathToCamel,pathToForcing,HUc,gChrs,"_lump_nldas_forcing_leap.txt"), skip = 4)
+  # dtaFC <- read.table(paste0(pathToCamel,pathToForcing,HUc,gChrs,"_lump_nldas_forcing_leap.txt"), skip = 4)
   dtaQ <- read.table(paste0(pathToCamel,pathToObsQ,HUc,gChrs,"_streamflow_qc.txt"))
 
   pr<-dtaFC$V6
@@ -37,6 +37,7 @@ for(i in 1:nrow(gaugeChars)){
 
   Qm <-dtaQ$V5 * 0.0283168466 * 3600 * 24/area*1000
 
+  print(paste("The basin number: ",i))
   print(sum(pr[1:nt]))
   print(sum(Qm[1:nt]))
 
@@ -80,7 +81,7 @@ for(i in 1:nrow(gaugeChars)){
 
   itermaxW=100
   decntr<-DEoptim.control(VTR = 0, strategy = 2, bs = FALSE, NP = 300,
-                        itermax = itermaxW, CR = 0.75, F = 0.9, trace = TRUE,
+                        itermax = itermaxW, CR = 0.75, F = 0.9, trace = FALSE,
                         initialpop = NULL, storepopfrom = itermaxW + 1,
                         storepopfreq = 1, p = 0.2, c = 0, reltol = sqrt(.Machine$double.eps),
                         steptol = itermaxW)
@@ -102,15 +103,18 @@ for(i in 1:nrow(gaugeChars)){
   plot(Qm[1:nt],type="l", main=paste(gaugeChars$GAGE_ID[i]," KGE=", format(kgeVec[i], digits = 2)," NSE=", format(nseVec[i], digits = 2))
        ,ylab ="Q [mm]", xlab="Time [day]")
   lines(dF$TOTR,col="red")
+  grid()
 }
 
 boxplot(data.frame(KGE =kgeVec,NSE=nseVec))
 KGE_NSE=data.frame(KGE =kgeVec,NSE=nseVec)
-saveRDS(file="/home/hubert/Camels/camel_kge_nse_basic_2000cal_nldas.rds",KGE_NSE)
+saveRDS(file="/home/hubert/Camels/camel_kge_nse_basic_2000cal_Daymet.rds",KGE_NSE)
+# saveRDS(file="/home/hubert/Camels/camel_kge_nse_basic_2000cal_Maurer.rds",KGE_NSE)
+# saveRDS(file="/home/hubert/Camels/camel_kge_nse_basic_2000cal_nldas.rds",KGE_NSE)
 
-dtKGdaymet <- readRDS("/home/hubert/Camels/camel_kge_nse_basic_2000cal_Daymet.rds")
-dtKGmauer <- readRDS("/home/hubert/Camels/camel_kge_nse_basic_2000cal_Maurer.rds")
-dtKGnldas <- readRDS("/home/hubert/Camels/camel_kge_nse_basic_2000cal_nldas.rds")
+# dtKGdaymet <- readRDS("/home/hubert/Camels/camel_kge_nse_basic_2000cal_Daymet.rds")
+# dtKGmauer <- readRDS("/home/hubert/Camels/camel_kge_nse_basic_2000cal_Maurer.rds")
+# dtKGnldas <- readRDS("/home/hubert/Camels/camel_kge_nse_basic_2000cal_nldas.rds")
 
 KGE = data.frame(KGEdaymet = dtKGdaymet$KGE, KGEmaurer = dtKGmauer$KGE, KGEnldas = dtKGnldas$KGE)
 boxplot(KGE)
