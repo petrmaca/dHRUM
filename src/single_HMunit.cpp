@@ -924,7 +924,11 @@ void single_HMunit::read_InputFromFile(const std::string& Filet) {
 
 }
 
-
+/** \brief Setter for area of HRU
+ *
+ * \param area size of HRU in m2
+ *
+ */
 void single_HMunit::set_Area(numberSel area) {
 
   Area = area;
@@ -933,27 +937,43 @@ void single_HMunit::set_Area(numberSel area) {
 
 }
 
-
+/** \brief Getter for area of HRU
+ *
+ * \param area size of HRU in m2
+ *
+ */
 numberSel single_HMunit::get_Area(){
 
   return Area;
 
 }
 
-
+/** \brief Getter for single time series of HRU
+ *
+ * \param _tsType type of time serie of HRU
+ *
+ */
 hdata single_HMunit::getSingleHruTsDta(const ts_type& _tsType){
 
  return hyd_dta.get_HbTsData(_tsType);
 
 }
 
+/** \brief Getter for all time series of HRU
+ *
+ *
+ */
 data_HB_1d single_HMunit::getAllData(){
 
  return hyd_dta;
 
 }
 
-
+/** \brief Setter for ID of HRU
+ *
+ * \param IdToSet IS string of HRU
+ *
+ */
 void single_HMunit::setIdHru(const std::string& IdToSet) {
 
   IdHru = IdToSet;
@@ -961,14 +981,23 @@ void single_HMunit::setIdHru(const std::string& IdToSet) {
  return ;
 }
 
-
+/** \brief Getter for ID of HRU
+ *
+ *
+ */
 std::string single_HMunit::getIdHru(){
 
  return (IdHru);
 
 }
 
-
+/** \brief Setter for calendar dat of HRU
+ *
+ * \param yyear the data of years for caldata
+ * \param mmonth the data of mmonths for caldata
+ * \param dday the data of days for caldata
+ *
+ */
 void single_HMunit::load_calData(const caldata& yyear, const caldata& mmonth, const caldata& dday) {
 
   hyd_dta.loadCalData(yyear, mmonth, dday);
@@ -977,13 +1006,20 @@ void single_HMunit::load_calData(const caldata& yyear, const caldata& mmonth, co
 
 }
 
-
+/** \brief Getter for number of parameters of HRU
+ *
+ *
+ */
 unsigned single_HMunit::get_numPars(){
 
  return (par_HRU.g_numPars());
 
 }
 
+/** \brief Prints all names and values of parameters of HRU
+ *
+ *
+ */
 void single_HMunit::print_Pars() {
 
   std::cout << "\nThe HRU ID " << getIdHru() << std::endl;
