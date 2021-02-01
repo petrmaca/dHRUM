@@ -7,7 +7,7 @@ library(data.table)
 
 
 pathToCamel <- "/home/hubert/prg/data/basin_timeseries_v1p2_metForcing_obsFlow/basin_dataset_public_v1p2"
-# pathToForcing <- "basin_mean_forcing/maurer/"
+pathToForcing <- "basin_mean_forcing/maurer/"
 # pathToForcing <-"/basin_mean_forcing/daymet/"
 # pathToForcing <- "basin_mean_forcing/nldas/"
 pathToObsQ <- "/usgs_streamflow/"
