@@ -7,7 +7,7 @@ library(data.table)
 
 
 pathToCamel <- "/home/hubert/prg/data/basin_timeseries_v1p2_metForcing_obsFlow/basin_dataset_public_v1p2"
-# pathToForcing <- "basin_mean_forcing/maurer/"
+pathToForcing <- "basin_mean_forcing/maurer/"
 # pathToForcing <-"/basin_mean_forcing/daymet/"
 # pathToForcing <- "basin_mean_forcing/nldas/"
 pathToObsQ <- "/usgs_streamflow/"
@@ -108,8 +108,8 @@ for(i in 1:nrow(gaugeChars)){
 
 boxplot(data.frame(KGE =kgeVec,NSE=nseVec))
 KGE_NSE=data.frame(KGE =kgeVec,NSE=nseVec)
-saveRDS(file="/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_Daymet.rds",KGE_NSE)
-# saveRDS(file="/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_Maurer.rds",KGE_NSE)
+# saveRDS(file="/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_Daymet.rds",KGE_NSE)
+saveRDS(file="/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_Maurer.rds",KGE_NSE)
 # saveRDS(file="/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_nldas.rds",KGE_NSE)
 
 # dtKGdaymet <- readRDS("/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_Daymet.rds")
