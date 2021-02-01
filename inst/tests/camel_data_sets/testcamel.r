@@ -6,14 +6,14 @@ library(data.table)
 # 01	01181000	     WEST BRANCH WESTFIELD RIVER AT HUNTINGTON, MA	  42.23731	 -72.89565	    243.50
 
 
-pathToCamel <- "/home/hubert/Camels/basin_timeseries_v1p2_metForcing_obsFlow/basin_dataset_public_v1p2/"
+pathToCamel <- "/home/hubert/prg/data/basin_timeseries_v1p2_metForcing_obsFlow/basin_dataset_public_v1p2"
 # pathToForcing <- "basin_mean_forcing/maurer/"
-pathToForcing <-"basin_mean_forcing/daymet/"
+# pathToForcing <-"/basin_mean_forcing/daymet/"
 # pathToForcing <- "basin_mean_forcing/nldas/"
-pathToObsQ <- "usgs_streamflow/"
+pathToObsQ <- "/usgs_streamflow/"
 
 basinChrs <- fread(paste0(paste0(pathToCamel,"/basin_metadata/basin_physical_characteristics.txt")))
-gaugeChars <- fread(paste0(paste0(pathToCamel,"/basin_metadata/gauge_information.txt")))
+gaugeChars <- fread(paste0(paste0(pathToCamel,"/basin_metadata/gauge_informationPM.txt")))
 
 gaugeChars[523:524,]
 
@@ -108,13 +108,13 @@ for(i in 1:nrow(gaugeChars)){
 
 boxplot(data.frame(KGE =kgeVec,NSE=nseVec))
 KGE_NSE=data.frame(KGE =kgeVec,NSE=nseVec)
-saveRDS(file="/home/hubert/Camels/camel_kge_nse_basic_2000cal_Daymet.rds",KGE_NSE)
-# saveRDS(file="/home/hubert/Camels/camel_kge_nse_basic_2000cal_Maurer.rds",KGE_NSE)
-# saveRDS(file="/home/hubert/Camels/camel_kge_nse_basic_2000cal_nldas.rds",KGE_NSE)
+saveRDS(file="/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_Daymet.rds",KGE_NSE)
+# saveRDS(file="/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_Maurer.rds",KGE_NSE)
+# saveRDS(file="/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_nldas.rds",KGE_NSE)
 
-# dtKGdaymet <- readRDS("/home/hubert/Camels/camel_kge_nse_basic_2000cal_Daymet.rds")
-# dtKGmauer <- readRDS("/home/hubert/Camels/camel_kge_nse_basic_2000cal_Maurer.rds")
-# dtKGnldas <- readRDS("/home/hubert/Camels/camel_kge_nse_basic_2000cal_nldas.rds")
+# dtKGdaymet <- readRDS("/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_Daymet.rds")
+# dtKGmauer <- readRDS("/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_Maurer.rds")
+# dtKGnldas <- readRDS("/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_nldas.rds")
 
 KGE = data.frame(KGEdaymet = dtKGdaymet$KGE, KGEmaurer = dtKGmauer$KGE, KGEnldas = dtKGnldas$KGE)
 boxplot(KGE)
