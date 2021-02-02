@@ -4,7 +4,7 @@ Areas <- 4300000
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhruBP <- initdHruModel(nHrus,Areas,IdsHrus)
 
-filname2 = "../dHRUM/inst/tests/indata/BP_1960_01_01.txt"
+filname2 = "../dHRUM/Calibrations/Amalie/indata/BP_1960_01_01.txt"
 
 
 setPTInputsToAlldHrusFromFile(dhruBP, filname2)
@@ -13,7 +13,7 @@ calcPetToAllHrus(dhruBP,50.1,"Oudin")
 # Oudin PET
 # calPetToAllHrus(dHRU_ptr = dhruBP,50.1,"Oudin")
 
-attach(what = "data/Amalie_lumped_dHRUM.rda")
+attach(what = "../dHRUM/Calibrations/Amalie/Amalie_lumped_dHRUM.rda")
 Par_dHRUm_Amalie_lumped$pars[1,]
 ParBP = Par_dHRUm_Amalie_lumped$pars[1,1:15]
 ParBP=BP_df[1,1:15]
@@ -73,7 +73,7 @@ dtM=dfShort[,.(PRM=sum(PREC),AETM=sum(AET)),by=.(MONTH,YEAR)]
 
 dtM[,.(median(PRM)),by=.(MONTH)]
 
-dta=readRDS("./inst/tests/indata/StepProSimulace.rds")
+dta=readRDS("../dHRUM/Calibrations/Amalie/indata/StepProSimulace.rds")
 dtaBP=dta[DTM>"1979-12-31" &  DTM<"2011-01-01" & ID=='BP',]
 
 nHrus <- 1
@@ -107,4 +107,4 @@ dtM=dfShort[,.(PRM=sum(PREC),AETM=sum(Aet),PETM=sum(PET),SO=mean(SOIS),D=sum(DIR
 # dtM=na.omit(dtM)
 MdatBP=dtM[,.(P=median(PRM),PET=median(PETM),AET=median(AETM),SOIL=median(SO),DR=median(D),BF=median(BF),R=median(R)),by=.(MONTH)]
 MdatBP
-saveRDS(file = "../../bp_m.rds",MdatBP)
+# saveRDS(file = "../../bp_m.rds",MdatBP)
