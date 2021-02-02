@@ -7,7 +7,7 @@ library(data.table)
 
 
 pathToCamel <- "/home/hubert/prg/data/basin_timeseries_v1p2_metForcing_obsFlow/basin_dataset_public_v1p2"
-pathToForcing <- "basin_mean_forcing/maurer/"
+pathToForcing <- "/basin_mean_forcing/maurer/"
 # pathToForcing <-"/basin_mean_forcing/daymet/"
 # pathToForcing <- "basin_mean_forcing/nldas/"
 pathToObsQ <- "/usgs_streamflow/"
@@ -24,8 +24,8 @@ kgeVec <- c()
 for(i in 1:nrow(gaugeChars)){
   ifelse((gaugeChars$GAGE_ID[i]<10000000), gChrs <-paste0(0,gaugeChars$GAGE_ID[i]), gChrs <- paste0(gaugeChars$GAGE_ID[i]))
   ifelse((gaugeChars$HUC_02[i]<10), HUc <-paste0(0,gaugeChars$HUC_02[i],"/"), HUc <- paste0(gaugeChars$HUC_02[i],"/"))
-  dtaFC <- read.table(paste0(pathToCamel,pathToForcing,HUc,gChrs,"_lump_cida_forcing_leap.txt"), skip = 4)
-  # dtaFC <- read.table(paste0(pathToCamel,pathToForcing,HUc,gChrs,"_lump_maurer_forcing_leap.txt"), skip = 4)
+  # dtaFC <- read.table(paste0(pathToCamel,pathToForcing,HUc,gChrs,"_lump_cida_forcing_leap.txt"), skip = 4)
+  dtaFC <- read.table(paste0(pathToCamel,pathToForcing,HUc,gChrs,"_lump_maurer_forcing_leap.txt"), skip = 4)
   # dtaFC <- read.table(paste0(pathToCamel,pathToForcing,HUc,gChrs,"_lump_nldas_forcing_leap.txt"), skip = 4)
   dtaQ <- read.table(paste0(pathToCamel,pathToObsQ,HUc,gChrs,"_streamflow_qc.txt"))
 

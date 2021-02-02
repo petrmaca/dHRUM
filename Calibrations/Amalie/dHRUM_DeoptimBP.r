@@ -6,7 +6,7 @@ Areas <- runif(nHrus,min = 1,max  = 100)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 
-filname2 = "../dHRUM/inst/tests/indata/BP_1960_01_01.txt"
+filname2 = "../dHRUM/Calibrations/Amalie/indata/BP_1960_01_01.txt"
 
 setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Oudin")
@@ -70,7 +70,7 @@ decntr<-DEoptim.control(VTR = 0, strategy = 2, bs = FALSE, NP = 200,
                 initialpop = NULL, storepopfrom = itermaxW + 1,
                 storepopfreq = 1, p = 0.2, c = 0, reltol = sqrt(.Machine$double.eps),
                 steptol = itermaxW)
-n_ens=25
+n_ens=1
 parsBPmatrix=matrix(0,nrow=n_ens, ncol=ncol(ParBest))
 for(i in 1:n_ens){
   u=DEoptim( lower=as.numeric(ParDFlow[1,]), upper=as.numeric(ParDFup[1,]), fn=mae, control = decntr)
@@ -83,9 +83,9 @@ BP_df = data.frame(parsBPmatrix)
 names(BP_df) = names(ParBest)
 BP_df=cbind(BP_df,ID=rep("BP",times=n_ens))
 # save(BP_df,file="par_dHRUM_lumped_PET_HAMON_50_1_BP.rda")
-save(BP_df,file="par_dHRUM_lumped_PET_Oudin_50_1_BP.rda")
+save(BP_df,file="./Calibrations/Amalie/outdata/par_dHRUM_lumped_PET_Oudin_50_1_BP.rda")
 
-load("par_dHRUM_lumped_PET_Oudin_50_1_BP.rda")
+load("./Calibrations/Amalie/outdata/par_dHRUM_lumped_PET_Oudin_50_1_BP.rda")
 BP_df
 
 A=4.7*1000*1000## plocha BP
@@ -104,7 +104,7 @@ Par_dHRUm_Amalie_lumped = list(
   latitude =50.1
 )
 
-save(Par_dHRUm_Amalie_lumped ,file = "Amalie_lumped_dHRUM.rda")
+save(Par_dHRUm_Amalie_lumped ,file = "./Calibrations/Amalie/outdata/Amalie_lumped_dHRUM.rda")
 Par_dHRUm_Amalie_lumped$areaM2$BP
 BP_df=cbind(ID=rep("BP",times=n_ens))
 
