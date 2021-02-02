@@ -5,7 +5,7 @@ Areas <- runif(nHrus,min = 1,max  = 100)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 
-filname2 = "../dHRUM/inst/tests/indata/BP_1960_01_01.txt"
+filname2 = "../dHRUM/Calibrations/Amalie/indata/BP_1960_01_01.txt"
 setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
 
@@ -47,7 +47,7 @@ dhrus <- initdHruModel(nHrus-1,Areas[1:2],IdsHrus)
 
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 
-filname2 = "../dHRUM/inst/tests/indata/BP_1960_01_01.txt"
+filname2 = "../dHRUM/Calibrations/Amalie/indata/BP_1960_01_01.txt"
 
 setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 
@@ -106,7 +106,7 @@ calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"OudIn")
 
 calcHBInAlldHrus(dHRUM_ptr = dhrus)
 gatherHBdata(dHRUM_ptr = dhrus)
-outfilet=("../dHRUM/inst/tests/outdata/Rpck_dhruout.txt")
+outfilet=("../dHRUM/Calibrations/Amalie/outdata/Rpck_dhruout.txt")
 printToFile(dHRUM_ptr = dhrus,namOutFilet = outfilet)
 
 dta<-getOutput(dHRUM_ptr = dhrus)
