@@ -6,6 +6,8 @@ Areas <- c(2.23,1.05)#les 2.23 Zem_puda 1.05
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 
+
+# wrong order of precip and temperatures
 filname2 = "../tests/indata/KL_1960_01_01.txt"
 
 setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
