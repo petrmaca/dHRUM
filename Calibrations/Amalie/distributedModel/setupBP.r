@@ -71,6 +71,7 @@ for(i in 1:(nHrus-1)){
 }
 
 ParDFlow1$C_MAX <- SoilBP$RVK
+ParDFup1$C_MAX <- SoilBP$RVK + SoilBP$VVK
 
 ParNams <- names(ParDFlow1)
 
