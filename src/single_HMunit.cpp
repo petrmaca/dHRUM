@@ -534,7 +534,7 @@ void single_HMunit::interception_WithSnow() {
   //  prevCanS =  prevCanS + (get_dta(tstRM, ts_type::SNOW) + get_dta(tstRM, ts_type::MELT))- OverflowCan - CanOut - EvapCanop;
   set_varValue(prevCanS, tstRM, ts_type::CANS);
 
-  prevCanS =  prevCanS + get_par(par_HRUtype::SDIV) * get_dta(tstRM, ts_type::MELT);
+  prevCanS =  prevCanS + get_par(par_HRUtype::CDIV) * get_dta(tstRM, ts_type::MELT);
 
   OverflowStem = std::max((prevSteS - get_par(par_HRUtype::CAN_ST)),0.0);
   prevSteS = prevSteS - OverflowStem;
