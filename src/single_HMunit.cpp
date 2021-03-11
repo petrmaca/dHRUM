@@ -293,23 +293,24 @@ void single_HMunit::surface_retention() {
   // std::cout << RetOut << "  retout " << tstRM <<std::endl;
   prev_SurS = prev_SurS - RetOut;
 
-  EvapSR = std::min((prev_SurS) / get_par(par_HRUtype::RETCAP) * get_dta(tstRM, ts_type::PET),prev_SurS);
+  EvapSR = std::min(std::pow((prev_SurS) / get_par(par_HRUtype::RETCAP),2/3),prev_SurS);
   // std::cout << EvapSR << "  EvapSR " << tstRM <<std::endl;
   // if(tstRM == 469) std::cout <<  " e " << EvapSR <<std::endl;
   prev_SurS = prev_SurS - EvapSR;
   // if(tstRM == 469) std::cout << RetOut << " ps " << prev_SurS << " e " << EvapSR <<std::endl;
-  set_varValue(prev_SurS, tstRM, ts_type::SURS);
+
 
   if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
     prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
       (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT));
   } else {
     prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
-      (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT) + get_dta(tstRM, ts_type::PREC));
+      (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT) + (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) *get_dta(tstRM, ts_type::PREC));
       }
 
   set_varValue(EvapSR, tstRM, ts_type::AET);
   set_varValue(RetOut,tstRM,ts_type::PREF);
+  set_varValue(prev_SurS, tstRM, ts_type::SURS);
 
   return ;
 }
@@ -474,19 +475,19 @@ void single_HMunit::interception_NoSnow() {
 
   numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
 
-  EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
-  prevCanS = prevCanS - EvapCanop;
   OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
   prevCanS = prevCanS - OverflowCan;
+  EvapCanop = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  prevCanS = prevCanS - EvapCanop;
+
   CanOut = std::min((prevCanS / get_par(par_HRUtype::CAN_ST) * EvapCanop),prevCanS);
   prevCanS = prevCanS - CanOut;
-  set_varValue(prevCanS, tstRM, ts_type::CANS);
 
   prevCanS =  prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT));
 
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
-  EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+  EvapStem = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
   prevSteS = prevSteS - EvapStem;
 
   OverflowStem = std::max((prevSteS - get_par(par_HRUtype::STEM_ST)),0.0);
@@ -494,7 +495,7 @@ void single_HMunit::interception_NoSnow() {
 
   StemOut = std::min((prevCanS) / get_par(par_HRUtype::CAN_ST) * EvapStem, prevSteS);
   prevSteS = prevSteS - StemOut;
-  set_varValue(prevSteS, tstRM, ts_type::STES);
+
 
   prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan);
 
@@ -509,6 +510,8 @@ void single_HMunit::interception_NoSnow() {
   set_varValue(Througf, tstRM, ts_type::TROF);
 
   set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
+  set_varValue(prevCanS, tstRM, ts_type::CANS);
+  set_varValue(prevSteS, tstRM, ts_type::STES);
 
   return ;
 }
@@ -586,7 +589,7 @@ void single_HMunit::interception_snow() {
 
   if(get_dta(tstRM, ts_type::TEMP) > get_par(par_HRUtype::TMEL)) {
     Snow_melt = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prevSnoS);
-     if(Snow_melt <0) std::cout  <<"negative melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
+    // if(Snow_melt <0) std::cout  <<"negative melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
   } else Snow_melt = 0.0;
 
   if ((prevSnoS + Snoww - Snow_melt)<0){

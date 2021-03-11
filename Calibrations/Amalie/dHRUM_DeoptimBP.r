@@ -16,10 +16,10 @@ SDIV = 0.3, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL 
 RETCAP = 2 )
 
 ParDFup = data.frame( B_SOIL = 2, C_MAX = 300, B_EVAP = 2,  KS = 0.4, KF = 0.8, ADIV = 0.9, CDIV = 0.3,
-                      SDIV = 0.3, CAN_ST = 2.25, STEM_ST = 1.6, CSDIV = 0.8, TETR = 0.5, DDFA = 5, TMEL = 0.0,
+                      SDIV = 0.3, CAN_ST = 1.75, STEM_ST = 1.2, CSDIV = 0.8, TETR = 0.5, DDFA = 5, TMEL = 0.0,
                       RETCAP = 6 )
 
-ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 5, B_EVAP = 0.5,  KS = 0.001, KF = 0.4, ADIV = 0.01, CDIV = 0.05,
+ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 5, B_EVAP = 0.25,  KS = 0.001, KF = 0.4, ADIV = 0.01, CDIV = 0.05,
                        SDIV = 0.01, CAN_ST = 0.25, STEM_ST = 0.25, CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -8.0,
                        RETCAP = 2 )
 ParBest = ParDF
