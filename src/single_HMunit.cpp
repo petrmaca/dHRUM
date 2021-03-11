@@ -569,6 +569,17 @@ void single_HMunit::interception_WithSnow() {
   return ;
 }
 
+
+/** \brief Updates interception and snow buffer
+ *
+ */
+void single_HMunit::snow_melt(){
+
+
+
+  return ;
+}
+
 /** \brief Updates interception and snow buffer
  *
  */
@@ -578,31 +589,16 @@ void single_HMunit::interception_snow() {
 
   if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
     Snoww = get_dta(tstRM, ts_type::PREC);
+    snow_melt();
     interception_WithSnow();
     //    std::cout << " snow " << Snoww << " \n";
   } else {
     Snoww = 0.0;
+    snow_melt();
     interception_NoSnow();
   }
 
   set_varValue(Snoww,tstRM,ts_type::SNOW);
-
-  if(get_dta(tstRM, ts_type::TEMP) > get_par(par_HRUtype::TMEL)) {
-    Snow_melt = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prevSnoS);
-    // if(Snow_melt <0) std::cout  <<"negative melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
-  } else Snow_melt = 0.0;
-
-  if ((prevSnoS + Snoww - Snow_melt)<0){
-    prevSnoS = 0.0;
-    Snow_melt = prevSnoS + Snoww;
-  } else prevSnoS = prevSnoS + Snoww - Snow_melt;
-
-  //   std::cout << " prevSnoS " << prevSnoS << " MELT " << Snow_melt<< " ";
-
-
-  set_varValue(prevSnoS,tstRM,ts_type::SNOW);
-  set_varValue(Snow_melt,tstRM,ts_type::MELT);
-
 
   return ;
 }

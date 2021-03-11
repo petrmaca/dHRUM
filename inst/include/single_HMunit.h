@@ -35,6 +35,7 @@ class single_HMunit {
   void calc_Pet();
   void set_PetVars(const numberSel& newLatitude, const pet_Type& newPeType);
 
+  void snow_melt();//!< The update opf snow storage and estimating the snowmelt
   void interception_snow();//!< Update snow storage and interception
   void interception_NoSnow();//!< Update the Canopy and Stem Interception storages without snow
   void interception_WithSnow();//!< Update the Canopy and Stem Interception storage with snow
