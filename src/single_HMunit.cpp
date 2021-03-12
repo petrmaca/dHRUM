@@ -531,7 +531,8 @@ void single_HMunit::interception_WithSnow() {
   OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
   prevCanS = prevCanS - OverflowCan;
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
-  EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  // EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  EvapCanop = 0.0;
   prevCanS = prevCanS - EvapCanop;
   //  CanOut = (prevCanS - OverflowCan) / get_par(par_HRUtype::CAN_ST) * EvapCanop;
   //  prevCanS =  prevCanS + (get_dta(tstRM, ts_type::SNOW) + get_dta(tstRM, ts_type::MELT))- OverflowCan - CanOut - EvapCanop;
@@ -542,7 +543,8 @@ void single_HMunit::interception_WithSnow() {
   OverflowStem = std::max((prevSteS - get_par(par_HRUtype::STEM_ST)),0.0);
   prevSteS = prevSteS - OverflowStem;
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
-  EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+  // EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+  EvapStem = 0.0;
   prevSteS = prevSteS - EvapStem;
   //  StemOut = (prevCanS - OverflowCan) / get_par(par_HRUtype::CAN_ST) * EvapStem;
   //  prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan) - EvapStem - StemOut;
@@ -575,29 +577,9 @@ void single_HMunit::interception_WithSnow() {
  */
 void single_HMunit::snow_melt(){
 
-
-  return ;
-}
-
-/** \brief Updates interception and snow buffer
- *
- */
-void single_HMunit::interception_snow() {
-
   numberSel Snow_melt = 0.0, Snoww = 0.0;
 
-  if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
-    Snoww = get_dta(tstRM, ts_type::PREC);
-    snow_melt();
-    interception_WithSnow();
-    //    std::cout << " snow " << Snoww << " \n";
-  } else {
-    Snoww = 0.0;
-    snow_melt();
-    interception_NoSnow();
-  }
-
-  set_varValue(Snoww,tstRM,ts_type::SNOW);
+  Snoww = get_dta(tstRM, ts_type::SNOW);
 
   if(get_dta(tstRM, ts_type::TEMP) > get_par(par_HRUtype::TMEL)) {
     Snow_melt = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prevSnoS);
@@ -612,8 +594,50 @@ void single_HMunit::interception_snow() {
   //   std::cout << " prevSnoS " << prevSnoS << " MELT " << Snow_melt<< " ";
 
 
-  set_varValue(prevSnoS,tstRM,ts_type::SNOW);
+  // set_varValue(prevSnoS,tstRM,ts_type::SNOW);
   set_varValue(Snow_melt,tstRM,ts_type::MELT);
+
+
+  return ;
+}
+
+/** \brief Updates interception and snow buffer
+ *
+ */
+void single_HMunit::interception_snow() {
+
+  numberSel Snow_melt = 0.0, Snoww = 0.0;
+
+  if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
+    Snoww = get_dta(tstRM, ts_type::PREC);
+    set_varValue(Snoww,tstRM,ts_type::SNOW);
+    snow_melt();
+    interception_WithSnow();
+    //    std::cout << " snow " << Snoww << " \n";
+  } else {
+    Snoww = 0.0;
+    set_varValue(Snoww,tstRM,ts_type::SNOW);
+    snow_melt();
+    interception_NoSnow();
+  }
+
+  // set_varValue(Snoww,tstRM,ts_type::SNOW);
+//
+//   if(get_dta(tstRM, ts_type::TEMP) > get_par(par_HRUtype::TMEL)) {
+//     Snow_melt = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prevSnoS);
+//     // if(Snow_melt <0) std::cout  <<"negative melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
+//   } else Snow_melt = 0.0;
+//
+//   if ((prevSnoS + Snoww - Snow_melt)<0){
+//     prevSnoS = 0.0;
+//     Snow_melt = prevSnoS + Snoww;
+//   } else prevSnoS = prevSnoS + Snoww - Snow_melt;
+//
+//   //   std::cout << " prevSnoS " << prevSnoS << " MELT " << Snow_melt<< " ";
+//
+//
+//   // set_varValue(prevSnoS,tstRM,ts_type::SNOW);
+//   set_varValue(Snow_melt,tstRM,ts_type::MELT);
 
 
   return ;

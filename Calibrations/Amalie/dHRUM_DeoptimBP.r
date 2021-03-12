@@ -20,7 +20,7 @@ ParDFup = data.frame( B_SOIL = 2, C_MAX = 300, B_EVAP = 2,  KS = 0.4, KF = 0.8, 
                       RETCAP = 6 )
 
 ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 5, B_EVAP = 0.25,  KS = 0.001, KF = 0.4, ADIV = 0.01, CDIV = 0.05,
-                       SDIV = 0.01, CAN_ST = 0.25, STEM_ST = 0.25, CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -8.0,
+                       SDIV = 0.01, CAN_ST = 0.25, STEM_ST = 0.25, CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -1.0,
                        RETCAP = 2 )
 ParBest = ParDF
   # set_Params_TodHru(dHRU_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
@@ -140,6 +140,7 @@ plot(dF$EVAC, type='l')
 plot(dF$EVAS, type='l')
 plot(dF$EVBS, type='l')
 plot(dF$AET, type='l')
+plot(dF$MELT, type='l')
 
 which.min(dF$EVBS)
 
@@ -166,7 +167,7 @@ dFF= data.table(
 dFF[,Month:=month(DTM)]
 dFF[,Year:=year(DTM)]
 
-dFF[DTM>as.Date("1996-01-01"),.(GW=mean(GW),SO=mean(SO),SR=mean(SR), SOSR=mean(SO+SR),P=sum(P),Sn=mean(Sn),T=mean(T),PET=sum(PET),AET=sum(AET),MELt=sum(MEL),R=sum(R)),by=.(Month)]
+dFF[DTM>as.Date("1996-01-01"),.(GW=mean(GW),SO=mean(SO),SR=mean(SR), SOSR=mean(SO+SR),P=sum(P),Sn=sum(Sn),T=mean(T),PET=sum(PET),AET=sum(AET),MELt=sum(MEL),R=sum(R)),by=.(Month)]
 dFF[DTM>as.Date("1961-01-01"),.(GW=mean(GW),SO=mean(SO),SR=mean(SR), SOSR=mean(SO+SR),P=sum(P),Sn=mean(Sn),T=mean(T),PET=sum(PET),AET=sum(AET),MELt=sum(MEL),R=sum(R)),by=.(Year)]
 dFF[DTM>as.Date("1961-01-01"),.(GW=mean(GW),SO=mean(SO),SR=mean(SR), SOSR=mean(SO+SR),P=sum(P),Sn=mean(Sn),T=mean(T),PET=sum(PET),AET=sum(AET),MELt=sum(MEL),R=sum(R)),]
 simBest=as.numeric(quantile(dF$TOTR,probs=(1-p_OBS), na.rm = TRUE))
