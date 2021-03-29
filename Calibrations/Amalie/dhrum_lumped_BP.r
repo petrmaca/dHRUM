@@ -16,7 +16,7 @@ calcPetToAllHrus(dhruBP,50.1,"Oudin")
 attach(what = "../dHRUM/Calibrations/Amalie/Amalie_lumped_dHRUM.rda")
 Par_dHRUm_Amalie_lumped$pars[1,]
 ParBP = Par_dHRUm_Amalie_lumped$pars[1,1:15]
-ParBP=BP_df[1,1:15]
+# ParBP=BP_df[1,1:15]
 setParamsToAlldHrus(dhruBP,as.numeric(ParBP[1,]),names(ParBP))
 calcHBInAlldHrus(dhruBP)
 gatherHBdata(dhruBP)
@@ -68,7 +68,7 @@ library(data.table)
 DFDT=as.data.table(dF)
 
 DFDT[,DTM:=as.Date(paste(YEAR,MONTH,DAY,sep="-")),]
-dfShort=DFDT[DTM>"1980-01-01" & DTM<"2011-01-01",]
+dfShort=DFDT[DTM>"1961-01-01" & DTM<"2011-01-01",]
 dtM=dfShort[,.(PRM=sum(PREC),AETM=sum(AET)),by=.(MONTH,YEAR)]
 
 dtM[,.(median(PRM)),by=.(MONTH)]
@@ -83,10 +83,11 @@ dhruBP1 <- initdHruModel(nHrus,Areas,IdsHrus)
 setPTDateInputsToAlldHrus(dhruBP1,Prec = dtaBP$P,Temp = dtaBP$T,DateVec = dtaBP$DTM)
 calcPetToAllHrus(dhruBP1,Latitude = 50.1,PetTypeStr = "Oudin")
 
-ParBest[1,] = as.numeric(BP_df[1,1:15])
-ParBest
-
-BP_df
+ParBest = ParBP
+# ParBest[1,] = as.numeric(ParBP[1,1:15])
+# ParBest
+#
+# BP_df
 
 
 setParamsToAlldHrus(dhruBP1,as.numeric(ParBest[1,]),names(ParBest))
@@ -99,9 +100,9 @@ DFDT=as.data.table(dF)
 
 DFDT[,DTM:=as.Date(paste(YEAR,MONTH,DAY,sep="-")),]
 DFDT[,DTM:=as.Date(paste(YEAR,MONTH,DAY,sep="-")),]
-dfShort=DFDT[DTM>"1980-01-01" & DTM<"2011-01-01",]
+dfShort=DFDT[DTM>"1961-01-01" & DTM<"2011-01-01",]
 # na.omit(dfShort)
-dfShort=DFDT[DTM>"1980-01-01" & DTM<"2011-01-01",Aet:=AET+EVBS+EVAS]
+dfShort=DFDT[DTM>"1961-01-01" & DTM<"2011-01-01",Aet:=AET+EVBS+EVAS+EVAC]
 dfShort=na.omit(dfShort)
 dtM=dfShort[,.(PRM=sum(PREC),AETM=sum(Aet),PETM=sum(PET),SO=mean(SOIS),D=sum(DIRR),BF=sum(BASF),R=sum(TOTR)),by=.(MONTH,YEAR)]
 # dtM=na.omit(dtM)

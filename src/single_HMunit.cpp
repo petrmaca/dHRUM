@@ -293,10 +293,13 @@ void single_HMunit::surface_retention() {
   // std::cout << RetOut << "  retout " << tstRM <<std::endl;
   prev_SurS = prev_SurS - RetOut;
 
-  EvapSR = std::min(std::pow((prev_SurS) / get_par(par_HRUtype::RETCAP),2/3),prev_SurS);
-  // std::cout << EvapSR << "  EvapSR " << tstRM <<std::endl;
+  // Evaporation according to Beran VTEI
+  if (get_dta(tstRM, ts_type::TEMP) > 0.0) {
+    EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+  } else EvapSR = 0.0;
+   std::cout << EvapSR << "  EvapSR " << tstRM << " " << get_dta(tstRM, ts_type::TEMP) << " u " << (std::pow((-1.5),1.289)) <<std::endl;
   // if(tstRM == 469) std::cout <<  " e " << EvapSR <<std::endl;
-  prev_SurS = prev_SurS - EvapSR;
+  prev_SurS = std::max((prev_SurS - EvapSR),0.0);
   // if(tstRM == 469) std::cout << RetOut << " ps " << prev_SurS << " e " << EvapSR <<std::endl;
 
 
@@ -531,8 +534,8 @@ void single_HMunit::interception_WithSnow() {
   OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
   prevCanS = prevCanS - OverflowCan;
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
-  // EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
-  EvapCanop = 0.0;
+   EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  //EvapCanop = 0.0;
   prevCanS = prevCanS - EvapCanop;
   //  CanOut = (prevCanS - OverflowCan) / get_par(par_HRUtype::CAN_ST) * EvapCanop;
   //  prevCanS =  prevCanS + (get_dta(tstRM, ts_type::SNOW) + get_dta(tstRM, ts_type::MELT))- OverflowCan - CanOut - EvapCanop;
@@ -543,8 +546,8 @@ void single_HMunit::interception_WithSnow() {
   OverflowStem = std::max((prevSteS - get_par(par_HRUtype::STEM_ST)),0.0);
   prevSteS = prevSteS - OverflowStem;
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
-  // EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
-  EvapStem = 0.0;
+   EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+  //EvapStem = 0.0;
   prevSteS = prevSteS - EvapStem;
   //  StemOut = (prevCanS - OverflowCan) / get_par(par_HRUtype::CAN_ST) * EvapStem;
   //  prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan) - EvapStem - StemOut;
