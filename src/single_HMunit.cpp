@@ -297,7 +297,7 @@ void single_HMunit::surface_retention() {
   if (get_dta(tstRM, ts_type::TEMP) > 0.0) {
     EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
   } else EvapSR = 0.0;
-   std::cout << EvapSR << "  EvapSR " << tstRM << " " << get_dta(tstRM, ts_type::TEMP) << " u " << (std::pow((-1.5),1.289)) <<std::endl;
+   // std::cout << EvapSR << "  EvapSR " << tstRM << " " << get_dta(tstRM, ts_type::TEMP) << " u " << (std::pow((-1.5),1.289)) <<std::endl;
   // if(tstRM == 469) std::cout <<  " e " << EvapSR <<std::endl;
   prev_SurS = std::max((prev_SurS - EvapSR),0.0);
   // if(tstRM == 469) std::cout << RetOut << " ps " << prev_SurS << " e " << EvapSR <<std::endl;
