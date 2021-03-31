@@ -1,6 +1,6 @@
 library(dHRUM)
 nHrus <- 1
-Areas <- 4300000
+Areas <- 4700000
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhruBP <- initdHruModel(nHrus,Areas,IdsHrus)
 
@@ -37,7 +37,8 @@ plot(dF$DIRR, type='l')
 plot(dF$SOIS, type='l')
 # zasoba vody v podzemni vode
 plot(dF$GROS, type='l')
-
+# vypar povrchova retence
+plot(dF$AET, type='l')
 
 VecDATE = c()
 for(i in 1:nrow(dF)){
@@ -49,7 +50,7 @@ Prec=dF$PREC
 Temp=dF$TEMP
 
 nHrus <- 1
-Areas <- 4300000
+Areas <- 4700000
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhruBP1 <- initdHruModel(nHrus,Areas,IdsHrus)
 setPTDateInputsToAlldHrus(dhruBP1,Prec = Prec,Temp = Temp,DateVec = VecDATE)
@@ -77,7 +78,7 @@ dta=readRDS("../dHRUM/Calibrations/Amalie/indata/StepProSimulace.rds")
 dtaBP=dta[DTM>"1979-12-31" &  DTM<"2011-01-01" & ID=='BP',]
 
 nHrus <- 1
-Areas <- 4300000
+Areas <- 4700000
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhruBP1 <- initdHruModel(nHrus,Areas,IdsHrus)
 setPTDateInputsToAlldHrus(dhruBP1,Prec = dtaBP$P,Temp = dtaBP$T,DateVec = dtaBP$DTM)
@@ -100,9 +101,9 @@ DFDT=as.data.table(dF)
 
 DFDT[,DTM:=as.Date(paste(YEAR,MONTH,DAY,sep="-")),]
 DFDT[,DTM:=as.Date(paste(YEAR,MONTH,DAY,sep="-")),]
-dfShort=DFDT[DTM>"1961-01-01" & DTM<"2011-01-01",]
+dfShort=DFDT[DTM>"1980-01-01" & DTM<"2011-01-01",]
 # na.omit(dfShort)
-dfShort=DFDT[DTM>"1961-01-01" & DTM<"2011-01-01",Aet:=AET+EVBS+EVAS+EVAC]
+dfShort=DFDT[DTM>"1980-01-01" & DTM<"2011-01-01",Aet:=AET+EVBS+EVAS+EVAC]#]
 dfShort=na.omit(dfShort)
 dtM=dfShort[,.(PRM=sum(PREC),AETM=sum(Aet),PETM=sum(PET),SO=mean(SOIS),D=sum(DIRR),BF=sum(BASF),R=sum(TOTR)),by=.(MONTH,YEAR)]
 # dtM=na.omit(dtM)

@@ -297,11 +297,17 @@ void single_HMunit::surface_retention() {
   if (get_dta(tstRM, ts_type::TEMP) > 0.0) {
     EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
   } else EvapSR = 0.0;
+
+  if (EvapSR > prev_SurS) {
+    EvapSR = prev_SurS;
+  }
+
    // std::cout << EvapSR << "  EvapSR " << tstRM << " " << get_dta(tstRM, ts_type::TEMP) << " u " << (std::pow((-1.5),1.289)) <<std::endl;
   // if(tstRM == 469) std::cout <<  " e " << EvapSR <<std::endl;
-  prev_SurS = std::max((prev_SurS - EvapSR),0.0);
+  // prev_SurS = std::max((prev_SurS - EvapSR),0.0);
+  prev_SurS = prev_SurS - EvapSR;
   // if(tstRM == 469) std::cout << RetOut << " ps " << prev_SurS << " e " << EvapSR <<std::endl;
-
+  set_varValue(prev_SurS, tstRM, ts_type::SURS);
 
   if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
     prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
@@ -313,7 +319,6 @@ void single_HMunit::surface_retention() {
 
   set_varValue(EvapSR, tstRM, ts_type::AET);
   set_varValue(RetOut,tstRM,ts_type::PREF);
-  set_varValue(prev_SurS, tstRM, ts_type::SURS);
 
   return ;
 }
@@ -443,7 +448,7 @@ void single_HMunit::slow_response() {
   return ;
 }
 
-/** \brief Updates the series of fast rsponse described by linear reservoirs
+/** \brief Updates the series of fast rEsponse described by linear reservoirs
  *
  */
 void single_HMunit::fast_response() {
@@ -486,6 +491,7 @@ void single_HMunit::interception_NoSnow() {
 
   CanOut = std::min((prevCanS / get_par(par_HRUtype::CAN_ST) * EvapCanop),prevCanS);
   prevCanS = prevCanS - CanOut;
+  set_varValue(prevCanS, tstRM, ts_type::CANS);
 
   prevCanS =  prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT));
 
@@ -498,7 +504,7 @@ void single_HMunit::interception_NoSnow() {
 
   StemOut = std::min((prevCanS) / get_par(par_HRUtype::CAN_ST) * EvapStem, prevSteS);
   prevSteS = prevSteS - StemOut;
-
+  set_varValue(prevSteS, tstRM, ts_type::STES);
 
   prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan);
 
@@ -513,17 +519,15 @@ void single_HMunit::interception_NoSnow() {
   set_varValue(Througf, tstRM, ts_type::TROF);
 
   set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
-  set_varValue(prevCanS, tstRM, ts_type::CANS);
-  set_varValue(prevSteS, tstRM, ts_type::STES);
 
   return ;
 }
 
 
 
-/** \brief updates states in interception storage in single pdm unit
+/** \brief updates states in interception storage in single HRU unit
  *
- *  updating of states in canopy and stem-trunk storage in the single pdm unit
+ *  updating of states in canopy and stem-trunk storage in the single hru unit
  *  calculating related fluxes
  *
  */

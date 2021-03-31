@@ -15,11 +15,11 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 500, B_EVAP = 1,  KS = 0.01, KF = 0.03
 SDIV = 0.3, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
 RETCAP = 2 )
 
-ParDFup = data.frame( B_SOIL = 2, C_MAX = 300, B_EVAP = 2,  KS = 0.4, KF = 0.8, ADIV = 0.9, CDIV = 0.3,
+ParDFup = data.frame( B_SOIL = 2, C_MAX = 300, B_EVAP = 2.5,  KS = 0.8, KF = 0.8, ADIV = 0.9, CDIV = 0.3,
                       SDIV = 0.3, CAN_ST = 1.75, STEM_ST = 1.2, CSDIV = 0.8, TETR = 0.5, DDFA = 5, TMEL = 0.0,
                       RETCAP = 6 )
 
-ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 5, B_EVAP = 0.25,  KS = 0.001, KF = 0.4, ADIV = 0.01, CDIV = 0.05,
+ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 5, B_EVAP = 0.1,  KS = 0.001, KF = 0.0001, ADIV = 0.01, CDIV = 0.05,
                        SDIV = 0.01, CAN_ST = 0.25, STEM_ST = 0.25, CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -1.0,
                        RETCAP = 2 )
 ParBest = ParDF
@@ -70,7 +70,7 @@ decntr<-DEoptim.control(VTR = 0, strategy = 2, bs = FALSE, NP = 200,
                 initialpop = NULL, storepopfrom = itermaxW + 1,
                 storepopfreq = 1, p = 0.2, c = 0, reltol = sqrt(.Machine$double.eps),
                 steptol = itermaxW)
-n_ens=25
+n_ens=1
 parsBPmatrix=matrix(0,nrow=n_ens, ncol=ncol(ParBest))
 for(i in 1:n_ens){
   u=DEoptim( lower=as.numeric(ParDFlow[1,]), upper=as.numeric(ParDFup[1,]), fn=mae, control = decntr)
@@ -95,11 +95,11 @@ Par_dHRUm_BP_lumped= list(
   Pet_type = "Oudin",
   latitude =50.1
 )
-pars=rbind(Par_dHRUm_BP_lumped$pars,Par_dHRUm_KL_lumped$pars)
+pars=rbind(Par_dHRUm_BP_lumped$pars)
 
 Par_dHRUm_Amalie_lumped = list(
   pars =pars,
-  areaM2 = data.frame(BP= 4700000, KL = 3280000),
+  areaM2 = data.frame(BP= 4700000),
   Pet_type = "Oudin",
   latitude =50.1
 )
@@ -186,4 +186,5 @@ points(p_OBS,simBest,col="red",pch=19)
 
 (RmBP-simBest)/RmBP*100
 
-saveRDS(file="./data/basin_params/BP/dHRUM_lumped_BP_03.rds",ParBest)
+# saveRDS(file="./data/basin_params/BP/dHRUM_lumped_BP_03.rds",ParBest)
+
