@@ -438,9 +438,13 @@ prev_Soil = next_soil;
 void single_HMunit::slow_response() {
 
   numberSel BaseOut = 0.0;
+  // numberSel Evap = 0.0;
+
+
 
   BaseOut = prev_Grou * get_par(par_HRUtype::KS) ;
-  prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
+  // Evap = prev_Grou * get_par(par_HRUtype::KS) ;
+  prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;//- Evap
 
   set_varValue(BaseOut, tstRM, ts_type::BASF);
   set_varValue(prev_Grou, tstRM,ts_type::GROS);
@@ -448,7 +452,7 @@ void single_HMunit::slow_response() {
   return ;
 }
 
-/** \brief Updates the series of fast rEsponse described by linear reservoirs
+/** \brief Updates the series of fast response described by linear reservoirs
  *
  */
 void single_HMunit::fast_response() {
@@ -460,10 +464,10 @@ void single_HMunit::fast_response() {
   for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
     help_State = get_stateFastres(ifrb);
     helpFastOut = get_par(par_HRUtype::KF) * help_State;
-    help_State = help_State - helpFastOut;
+    // help_State = help_State - helpFastOut;
     if(ifrb == 0) {
-      help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC);
-    } else help_State = help_State + get_outFastRes((ifrb-1));
+      help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC)- helpFastOut;
+    } else help_State = help_State + get_outFastRes((ifrb-1))- helpFastOut;
     set_stateFastRes(help_State,ifrb);
     set_outFastRes(helpFastOut,ifrb);
   }

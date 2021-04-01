@@ -11,15 +11,15 @@ filname2 = "../dHRUM/Calibrations/Amalie/indata/BP_1960_01_01.txt"
 setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Oudin")
 
-ParDF = data.frame( B_SOIL = 1.6, C_MAX = 500, B_EVAP = 1,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.3,
+ParDF = data.frame( B_SOIL = 1.6, C_MAX = 500, B_EVAP = 1,  KS = 0.01, KF = 0.03, ADIV = 0.01, CDIV = 0.3,
 SDIV = 0.3, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
 RETCAP = 2 )
 
-ParDFup = data.frame( B_SOIL = 2, C_MAX = 300, B_EVAP = 2.5,  KS = 0.8, KF = 0.8, ADIV = 0.9, CDIV = 0.3,
+ParDFup = data.frame( B_SOIL = 2, C_MAX = 2, B_EVAP = 2.5,  KS = 0.8, KF = 0.0008, ADIV = 0.009, CDIV = 0.3,
                       SDIV = 0.3, CAN_ST = 1.75, STEM_ST = 1.2, CSDIV = 0.8, TETR = 0.5, DDFA = 5, TMEL = 0.0,
                       RETCAP = 6 )
 
-ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 5, B_EVAP = 0.1,  KS = 0.001, KF = 0.0001, ADIV = 0.01, CDIV = 0.05,
+ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 1, B_EVAP = 0.1,  KS = 0.001, KF = 0.0001, ADIV = 0.00051, CDIV = 0.05,
                        SDIV = 0.01, CAN_ST = 0.25, STEM_ST = 0.25, CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -1.0,
                        RETCAP = 2 )
 ParBest = ParDF
@@ -125,7 +125,9 @@ names(dF) <- dta$VarsNams
 
 plot(dF$TOTR, type='l')
 plot(dF$BASF, type='l')
+sum(dF$BASF)/length(dF$BASF)
 plot(dF$DIRR, type='l')
+30*sum(dF$DIRR[1:30])/30
 plot(dF$SOIS, type='l')
 plot(dF$SURS,type= 'l')
 plot(dF$GROS, type='l')
@@ -162,13 +164,16 @@ dFF= data.table(
   PET=dF$PET,
   AET=dF$AET+dF$EVBS+dF$EVAC+dF$EVAS,
   MEL =dF$MELT,
-  R =dF$TOTR
-)
+  R =dF$TOTR,
+  BF = dF$BASF,
+  DR = dF$DIRR,
+  PR = dF$PERC,
+  EF = dF$PREF)
 dFF[,Month:=month(DTM)]
 dFF[,Year:=year(DTM)]
 
-dFF[DTM>as.Date("1996-01-01"),.(GW=mean(GW),SO=mean(SO),SR=mean(SR), SOSR=mean(SO+SR),P=sum(P),Sn=sum(Sn),T=mean(T),PET=sum(PET),AET=sum(AET),MELt=sum(MEL),R=sum(R)),by=.(Month)]
-dFF[DTM>as.Date("1961-01-01"),.(GW=mean(GW),SO=mean(SO),SR=mean(SR), SOSR=mean(SO+SR),P=sum(P),Sn=mean(Sn),T=mean(T),PET=sum(PET),AET=sum(AET),MELt=sum(MEL),R=sum(R)),by=.(Year)]
+dFF[DTM>as.Date("2006-01-01"),.(GW=mean(GW),SO=mean(SO),SR=mean(SR), SOSR=mean(SO+SR),P=sum(P),Sn=sum(Sn),T=mean(T),PET=sum(PET),AET=sum(AET),MELt=sum(MEL),R=sum(R), BF=sum(BF), DR=sum(DR), PERC= sum(PR),EF = sum(EF)),by=.(Month)]
+dFF[DTM>as.Date("1961-01-01"),.(GW=mean(GW),SO=mean(SO),SR=mean(SR), SOSR=mean(SO+SR),P=sum(P),Sn=mean(Sn),T=mean(T),PET=sum(PET),AET=sum(AET),MELt=sum(MEL),R=sum(R), BF=sum(BF), DR=sum(DR), PERC= sum(PR)),by=.(Year)]
 dFF[DTM>as.Date("1961-01-01"),.(GW=mean(GW),SO=mean(SO),SR=mean(SR), SOSR=mean(SO+SR),P=sum(P),Sn=mean(Sn),T=mean(T),PET=sum(PET),AET=sum(AET),MELt=sum(MEL),R=sum(R)),]
 simBest=as.numeric(quantile(dF$TOTR,probs=(1-p_OBS), na.rm = TRUE))
 
