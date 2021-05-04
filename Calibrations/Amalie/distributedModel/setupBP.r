@@ -1,4 +1,6 @@
+library(RcppDE)
 library(data.table)
+library(dHRUM)
 dtHrus <- as.data.table(read.csv("../dHRUM/Calibrations/Amalie/distributedModel/Soils_RVK_VVK.csv"))
 dtHrus[Povodi=='BP',sum(Area)]
 
@@ -27,9 +29,6 @@ QmBP = c(26, 18, 14, 12, 10, 8.0, 7.0, 6.0, 4.5, 3.5, 2.5, 1.0, 0.5)
 A=sum(SoilBP$Area)# plocha BP
 RmBP = QmBP * (3600*24) / A #CHMU ZHU 4.42 v datech SoilBP 4.41
 
-
-library(dHRUM)
-library(data.table)
 nHrus <- NhrusBP
 Areas <- SoilBP$Area
 IdsHrus <- SoilBP$id
@@ -99,7 +98,7 @@ mae = function(myPar){
   # (return as.double(mymae))
 }
 
-library(RcppDE)
+
 itermaxW=5
 decntr<-DEoptim.control(VTR = 0, strategy = 2, bs = FALSE, NP = 5550,
                         itermax = itermaxW, CR = 0.25, F = 0.7, trace = TRUE,
@@ -138,4 +137,34 @@ plot(p_OBS,RmBP, pch=19, ylim=range(c(RmBP,simBest)),
      main = paste0("Brejlský potok - kalibrace dHRUM - ",nHrus," HRU jednotek"),xlab="P(Qm)", ylab="Qm [mm/den]")
 points(p_OBS,simBest,col="red",pch=19)
 grid()
+
+
+ParsOrig <- ParBestDF
+dtaORIG <- dF
+
+ParsCC_SURstor <- ParsOrig
+ParsCC_SURstor$RETCAP <- ParsCC_SURstor$RETCAP * 1.30
+setParsToDistdHRUM(dhrusBP, ParsCC_SURstor, TRUE)
+# # for( i in 1:1000){
+calcHBInAlldHrus(dHRUM_ptr = dhrusBP)
+gatherHBdata(dHRUM_ptr = dhrusBP)
+# # }
+dtaSURSTCC <- getOutput(dHRUM_ptr = dhrusBP)
+dFsurCC <-data.frame(dtaSURSTCC$outDta)
+names(dFsurCC) <- dta$VarsNams
+
+
+dFsurCC <-  as.data.table(dFsurCC)
+dtaORIG <-  as.data.table(dtaORIG)
+
+is.data.table(dFsurCC)
+dFsurCC[,DTM:= as.Date(paste(YEAR,MONTH,DAY,sep="-"))]
+
+ccOUt <- dFsurCC[, .(SURS = mean(SURS),SOIS =mean(SOIS)), by=.(MONTH)]
+origOut <- dtaORIG[, .(SURS =mean(SURS),SOIS =mean(SOIS)), by=.(MONTH)]
+
+mean(ccOUt$SURS) - mean(origOut$SURS)
+mean(ccOUt$SOIS) - mean(origOut$SOIS)
+
+
 

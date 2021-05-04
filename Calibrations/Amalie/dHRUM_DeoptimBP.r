@@ -15,11 +15,11 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 500, B_EVAP = 1,  KS = 0.01, KF = 0.03
 SDIV = 0.3, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
 RETCAP = 2 )
 
-ParDFup = data.frame( B_SOIL = 2, C_MAX = 2, B_EVAP = 2.5,  KS = 0.8, KF = 0.0008, ADIV = 0.009, CDIV = 0.3,
+ParDFup = data.frame( B_SOIL = 2, C_MAX = 2, B_EVAP = 2.5,  KS = 0.8, KF = 0.0008, ADIV = 0.99, CDIV = 0.3,
                       SDIV = 0.3, CAN_ST = 1.75, STEM_ST = 1.2, CSDIV = 0.8, TETR = 0.5, DDFA = 5, TMEL = 0.0,
                       RETCAP = 6 )
 
-ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 1, B_EVAP = 0.1,  KS = 0.001, KF = 0.0001, ADIV = 0.00051, CDIV = 0.05,
+ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 1, B_EVAP = 0.1,  KS = 0.001, KF = 0.0001, ADIV = 0.81, CDIV = 0.05,
                        SDIV = 0.01, CAN_ST = 0.25, STEM_ST = 0.25, CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -1.0,
                        RETCAP = 2 )
 ParBest = ParDF

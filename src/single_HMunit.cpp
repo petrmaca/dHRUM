@@ -18,7 +18,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   Area(0),
   IdHru() {
 
-  set_nmbFastres(1);
+  set_nmbFastres(10);
   help_nmbFR = get_nmbFastRes();
 //  std::cout << "\nFast runoff response has " << help_nmbFR << " reservoirs." << std::endl;
   set_ZeroinitStates(help_nmbFR);
