@@ -142,6 +142,8 @@ grid()
 ParsOrig <- ParBestDF
 dtaORIG <- dF
 
+
+# surface retention
 ParsCC_SURstor <- ParsOrig
 ParsCC_SURstor$RETCAP <- ParsCC_SURstor$RETCAP * 1.30
 setParsToDistdHRUM(dhrusBP, ParsCC_SURstor, TRUE)
@@ -166,5 +168,38 @@ origOut <- dtaORIG[, .(SURS =mean(SURS),SOIS =mean(SOIS)), by=.(MONTH)]
 mean(ccOUt$SURS) - mean(origOut$SURS)
 mean(ccOUt$SOIS) - mean(origOut$SOIS)
 
+cmax_change <- seq(from = 0.5,to =1.5, by=0.05)
+soil_change <-c()
+gs_change <- c()
+SMAX <-c()
+# soil max capacity
+for(i in 1:length(cmax_change)){
+
+  ParsCC_SMAXstor <- ParsOrig
+ParsCC_SMAXstor$C_MAX <- ParsCC_SURstor$C_MAX * cmax_change[i]
+setParsToDistdHRUM(dhrusBP, ParsCC_SMAXstor, TRUE)
+# # for( i in 1:1000){
+calcHBInAlldHrus(dHRUM_ptr = dhrusBP)
+gatherHBdata(dHRUM_ptr = dhrusBP)
+# # }
+dtaSOILTCC <- getOutput(dHRUM_ptr = dhrusBP)
+dFsoilCC <-data.frame(dtaSOILTCC$outDta)
+names(dFsoilCC) <- dta$VarsNams
 
 
+dFsoilCC <-  as.data.table(dFsoilCC)
+dtaORIG <-  as.data.table(dtaORIG)
+
+dFsoilCC[,DTM:= as.Date(paste(YEAR,MONTH,DAY,sep="-"))]
+
+ccOUt <- dFsoilCC[, .(GRS = mean(GROS),SOIS =mean(SOIS)), by=.(MONTH)]
+origOut <- dtaORIG[, .(GRS =mean(GROS),SOIS =mean(SOIS)), by=.(MONTH)]
+
+gs_change[i] <- mean(ccOUt$GRS) - mean(origOut$GRS)
+soil_change[i] <- mean(ccOUt$SOIS) - mean(origOut$SOIS)
+SMAX[i] <- ParsCC_SMAXstor$C_MAX / (ParsCC_SMAXstor$B_SOIL +1)
+}
+
+plot(cmax_change,SMAX)
+plot(cmax_change,gs_change)
+plot(cmax_change,soil_change)
