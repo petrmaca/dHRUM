@@ -114,7 +114,7 @@ u=DEoptim( lower=as.numeric(as.matrix(ParDFlow1)),
 ParBestVec <- as.numeric(u$optim$bestmem)
 ParBestDF <- as.data.frame(matrix(ParBestVec,nrow = nHrus, ncol = nParIhru))
 names(ParBestDF) <- ParNams
-
+saveRDS(ParBestDF,file ="./Calibrations/Amalie/Params/Amalie/distModelOrigParams/BP.rds")
 
 setParsToDistdHRUM(dhrusBP, ParBestDF, TRUE)
 # # for( i in 1:1000){
@@ -197,9 +197,10 @@ origOut <- dtaORIG[, .(GRS =mean(GROS),SOIS =mean(SOIS)), by=.(MONTH)]
 
 gs_change[i] <- mean(ccOUt$GRS) - mean(origOut$GRS)
 soil_change[i] <- mean(ccOUt$SOIS) - mean(origOut$SOIS)
-SMAX[i] <- ParsCC_SMAXstor$C_MAX / (ParsCC_SMAXstor$B_SOIL +1)
+SMAX[i] <- mean(ParsCC_SMAXstor$C_MAX / (ParsCC_SMAXstor$B_SOIL +1))
 }
 
 plot(cmax_change,SMAX)
 plot(cmax_change,gs_change)
 plot(cmax_change,soil_change)
+
