@@ -177,7 +177,7 @@ BF <- c()
 for(i in 1:length(cmax_change)){
   ParsCC_SMAXstor <- ParsOrig
   ParsCC_SMAXstor$C_MAX <- ParsCC_SURstor$C_MAX * cmax_change[i]
-  setParsToDistdHRUM(dhrusBP, ParsCC_SMAXstor, TRUE)
+  setParsToDistdHRUM(dhrusBP, ParsCC_SMAXstor, PrintPars = FALSE)
   # # for( i in 1:1000){
   calcHBInAlldHrus(dHRUM_ptr = dhrusBP)
   gatherHBdata(dHRUM_ptr = dhrusBP)
