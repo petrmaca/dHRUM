@@ -116,7 +116,9 @@ ParBestDF <- as.data.frame(matrix(ParBestVec,nrow = nHrus, ncol = nParIhru))
 names(ParBestDF) <- ParNams
 saveRDS(ParBestDF,file ="./Calibrations/Amalie/Params/Amalie/distModelOrigParams/BP.rds")
 
-setParsToDistdHRUM(dhrusBP, ParBestDF, TRUE)
+
+parsDF <- readRDS(file ="./Calibrations/Amalie/Params/Amalie/distModelOrigParams/BP.rds")
+setParsToDistdHRUM(dhrusBP, parsDF, TRUE)
 # # for( i in 1:1000){
 calcHBInAlldHrus(dHRUM_ptr = dhrusBP)
 gatherHBdata(dHRUM_ptr = dhrusBP)
@@ -139,7 +141,7 @@ points(p_OBS,simBest,col="red",pch=19)
 grid()
 
 
-ParsOrig <- ParBestDF
+ParsOrig <- parsDF
 dtaORIG <- dF
 
 
@@ -201,3 +203,6 @@ plot(cmax_change,gs_change)
 plot(cmax_change,soil_change)
 plot(cmax_change,BF)
 
+plot(SMAX,gs_change)
+plot(SMAX,soil_change)
+plot(SMAX,BF)
