@@ -45,7 +45,7 @@ void setPTInputsToAlldHrusFromFile(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namI
 //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 //' prec=c(1,2,3)
 //' temp=c(1,2,3)
-//' setPTinputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
+//' setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
 // [[Rcpp::export]]
 void setPTInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Prec, Rcpp::NumericVector Temp, Rcpp::Date inDate) {
 

@@ -2,7 +2,7 @@ sessionInfo()
 library(dHRUM)
 library(data.table)
 nHrus <- 1
-Areas <- runif(nHrus,min = 1,max  = 100)
+Areas <- 4.7*1000*1000
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 
@@ -15,11 +15,11 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 500, B_EVAP = 1,  KS = 0.01, KF = 0.03
 SDIV = 0.3, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
 RETCAP = 2 )
 
-ParDFup = data.frame( B_SOIL = 2, C_MAX = 2, B_EVAP = 2.5,  KS = 0.8, KF = 0.0008, ADIV = 0.99, CDIV = 0.3,
+ParDFup = data.frame( B_SOIL = 2, C_MAX = 2, B_EVAP = 2.5,  KS = 0.8, KF = 0.008, ADIV = 0.99, CDIV = 0.3,
                       SDIV = 0.3, CAN_ST = 1.75, STEM_ST = 1.2, CSDIV = 0.8, TETR = 0.5, DDFA = 5, TMEL = 0.0,
                       RETCAP = 6 )
 
-ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 1, B_EVAP = 0.1,  KS = 0.001, KF = 0.0001, ADIV = 0.81, CDIV = 0.05,
+ParDFlow = data.frame( B_SOIL = 0.03, C_MAX = 1, B_EVAP = 0.1,  KS = 0.001, KF = 0.001, ADIV = 0.71, CDIV = 0.05,
                        SDIV = 0.01, CAN_ST = 0.25, STEM_ST = 0.25, CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -1.0,
                        RETCAP = 2 )
 ParBest = ParDF
@@ -38,12 +38,12 @@ p_OBS=dny/365.25
 
 # BP 96.68961 (1.736-2.430446)
 RaBP = 96# odhad Martin Hanel
-QmBP = c(26, 18, 14, 12, 10, 8.0, 7.0, 6.0, 4.5, 3.5, 2.5, 1.0, 0.5)
+QmBP = c(26, 18, 14, 12, 10, 8.0, 7.0, 6.0, 4.5, 3.5, 2.5, 1.0, 0.5)#l/s in 1 day
 A=4.7*1000*1000# plocha BP
-RmBP = QmBP * (3600*24) / A #CHMU ZHU
+RmBP = QmBP * (3600*24) / A #CHMU ZHU mm/day
 # simRM=as.numeric(quantile(dF$TOTR,probs=(1-p_OBS)))
 
-mae = function(myPar){
+sse = function(myPar){
   # myPar =ParDF[1,]
   setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(myPar),names(ParDF))
   # # for( i in 1:1000){
@@ -70,10 +70,10 @@ decntr<-DEoptim.control(VTR = 0, strategy = 2, bs = FALSE, NP = 200,
                 initialpop = NULL, storepopfrom = itermaxW + 1,
                 storepopfreq = 1, p = 0.2, c = 0, reltol = sqrt(.Machine$double.eps),
                 steptol = itermaxW)
-n_ens=1
+n_ens=2
 parsBPmatrix=matrix(0,nrow=n_ens, ncol=ncol(ParBest))
 for(i in 1:n_ens){
-  u=DEoptim( lower=as.numeric(ParDFlow[1,]), upper=as.numeric(ParDFup[1,]), fn=mae, control = decntr)
+  u=DEoptim( lower=as.numeric(ParDFlow[1,]), upper=as.numeric(ParDFup[1,]), fn=sse, control = decntr)
   u$optim$bestmem
   ParBest[1,] = as.numeric(u$optim$bestmem)
   parsBPmatrix[i,] = as.numeric(u$optim$bestmem)
@@ -127,7 +127,6 @@ plot(dF$TOTR, type='l')
 plot(dF$BASF, type='l')
 sum(dF$BASF)/length(dF$BASF)
 plot(dF$DIRR, type='l')
-30*sum(dF$DIRR[1:30])/30
 plot(dF$SOIS, type='l')
 plot(dF$SURS,type= 'l')
 plot(dF$GROS, type='l')
