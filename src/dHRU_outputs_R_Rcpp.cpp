@@ -82,9 +82,9 @@ void printToFile(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namOutFilet) {
 
 }
 
-//' Provides dHRUM outputs - time series
+//' Provides dHRUM outputs - time series for each HRU
 //'
-//' return matrix with state variables and fluxes averaged over basin area.
+//' return list matrix with state variables and fluxes averaged over basin area.
 //'
 //'
 //' @param dHRUM_ptr pointer to dHRUM instance
@@ -105,7 +105,10 @@ void printToFile(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namOutFilet) {
 //' calcHBInAlldHrus(dHRUM_ptr = dhrus)
 //' gatherHBdata(dHRUM_ptr = dhrus)
 //' outDta <- getOutputDist(dHRUM_ptr = dhrus)
-//' outDta
+//' outDta <- getOutputDist(dHRUM_ptr = dhrus)
+//' outDF <- cbind(outDta$outDta, outDta$Ids)
+//' outDF <- data.frame(outDF)
+//' names(outDF) <-c(outDta$VarsNams,"HruIDs")
 // [[Rcpp::export]]
 Rcpp::List getOutputDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
   unsigned nrowOutMat = dHRUM_ptr.get()->get_numTS() * dHRUM_ptr->getdHRUdim();

@@ -203,9 +203,9 @@ printToFile <- function(dHRUM_ptr, namOutFilet) {
     invisible(.Call(`_dHRUM_printToFile`, dHRUM_ptr, namOutFilet))
 }
 
-#' Provides dHRUM outputs - time series
+#' Provides dHRUM outputs - time series for each HRU
 #'
-#' return matrix with state variables and fluxes averaged over basin area.
+#' return list matrix with state variables and fluxes averaged over basin area.
 #'
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
@@ -226,7 +226,10 @@ printToFile <- function(dHRUM_ptr, namOutFilet) {
 #' calcHBInAlldHrus(dHRUM_ptr = dhrus)
 #' gatherHBdata(dHRUM_ptr = dhrus)
 #' outDta <- getOutputDist(dHRUM_ptr = dhrus)
-#' outDta
+#' outDta <- getOutputDist(dHRUM_ptr = dhrus)
+#' outDF <- cbind(outDta$outDta, outDta$Ids)
+#' outDF <- data.frame(outDF)
+#' names(outDF) <-c(outDta$VarsNams,"HruIDs")
 getOutputDist <- function(dHRUM_ptr) {
     .Call(`_dHRUM_getOutputDist`, dHRUM_ptr)
 }

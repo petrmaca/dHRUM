@@ -26,5 +26,5 @@ IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 prec=c(1,2,3)
 temp=c(1,2,3)
-setPTinputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
+setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
 }
