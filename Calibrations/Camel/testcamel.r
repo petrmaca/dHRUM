@@ -4,7 +4,8 @@ library(RcppDE)
 library(data.table)
 
 # 01	01181000	     WEST BRANCH WESTFIELD RIVER AT HUNTINGTON, MA	  42.23731	 -72.89565	    243.50
-
+#test_1
+#pathToCamel <- "/home/eleni/CULS_FES/dHRUM/basin_timeseries_v1p2_metForcing_obsFlow/basin_dataset_public_v1p2"
 
 pathToCamel <- "/home/hubert/prg/data/basin_timeseries_v1p2_metForcing_obsFlow/basin_dataset_public_v1p2"
 # pathToForcing <- "/basin_mean_forcing/maurer/"
@@ -115,6 +116,11 @@ saveRDS(file="/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_
 dtKGdaymet <- readRDS("/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_Daymet.rds")
 dtKGmauer <- readRDS("/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_Maurer.rds")
 dtKGnldas <- readRDS("/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_nldas.rds")
+
+#test_2
+# dtKGdaymet <- readRDS("/home/eleni/Camels/camel_kge_nse_basic_2000cal_Daymet.rds")
+# dtKGmauer <- readRDS("/home/eleni/Camels/camel_kge_nse_basic_2000cal_Maurer.rds")
+# dtKGnldas <- readRDS("/home/eleni/Camels/NT_2000/camel_kge_nse_basic_2000cal_nldas.rds")
 
 KGE = data.frame(KGEdaymet = dtKGdaymet$KGE, KGEmaurer = dtKGmauer$KGE, KGEnldas = dtKGnldas$KGE)
 boxplot(KGE)
