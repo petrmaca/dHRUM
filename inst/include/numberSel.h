@@ -34,5 +34,7 @@ const par_HRUtype all_pars[]{par_HRUtype::B_SOIL, par_HRUtype::C_MAX, par_HRUtyp
 const std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF","ADIV","CDIV", \
                                       "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR", \
                                       "DDFA","TMEL","RETCAP"};
+enum class gs_STORtype {LIN_RES};
+const gs_STORtype all_gs_STORs[]{ gs_STORtype::LIN_RES};
 
 #endif // NUMBERSEL_H_INCLUDED

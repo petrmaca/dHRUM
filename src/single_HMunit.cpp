@@ -34,6 +34,7 @@ single_HMunit::single_HMunit(): tstRM(0),
 //  std::cout << "INITprevDR " << prev_Grou << std::endl;
 
   tstRM = 0;
+  gs_STORAGE = gs_STORtype::LIN_RES;
 
 }
 
@@ -435,7 +436,7 @@ prev_Soil = next_soil;
  *  calculating related fluxes, groundwater storage represented by a linear reservoir
  *
  */
-void single_HMunit::slow_response() {
+/*void single_HMunit::slow_response() {
 
   numberSel BaseOut = 0.0;
   // numberSel Evap = 0.0;
@@ -450,11 +451,31 @@ void single_HMunit::slow_response() {
   set_varValue(prev_Grou, tstRM,ts_type::GROS);
 
   return ;
+}*/
+
+void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
+
+  numberSel BaseOut = 0.0;
+  numberSel BaseOut_1 = 0.0;
+  numberSel BaseOut_2 = 0.0;
+
+  switch(_gs_STORtype) {
+
+  case gs_STORtype::LIN_RES:
+    BaseOut = prev_Grou * get_par(par_HRUtype::KS) ;
+    prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
+
+    set_varValue(BaseOut, tstRM, ts_type::BASF);
+    set_varValue(prev_Grou, tstRM,ts_type::GROS);
+    break;
+  }
+  return;
 }
 
 /** \brief Updates the series of fast response described by linear reservoirs
  *
  */
+
 void single_HMunit::fast_response() {
 
   numberSel helpFastOut = 0.0, help_State =0.0;
@@ -672,7 +693,7 @@ void single_HMunit::run_HB() {
     interception_snow();
     surface_retention();
     soil_buffer();
-    slow_response();
+    slow_response(gs_STORAGE);
     fast_response();
     helprm = (get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR));
     set_varValue(helprm ,tstRM,ts_type::TOTR);
@@ -1077,5 +1098,35 @@ void single_HMunit::print_Pars() {
   par_HRU.p_param();
 
   return ;
+
+}
+
+void single_HMunit::set_GStype(gs_STORtype _gs_STORtype) {
+
+  gs_STORAGE = _gs_STORtype;
+  print_GStype();
+
+  return ;
+
+}
+
+gs_STORtype single_HMunit::get_GStype() {
+
+  return gs_STORAGE;
+
+}
+
+void single_HMunit::print_GStype() {
+
+  switch(gs_STORAGE) {
+
+  case gs_STORtype::LIN_RES:
+
+    std::cout << "The gs_STORE is a LIN reservoir." << std::endl;
+
+    break;
+  }
+
+  return;
 
 }

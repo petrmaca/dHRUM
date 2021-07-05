@@ -49,6 +49,8 @@ class dHRUM {
   unsigned get_singleHRUnumPars(unsigned Id);
   void set_numPars();
   void print_Pars();
+  void init_STORtypes(const std::vector<gs_STORtype>& gs_STORtypes);
+  //std::vector<gs_STORtype> get_STORtypes();
 
 protected:
 
@@ -61,7 +63,7 @@ private:
   caldata numParsAllHRus;//< Vector with Numbers of params
 
   data_HB_1d basinDta;//!< The HB data on all basin
-
+  std::vector<gs_STORtype> gs_STORtypes;
 };
 
 #endif // DHRUM_H

@@ -390,3 +390,16 @@ void dHRUM::loadPTInputsToOneHru(hdata Prec, hdata Temp, const numberSel& val,co
   return;
 
 }
+
+void dHRUM::init_STORtypes(const std::vector<gs_STORtype>& gs_STORtypes) {
+
+  if(gs_STORtypes.size() == dimHM) {
+    for(unsigned int i=0; i<gs_STORtypes.size(); i++) {
+      dHruVec[i].set_GStype(gs_STORtypes[i]);
+    }
+  } else {
+    std::cout << "The size of gs_STORtypes differs from dimHM." << std::endl;
+    exit(EXIT_FAILURE);
+  }
+
+}
