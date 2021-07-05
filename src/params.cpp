@@ -9,7 +9,7 @@ params::params(): numPars(0),
 //    b_soil = 2.0;
 //    c_max = 100.0;
 //    b_evap = 1;
-  numPars = 16;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
+  numPars = 17;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
 
   pars.resize(numPars,numPars);
   up_pars.resize(numPars,numPars);
@@ -32,6 +32,7 @@ params::params(): numPars(0),
   pars[13] = 2;//!<  DDFA The day degree model for snow melt [o, inf] better [0,2],VC1
   pars[14] = 0;//!<  TMEL The threshold temperature for determining melting process [-inf, inf] better [-5,5]
   pars[15] = 4;//!< RETCAP The maximum capacity of surface retention [0, inf],VC1
+  pars[16] = 1;//!< L The amount of groundwater recharge removed from the linear reservoir [0,1]
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   up_pars[1] = 500.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -51,6 +52,7 @@ params::params(): numPars(0),
   up_pars[13] = 2;//!<  DDFA The day degree model for snow melt [o, inf] better [0,2],VC1
   up_pars[14] = 0;//!<  TMEL The threshold temperature for determining melting process [-inf, inf] better [-5,5]
   up_pars[15] = 100;//!< RETCAP The maximum capacity of surface retention [0, inf],VC1
+  up_pars[16] = 1;//!< L The amount of groundwater recharge removed from the linear reservoir [0,1]
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   low_pars[1] = 0.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -70,6 +72,7 @@ params::params(): numPars(0),
   low_pars[13] = 0.0;//!<  DDFA The day degree model for snow melt [o, inf] better [0,2],VC1
   low_pars[14] = 0.0;//!<  TMEL The threshold temperature for determining melting process [-inf, inf] better [-5,5]
   low_pars[15] = 0.0;//!< RETCAP The maximum capacity of surface retention [0, inf],VC1
+  low_pars[16] = 0.0;//!< L The amount of groundwater recharge removed from the linear reservoir [0,1]
 //  std::cout << "Params are initialized." << std::endl;
 }
 
@@ -181,6 +184,10 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     pars[15] = par_dta;
 //    std::cout << "New RETCAP --> loaded\n";
     break;
+  case par_HRUtype::L:
+    pars[16] = par_dta;
+//    std::cout << "New L --> loaded\n";
+    break;
   }
   return ;
 }
@@ -262,6 +269,10 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
     pars[15] = par_dta;
 //    std::cout << "New RETCAP --> loaded\n";
     break;
+  case par_HRUtype::L:
+    pars[16] = par_dta;
+//    std::cout << "New L --> loaded\n";
+    break;
   }
   return ;
 }
@@ -325,6 +336,9 @@ numberSel params::g_par(const par_HRUtype& _parType) {
     break;
   case par_HRUtype::RETCAP:
     value =  pars[15];
+    break;
+  case par_HRUtype::L:
+    value =  pars[16];
     break;
   }
 
@@ -392,6 +406,7 @@ void params::s_default() {
   pars[13] = 2;//!< The day degree model for snow melt [o, inf] better [0,2],VC1
   pars[14] = 0;//!<  The threshold temperature for determining melting process [-inf, inf] better [-5,5]
   pars[15] = 1;//!< The maximum capacity of surface retention [0, inf],VC1
+  pars[16] = 1.0;//!< Leakage coefficient for linear reservoirs
 
   numFastRes = 1;
 
@@ -405,7 +420,7 @@ void params::s_default() {
 void params::p_param() {
 
   std::vector<std::string> parsNames {"B_SOIL: ", "C_MAX: ", "B_EVAP: ", "SMAX: ", "KS: ", "KF: ", \
-                                      "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", "DDFA: ", "TMEL: ", "RETCAP: "};
+                                      "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", "DDFA: ", "TMEL: ", "RETCAP: ", "L: "};
 
   std::cout << std::endl << "Printing the values of parameters:" << std::endl << std::endl;
   for(unsigned pp=0; pp<numPars ; pp++ ) {

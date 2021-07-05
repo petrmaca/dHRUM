@@ -24,7 +24,7 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
   unsigned numParsNames = ParsNames.size();
   unsigned numParsVals = ParsVec.size();
 
-  if((numParsNames!=numParsVals) || (numParsNames>15) || (numParsVals>15)) {
+  if((numParsNames!=numParsVals) || (numParsNames>16) || (numParsVals>16)) {
     Rcpp::Rcout << "The number of names of params is " << numParsNames <<"\n";
     Rcpp::Rcout << "The number of values of params is " << numParsVals <<"\n";
     Rcpp::stop("\n Those values are different then required number of dHRU Par Values.\n");
@@ -55,7 +55,8 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       {"TETR", par_HRUtype::TETR},
       {"DDFA", par_HRUtype::DDFA},
       {"TMEL", par_HRUtype::TMEL},
-      {"RETCAP", par_HRUtype::RETCAP}
+      {"RETCAP", par_HRUtype::RETCAP},
+      {"L", par_HRUtype::L}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -145,6 +146,11 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::RETCAP));
         // pars[15] = par_dta;
         // std::cout << "New RETCAP --> loaded\n";
+        break;
+      case par_HRUtype::L:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::L));
+        // pars[16] = par_dta;
+        // std::cout << "New L --> loaded\n";
         break;
       }
     }
@@ -210,7 +216,8 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
       {"TETR", par_HRUtype::TETR},
       {"DDFA", par_HRUtype::DDFA},
       {"TMEL", par_HRUtype::TMEL},
-      {"RETCAP", par_HRUtype::RETCAP}
+      {"RETCAP", par_HRUtype::RETCAP},
+      {"L", par_HRUtype::L}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -300,6 +307,11 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::RETCAP));
         // pars[15] = par_dta;
         // std::cout << "New RETCAP --> loaded\n";
+        break;
+      case par_HRUtype::L:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::L));
+        // pars[16] = par_dta;
+        // std::cout << "New L --> loaded\n";
         break;
       }
     }
