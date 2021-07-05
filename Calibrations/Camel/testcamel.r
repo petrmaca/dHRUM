@@ -117,6 +117,11 @@ dtKGdaymet <- readRDS("/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic
 dtKGmauer <- readRDS("/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_Maurer.rds")
 dtKGnldas <- readRDS("/home/hubert/prg/data/outputs/NT_2000/camel_kge_nse_basic_2000cal_nldas.rds")
 
+#test_2
+# dtKGdaymet <- readRDS("/home/eleni/Camels/camel_kge_nse_basic_2000cal_Daymet.rds")
+# dtKGmauer <- readRDS("/home/eleni/Camels/camel_kge_nse_basic_2000cal_Maurer.rds")
+# dtKGnldas <- readRDS("/home/eleni/Camels/NT_2000/camel_kge_nse_basic_2000cal_nldas.rds")
+
 KGE = data.frame(KGEdaymet = dtKGdaymet$KGE, KGEmaurer = dtKGmauer$KGE, KGEnldas = dtKGnldas$KGE)
 boxplot(KGE)
 summary(KGE)
