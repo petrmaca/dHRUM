@@ -26,6 +26,8 @@ data_HB_1d::data_HB_1d(): numTS(0),
   IntS(1,1),
   SoiS(1,1),
   GroS(1,1),
+  GroS1(1,1),
+  GroS2(1,1),
   SurS(1,1),
   TotR(1,1),
   Basf(1,1),
@@ -35,6 +37,8 @@ data_HB_1d::data_HB_1d(): numTS(0),
   Pref(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
+  init_GroS1(0.0),
+  init_GroS2(0.0),
   init_CanS(0.0),
   init_SteS(0.0),
   init_SnoS(0.0),
@@ -149,6 +153,8 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   IntS(1,1),
   SoiS(1,1),
   GroS(1,1),
+  GroS1(1,1),
+  GroS2(1,1),
   SurS(1,1),
   TotR(1,1),
   Basf(1,1),
@@ -158,6 +164,8 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Pref(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
+  init_GroS1(0.0),
+  init_GroS2(0.0),
   init_CanS(0.0),
   init_SteS(0.0),
   init_SnoS(0.0),
@@ -191,6 +199,8 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   IntS = other.IntS;//!< Interception storage
   SoiS = other.SoiS;//!< Soil storage
   GroS = other.GroS;//!< Groundwater storage
+  GroS1 = other.GroS1;//!< Groundwater storage 1
+  GroS2 = other.GroS2;//!< Groundwater storage 2
   SurS = other.SurS;//!< Surface retention
   TotR = other.TotR;//!< Total runoff
   Basf = other.Basf;//!< Baseflow
@@ -200,6 +210,8 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Pref = other.Pref;//!< Effective Precipitation
   init_SoiS = other.init_SoiS;//!< Initial value of soil storage
   init_GroS = other.init_GroS;//!< Initial value of groundwater storage
+  init_GroS1 = other.init_GroS1;//!< Initial value of groundwater storage 1
+  init_GroS2 = other.init_GroS2;//!< Initial value of groundwater storage 2
   init_CanS = other.init_SteS;//!< Initial value of Canopy Interception storage
   init_SteS = other.init_SteS;//!< Initial value of Stem Interception storage
   init_SnoS = other.init_SnoS;//!< Initial variable of Snow storage
@@ -239,6 +251,8 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     IntS = rhs.IntS;//!< Interception storage
     SoiS = rhs.SoiS;//!< Soil storage
     GroS = rhs.GroS;//!< Groundwater storage
+    GroS1 = rhs.GroS1;//!< Groundwater storage
+    GroS2 = rhs.GroS2;//!< Groundwater storage
     SurS = rhs.SurS;//!< Surface retention
     TotR = rhs.TotR;//!< Total runoff
     Basf = rhs.Basf;//!< Baseflow
@@ -248,6 +262,8 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     Pref = rhs.Pref;//!< Effective Precipitation
     init_SoiS = rhs.init_SoiS;//!< Initial value of soil storage
     init_GroS = rhs.init_GroS;//!< Initial value of groundwater storage
+    init_GroS1 = rhs.init_GroS1;//!< Initial value of groundwater storage 1
+    init_GroS2 = rhs.init_GroS2;//!< Initial value of groundwater storage 2
     init_CanS = rhs.init_SteS;//!< Initial value of Canopy Interception storage
     init_SteS = rhs.init_SteS;//!< Initial value of Stem Interception storage
     init_SnoS = rhs.init_SnoS;//!< Initial variable of Snow storage
@@ -323,6 +339,14 @@ void data_HB_1d::s_data(const hdata& dta,const ts_type& _tsType, bool updateNumT
   case ts_type::GROS:
     GroS = dta;
 //    std::cout << "New GroS --> loaded\n";
+    break;
+  case ts_type::GROS1:
+    GroS1 = dta;
+//    std::cout << "New GroS1 --> loaded\n";
+    break;
+  case ts_type::GROS2:
+    GroS2 = dta;
+//    std::cout << "New GroS2 --> loaded\n";
     break;
   case ts_type::SURS:
     SurS= dta;
@@ -417,6 +441,12 @@ void data_HB_1d::s_varVal(const numberSel& dta, const unsigned& tst,const ts_typ
   case ts_type::GROS:
     GroS[tst] = dta;
     break;
+  case ts_type::GROS1:
+    GroS1[tst] = dta;
+    break;
+  case ts_type::GROS2:
+    GroS2[tst] = dta;
+    break;
   case ts_type::SURS:
     SurS[tst] = dta;
     break;
@@ -482,6 +512,10 @@ numberSel data_HB_1d::g_dta(const unsigned& tst,const ts_type& _tsType) {
     return SoiS[tst];
   case ts_type::GROS:
     return GroS[tst];
+  case ts_type::GROS1:
+    return GroS1[tst];
+  case ts_type::GROS2:
+    return GroS2[tst];
   case ts_type::SURS:
     return SurS[tst];
   case ts_type::INTS:
@@ -512,6 +546,12 @@ void data_HB_1d::s_initStates(const hdata& initfastRes, const numberSel& init_St
     break;
   case init_Stype::GROUNDWAT:
     init_GroS = init_State;
+    break;
+  case init_Stype::GROUNDWAT1:
+    init_GroS1 = init_State;
+    break;
+  case init_Stype::GROUNDWAT2:
+    init_GroS2 = init_State;
     break;
   case init_Stype::CANS:
     init_CanS = init_State;
@@ -549,6 +589,12 @@ numberSel data_HB_1d::g_initState(const init_Stype& _Stype) {
     break;
   case init_Stype::GROUNDWAT:
     return init_GroS;
+    break;
+  case init_Stype::GROUNDWAT1:
+    return init_GroS1;
+    break;
+  case init_Stype::GROUNDWAT2:
+    return init_GroS2;
     break;
   case init_Stype::CANS:
     return init_CanS;
@@ -848,6 +894,10 @@ hdata data_HB_1d::get_HbTsData(const ts_type& _tsType) {
     return SoiS;
   case ts_type::GROS:
     return GroS;
+  case ts_type::GROS1:
+    return GroS1;
+  case ts_type::GROS2:
+    return GroS2;
   case ts_type::SURS:
     return SurS;
   case ts_type::INTS:
@@ -939,6 +989,12 @@ void data_HB_1d::setOneTstoZero(const ts_type& _tsType) {
     break;
   case ts_type::GROS:
     GroS = 0.0;
+    break;
+  case ts_type::GROS1:
+    GroS1 = 0.0;
+    break;
+  case ts_type::GROS2:
+    GroS2 = 0.0;
     break;
   case ts_type::SURS:
     SurS = 0.0;

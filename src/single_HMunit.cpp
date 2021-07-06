@@ -9,6 +9,8 @@ single_HMunit::single_HMunit(): tstRM(0),
   hyd_dta(),
   prev_Soil(0.0),
   prev_Grou(0.0),
+  prev_Grou1(0.0),
+  prev_Grou2(0.0),
   prevCanS(0.0),
   prevSteS(0.0),
   prevSnoS(0.0),
@@ -25,6 +27,8 @@ single_HMunit::single_HMunit(): tstRM(0),
 //  std::cout<< "Soil init " << get_initState(init_Stype::SOIL) << std::endl;
   prev_Soil = get_initState(init_Stype::SOIL);
   prev_Grou = get_initState(init_Stype::GROUNDWAT);
+  prev_Grou1 = get_initState(init_Stype::GROUNDWAT1);
+  prev_Grou2 = get_initState(init_Stype::GROUNDWAT2);
   prevCanS = get_initState(init_Stype::CANS);
   prevSteS  = get_initState(init_Stype::STES);
   prevSnoS = get_initState(init_Stype::SNOS);
@@ -34,7 +38,7 @@ single_HMunit::single_HMunit(): tstRM(0),
 //  std::cout << "INITprevDR " << prev_Grou << std::endl;
 
   tstRM = 0;
-  gs_STORAGE = gs_STORtype::LIN_RES;
+  gs_STORAGE = gs_STORtype::LIN_2SE;
 
 }
 
@@ -62,6 +66,8 @@ par_HRU(),
 hyd_dta(),
 prev_Soil(0.0),
 prev_Grou(0.0),
+prev_Grou1(0.0),
+prev_Grou2(0.0),
 prevCanS(0.0),
 prevSteS(0.0),
 prevSnoS(0.0),
@@ -76,6 +82,8 @@ IdHru() {
   hyd_dta = other.hyd_dta;//!< The data of all time series of hydrological variables
   prev_Soil = other.prev_Soil;//!< The helper variable for updating soil storage
   prev_Grou = other.prev_Grou;//!< The helper variable for updating groundwater storage
+  prev_Grou1 = other.prev_Grou1;//!< The helper variable for updating groundwater storage 1
+  prev_Grou2 = other.prev_Grou2;//!< The helper variable for updating groundwater storage 2
   prevCanS = other.prevCanS;//!<  The helper variable for Canopy interception storage
   prevSteS = other.prevSteS;//!<  The helper variable for Stem interception storage
   prevSnoS = other.prevSnoS;//!<  The helper variable for Snow storage
@@ -105,6 +113,8 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     hyd_dta = rhs.hyd_dta;//!< The data of all time series of hydrological variables
     prev_Soil = rhs.prev_Soil;//!< The helper variable for updating soil storage
     prev_Grou = rhs.prev_Grou;//!< The helper variable for updating groundwater storage
+    prev_Grou1 = rhs.prev_Grou1;//!< The helper variable for updating groundwater storage 1
+    prev_Grou2 = rhs.prev_Grou2;//!< The helper variable for updating groundwater storage 2
     prevCanS = rhs.prevCanS;//!<  The helper variable for Canopy interception storage
     prevSteS = rhs.prevSteS;//!<  The helper variable for Stem interception storage
     prevSnoS = rhs.prevSnoS;//!<  The helper variable for Snow storage
@@ -224,6 +234,8 @@ void single_HMunit::set_ZeroinitStates(const unsigned& numres) {
   //  help_data;
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::SOIL);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::GROUNDWAT);
+  hyd_dta.s_initStates(help_data,zeroState,init_Stype::GROUNDWAT1);
+  hyd_dta.s_initStates(help_data,zeroState,init_Stype::GROUNDWAT2);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::SURFRET);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::CANS);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::STES);
@@ -501,6 +513,19 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
       set_varValue(BaseOut, tstRM, ts_type::BASF);
       set_varValue(prev_Grou, tstRM,ts_type::GROS);
     }
+    break;
+
+  case gs_STORtype::LIN_2SE:
+    BaseOut = prev_Grou2 * get_par(par_HRUtype::KS2);
+    BaseOut_1 = prev_Grou1 * get_par(par_HRUtype::KS);
+
+    prev_Grou1 = prev_Grou1 + ((1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC)) - BaseOut_1;
+    prev_Grou2 = prev_Grou2 + BaseOut_1 - BaseOut;
+
+    set_varValue(BaseOut, tstRM, ts_type::BASF);
+    set_varValue(prev_Grou1, tstRM,ts_type::GROS1);
+    set_varValue(prev_Grou2, tstRM,ts_type::GROS2);
+    set_varValue(prev_Grou1 + prev_Grou2, tstRM,ts_type::GROS);
     break;
   }
 
@@ -924,6 +949,8 @@ void single_HMunit::set_ZeroStates() {
 
   prev_Soil = 0.0;
   prev_Grou = 0.0;
+  prev_Grou1 = 0.0;
+  prev_Grou2 = 0.0;
   prevCanS = 0.0;
   prevSteS = 0.0;
   prevSnoS = 0.0;

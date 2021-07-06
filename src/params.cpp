@@ -9,7 +9,7 @@ params::params(): numPars(0),
 //    b_soil = 2.0;
 //    c_max = 100.0;
 //    b_evap = 1;
-  numPars = 19;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
+  numPars = 20;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
 
   pars.resize(numPars,numPars);
   up_pars.resize(numPars,numPars);
@@ -35,6 +35,7 @@ params::params(): numPars(0),
   pars[16] = 1;//!< L The amount of groundwater recharge removed from the linear reservoir [0,1]
   pars[17] = 1;//!< D_BYPASS The amount of groundwater recharge removed from the linear reservoir [0,1]
   pars[18] = 1;//!< B_EXP Power coefficient
+  pars[19] = 0.1;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   up_pars[1] = 500.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -57,6 +58,7 @@ params::params(): numPars(0),
   up_pars[16] = 1;//!< L The amount of groundwater recharge removed from the linear reservoir [0,1]
   up_pars[17] = 1;//!< D_BYPASS The amount of groundwater recharge removed from the linear reservoir [0,1]
   up_pars[18] = 1;//!< B_EXP Power coefficient
+  up_pars[19] = 1;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   low_pars[1] = 0.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -79,6 +81,7 @@ params::params(): numPars(0),
   low_pars[16] = 0.0;//!< L The amount of groundwater recharge removed from the linear reservoir [0,1]
   low_pars[17] = 0.0;//!< D_BYPASS The amount of groundwater recharge removed from the linear reservoir [0,1]
   low_pars[18] = 0.25;//!< B_EXP Power coefficient
+  low_pars[19] = 0.0;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
 //  std::cout << "Params are initialized." << std::endl;
 }
 
@@ -202,6 +205,10 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     pars[18] = par_dta;
 //    std::cout << "New B_EXP --> loaded\n";
     break;
+  case par_HRUtype::KS2:
+    pars[19] = par_dta;
+//    std::cout << "New KS2 --> loaded\n";
+    break;
   }
   return ;
 }
@@ -295,6 +302,10 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
     pars[18] = par_dta;
 //    std::cout << "New B_EXP --> loaded\n";
     break;
+  case par_HRUtype::KS2:
+    pars[19] = par_dta;
+//    std::cout << "New KS2 --> loaded\n";
+    break;
   }
   return ;
 }
@@ -368,6 +379,9 @@ numberSel params::g_par(const par_HRUtype& _parType) {
   case par_HRUtype::B_EXP:
     value =  pars[18];
     break;
+  case par_HRUtype::KS2:
+    value =  pars[19];
+    break;
   }
 
   return value;
@@ -437,6 +451,7 @@ void params::s_default() {
   pars[16] = 1.0;//!< Leakage coefficient for linear reservoirs
   pars[17] = 1.0;//!< Direct by-pass coefficient for linear reservoirs
   pars[18] = 1;//!< Power coefficient
+  pars[19] = 0.1;//!< Second storage coefficient of groundwater storage [0,1],VC1
   numFastRes = 1;
 
 //  std::cout << "Params are initialized." << std::endl;
