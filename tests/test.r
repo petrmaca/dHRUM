@@ -1,5 +1,5 @@
 library(dHRUM)
-nHrus <- 2
+nHrus <- 20
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
