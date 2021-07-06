@@ -34,7 +34,7 @@ single_HMunit::single_HMunit(): tstRM(0),
 //  std::cout << "INITprevDR " << prev_Grou << std::endl;
 
   tstRM = 0;
-  gs_STORAGE = gs_STORtype::LINL_RES;
+  gs_STORAGE = gs_STORtype::LIN_RES;
 
 }
 
@@ -483,6 +483,24 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
 
     set_varValue(BaseOut, tstRM, ts_type::BASF);
     set_varValue(prev_Grou, tstRM,ts_type::GROS);
+    break;
+
+  case gs_STORtype::POW_RES:
+    BaseOut = std::pow(prev_Grou, get_par(par_HRUtype::B_EXP)) * get_par(par_HRUtype::KS);
+    prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
+
+    set_varValue(BaseOut, tstRM, ts_type::BASF);
+    set_varValue(prev_Grou, tstRM,ts_type::GROS);
+    break;
+
+  case gs_STORtype::EXP_RES:
+    if(get_par(par_HRUtype::B_EXP) != 0) {
+      BaseOut = get_par(par_HRUtype::KS)*std::exp(prev_Grou / get_par(par_HRUtype::B_EXP));
+      prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
+
+      set_varValue(BaseOut, tstRM, ts_type::BASF);
+      set_varValue(prev_Grou, tstRM,ts_type::GROS);
+    }
     break;
   }
 

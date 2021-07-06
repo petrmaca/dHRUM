@@ -9,7 +9,7 @@ params::params(): numPars(0),
 //    b_soil = 2.0;
 //    c_max = 100.0;
 //    b_evap = 1;
-  numPars = 18;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
+  numPars = 19;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
 
   pars.resize(numPars,numPars);
   up_pars.resize(numPars,numPars);
@@ -34,6 +34,7 @@ params::params(): numPars(0),
   pars[15] = 4;//!< RETCAP The maximum capacity of surface retention [0, inf],VC1
   pars[16] = 1;//!< L The amount of groundwater recharge removed from the linear reservoir [0,1]
   pars[17] = 1;//!< D_BYPASS The amount of groundwater recharge removed from the linear reservoir [0,1]
+  pars[18] = 1;//!< B_EXP Power coefficient
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   up_pars[1] = 500.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -55,6 +56,7 @@ params::params(): numPars(0),
   up_pars[15] = 100;//!< RETCAP The maximum capacity of surface retention [0, inf],VC1
   up_pars[16] = 1;//!< L The amount of groundwater recharge removed from the linear reservoir [0,1]
   up_pars[17] = 1;//!< D_BYPASS The amount of groundwater recharge removed from the linear reservoir [0,1]
+  up_pars[18] = 1;//!< B_EXP Power coefficient
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   low_pars[1] = 0.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -76,6 +78,7 @@ params::params(): numPars(0),
   low_pars[15] = 0.0;//!< RETCAP The maximum capacity of surface retention [0, inf],VC1
   low_pars[16] = 0.0;//!< L The amount of groundwater recharge removed from the linear reservoir [0,1]
   low_pars[17] = 0.0;//!< D_BYPASS The amount of groundwater recharge removed from the linear reservoir [0,1]
+  low_pars[18] = 0.25;//!< B_EXP Power coefficient
 //  std::cout << "Params are initialized." << std::endl;
 }
 
@@ -195,6 +198,10 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     pars[17] = par_dta;
 //    std::cout << "New D_BYPASS --> loaded\n";
     break;
+  case par_HRUtype::B_EXP:
+    pars[18] = par_dta;
+//    std::cout << "New B_EXP --> loaded\n";
+    break;
   }
   return ;
 }
@@ -284,6 +291,10 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
     pars[17] = par_dta;
 //    std::cout << "New D_BYPASS --> loaded\n";
     break;
+  case par_HRUtype::B_EXP:
+    pars[18] = par_dta;
+//    std::cout << "New B_EXP --> loaded\n";
+    break;
   }
   return ;
 }
@@ -354,6 +365,9 @@ numberSel params::g_par(const par_HRUtype& _parType) {
   case par_HRUtype::D_BYPASS:
     value =  pars[17];
     break;
+  case par_HRUtype::B_EXP:
+    value =  pars[18];
+    break;
   }
 
   return value;
@@ -422,7 +436,7 @@ void params::s_default() {
   pars[15] = 1;//!< The maximum capacity of surface retention [0, inf],VC1
   pars[16] = 1.0;//!< Leakage coefficient for linear reservoirs
   pars[17] = 1.0;//!< Direct by-pass coefficient for linear reservoirs
-
+  pars[18] = 1;//!< Power coefficient
   numFastRes = 1;
 
 //  std::cout << "Params are initialized." << std::endl;
@@ -435,7 +449,7 @@ void params::s_default() {
 void params::p_param() {
 
   std::vector<std::string> parsNames {"B_SOIL: ", "C_MAX: ", "B_EVAP: ", "SMAX: ", "KS: ", "KF: ", \
-                                      "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: "};
+                                      "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: "};
 
   std::cout << std::endl << "Printing the values of parameters:" << std::endl << std::endl;
   for(unsigned pp=0; pp<numPars ; pp++ ) {
