@@ -21,6 +21,6 @@ nHrus <- 200
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
+filname2 = "../Calibrations/Amalie/indata/BP_1960_01_01.txt"
 setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 }

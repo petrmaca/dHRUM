@@ -120,6 +120,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dHRUMrun
+Rcpp::List dHRUMrun(Rcpp::XPtr<dHRUM> dHRUM_ptr);
+RcppExport SEXP _dHRUM_dHRUMrun(SEXP dHRUM_ptrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    rcpp_result_gen = Rcpp::wrap(dHRUMrun(dHRUM_ptr));
+    return rcpp_result_gen;
+END_RCPP
+}
 // setParamsToAlldHrus
 void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec, Rcpp::CharacterVector ParsNames);
 RcppExport SEXP _dHRUM_setParamsToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP ParsVecSEXP, SEXP ParsNamesSEXP) {
@@ -181,6 +192,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_getOutput", (DL_FUNC) &_dHRUM_getOutput, 1},
     {"_dHRUM_printToFile", (DL_FUNC) &_dHRUM_printToFile, 2},
     {"_dHRUM_getOutputDist", (DL_FUNC) &_dHRUM_getOutputDist, 1},
+    {"_dHRUM_dHRUMrun", (DL_FUNC) &_dHRUM_dHRUMrun, 1},
     {"_dHRUM_setParamsToAlldHrus", (DL_FUNC) &_dHRUM_setParamsToAlldHrus, 3},
     {"_dHRUM_setParamsToOnedHru", (DL_FUNC) &_dHRUM_setParamsToOnedHru, 4},
     {"_dHRUM_setParsToDistdHRUM", (DL_FUNC) &_dHRUM_setParsToDistdHRUM, 3},

@@ -128,8 +128,6 @@ Rcpp::List getOutputDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
     }
   // numTSvar
 
-
-
   for(unsigned j=0;j<4;j++){
     unsigned indexrowCal=0;
     for(unsigned itHRU=0; itHRU<dHRUM_ptr->getdHRUdim(); itHRU++){
@@ -162,5 +160,64 @@ Rcpp::List getOutputDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
     Rcpp::Named("outDta") = outDta,
     Rcpp::Named("VarsNams") = VarsNams,
     Rcpp::Named("Ids") = Ids
+  );
+}
+
+
+//' Run dHRUM and provides with outputs of all model
+//'
+//' return list matrix with state variables and fluxes averaged over basin area.
+//'
+//'
+//' @param dHRUM_ptr pointer to dHRUM instance
+//' @return list with matrix of caldata \code{[,1:4]} and hdata ts variables \code{[,5:27]} and names of vars
+//' @export
+//' @examples
+//' nHrus <- 2
+//' Areas <- runif(nHrus,min = 1,max  = 10)
+//' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+//' prec=c(1,2,3)
+//' temp=c(1,2,3)
+//' setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
+//' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+//'                       SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+//' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
+//' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+//' outDta <- dHRUMrun(dHRUM_ptr = dhrus)
+//' outDF <- data.frame(utDta$outDta)
+//' names(outDF) <-c(outDta$VarsNams)
+// [[Rcpp::export]]
+Rcpp::List dHRUMrun(Rcpp::XPtr<dHRUM> dHRUM_ptr){
+
+  dHRUM_ptr.get()->calcHbToAllHrus();
+  dHRUM_ptr.get()->gatherTsFromHrus();
+
+  unsigned nrowOutMat = dHRUM_ptr.get()->get_numTS();
+  unsigned ncolOutMat = numTSvars+4;
+  Rcpp::NumericMatrix outDta( nrowOutMat, ncolOutMat ) ;
+  hdata helpVal = dHRUM_ptr.get()->get_HbDta(all_ts[0]);
+  // numTSvar
+  for(unsigned j=0;j<4;j++){
+    caldata helpVal = dHRUM_ptr.get()->get_CalDta(all_caDT[j]);
+    for(unsigned i=0; i<nrowOutMat; i++){
+      outDta(i,j) = helpVal[i] ;
+    }
+  }
+
+  for(unsigned j=4;j<ncolOutMat;j++){
+    hdata helpVal = dHRUM_ptr.get()->get_HbDta(all_ts[j-4]);
+    for(unsigned i=0; i<nrowOutMat; i++){
+      outDta(i,j) = helpVal[i] ;
+    }
+  }
+  Rcpp::StringVector VarsNams({"YEAR", "MONTH", "DAY", "JDAY",    \
+                              "PREC","SNOW","AET","PET","TEMP",   \
+                              "MELT","TROF","STEF","CANF","CANS", \
+                              "STES","EVAC","EVAS","EVBS","INTS", \
+                              "SOIS","GROS","SURS","TOTR","BASF","DIRR","PERC","PREF"});
+  return Rcpp::List::create(
+    Rcpp::Named("outDta") = outDta,
+    Rcpp::Named("VarsNams") = VarsNams
   );
 }

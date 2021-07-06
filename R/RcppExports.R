@@ -13,8 +13,8 @@
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
-#' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
+#' filname2 = "Calibrations/Amalie/indata/BP_1960_01_01.txt"
+#' setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
@@ -37,7 +37,7 @@ calcHBInAlldHrus <- function(dHRUM_ptr) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
+#' filname2 = "Calibrations/Amalie/indata/BP_1960_01_01.txt"
 #' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
@@ -64,7 +64,7 @@ gatherHBdata <- function(dHRUM_ptr) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
+#' filname2 = "../Calibrations/Amalie/indata/BP_1960_01_01.txt"
 #' setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 setPTInputsToAlldHrusFromFile <- function(dHRUM_ptr, namInpFilet) {
     invisible(.Call(`_dHRUM_setPTInputsToAlldHrusFromFile`, dHRUM_ptr, namInpFilet))
@@ -232,6 +232,33 @@ printToFile <- function(dHRUM_ptr, namOutFilet) {
 #' names(outDF) <-c(outDta$VarsNams,"HruIDs")
 getOutputDist <- function(dHRUM_ptr) {
     .Call(`_dHRUM_getOutputDist`, dHRUM_ptr)
+}
+
+#' Run dHRUM and provides with outputs of all model
+#'
+#' return list matrix with state variables and fluxes averaged over basin area.
+#'
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @return list with matrix of caldata \code{[,1:4]} and hdata ts variables \code{[,5:27]} and names of vars
+#' @export
+#' @examples
+#' nHrus <- 2
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
+#' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+#'                       SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
+#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+#' outDta <- dHRUMrun(dHRUM_ptr = dhrus)
+#' outDF <- data.frame(utDta$outDta)
+#' names(outDF) <-c(outDta$VarsNams)
+dHRUMrun <- function(dHRUM_ptr) {
+    .Call(`_dHRUM_dHRUMrun`, dHRUM_ptr)
 }
 
 #' Sets the similar values of params to dHRU model for all single HRUs.
