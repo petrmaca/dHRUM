@@ -24,7 +24,7 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
   unsigned numParsNames = ParsNames.size();
   unsigned numParsVals = ParsVec.size();
 
-  if((numParsNames!=numParsVals) || (numParsNames>16) || (numParsVals>16)) {
+  if((numParsNames!=numParsVals) || (numParsNames>17) || (numParsVals>17)) {
     Rcpp::Rcout << "The number of names of params is " << numParsNames <<"\n";
     Rcpp::Rcout << "The number of values of params is " << numParsVals <<"\n";
     Rcpp::stop("\n Those values are different then required number of dHRU Par Values.\n");
@@ -56,7 +56,8 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       {"DDFA", par_HRUtype::DDFA},
       {"TMEL", par_HRUtype::TMEL},
       {"RETCAP", par_HRUtype::RETCAP},
-      {"L", par_HRUtype::L}
+      {"L", par_HRUtype::L},
+      {"D_BYPASS", par_HRUtype::D_BYPASS}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -151,6 +152,11 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::L));
         // pars[16] = par_dta;
         // std::cout << "New L --> loaded\n";
+        break;
+      case par_HRUtype::D_BYPASS:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::D_BYPASS));
+        // pars[17] = par_dta;
+        // std::cout << "New D_BYPASS --> loaded\n";
         break;
       }
     }
@@ -217,7 +223,8 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
       {"DDFA", par_HRUtype::DDFA},
       {"TMEL", par_HRUtype::TMEL},
       {"RETCAP", par_HRUtype::RETCAP},
-      {"L", par_HRUtype::L}
+      {"L", par_HRUtype::L},
+      {"D_BYPASS", par_HRUtype::D_BYPASS}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -312,6 +319,11 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::L));
         // pars[16] = par_dta;
         // std::cout << "New L --> loaded\n";
+        break;
+      case par_HRUtype::D_BYPASS:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::D_BYPASS));
+        // pars[17] = par_dta;
+        // std::cout << "New D_BYPASS --> loaded\n";
         break;
       }
     }

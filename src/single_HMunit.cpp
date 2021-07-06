@@ -468,7 +468,26 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
     set_varValue(BaseOut, tstRM, ts_type::BASF);
     set_varValue(prev_Grou, tstRM,ts_type::GROS);
     break;
+
+  case gs_STORtype::LINL_RES:
+    BaseOut = prev_Grou * get_par(par_HRUtype::KS) ;
+    prev_Grou = (prev_Grou * get_par(par_HRUtype::L)) + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
+
+    set_varValue(BaseOut, tstRM, ts_type::BASF);
+    set_varValue(prev_Grou, tstRM,ts_type::GROS);
+    break;
+
+  case gs_STORtype::LINBY_RES:
+    BaseOut = prev_Grou * get_par(par_HRUtype::KS) + get_par(par_HRUtype::D_BYPASS) * ((1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC));
+    prev_Grou = prev_Grou  + (1 - get_par(par_HRUtype::D_BYPASS)) * (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
+
+    set_varValue(BaseOut, tstRM, ts_type::BASF);
+    set_varValue(prev_Grou, tstRM,ts_type::GROS);
+    break;
   }
+
+
+
   return;
 }
 
@@ -1125,6 +1144,19 @@ void single_HMunit::print_GStype() {
     std::cout << "The gs_STORE is a LIN reservoir." << std::endl;
 
     break;
+
+  case gs_STORtype::LINL_RES:
+
+    std::cout << "The gs_STORE is a LINL reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::LINBY_RES:
+
+    std::cout << "The gs_STORE is a LINBY_RES reservoir." << std::endl;
+
+    break;
+
   }
 
   return;

@@ -26,15 +26,15 @@ enum class cal_Type {YEAR, MONTH, DAY, JDAY};
 const cal_Type all_caDT[] {cal_Type::YEAR, cal_Type::MONTH, cal_Type::DAY, cal_Type::JDAY};
 
 using pdata = std::valarray<numberSel>;
-enum class par_HRUtype {B_SOIL, C_MAX, B_EVAP, SMAX, KS, KF, ADIV, CDIV, SDIV, CAN_ST, STEM_ST, CSDIV, TETR, DDFA, TMEL, RETCAP, L};
+enum class par_HRUtype {B_SOIL, C_MAX, B_EVAP, SMAX, KS, KF, ADIV, CDIV, SDIV, CAN_ST, STEM_ST, CSDIV, TETR, DDFA, TMEL, RETCAP, L, D_BYPASS};
 const par_HRUtype all_pars[]{par_HRUtype::B_SOIL, par_HRUtype::C_MAX, par_HRUtype::B_EVAP, par_HRUtype::SMAX, par_HRUtype::KS, par_HRUtype::KF,      \
                              par_HRUtype::ADIV, par_HRUtype::CDIV, par_HRUtype::SDIV, par_HRUtype::CAN_ST, par_HRUtype::STEM_ST, par_HRUtype::CSDIV, \
-                             par_HRUtype::TETR, par_HRUtype::DDFA, par_HRUtype::TMEL, par_HRUtype::RETCAP, par_HRUtype::L};
+                             par_HRUtype::TETR, par_HRUtype::DDFA, par_HRUtype::TMEL, par_HRUtype::RETCAP, par_HRUtype::L, par_HRUtype::D_BYPASS};
 
 const std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF","ADIV","CDIV", \
                                       "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR", \
-                                      "DDFA","TMEL","RETCAP","L"};
-enum class gs_STORtype { LIN_RES, LINL_RES };
-const gs_STORtype all_gs_STORs[]{ gs_STORtype::LIN_RES, gs_STORtype::LINL_RES};
+                                      "DDFA","TMEL","RETCAP","L", "D_BYPASS"};
+enum class gs_STORtype { LIN_RES, LINL_RES, LINBY_RES };
+const gs_STORtype all_gs_STORs[]{ gs_STORtype::LIN_RES, gs_STORtype::LINL_RES, gs_STORtype::LINBY_RES };
 
 #endif // NUMBERSEL_H_INCLUDED
