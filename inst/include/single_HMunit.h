@@ -97,8 +97,6 @@ private:
 
   numberSel prev_Soil;//!< The helper variable for updating soil storage
   numberSel prev_Grou;//!< The helper variable for updating groundwater storage
-  numberSel prev_Grou1;//!< The helper variable for updating groundwater storage 1
-  numberSel prev_Grou2;//!< The helper variable for updating groundwater storage 2
   numberSel prevCanS;//!<  The helper variable for Canopy interception storage
   numberSel prevSteS;//!<  The helper variable for Stem interception storage
   numberSel prevSnoS;//!<  The helper variable for Snow storage

@@ -102,8 +102,6 @@ class data_HB_1d {
 
   hdata SoiS;//!< Soil storage
   hdata GroS;//!< Groundwater storage
-  hdata GroS1;//!< Groundwater storage 1
-  hdata GroS2;//!< Groundwater storage 2
   hdata SurS;//!< Surface retention
 
   hdata TotR;//!< Total runoff
@@ -116,8 +114,6 @@ class data_HB_1d {
 
   numberSel init_SoiS;//!< Initial value of soil storage
   numberSel init_GroS;//!< Initial value of groundwater storage
-  numberSel init_GroS1;//!< Initial value of groundwater storage 1
-  numberSel init_GroS2;//!< Initial value of groundwater storage 2
   numberSel init_CanS;//!< Initial value of Canopy Interception storage
   numberSel init_SteS;//!< Initial value of Stem Interception storage
   numberSel init_SnoS;//!< Initial variable of Snow storage

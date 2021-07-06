@@ -14,12 +14,12 @@ using numberDta = unsigned;
 using hdata = std::valarray<numberSel>;
 using caldata = std::valarray<unsigned>;
 
-enum class ts_type {PREC,SNOW,AET,PET,TEMP,MELT,TROF,STEF,CANF,CANS,STES,EVAC,EVAS,EVBS,INTS,SOIS,GROS,GROS1,GROS2,SURS,TOTR,BASF,DIRR,PERC,PREF};
+enum class ts_type {PREC,SNOW,AET,PET,TEMP,MELT,TROF,STEF,CANF,CANS,STES,EVAC,EVAS,EVBS,INTS,SOIS,GROS,SURS,TOTR,BASF,DIRR,PERC,PREF};
 const ts_type all_ts[]{ts_type::PREC,ts_type::SNOW,ts_type::AET,ts_type::PET,ts_type::TEMP,ts_type::MELT,ts_type::TROF,ts_type::STEF,ts_type::CANF, \
                                    ts_type::CANS,ts_type::STES,ts_type::EVAC,ts_type::EVAS,ts_type::EVBS,ts_type::INTS,ts_type::SOIS,ts_type::GROS, \
-                                   ts_type::GROS1,ts_type::GROS2,ts_type::SURS,ts_type::TOTR,ts_type::BASF,ts_type::DIRR,ts_type::PERC,ts_type::PREF};
-const unsigned numTSvars = 25;
-enum class init_Stype {SOIL, GROUNDWAT, GROUNDWAT1, GROUNDWAT2, FASTRES, SURFRET, CANS, STES, SNOS};
+                                   ts_type::SURS,ts_type::TOTR,ts_type::BASF,ts_type::DIRR,ts_type::PERC,ts_type::PREF};
+const unsigned numTSvars = 23;
+enum class init_Stype {SOIL, GROUNDWAT, FASTRES, SURFRET, CANS, STES, SNOS};
 enum class pet_Type {OUDIN, HAMON};
 
 enum class cal_Type {YEAR, MONTH, DAY, JDAY};
