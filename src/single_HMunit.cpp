@@ -38,7 +38,7 @@ single_HMunit::single_HMunit(): tstRM(0),
 //  std::cout << "INITprevDR " << prev_Grou << std::endl;
 
   tstRM = 0;
-  gs_STORAGE = gs_STORtype::LIN_2SE;
+  gs_STORAGE = gs_STORtype::FLEX_RES;
 
 }
 
@@ -526,6 +526,44 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
     set_varValue(prev_Grou1, tstRM,ts_type::GROS1);
     set_varValue(prev_Grou2, tstRM,ts_type::GROS2);
     set_varValue(prev_Grou1 + prev_Grou2, tstRM,ts_type::GROS);
+    break;
+
+  case gs_STORtype::LIN_2PA:
+    BaseOut_1 = prev_Grou1 * get_par(par_HRUtype::KS);
+    prev_Grou1 = prev_Grou1 + (1 - get_par(par_HRUtype::ADIV)) * get_par(par_HRUtype::ALPHA) * get_dta(tstRM, ts_type::PERC) - BaseOut_1;
+
+    BaseOut_2 = prev_Grou2 * get_par(par_HRUtype::KS2);
+    prev_Grou2 = prev_Grou2 + (1 - get_par(par_HRUtype::ADIV)) * (1 - get_par(par_HRUtype::ALPHA)) * get_dta(tstRM, ts_type::PERC) - BaseOut_2;
+
+    BaseOut = BaseOut_1 + BaseOut_2;
+
+    set_varValue(BaseOut, tstRM, ts_type::BASF);
+    set_varValue(prev_Grou1, tstRM,ts_type::GROS1);
+    set_varValue(prev_Grou2, tstRM,ts_type::GROS2);
+    set_varValue(prev_Grou1 + prev_Grou2, tstRM,ts_type::GROS);
+
+    break;
+
+  case gs_STORtype::FLEX_RES:
+    BaseOut_1 = prev_Grou * get_par(par_HRUtype::KS);
+    prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut_1;
+
+    if(get_par(par_HRUtype::THR) > prev_Grou) {
+      //lower outlet working
+      set_varValue(BaseOut_1, tstRM, ts_type::BASF);
+
+    } else {
+      //lower and upper outlets working
+      BaseOut_2 = get_par(par_HRUtype::KS2) * (prev_Grou - get_par(par_HRUtype::THR));
+      prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut_2;
+
+      BaseOut = BaseOut_1 + BaseOut_2;
+
+      set_varValue(BaseOut, tstRM, ts_type::BASF);
+    }
+
+    set_varValue(prev_Grou, tstRM,ts_type::GROS);
+
     break;
   }
 
@@ -1181,28 +1219,6 @@ gs_STORtype single_HMunit::get_GStype() {
 }
 
 void single_HMunit::print_GStype() {
-
-  switch(gs_STORAGE) {
-
-  case gs_STORtype::LIN_RES:
-
-    std::cout << "The gs_STORE is a LIN reservoir." << std::endl;
-
-    break;
-
-  case gs_STORtype::LINL_RES:
-
-    std::cout << "The gs_STORE is a LINL reservoir." << std::endl;
-
-    break;
-
-  case gs_STORtype::LINBY_RES:
-
-    std::cout << "The gs_STORE is a LINBY_RES reservoir." << std::endl;
-
-    break;
-
-  }
 
   return;
 

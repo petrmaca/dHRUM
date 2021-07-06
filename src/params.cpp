@@ -9,7 +9,7 @@ params::params(): numPars(0),
 //    b_soil = 2.0;
 //    c_max = 100.0;
 //    b_evap = 1;
-  numPars = 20;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
+  numPars = 22;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
 
   pars.resize(numPars,numPars);
   up_pars.resize(numPars,numPars);
@@ -36,6 +36,8 @@ params::params(): numPars(0),
   pars[17] = 1;//!< D_BYPASS The amount of groundwater recharge removed from the linear reservoir [0,1]
   pars[18] = 1;//!< B_EXP Power coefficient
   pars[19] = 0.1;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
+  pars[20] = 1;//!< THR Threshold coefficient for threshold-controlled linear storage [0,inf]
+  pars[21] = 0.5;//!< ALPHA Divider for two parallel linear reservoirs
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   up_pars[1] = 500.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -59,6 +61,8 @@ params::params(): numPars(0),
   up_pars[17] = 1;//!< D_BYPASS The amount of groundwater recharge removed from the linear reservoir [0,1]
   up_pars[18] = 1;//!< B_EXP Power coefficient
   up_pars[19] = 1;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
+  up_pars[20] = 100;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
+  up_pars[21] = 1;//!< ALPHA Divider for two parallel linear reservoirs
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   low_pars[1] = 0.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -82,6 +86,8 @@ params::params(): numPars(0),
   low_pars[17] = 0.0;//!< D_BYPASS The amount of groundwater recharge removed from the linear reservoir [0,1]
   low_pars[18] = 0.25;//!< B_EXP Power coefficient
   low_pars[19] = 0.0;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
+  low_pars[20] = 0.0;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
+  low_pars[21] = 0.0;//!< ALPHA Divider for two parallel linear reservoirs
 //  std::cout << "Params are initialized." << std::endl;
 }
 
@@ -209,6 +215,14 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     pars[19] = par_dta;
 //    std::cout << "New KS2 --> loaded\n";
     break;
+  case par_HRUtype::THR:
+    pars[20] = par_dta;
+//    std::cout << "New THR --> loaded\n";
+    break;
+  case par_HRUtype::ALPHA:
+    pars[21] = par_dta;
+//    std::cout << "New ALPHA --> loaded\n";
+    break;
   }
   return ;
 }
@@ -306,6 +320,14 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
     pars[19] = par_dta;
 //    std::cout << "New KS2 --> loaded\n";
     break;
+  case par_HRUtype::THR:
+    pars[20] = par_dta;
+//    std::cout << "New THR --> loaded\n";
+    break;
+  case par_HRUtype::ALPHA:
+    pars[21] = par_dta;
+//    std::cout << "New ALPHA --> loaded\n";
+    break;
   }
   return ;
 }
@@ -382,6 +404,12 @@ numberSel params::g_par(const par_HRUtype& _parType) {
   case par_HRUtype::KS2:
     value =  pars[19];
     break;
+  case par_HRUtype::THR:
+    value =  pars[20];
+    break;
+  case par_HRUtype::ALPHA:
+    value =  pars[21];
+    break;
   }
 
   return value;
@@ -452,6 +480,8 @@ void params::s_default() {
   pars[17] = 1.0;//!< Direct by-pass coefficient for linear reservoirs
   pars[18] = 1;//!< Power coefficient
   pars[19] = 0.1;//!< Second storage coefficient of groundwater storage [0,1],VC1
+  pars[20] = 1.0;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
+  pars[21] = 0.5;//!< Divider for two parallel linear reservoirs
   numFastRes = 1;
 
 //  std::cout << "Params are initialized." << std::endl;

@@ -24,7 +24,7 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
   unsigned numParsNames = ParsNames.size();
   unsigned numParsVals = ParsVec.size();
 
-  if((numParsNames!=numParsVals) || (numParsNames>19) || (numParsVals>19)) {
+  if((numParsNames!=numParsVals) || (numParsNames>20) || (numParsVals>20)) {
     Rcpp::Rcout << "The number of names of params is " << numParsNames <<"\n";
     Rcpp::Rcout << "The number of values of params is " << numParsVals <<"\n";
     Rcpp::stop("\n Those values are different then required number of dHRU Par Values.\n");
@@ -59,7 +59,9 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       {"L", par_HRUtype::L},
       {"D_BYPASS", par_HRUtype::D_BYPASS},
       {"B_EXP", par_HRUtype::B_EXP},
-      {"KS2", par_HRUtype::KS2}
+      {"KS2", par_HRUtype::KS2},
+      {"THR", par_HRUtype::THR},
+      {"ALPHA", par_HRUtype::ALPHA}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -169,6 +171,16 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::KS2));
         // pars[19] = par_dta;
         // std::cout << "New KS2 --> loaded\n";
+        break;
+      case par_HRUtype::THR:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::THR));
+        // pars[20] = par_dta;
+        // std::cout << "New THR --> loaded\n";
+        break;
+      case par_HRUtype::ALPHA:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::ALPHA));
+        // pars[21] = par_dta;
+        // std::cout << "New ALPHA --> loaded\n";
         break;
       }
     }
@@ -238,7 +250,9 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
       {"L", par_HRUtype::L},
       {"D_BYPASS", par_HRUtype::D_BYPASS},
       {"B_EXP", par_HRUtype::B_EXP},
-      {"KS2", par_HRUtype::KS2}
+      {"KS2", par_HRUtype::KS2},
+      {"THR", par_HRUtype::THR},
+      {"ALPHA", par_HRUtype::ALPHA}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -348,6 +362,16 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::KS2));
         // pars[19] = par_dta;
         // std::cout << "New KS2 --> loaded\n";
+        break;
+      case par_HRUtype::THR:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::THR));
+        // pars[20] = par_dta;
+        // std::cout << "New THR --> loaded\n";
+        break;
+      case par_HRUtype::ALPHA:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::ALPHA));
+        // pars[21] = par_dta;
+        // std::cout << "New ALPHA --> loaded\n";
         break;
       }
     }
