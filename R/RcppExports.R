@@ -284,7 +284,7 @@ dHRUMrun <- function(dHRUM_ptr) {
 #' outDta <- dHRUMrunDist(dHRUM_ptr = dhrus)
 #' outDF <- data.frame(outDta$outDta)
 #' outDF <- cbind(outDF, outDta$Ids)
-#' names(outDF) <-c(outDta$VarsNams, "HRuIDs")
+#' names(outDF) <-c(outDta$VarsNams)
 dHRUMrunDist <- function(dHRUM_ptr) {
     .Call(`_dHRUM_dHRUMrunDist`, dHRUM_ptr)
 }
