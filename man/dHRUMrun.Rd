@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{dHRUMrun}
 \alias{dHRUMrun}
-\title{Run dHRUM and provides with outputs of all model}
+\title{Run dHRUM and provides with model outputs}
 \usage{
 dHRUMrun(dHRUM_ptr)
 }
@@ -28,6 +28,6 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, 
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
 outDta <- dHRUMrun(dHRUM_ptr = dhrus)
-outDF <- data.frame(outDF)
-names(outDF) <-c(outDta$VarsNams,"HruIDs")
+outDF <- data.frame(utDta$outDta)
+names(outDF) <-c(outDta$VarsNams)
 }
