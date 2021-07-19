@@ -87,10 +87,6 @@ void calcPetToAllHrusDist(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Latit
   }
 
 
-
-
-
-
 //
 //
 //   std::map<std::string, pet_Type> s_mapStringToPet_Type = {
