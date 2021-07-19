@@ -46,8 +46,14 @@ class data_HB_1d {
   void calc_Pet();
   void OudinPET();
   void HamonPET();
+
+  void ThornthwaitePET();
+  numberSel get_daysInMonth(const unsigned& tstMonth, const unsigned& year);
+
+
   bool leap_Check_Year(unsigned TestedYear);
   void s_Julian_day();
+
 
   void s_calender();
   void p_calender();

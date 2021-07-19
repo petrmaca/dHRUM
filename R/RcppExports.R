@@ -255,7 +255,7 @@ getOutputDist <- function(dHRUM_ptr) {
 #' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 #' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
 #' outDta <- dHRUMrun(dHRUM_ptr = dhrus)
-#' outDF <- data.frame(utDta$outDta)
+#' outDF <- data.frame(outDta$outDta)
 #' names(outDF) <-c(outDta$VarsNams)
 dHRUMrun <- function(dHRUM_ptr) {
     .Call(`_dHRUM_dHRUMrun`, dHRUM_ptr)
@@ -407,7 +407,7 @@ calcPetToAllHrus <- function(dHRUM_ptr, Latitude, PetTypeStr) {
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
 #' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
-calcPetToAllHrusDist <- function(dHRUM_ptr, Latitude, PetTypeStr) {
-    invisible(.Call(`_dHRUM_calcPetToAllHrusDist`, dHRUM_ptr, Latitude, PetTypeStr))
+calcPetToAllHrusDist <- function(dHRUM_ptr, Latitude, PetTypeStrNames, HruIds) {
+    invisible(.Call(`_dHRUM_calcPetToAllHrusDist`, dHRUM_ptr, Latitude, PetTypeStrNames, HruIds))
 }
 

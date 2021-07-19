@@ -623,6 +623,10 @@ void data_HB_1d::calc_Pet() {
     HamonPET();
 //    std::cout << "\n hamon\n";
     break;
+  case pet_Type::THORNTHWAITE:
+    ThornthwaitePET();
+    //    std::cout << "\n oudin\n";
+    break;
   }
   return ;
 }
@@ -685,6 +689,143 @@ void data_HB_1d::HamonPET() {
 
   return ;
 
+}
+
+
+void data_HB_1d::ThornthwaitePET() {
+
+  numberSel rad_Latid = Latitude / 180 * M_PI, ndy = 365, omega = 0.0, dec = 0.0;
+  hdata Nn(1.01,1);
+  Nn.resize(numTS);
+
+  for(unsigned tst=0; tst<numTS; tst++) {
+    if(leap_Check_Year(year[tst])) ndy = 366;
+    else ndy = 365;
+    dec = 0.409 * sin( (2 * M_PI ) * static_cast<numberSel>(Jday[tst]) / ndy - 1.39);
+    omega = acos( (-1)* tan(rad_Latid) * tan(dec));
+    Nn[tst] = 24 / M_PI * omega;
+  }
+
+  unsigned nmonthsinData = 1, nyearsinData = 1;
+
+  for(unsigned tst=1; tst<numTS; tst++) {
+    if(month[tst] != month[tst-1]) nmonthsinData++;
+    if(year[tst] != year[tst-1]) nyearsinData++;
+  }
+
+  nmonthsinData++;//last month must be considered
+  nyearsinData++;//last year must be considered
+
+  hdata tam(1.01,1), Nmeanmonth(1.01,1), numDaysMonth(1.01,1);//monthly temperatures
+  tam.resize(nmonthsinData);
+  Nmeanmonth.resize(nmonthsinData);
+  numDaysMonth.resize(nmonthsinData);
+  hdata helpyear(1.01,1);
+  helpyear.resize(nmonthsinData);
+
+  numberSel helptam =0, helpNn=0, helpNdaysInMoth = 1;
+  helptam = helptam + Temp[0];
+  helpNn = helpNn + Nn[0];
+
+  unsigned helpInd =0;
+  for(unsigned tst=1; tst<numTS; tst++) {
+    if((month[tst] > month[tst-1])||(year[tst] > year[tst-1])) {
+      helptam = 0.0;
+      helpNn =  0.0;
+      helpInd++;
+      helpNdaysInMoth = 0;
+      }
+    helptam = helptam + Temp[tst];
+    helpNn = helpNn + Nn[tst];
+    helpNdaysInMoth = helpNdaysInMoth + 1.0;
+    tam[helpInd] = helptam / helpNdaysInMoth;
+    Nmeanmonth[helpInd] = helpNn / helpNdaysInMoth;
+    numDaysMonth[helpInd] = helpNdaysInMoth;
+    helpyear[helpInd] = (numberSel) year[tst];
+  }
+
+  hdata i_heatindex(1.01,1);
+  i_heatindex.resize(nmonthsinData);
+  for(unsigned it=0; it<nmonthsinData;it++){
+    if(tam[it]<0.0) {
+      tam[it] = 0.0;
+    } else {
+      if(tam[it]>0) {
+        i_heatindex[it] = std::pow((tam[it]*0.2),1.514);
+      } else i_heatindex[it]=0.0;
+      }
+  }
+
+  hdata I_annualHeatindex(1.01,1);
+  I_annualHeatindex.resize(nyearsinData);
+  hdata acoeff(1.01,1);
+  acoeff.resize(nyearsinData);
+
+  numberSel helpsumI = 0.0, part1 = 0.0, part2 =0.0, part0 = 0.0;
+  unsigned helpIn = 0;
+
+  numberSel lastyear = helpyear.max();
+  helpsumI = i_heatindex[0];
+  for(unsigned it=1; it<nmonthsinData; it++){
+    helpsumI = helpsumI + i_heatindex[it];
+    I_annualHeatindex[helpIn] = helpsumI - i_heatindex[it];
+    part1 = I_annualHeatindex[helpIn] * I_annualHeatindex[helpIn]* I_annualHeatindex[helpIn];
+    part2 = I_annualHeatindex[helpIn] * I_annualHeatindex[helpIn];
+    part0 = 0.01729 * I_annualHeatindex[helpIn];
+    acoeff[helpIn] = 0.0000006751 * part1 + 0.0000771 * part2 +  part0 + 0.49239;
+    if((helpyear[it] != helpyear[it-1])){
+      helpIn++;
+      helpsumI = i_heatindex[it];
+      }
+    }
+
+  hdata amonthly(1.01,1);
+  hdata Imonthly(1.01,1);
+  hdata Epetraw(0.01,1);
+  amonthly.resize(nmonthsinData);
+  Imonthly.resize(nmonthsinData);
+  Epetraw.resize(nmonthsinData);
+  amonthly[0] = acoeff[0];
+  Imonthly[0] = I_annualHeatindex[0];
+  Epetraw[0] = 16*(pow((10*tam[0]/Imonthly[0]),amonthly[0]));
+
+  unsigned helpYearInd = 0.0;
+  for(unsigned it=1; it<nmonthsinData; it++){
+    if(helpyear[it] != helpyear[it-1]){
+      helpYearInd++;
+      }
+    amonthly[it] = acoeff[helpYearInd];
+    Imonthly[it] = I_annualHeatindex[helpYearInd];
+    Epetraw[it] = 16*(pow((10*tam[it]/Imonthly[it]),amonthly[it]));
+  }
+
+  hdata Epet(1.01,1);
+  Epet.resize(nmonthsinData);
+  for(unsigned it=1; it<nmonthsinData; it++){
+    Epet[it] = Epetraw[it] * (Nmeanmonth[it] / 12) * (numDaysMonth[it] / 30);
+  }
+
+  unsigned helpit =0;
+  PEt[0] = Epet[0] / numDaysMonth[0];
+  // numberSel difPETm=0.0, cdifPet = 0.0;
+  // difPETm = Epet[0] - Epet[1] / numDaysMonth[0];
+  // cdifPet = 0.0;
+  for(unsigned tst=1; tst<numTS; tst++) {
+    if(month[tst]!=month[tst-1]){
+      helpit++;
+      // difPETm =(Epet[helpit] - Epet[helpit+1]) / numDaysMonth[helpit];
+      // cdifPet = 0.0;
+      }
+    // cdifPet = cdifPet + difPETm;
+    PEt[tst] = Epet[helpit] / numDaysMonth[helpit];
+    // PEt[tst] = Epet[helpit] + cdifPet;
+  }
+
+
+
+  PETtype = pet_Type::THORNTHWAITE;
+
+  return ;
 }
 
 /** \brief The description  of leap years
@@ -767,6 +908,25 @@ void data_HB_1d::s_calender() {
 
   return ;
 }
+
+numberSel data_HB_1d::get_daysInMonth(const unsigned& tstMonth, const unsigned& year){
+
+  numberSel ndays = 0;
+  hdata NdaysInYear{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  hdata NdaysInYearLeapYear {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+
+  if(leap_Check_Year(year)) {
+    ndays = NdaysInYearLeapYear[tstMonth-1];
+    }
+  else {
+    ndays = NdaysInYear[tstMonth-1];
+    }
+
+
+  return ndays;
+}
+
 
 /** \brief Printing the calender of data
  *
