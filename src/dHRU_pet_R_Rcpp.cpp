@@ -75,7 +75,7 @@ void calcPetToAllHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, numberSel Latitude, std::stri
 //' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
 //' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
 // [[Rcpp::export]]
-void calcPetToAllHrusDist(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Latitude, Rcpp::CharacterVector PetTypeStrNames){
+void calcPetToAllHrusDist(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Latitude, Rcpp::CharacterVector PetTypeStrNames, Rcpp::CharacterVector HruIds){
   std::vector<std::string>  petNameStr = Rcpp::as<std::vector<std::string> >(PetTypeStrNames);
   unsigned dHRUMdim = dHRUM_ptr->getdHRUdim();
 
