@@ -1,6 +1,7 @@
 #include "dHRUM.h"
 
 dHRUM::dHRUM(): dHruVec(),
+  dHruVecId(),
   dimHM(0),
   basinArea(0),
   Areas(0),
@@ -15,6 +16,7 @@ dHRUM::~dHRUM() {
 }
 
 dHRUM::dHRUM(const dHRUM& other): dHruVec(),
+  dHruVecId(),
   dimHM(0),
   basinArea(0),
   Areas(0),
@@ -23,6 +25,7 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   basinDta() {
 
   dHruVec = other.dHruVec;
+  dHruVecId = other.dHruVecId;
   dimHM = other.dimHM;
   basinArea = other.basinArea;
   Areas = other.Areas;
@@ -35,6 +38,7 @@ dHRUM& dHRUM::operator=(const dHRUM& rhs) {
   if (this == &rhs) return *this;
   else {
     dHruVec = rhs.dHruVec;
+    dHruVecId = rhs.dHruVecId;
     dimHM = rhs.dimHM;
     basinArea = rhs.basinArea;
     Areas = rhs.Areas;
@@ -391,15 +395,23 @@ void dHRUM::loadPTInputsToOneHru(hdata Prec, hdata Temp, const numberSel& val,co
 
 }
 
-void dHRUM::init_STORtypes(const std::vector<gs_STORtype>& gs_STORtypes) {
+std::vector<std::string> dHRUM::getHRUIds() {
 
-  if(gs_STORtypes.size() == dimHM) {
-    for(unsigned int i=0; i<gs_STORtypes.size(); i++) {
-      dHruVec[i].set_GStype(gs_STORtypes[i]);
-    }
-  } else {
-    std::cout << "The size of gs_STORtypes differs from dimHM." << std::endl;
-    exit(EXIT_FAILURE);
+  std::vector<std::string> ids(getdHRUdim());
+  for(unsigned int i=0; i<ids.size(); i++) {
+    ids[i] = getSingleHruId(i);
   }
 
+  return ids;
 }
+
+void dHRUM::initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& gs_STORtypes) {
+
+    for(unsigned int i=0; i<gs_STORtypes.size(); i++) {
+      dHruVec[gs_STORtypes[i].first].set_GStype(gs_STORtypes[i].second);
+    }
+
+  return;
+
+}
+

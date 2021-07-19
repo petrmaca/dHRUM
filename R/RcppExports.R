@@ -49,6 +49,23 @@ gatherHBdata <- function(dHRUM_ptr) {
     invisible(.Call(`_dHRUM_gatherHBdata`, dHRUM_ptr))
 }
 
+#' Sets the similar values of params to dHRU model for all single HRUs.
+#'
+#' Setting of params to dHRUM.
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @param dimdHru a single \code{numberDta} number of single Hrus.
+#' @param gwTypes a charater vector of GW type names
+#' @export
+#' @examples
+#' nHrus <- 200
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' setGWtypeToAlldHrus(dHRUM_ptr = dhrus)
+setGWtypeToAlldHrus <- function(dHRUM_ptr, gwTypes, hruIds) {
+    invisible(.Call(`_dHRUM_setGWtypeToAlldHrus`, dHRUM_ptr, gwTypes, hruIds))
+}
+
 #' Sets similar input data obtained from file to all single Hrus at dHRUM instance.
 #'
 #' Loads the data from file to a single dHRUM instance created  the \code{initdHruModel(nHrus,Areas,IdsHrus)} function

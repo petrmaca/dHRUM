@@ -1208,6 +1208,57 @@ gs_STORtype single_HMunit::get_GStype() {
 
 void single_HMunit::print_GStype() {
 
-  return;
+  switch(gs_STORAGE) {
+
+  case gs_STORtype::LIN_RES:
+
+    std::cout << "The gs_STORE is a LIN reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::LINL_RES:
+
+    std::cout << "The gs_STORE is a LINL reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::LINBY_RES:
+
+    std::cout << "The gs_STORE is a LINBY reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::LIN_2SE:
+
+    std::cout << "The gs_STORE is a LIN_2SE reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::LIN_2PA:
+
+    std::cout << "The gs_STORE is a LIN_2PA reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::POW_RES:
+
+    std::cout << "The gs_STORE is a POW reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::EXP_RES:
+
+    std::cout << "The gs_STORE is a EXP reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::FLEX_RES:
+
+    std::cout << "The gs_STORE is a FLEX reservoir." << std::endl;
+
+    break;
+
+  }
 
 }
+

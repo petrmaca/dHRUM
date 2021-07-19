@@ -36,9 +36,13 @@ const std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF",
                                       "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR", \
                                       "DDFA","TMEL","RETCAP","L", "D_BYPASS", "B_EXP", "KS2", "THR",
                                       "ALPHA"};
+
 enum class gs_STORtype { LIN_RES, LINL_RES, LINBY_RES, POW_RES, EXP_RES, LIN_2SE, LIN_2PA, FLEX_RES };
 const gs_STORtype all_gs_STORs[]{ gs_STORtype::LIN_RES, gs_STORtype::LINL_RES, gs_STORtype::LINBY_RES,
                                   gs_STORtype::POW_RES, gs_STORtype::EXP_RES, gs_STORtype::LIN_2SE,
                                   gs_STORtype::LIN_2PA, gs_STORtype::FLEX_RES };
+
+const std::vector<std::string> allGWStorTypeNames {"LIN_RES", "LINL_RES", "LINBY_RES", "POW_RES",
+                                                 "EXP_RES", "LIN_2SE", "LIN_2PA", "FLEX_RES" };
 
 #endif // NUMBERSEL_H_INCLUDED
