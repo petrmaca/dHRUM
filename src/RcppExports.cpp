@@ -191,6 +191,18 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// calcPetToAllHrusDist
+void calcPetToAllHrusDist(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Latitude, std::string PetTypeStr);
+RcppExport SEXP _dHRUM_calcPetToAllHrusDist(SEXP dHRUM_ptrSEXP, SEXP LatitudeSEXP, SEXP PetTypeStrSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type Latitude(LatitudeSEXP);
+    Rcpp::traits::input_parameter< std::string >::type PetTypeStr(PetTypeStrSEXP);
+    calcPetToAllHrusDist(dHRUM_ptr, Latitude, PetTypeStr);
+    return R_NilValue;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_calcHBInAlldHrus", (DL_FUNC) &_dHRUM_calcHBInAlldHrus, 1},
@@ -209,6 +221,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_setParamsToOnedHru", (DL_FUNC) &_dHRUM_setParamsToOnedHru, 4},
     {"_dHRUM_setParsToDistdHRUM", (DL_FUNC) &_dHRUM_setParsToDistdHRUM, 3},
     {"_dHRUM_calcPetToAllHrus", (DL_FUNC) &_dHRUM_calcPetToAllHrus, 3},
+    {"_dHRUM_calcPetToAllHrusDist", (DL_FUNC) &_dHRUM_calcPetToAllHrusDist, 3},
     {NULL, NULL, 0}
 };
 

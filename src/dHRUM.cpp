@@ -151,6 +151,23 @@ void dHRUM::calcPetToAllHrus(numberSel Latit, pet_Type myPetType) {
   return ;
 
 }
+
+void dHRUM::calcPetToAllHrusDist(hdata LatitVec, std::vector<pet_Type> petType){
+
+#pragma omp parallel for
+  for(unsigned it=0; it<dimHM; it++) {
+    ////    dHruVec[it].set_paramsToSim(parsToLoad);
+    //    dHruVec[it].read_InputFromFile(namesFilePath.c_str());
+    dHruVec[it].set_PetVars(LatitVec[it],petType[it]);
+    dHruVec[it].calc_Pet();
+    //  dHruVec[it].run_HB();
+    //    std::cout <<  "Calculating the PET data to HRU ID " << it << std::endl;
+  }
+  //  }
+  return ;
+
+}
+
 void dHRUM::calcHbToAllHrus() {
   //
   //  std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad;

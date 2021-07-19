@@ -363,7 +363,7 @@ setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
     invisible(.Call(`_dHRUM_setParsToDistdHRUM`, dHRUM_ptr, ParsDF, PrintPars))
 }
 
-#' Calculates the values of Potential evapotranspiration on all singleHrus
+#' Calculates the values of Potential evapotranspiration on all singleHrus taking constant latitude
 #'
 #' Setting of Pet method is done by \code{PetTypeStr}, methods implemented are: \code{Oudin}, \code{Hamon}
 #'
@@ -385,5 +385,29 @@ setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
 #' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
 calcPetToAllHrus <- function(dHRUM_ptr, Latitude, PetTypeStr) {
     invisible(.Call(`_dHRUM_calcPetToAllHrus`, dHRUM_ptr, Latitude, PetTypeStr))
+}
+
+#' Calculates the values of Potential evapotranspiration on all singleHrus taking nonconstant latitude
+#'
+#' Setting of Pet method is done by \code{PetTypeStr}, methods implemented are: \code{Oudin}, \code{Hamon}
+#'
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @param Latitude single number for Oudin method
+#' @param PetTypeStr variable on selection of PET models
+#' @export
+#' @examples
+#' nHrus <- 200
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
+#' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2,TRUE,0)
+#' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+#' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
+#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+calcPetToAllHrusDist <- function(dHRUM_ptr, Latitude, PetTypeStr) {
+    invisible(.Call(`_dHRUM_calcPetToAllHrusDist`, dHRUM_ptr, Latitude, PetTypeStr))
 }
 

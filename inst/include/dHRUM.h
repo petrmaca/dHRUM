@@ -33,6 +33,7 @@ class dHRUM {
   void setParamsToAllHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad);
   void setParamsToOneHru(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad, unsigned Id);
   void calcPetToAllHrus(numberSel Latit, pet_Type myPetType = pet_Type::OUDIN);
+  void calcPetToAllHrusDist(hdata LatitVec, std::vector<pet_Type> petType);
   void calcHbToAllHrus();
   void setAreasToHrus(hdata vec_Areas);
   void setBasinArea();

@@ -22,6 +22,8 @@ const unsigned numTSvars = 23;
 enum class init_Stype {SOIL, GROUNDWAT, FASTRES, SURFRET, CANS, STES, SNOS};
 enum class pet_Type {OUDIN, HAMON};
 
+const std::vector<std::string> allPetNames {"OUDIN", "HAMON"};
+
 enum class cal_Type {YEAR, MONTH, DAY, JDAY};
 const cal_Type all_caDT[] {cal_Type::YEAR, cal_Type::MONTH, cal_Type::DAY, cal_Type::JDAY};
 
