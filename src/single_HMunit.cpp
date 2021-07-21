@@ -1201,7 +1201,6 @@ void single_HMunit::set_GStype(gs_STORtype _gs_STORtype) {
 }
 
 gs_STORtype single_HMunit::get_GStype() {
-
   return gs_STORAGE;
 
 }

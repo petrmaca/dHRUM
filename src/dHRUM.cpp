@@ -96,8 +96,17 @@ void dHRUM::setInputsToOneHru(std::string namesFilePath, unsigned Id) {
 
 }
 
+void dHRUM::initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& gs_STORtypes) {
 
-void dHRUM::setParamsToAllHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad) {
+  for(unsigned int i=0; i<gs_STORtypes.size(); i++) {
+    dHruVec[gs_STORtypes[i].first].set_GStype(gs_STORtypes[i].second);
+  }
+
+  return;
+
+}
+
+void dHRUM::setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad) {
   //  #pragma omp parallel
   //  {
 #pragma omp parallel for
@@ -111,6 +120,41 @@ void dHRUM::setParamsToAllHrus(std::vector<std::pair<numberSel,par_HRUtype>> par
   }
   //  }
   return ;
+}
+
+std::vector<std::string> dHRUM::getRequiredParamsForHru(unsigned hruId) {
+
+  gs_STORtype gwType = dHruVec[hruId].get_GStype();
+  std::vector<std::string> params = {};
+
+  switch(gwType) {
+    case gs_STORtype::LIN_RES:
+      params = {"KS"};
+      break;
+    case gs_STORtype::LINL_RES:
+      params = {"KS"};
+      break;
+    case gs_STORtype::LINBY_RES:
+      params = {"KS","D_BYPASS"};
+      break;
+    case gs_STORtype::POW_RES:
+      params = {"KS","B_EXP"};
+      break;
+    case gs_STORtype::EXP_RES:
+      params = {"KS","B_EXP"};
+      break;
+    case gs_STORtype::LIN_2SE:
+      params = {"KS","KS2"};
+      break;
+    case gs_STORtype::LIN_2PA:
+      params = {"KS","KS2","ALPHA"};
+      break;
+    case gs_STORtype::FLEX_RES:
+      params = {"KS","KS2","THR"};
+      break;
+  }
+
+  return params;
 }
 
 void dHRUM::setParamsToOneHru(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad, unsigned Id) {
@@ -403,15 +447,5 @@ std::vector<std::string> dHRUM::getHRUIds() {
   }
 
   return ids;
-}
-
-void dHRUM::initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& gs_STORtypes) {
-
-    for(unsigned int i=0; i<gs_STORtypes.size(); i++) {
-      dHruVec[gs_STORtypes[i].first].set_GStype(gs_STORtypes[i].second);
-    }
-
-  return;
-
 }
 

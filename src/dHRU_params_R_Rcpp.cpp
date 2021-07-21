@@ -184,7 +184,17 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
         break;
       }
     }
-    dHRUM_ptr.get()->setParamsToAllHrus(ParsToLoad);
+    unsigned dimHRU = dHRUM_ptr.get()->getdHRUdim();
+    for(unsigned id=0;id<dimHRU;id++){
+      std::vector<std::string> requiredParams = dHRUM_ptr.get()->getRequiredParamsForHru(id);
+      for(unsigned i=0;i<requiredParams.size();i++){
+        if ( std::find(ParsNames.begin(), ParsNames.end(), requiredParams[i]) == ParsNames.end()) {
+          Rcpp::Rcout << "\nSomething wrong on item " << (i+1) << "\n";
+          Rcpp::stop("\n Required parameter missing.\n");
+        }
+      }
+    }
+    dHRUM_ptr.get()->setParamsToAlldHrus(ParsToLoad);
   }
   return  ;
 }
