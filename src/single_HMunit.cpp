@@ -1194,7 +1194,6 @@ void single_HMunit::print_Pars() {
 void single_HMunit::set_GStype(gs_STORtype _gs_STORtype) {
 
   gs_STORAGE = _gs_STORtype;
-  print_GStype();
 
   return ;
 
