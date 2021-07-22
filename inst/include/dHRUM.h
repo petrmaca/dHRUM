@@ -26,12 +26,14 @@ class dHRUM {
   void initHrusVec(const unsigned& numHMunits, const single_HMunit& shru);
   void initHrusID(const std::vector<std::string>& SingleHrusIds);
   std::string getSingleHruId(unsigned hruId);
+  std::vector<std::string> getHRUIds();
   void setInputsToAllHrus(std::string namesFilePath);
   void loadPTDatToAllHrus(hdata Prec, hdata Temp, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay);
   void setInputsToOneHru(std::string namesFilePath, unsigned Id);
   void loadPTInputsToOneHru(hdata Prec, hdata Temp, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay, unsigned HruIt);
-  void setParamsToAllHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad);
+  void setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad);
   void setParamsToOneHru(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad, unsigned Id);
+  std::vector<std::string> getRequiredParamsForHru(unsigned Id);
   void calcPetToAllHrus(numberSel Latit, pet_Type myPetType = pet_Type::OUDIN);
   void calcPetToAllHrusDist(hdata LatitVec, std::vector<pet_Type> petType);
   void calcHbToAllHrus();
@@ -50,11 +52,14 @@ class dHRUM {
   unsigned get_singleHRUnumPars(unsigned Id);
   void set_numPars();
   void print_Pars();
+  void initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& gs_STORtypes);
+  //std::vector<gs_STORtype> get_STORtypes();
 
 protected:
 
 private:
   std::vector<single_HMunit> dHruVec;//!< vector of single HRU objects
+  std::vector<std::string> dHruVecId;//!< vector of string HRU ids
   numberDta dimHM;//!< Number of single HRU objects
   numberSel basinArea;//!< The total basin area
   hdata Areas;//!< Arrays of Areas of all single HRUs
@@ -62,7 +67,7 @@ private:
   caldata numParsAllHRus;//< Vector with Numbers of params
 
   data_HB_1d basinDta;//!< The HB data on all basin
-
+  std::vector<gs_STORtype> gs_STORtypes;
 };
 
 #endif // DHRUM_H
