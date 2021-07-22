@@ -821,12 +821,37 @@ void data_HB_1d::ThornthwaitePET() {
     // PEt[tst] = Epet[helpit] + cdifPet;
   }
 
-
-
   PETtype = pet_Type::THORNTHWAITE;
 
   return ;
 }
+
+void data_HB_1d::Blaneycriddle(){
+
+  numberSel rad_Latid = Latitude / 180 * M_PI, ndy = 365, omega = 0.0, dec = 0.0;
+  hdata Nn(1.01,1);
+  Nn.resize(numTS);
+
+  for(unsigned tst=0; tst<numTS; tst++) {
+    if(leap_Check_Year(year[tst])) ndy = 366;
+    else ndy = 365;
+    dec = 0.409 * sin( (2 * M_PI ) * static_cast<numberSel>(Jday[tst]) / ndy - 1.39);
+    omega = acos( (-1)* tan(rad_Latid) * tan(dec));
+    Nn[tst] = 24 / M_PI * omega / (365*12);
+  }
+
+  for(unsigned tst=1; tst<numTS; tst++) {
+    PEt[tst] = Nn[tst] * 0.85 * (0.46 * Temp[tst] + 8.13);
+    //Xu and Singh 2001
+    //Evaluation and generalization of temperature-basedmethods for
+    //calculating evaporation Hydrol. Process. 15, 305–319 (2001)
+    }
+
+
+
+  return ;
+}
+
 
 /** \brief The description  of leap years
  *

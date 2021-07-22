@@ -1,6 +1,7 @@
 #include "dHRUM.h"
 
 dHRUM::dHRUM(): dHruVec(),
+  dHruVecId(),
   dimHM(0),
   basinArea(0),
   Areas(0),
@@ -15,6 +16,7 @@ dHRUM::~dHRUM() {
 }
 
 dHRUM::dHRUM(const dHRUM& other): dHruVec(),
+  dHruVecId(),
   dimHM(0),
   basinArea(0),
   Areas(0),
@@ -23,6 +25,7 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   basinDta() {
 
   dHruVec = other.dHruVec;
+  dHruVecId = other.dHruVecId;
   dimHM = other.dimHM;
   basinArea = other.basinArea;
   Areas = other.Areas;
@@ -35,6 +38,7 @@ dHRUM& dHRUM::operator=(const dHRUM& rhs) {
   if (this == &rhs) return *this;
   else {
     dHruVec = rhs.dHruVec;
+    dHruVecId = rhs.dHruVecId;
     dimHM = rhs.dimHM;
     basinArea = rhs.basinArea;
     Areas = rhs.Areas;
@@ -92,8 +96,17 @@ void dHRUM::setInputsToOneHru(std::string namesFilePath, unsigned Id) {
 
 }
 
+void dHRUM::initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& gs_STORtypes) {
 
-void dHRUM::setParamsToAllHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad) {
+  for(unsigned int i=0; i<gs_STORtypes.size(); i++) {
+    dHruVec[gs_STORtypes[i].first].set_GStype(gs_STORtypes[i].second);
+  }
+
+  return;
+
+}
+
+void dHRUM::setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad) {
   //  #pragma omp parallel
   //  {
 #pragma omp parallel for
@@ -107,6 +120,41 @@ void dHRUM::setParamsToAllHrus(std::vector<std::pair<numberSel,par_HRUtype>> par
   }
   //  }
   return ;
+}
+
+std::vector<std::string> dHRUM::getRequiredParamsForHru(unsigned hruId) {
+
+  gs_STORtype gwType = dHruVec[hruId].get_GStype();
+  std::vector<std::string> params = {};
+
+  switch(gwType) {
+    case gs_STORtype::LIN_RES:
+      params = {"KS"};
+      break;
+    case gs_STORtype::LINL_RES:
+      params = {"KS"};
+      break;
+    case gs_STORtype::LINBY_RES:
+      params = {"KS","D_BYPASS"};
+      break;
+    case gs_STORtype::POW_RES:
+      params = {"KS","B_EXP"};
+      break;
+    case gs_STORtype::EXP_RES:
+      params = {"KS","B_EXP"};
+      break;
+    case gs_STORtype::LIN_2SE:
+      params = {"KS","KS2"};
+      break;
+    case gs_STORtype::LIN_2PA:
+      params = {"KS","KS2","ALPHA"};
+      break;
+    case gs_STORtype::FLEX_RES:
+      params = {"KS","KS2","THR"};
+      break;
+  }
+
+  return params;
 }
 
 void dHRUM::setParamsToOneHru(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad, unsigned Id) {
@@ -407,3 +455,14 @@ void dHRUM::loadPTInputsToOneHru(hdata Prec, hdata Temp, const numberSel& val,co
   return;
 
 }
+
+std::vector<std::string> dHRUM::getHRUIds() {
+
+  std::vector<std::string> ids(getdHRUdim());
+  for(unsigned int i=0; i<ids.size(); i++) {
+    ids[i] = getSingleHruId(i);
+  }
+
+  return ids;
+}
+

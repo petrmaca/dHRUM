@@ -46,8 +46,11 @@ class data_HB_1d {
   void calc_Pet();
   void OudinPET();
   void HamonPET();
-
   void ThornthwaitePET();
+  void Blaneycriddle();
+
+
+
   numberSel get_daysInMonth(const unsigned& tstMonth, const unsigned& year);
 
 

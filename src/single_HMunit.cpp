@@ -34,6 +34,7 @@ single_HMunit::single_HMunit(): tstRM(0),
 //  std::cout << "INITprevDR " << prev_Grou << std::endl;
 
   tstRM = 0;
+  gs_STORAGE = gs_STORtype::LIN_2SE;
 
 }
 
@@ -435,7 +436,7 @@ prev_Soil = next_soil;
  *  calculating related fluxes, groundwater storage represented by a linear reservoir
  *
  */
-void single_HMunit::slow_response() {
+/*void single_HMunit::slow_response() {
 
   numberSel BaseOut = 0.0;
   // numberSel Evap = 0.0;
@@ -450,11 +451,121 @@ void single_HMunit::slow_response() {
   set_varValue(prev_Grou, tstRM,ts_type::GROS);
 
   return ;
+}*/
+
+void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
+
+  numberSel BaseOut = 0.0;
+  numberSel BaseOut_1 = 0.0;
+  numberSel BaseOut_2 = 0.0;
+  numberSel prev_Grou1 = 0.0;
+  numberSel prev_Grou2 = 0.0;
+
+  switch(_gs_STORtype) {
+
+  case gs_STORtype::LIN_RES:
+    BaseOut = prev_Grou * get_par(par_HRUtype::KS) ;
+    prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
+
+    set_varValue(BaseOut, tstRM, ts_type::BASF);
+    set_varValue(prev_Grou, tstRM,ts_type::GROS);
+    break;
+
+  case gs_STORtype::LINL_RES:
+    BaseOut = prev_Grou * get_par(par_HRUtype::KS) ;
+    prev_Grou = (prev_Grou * get_par(par_HRUtype::L)) + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
+
+    set_varValue(BaseOut, tstRM, ts_type::BASF);
+    set_varValue(prev_Grou, tstRM,ts_type::GROS);
+    break;
+
+  case gs_STORtype::LINBY_RES:
+    BaseOut = prev_Grou * get_par(par_HRUtype::KS) + get_par(par_HRUtype::D_BYPASS) * ((1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC));
+    prev_Grou = prev_Grou  + (1 - get_par(par_HRUtype::D_BYPASS)) * (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
+
+    set_varValue(BaseOut, tstRM, ts_type::BASF);
+    set_varValue(prev_Grou, tstRM,ts_type::GROS);
+    break;
+
+  case gs_STORtype::POW_RES:
+    BaseOut = std::pow(prev_Grou, get_par(par_HRUtype::B_EXP)) * get_par(par_HRUtype::KS);
+    prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
+
+    set_varValue(BaseOut, tstRM, ts_type::BASF);
+    set_varValue(prev_Grou, tstRM,ts_type::GROS);
+    break;
+
+  case gs_STORtype::EXP_RES:
+    if(get_par(par_HRUtype::B_EXP) != 0) {
+      BaseOut = get_par(par_HRUtype::KS)*std::exp(prev_Grou / get_par(par_HRUtype::B_EXP));
+      prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
+
+      set_varValue(BaseOut, tstRM, ts_type::BASF);
+      set_varValue(prev_Grou, tstRM,ts_type::GROS);
+    }
+    break;
+
+  case gs_STORtype::LIN_2SE:
+    BaseOut = prev_Grou2 * get_par(par_HRUtype::KS2);
+    BaseOut_1 = prev_Grou1 * get_par(par_HRUtype::KS);
+
+    prev_Grou1 = prev_Grou1 + ((1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC)) - BaseOut_1;
+    prev_Grou2 = prev_Grou2 + BaseOut_1 - BaseOut;
+
+    set_varValue(BaseOut, tstRM, ts_type::BASF);
+    set_varValue(prev_Grou1, tstRM,ts_type::GROS);
+    set_varValue(prev_Grou2, tstRM,ts_type::GROS);
+    set_varValue(prev_Grou1 + prev_Grou2, tstRM,ts_type::GROS);
+    break;
+
+  case gs_STORtype::LIN_2PA:
+    BaseOut_1 = prev_Grou1 * get_par(par_HRUtype::KS);
+    prev_Grou1 = prev_Grou1 + (1 - get_par(par_HRUtype::ADIV)) * get_par(par_HRUtype::ALPHA) * get_dta(tstRM, ts_type::PERC) - BaseOut_1;
+
+    BaseOut_2 = prev_Grou2 * get_par(par_HRUtype::KS2);
+    prev_Grou2 = prev_Grou2 + (1 - get_par(par_HRUtype::ADIV)) * (1 - get_par(par_HRUtype::ALPHA)) * get_dta(tstRM, ts_type::PERC) - BaseOut_2;
+
+    BaseOut = BaseOut_1 + BaseOut_2;
+
+    set_varValue(BaseOut, tstRM, ts_type::BASF);
+    set_varValue(prev_Grou1, tstRM,ts_type::GROS);
+    set_varValue(prev_Grou2, tstRM,ts_type::GROS);
+    set_varValue(prev_Grou1 + prev_Grou2, tstRM,ts_type::GROS);
+
+    break;
+
+  case gs_STORtype::FLEX_RES:
+    BaseOut_1 = prev_Grou * get_par(par_HRUtype::KS);
+    prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut_1;
+
+    if(get_par(par_HRUtype::THR) > prev_Grou) {
+      //lower outlet working
+      set_varValue(BaseOut_1, tstRM, ts_type::BASF);
+
+    } else {
+      //lower and upper outlets working
+      BaseOut_2 = get_par(par_HRUtype::KS2) * (prev_Grou - get_par(par_HRUtype::THR));
+      prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut_2;
+
+      BaseOut = BaseOut_1 + BaseOut_2;
+
+      set_varValue(BaseOut, tstRM, ts_type::BASF);
+    }
+
+    set_varValue(prev_Grou, tstRM,ts_type::GROS);
+
+    break;
+  }
+
+
+
+  return;
 }
 
 /** \brief Updates the series of fast response described by linear reservoirs
  *
  */
+
 void single_HMunit::fast_response() {
 
   numberSel helpFastOut = 0.0, help_State =0.0;
@@ -672,7 +783,7 @@ void single_HMunit::run_HB() {
     interception_snow();
     surface_retention();
     soil_buffer();
-    slow_response();
+    slow_response(gs_STORAGE);
     fast_response();
     helprm = (get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR));
     set_varValue(helprm ,tstRM,ts_type::TOTR);
@@ -1079,3 +1190,73 @@ void single_HMunit::print_Pars() {
   return ;
 
 }
+
+void single_HMunit::set_GStype(gs_STORtype _gs_STORtype) {
+
+  gs_STORAGE = _gs_STORtype;
+
+  return ;
+
+}
+
+gs_STORtype single_HMunit::get_GStype() {
+  return gs_STORAGE;
+
+}
+
+void single_HMunit::print_GStype() {
+
+  switch(gs_STORAGE) {
+
+  case gs_STORtype::LIN_RES:
+
+    std::cout << "The gs_STORE is a LIN reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::LINL_RES:
+
+    std::cout << "The gs_STORE is a LINL reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::LINBY_RES:
+
+    std::cout << "The gs_STORE is a LINBY reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::LIN_2SE:
+
+    std::cout << "The gs_STORE is a LIN_2SE reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::LIN_2PA:
+
+    std::cout << "The gs_STORE is a LIN_2PA reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::POW_RES:
+
+    std::cout << "The gs_STORE is a POW reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::EXP_RES:
+
+    std::cout << "The gs_STORE is a EXP reservoir." << std::endl;
+
+    break;
+
+  case gs_STORtype::FLEX_RES:
+
+    std::cout << "The gs_STORE is a FLEX reservoir." << std::endl;
+
+    break;
+
+  }
+
+}
+

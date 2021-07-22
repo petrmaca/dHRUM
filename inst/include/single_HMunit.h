@@ -42,7 +42,7 @@ class single_HMunit {
   void surface_retention();//!< Update surface retention
   void soil_buffer();//!< Update the soil buffer states
   void fast_response();//!< The fast runoff response
-  void slow_response();//!< The slow runoff response
+  void slow_response(gs_STORtype _gs_STORtype);//!< The slow runoff response
 
   void run_HB();//!< Update hydrological balance (HB) of single pdm unit run single pdm model
 
@@ -83,6 +83,10 @@ class single_HMunit {
   std::string getIdHru();
   void print_Pars();
 
+  void set_GStype(gs_STORtype _gs_STORtype);
+  gs_STORtype get_GStype();
+  void print_GStype();
+
 protected:
 
 private:
@@ -103,6 +107,8 @@ private:
 
   numberSel Area;//!< The area of HM unit in m2
   std::string IdHru;
+
+  gs_STORtype gs_STORAGE;
 
 };
 
