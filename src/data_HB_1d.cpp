@@ -867,7 +867,8 @@ void data_HB_1d::JensenhaisePET(){
     dr = 1 + 0.033 * cos((static_cast<numberSel>(Jday[tst])) * 2 * M_PI / ndy);
     omega = acos(-tan(rad_Latid) * tan(dec));
     Ra = (24 * 60) / M_PI * GlSoCo * dr * (omega * sin(rad_Latid) * sin(dec) + cos(rad_Latid) * cos(dec) * sin(omega));
-    PEt[tst] = Ra * Temp[tst] / (40 * 2450);
+    if (1000 * Ra * Temp[tst] / (40 * 2450) <0) PEt[tst] =0.0;
+      else PEt[tst] = 1000 * Ra * Temp[tst] / (40 * 2450);
   }
   //Oudin 2005 Joh
 
@@ -885,7 +886,8 @@ void data_HB_1d::McGuinnessbrdnePET(){
     dr = 1 + 0.033 * cos((static_cast<numberSel>(Jday[tst])) * 2 * M_PI / ndy);
     omega = acos(-tan(rad_Latid) * tan(dec));
     Ra = (24 * 60) / M_PI * GlSoCo * dr * (omega * sin(rad_Latid) * sin(dec) + cos(rad_Latid) * cos(dec) * sin(omega));
-    PEt[tst] = Ra * (Temp[tst] +5) / (68 * 2450);
+    if (1000 * Ra * (Temp[tst] +5) / (68 * 2450) <0) PEt[tst] =0.0;
+    else PEt[tst] = 1000 * Ra * (Temp[tst] +5) / (68 * 2450);
   }
   //Oudin 2005 Joh
 
