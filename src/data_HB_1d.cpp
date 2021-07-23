@@ -630,6 +630,9 @@ void data_HB_1d::calc_Pet() {
   case pet_Type::JENSENHAISE:
     JensenhaisePET();
     break;
+  case pet_Type::MCGUINNESSBORDNE:
+    McGuinnessbrdnePET();
+    break;
   }
   return ;
 }
@@ -869,8 +872,25 @@ void data_HB_1d::JensenhaisePET(){
   //Oudin 2005 Joh
 
   return ;
-}
+};
 
+
+void data_HB_1d::McGuinnessbrdnePET(){
+  numberSel dec = 0.0, rad_Latid = Latitude / 180 * M_PI, ndy = 365, dr = 0.0, omega = 0.0, Ra = 0.0, GlSoCo = 0.0820;
+
+  for(unsigned tst=0; tst<numTS; tst++) {
+    if( leap_Check_Year(year[tst]) ) ndy = 366;
+    else ndy = 365;
+    dec = 0.409 * sin(2 * (static_cast<numberSel>(Jday[tst])) * M_PI / ndy - 1.39);
+    dr = 1 + 0.033 * cos((static_cast<numberSel>(Jday[tst])) * 2 * M_PI / ndy);
+    omega = acos(-tan(rad_Latid) * tan(dec));
+    Ra = (24 * 60) / M_PI * GlSoCo * dr * (omega * sin(rad_Latid) * sin(dec) + cos(rad_Latid) * cos(dec) * sin(omega));
+    PEt[tst] = Ra * (Temp[tst] +5) / (68 * 2450);
+  }
+  //Oudin 2005 Joh
+
+  return ;
+}
 /** \brief The description  of leap years
  *
  * \param year to be described

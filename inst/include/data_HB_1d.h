@@ -49,6 +49,7 @@ class data_HB_1d {
   void ThornthwaitePET();
   void BlaneycriddlePET();
   void JensenhaisePET();
+  void McGuinnessbrdnePET();
 
 
 
