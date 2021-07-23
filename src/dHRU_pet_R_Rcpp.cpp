@@ -23,22 +23,23 @@
 //' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
 // [[Rcpp::export]]
 void calcPetToAllHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, numberSel Latitude, std::string PetTypeStr){
-  std::vector<std::string> PettypesVec {"Oudin", "Hamon","Thornthwaite","BlaneyCriddle"};
+  std::vector<std::string> PettypesVec {"Oudin", "Hamon","Thornthwaite","BlaneyCriddle","Jensenhaise"};
   bool petBB=false;
-  for(unsigned pp=0;pp<4;pp++){
+  for(unsigned pp=0;pp<5;pp++){
     if(PettypesVec[pp] == PetTypeStr){
       petBB = true;
     }
   }
   if(!petBB) {
-    Rcpp::stop("\n Wrong calling to the Pet Type method, try 'Oudin' or 'Hamon or 'Thornthwaite' or 'BlaneyCriddle'.\n");
+    Rcpp::stop("\n Wrong calling to the Pet Type method, try 'Oudin' or 'Hamon or 'Thornthwaite' or 'BlaneyCriddle' or 'Jensenhaise'.\n");
   }
 
   std::map<std::string, pet_Type> s_mapStringToPet_Type = {
     {"Oudin", pet_Type::OUDIN},
     {"Hamon", pet_Type::HAMON},
-    {"Thornthwaite", pet_Type::THORNTHWAITE}
-    {"BlaneyCriddle", pet_Type::BLANEYCRIDDLE}
+    {"Thornthwaite", pet_Type::THORNTHWAITE},
+    {"BlaneyCriddle", pet_Type::BLANEYCRIDDLE},
+    {"Jensenhaise", pet_Type::JENSENHAISE}
   };
   pet_Type  myPetType;
   switch(s_mapStringToPet_Type[PetTypeStr]) {
@@ -56,6 +57,10 @@ void calcPetToAllHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, numberSel Latitude, std::stri
     break;
   case pet_Type::BLANEYCRIDDLE:
     myPetType = pet_Type::BLANEYCRIDDLE;
+    // Rcpp::Rcout << "\n hamon \n";
+    break;
+  case pet_Type::JENSENHAISE:
+    myPetType = pet_Type::JENSENHAISE;
     // Rcpp::Rcout << "\n hamon \n";
     break;
   }

@@ -617,15 +617,18 @@ void data_HB_1d::calc_Pet() {
   switch (PETtype) {
   case pet_Type::OUDIN:
     OudinPET();
-//    std::cout << "\n oudin\n";
     break;
   case pet_Type::HAMON:
     HamonPET();
-//    std::cout << "\n hamon\n";
     break;
   case pet_Type::THORNTHWAITE:
     ThornthwaitePET();
-    //    std::cout << "\n oudin\n";
+    break;
+  case pet_Type::BLANEYCRIDDLE:
+    BlaneycriddlePET();
+    break;
+  case pet_Type::JENSENHAISE:
+    JensenhaisePET();
     break;
   }
   return ;
@@ -826,7 +829,7 @@ void data_HB_1d::ThornthwaitePET() {
   return ;
 }
 
-void data_HB_1d::Blaneycriddle(){
+void data_HB_1d::BlaneycriddlePET(){
 
   numberSel rad_Latid = Latitude / 180 * M_PI, ndy = 365, omega = 0.0, dec = 0.0;
   hdata Nn(1.01,1);
@@ -847,11 +850,26 @@ void data_HB_1d::Blaneycriddle(){
     //calculating evaporation Hydrol. Process. 15, 305–319 (2001)
     }
 
-
-
   return ;
 }
 
+
+void data_HB_1d::JensenhaisePET(){
+  numberSel dec = 0.0, rad_Latid = Latitude / 180 * M_PI, ndy = 365, dr = 0.0, omega = 0.0, Ra = 0.0, GlSoCo = 0.0820;
+
+  for(unsigned tst=0; tst<numTS; tst++) {
+    if( leap_Check_Year(year[tst]) ) ndy = 366;
+    else ndy = 365;
+    dec = 0.409 * sin(2 * (static_cast<numberSel>(Jday[tst])) * M_PI / ndy - 1.39);
+    dr = 1 + 0.033 * cos((static_cast<numberSel>(Jday[tst])) * 2 * M_PI / ndy);
+    omega = acos(-tan(rad_Latid) * tan(dec));
+    Ra = (24 * 60) / M_PI * GlSoCo * dr * (omega * sin(rad_Latid) * sin(dec) + cos(rad_Latid) * cos(dec) * sin(omega));
+    PEt[tst] = Ra * Temp[tst] / (40 * 2450);
+  }
+  //Oudin 2005 Joh
+
+  return ;
+}
 
 /** \brief The description  of leap years
  *
