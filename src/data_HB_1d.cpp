@@ -847,7 +847,7 @@ void data_HB_1d::BlaneycriddlePET(){
   }
 
   for(unsigned tst=1; tst<numTS; tst++) {
-    PEt[tst] = Nn[tst] * 0.85 * (0.46 * Temp[tst] + 8.13);
+    PEt[tst] = (Nn[tst] * 0.85 ) * 100 * (0.46 * Temp[tst] + 8.13);
     //Xu and Singh 2001
     //Evaluation and generalization of temperature-basedmethods for
     //calculating evaporation Hydrol. Process. 15, 305–319 (2001)

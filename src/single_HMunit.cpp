@@ -34,7 +34,7 @@ single_HMunit::single_HMunit(): tstRM(0),
 //  std::cout << "INITprevDR " << prev_Grou << std::endl;
 
   tstRM = 0;
-  gs_STORAGE = gs_STORtype::LIN_2SE;
+  gs_STORAGE = gs_STORtype::LIN_RES;
 
 }
 
