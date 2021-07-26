@@ -466,3 +466,8 @@ std::vector<std::string> dHRUM::getHRUIds() {
   return ids;
 }
 
+numberSel dHRUM::getTsDta(const ts_type& _tsType, const unsigned& HruIndex, const unsigned& tst){
+
+  return dHruVec[HruIndex].get_dta(tst, _tsType);
+
+  }

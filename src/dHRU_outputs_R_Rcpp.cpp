@@ -283,9 +283,9 @@ Rcpp::List dHRUMrunDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
   for(unsigned j=4;j<ncolOutMat;j++){
     unsigned indexrowNu=0;
     for(unsigned itHRU=0; itHRU<dHRUM_ptr->getdHRUdim(); itHRU++){
-      hdata helpVal = dHRUM_ptr.get()->get_HbDta(all_ts[j-4]);
       for(unsigned i=0; i<dHRUM_ptr.get()->get_numTS(); i++){
-        outDta(indexrowNu,j) = helpVal[i] ;
+        numberSel helpVal = dHRUM_ptr.get()->getTsDta(all_ts[j-4], itHRU, i);
+        outDta(indexrowNu,j) = helpVal;
         indexrowNu++;
       }
     }

@@ -53,6 +53,7 @@ class dHRUM {
   void set_numPars();
   void print_Pars();
   void initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& gs_STORtypes);
+  numberSel getTsDta(const ts_type& _tsType, const unsigned& HruIndex, const unsigned& tst);
   //std::vector<gs_STORtype> get_STORtypes();
 
 protected:
