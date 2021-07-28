@@ -6,7 +6,7 @@ Areas <- c(2.5,1.92)#les 1.92 Zem_puda 2.5
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 
-filname2 = "../tests/indata/BP_1960_01_01.txt"
+filname2 = "Calibrations/Amalie/indata/BP_1960_01_01.txt"
 setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
 
@@ -129,3 +129,14 @@ ParDF11=rbind(ParDF11,ParBest[(nPars1HRU+1):(2*nPars1HRU)])
 pars2hru_bp <-cbind(ParDF11,Areas=c(2.50, 1.92))
 
 saveRDS(pars2hru_bp,file = "./data/Params/Amalie/BP_2HRU.rds")
+
+outDta <- dHRUMrunDist(dHRUM_ptr = dhrus)
+outDF <- data.frame(outDta$outDta)
+outDF <- cbind(outDF, outDta$Ids)
+names(outDF) <-c(outDta$VarsNams)
+
+library(data.table)
+outDF <- as.data.table(outDF)
+
+plot(outDF[HruIds == "ID2", BASF], type ='l', col='red')
+lines(outDF[HruIds == "ID1", BASF], type ='l', col='blue')

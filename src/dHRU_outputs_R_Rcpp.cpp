@@ -265,7 +265,6 @@ Rcpp::List dHRUMrunDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
       Ids[indexrow] = dHRUM_ptr.get()->getSingleHruId(itHRU);
       indexrow++;
     }
-
   }
   // numTSvar
 

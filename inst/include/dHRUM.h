@@ -34,8 +34,11 @@ class dHRUM {
   void setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad);
   void setParamsToOneHru(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad, unsigned Id);
   std::vector<std::string> getRequiredParamsForHru(unsigned Id);
+
   void calcPetToAllHrus(numberSel Latit, pet_Type myPetType = pet_Type::OUDIN);
-  void calcPetToAllHrusDist(hdata LatitVec, std::vector<pet_Type> petType);
+  void calcPetToOneHru(numberSel Latit, pet_Type myPetType, unsigned HruId);
+  void calcPetToAllHrusDist(hdata LatitVec, std::vector<std::string> petType);
+
   void calcHbToAllHrus();
   void setAreasToHrus(hdata vec_Areas);
   void setBasinArea();
@@ -43,6 +46,7 @@ class dHRUM {
   numberDta get_numTS();
   void set_numTS();
   void initdHRUbasinDTA();
+
   void printAllDta(const std::string& Filet);
   hdata get_HbDta(const ts_type& _tsType);
   caldata get_CalDta(const cal_Type& _calType);
@@ -52,7 +56,7 @@ class dHRUM {
   unsigned get_singleHRUnumPars(unsigned Id);
   void set_numPars();
   void print_Pars();
-  void initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& gs_STORtypes);
+  void initGWtypeToAlldHrus(std::vector<std::pair<unsigned, gs_STORtype>>& gs_STORtypes);
   numberSel getTsDta(const ts_type& _tsType, const unsigned& HruIndex, const unsigned& tst);
   //std::vector<gs_STORtype> get_STORtypes();
 

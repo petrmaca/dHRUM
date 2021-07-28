@@ -106,38 +106,23 @@ void calcPetToAllHrusDist(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Latit
     }
   }
 
+  unsigned nHrusDF = Latitude.size();
+  if(nHrusDF != dHRUMdim){
+    Rcpp::stop("\n Different number of Hru's and Latitude values provided to dHRUM.\n");
+  }
 
-//
-//
-//   std::map<std::string, pet_Type> s_mapStringToPet_Type = {
-//     {"Oudin", pet_Type::OUDIN},
-//     {"Hamon", pet_Type::HAMON}
-//   };
-//   pet_Type  myPetType;
-//   switch(s_mapStringToPet_Type[PetTypeStr]) {
-//   case pet_Type::OUDIN:
-//     myPetType = pet_Type::OUDIN;
-//     // Rcpp::Rcout << "\n oudinddd \n";
-//     break;
-//   case pet_Type::HAMON:
-//     myPetType = pet_Type::HAMON;
-//     // Rcpp::Rcout << "\n hamon \n";
-//     break;
-//   }
-//
-//
-//
-//   hdata LatitudeVec(1,1);
-//
-//   LatitudeVec.resize(dHRUMdim);
-//
-//   for(unsigned it=0;it<dHRUMdim;it++){
-//     LatitudeVec[it] = Latitude[it];
-//   }
-//
-//   for(unsigned it=0;it<dHRUMdim;it++){
-//    dHRUM_ptr.get()->calcPetToAllHrus(LatitudeVec[it], myPetType[it]);
-//   }
+  if(petNameStr.size() != dHRUMdim){
+    Rcpp::stop("\n Different number of PET names and Hrus provided to dHRUM.\n");
+  }
+
+
+  hdata LatitVecData(1,1);
+  LatitVecData.resize(dHRUMdim);
+  for(unsigned it=0; it<dHRUMdim;it++){
+    LatitVecData[it] = Latitude[it];
+    }
+
+  dHRUM_ptr->calcPetToAllHrusDist( LatitVecData, petNameStr);
 
   return ;
 

@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <limits>
 #include <string>
+#include <map>
 
 // Type for numbers selector
 
@@ -23,6 +24,8 @@ enum class init_Stype {SOIL, GROUNDWAT, FASTRES, SURFRET, CANS, STES, SNOS};
 enum class pet_Type {OUDIN, HAMON, THORNTHWAITE, BLANEYCRIDDLE, JENSENHAISE, MCGUINNESSBORDNE};
 
 const std::vector<std::string> allPetNames {"OUDIN", "HAMON", "THORNTHWAITE","BLANEYCRIDDLE","JENSENHAISE", "MCGUINNESSBORDNE"};
+
+
 
 enum class cal_Type {YEAR, MONTH, DAY, JDAY};
 const cal_Type all_caDT[] {cal_Type::YEAR, cal_Type::MONTH, cal_Type::DAY, cal_Type::JDAY};

@@ -200,18 +200,51 @@ void dHRUM::calcPetToAllHrus(numberSel Latit, pet_Type myPetType) {
 
 }
 
-void dHRUM::calcPetToAllHrusDist(hdata LatitVec, std::vector<pet_Type> petType){
+void dHRUM::calcPetToOneHru(numberSel Latit, pet_Type myPetType, unsigned HruId){
+
+  dHruVec[HruId].set_PetVars(Latit,myPetType);
+  dHruVec[HruId].calc_Pet();
+
+  return ;
+
+}
+
+
+void dHRUM::calcPetToAllHrusDist(hdata LatitVec, std::vector<std::string> petTypeString){
+
+  std::map<std::string, pet_Type> s_mapString_ToPet_Type = {
+    {"OUDIN", pet_Type::OUDIN},
+    {"HAMON", pet_Type::HAMON },
+    {"THORNTHWAITE",  pet_Type::THORNTHWAITE},
+    {"BLANEYCRIDDLE",  pet_Type::BLANEYCRIDDLE},
+    {"JENSENHAISE",   pet_Type::JENSENHAISE},
+    {"MCGUINNESSBORDNE",  pet_Type::MCGUINNESSBORDNE}
+  };
 
 #pragma omp parallel for
   for(unsigned it=0; it<dimHM; it++) {
-    ////    dHruVec[it].set_paramsToSim(parsToLoad);
-    //    dHruVec[it].read_InputFromFile(namesFilePath.c_str());
-    dHruVec[it].set_PetVars(LatitVec[it],petType[it]);
-    dHruVec[it].calc_Pet();
-    //  dHruVec[it].run_HB();
-    //    std::cout <<  "Calculating the PET data to HRU ID " << it << std::endl;
+    switch(s_mapString_ToPet_Type[petTypeString[it]]) {
+     case pet_Type::OUDIN:
+      calcPetToOneHru(LatitVec[it], pet_Type::OUDIN, it);
+      break;
+    case pet_Type::HAMON:
+      calcPetToOneHru(LatitVec[it], pet_Type::HAMON, it);
+      break;
+    case pet_Type::THORNTHWAITE:
+      calcPetToOneHru(LatitVec[it], pet_Type::THORNTHWAITE, it);
+      break;
+    case pet_Type::BLANEYCRIDDLE:
+      calcPetToOneHru(LatitVec[it], pet_Type::BLANEYCRIDDLE, it);
+      break;
+    case pet_Type::JENSENHAISE:
+      calcPetToOneHru(LatitVec[it], pet_Type::JENSENHAISE, it);
+      break;
+    case pet_Type::MCGUINNESSBORDNE:
+      calcPetToOneHru(LatitVec[it], pet_Type::MCGUINNESSBORDNE, it);
+      break;
+         }
   }
-  //  }
+
   return ;
 
 }
@@ -470,4 +503,7 @@ numberSel dHRUM::getTsDta(const ts_type& _tsType, const unsigned& HruIndex, cons
 
   return dHruVec[HruIndex].get_dta(tst, _tsType);
 
-  }
+}
+
+
+
