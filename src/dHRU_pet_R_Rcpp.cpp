@@ -108,11 +108,11 @@ void calcPetToAllHrusDist(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Latit
 
   unsigned nHrusDF = Latitude.size();
   if(nHrusDF != dHRUMdim){
-    Rcpp::stop("\n Different number of Hru's and Latitude values provided to dHRUM.\n");
+    Rcpp::stop("\n Different number of Hru's and Latitude values provided to dHRUM.\n It must equal to numeber of HRus.\n");
   }
 
   if(petNameStr.size() != dHRUMdim){
-    Rcpp::stop("\n Different number of PET names and Hrus provided to dHRUM.\n");
+    Rcpp::stop("\n Different number of PET names and Hrus provided to dHRUM.\n It must equal to numeber of HRus.\n");
   }
 
 
