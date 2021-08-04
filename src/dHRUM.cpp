@@ -132,7 +132,7 @@ std::vector<std::string> dHRUM::getRequiredParamsForHru(unsigned hruId) {
       params = {"KS"};
       break;
     case gs_STORtype::LINL_RES:
-      params = {"KS"};
+      params = {"KS","L"};
       break;
     case gs_STORtype::LINBY_RES:
       params = {"KS","D_BYPASS"};
