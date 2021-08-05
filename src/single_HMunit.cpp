@@ -16,7 +16,8 @@ single_HMunit::single_HMunit(): tstRM(0),
   help_nmbFR(0),
   ifrb(0),
   Area(0),
-  IdHru() {
+  IdHru(),
+  gs_STORAGE{}{
 
   set_nmbFastres(10);
   help_nmbFR = get_nmbFastRes();
@@ -69,7 +70,9 @@ prev_SurS(0.0),
 help_nmbFR(0),
 ifrb(0),
 Area(0),
-IdHru() {
+IdHru(),
+gs_STORAGE{}
+{
 
   tstRM = other.tstRM;//!< The counter for main loop in run model
   par_HRU = other.par_HRU;//!< The parameters in PDM instances
@@ -84,6 +87,7 @@ IdHru() {
   ifrb = other.ifrb;//!< For loop counter
   Area = other.Area;//!< The area of HM unit in m2
   IdHru = other.IdHru;
+  gs_STORAGE = other.gs_STORAGE;
 
 }
 
@@ -112,7 +116,8 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     help_nmbFR = rhs.help_nmbFR;//!< The helper for number of fast reservoirs
     ifrb = rhs.ifrb;//!< For loop counter
     Area = rhs.Area;//!< The area of HM unit in m2
-    IdHru = rhs.IdHru;
+    IdHru = rhs.IdHru;//!< The ID of HRU
+    gs_STORAGE = rhs.gs_STORAGE;//!< The type of groundwater storage
 
   } // handle self assignment
   //assignment operator
@@ -773,11 +778,11 @@ void single_HMunit::run_HB() {
   unsigned Numdta;
 
   Numdta =  get_numdta();
-  if( !(Numdta >0)) {
-    std::cout << std::endl << "There is an error in data loadings." << std::endl;
-    std::cout << "It is impossible to calculate the basic for loop in runHB function" << std:: endl << "It is controlled by the length " << Numdta << "." << std::endl;
-    std::exit(EXIT_FAILURE);
-  }
+  // if( !(Numdta >0)) {
+  //   std::cout << std::endl << "There is an error in data loadings." << std::endl;
+  //   std::cout << "It is impossible to calculate the basic for loop in runHB function" << std:: endl << "It is controlled by the length " << Numdta << "." << std::endl;
+  //   std::exit(EXIT_FAILURE);
+  // }
   numberSel helprm=0.0;
   for(tstRM=0; tstRM < Numdta ; tstRM++) {
     interception_snow();
@@ -874,12 +879,12 @@ void single_HMunit::load_data_PT(const hdata& prec_input, const hdata& temp_inpu
 
   // std::cout << "ups size " << prec_input.size() << "\n";
 
-  if(helpnumDTA != temp_input.size()) {
-    std::cout << "Different number of time intervals in precipitation input " << prec_input.size() \
-              << " the temperature input has " << temp_input.size() << " inputs." << std::endl;
-    std::exit(EXIT_FAILURE);
-
-  }
+  // if(helpnumDTA != temp_input.size()) {
+  //   std::cout << "Different number of time intervals in precipitation input " << prec_input.size() \
+  //             << " the temperature input has " << temp_input.size() << " inputs." << std::endl;
+  //   std::exit(EXIT_FAILURE);
+  //
+  // }
   //  numberSel val = -99999.9;
   //  numberSel val = 0;
   // std::cout << "\n init inputs 1\n";
@@ -1075,11 +1080,12 @@ void single_HMunit::read_InputFromFile(const std::string& Filet) {
 
     // std::cout << "\nload_data loade";
 
-  } else {
-
-    std::cout << "There is a error in opening and reading from the file with path and name: " << Filet.c_str() << std::endl;
-
   }
+  // else {
+  //
+  //   std::cout << "There is a error in opening and reading from the file with path and name: " << Filet.c_str() << std::endl;
+  //
+  // }
 
   return ;
 
@@ -1183,7 +1189,7 @@ unsigned single_HMunit::get_numPars(){
  */
 void single_HMunit::print_Pars() {
 
-  std::cout << "\nThe HRU ID " << getIdHru() << std::endl;
+  // std::cout << "\nThe HRU ID " << getIdHru() << std::endl;
 
   par_HRU.p_param();
 
@@ -1204,59 +1210,59 @@ gs_STORtype single_HMunit::get_GStype() {
 
 }
 
-void single_HMunit::print_GStype() {
-
-  switch(gs_STORAGE) {
-
-  case gs_STORtype::LIN_RES:
-
-    std::cout << "The gs_STORE is a LIN reservoir." << std::endl;
-
-    break;
-
-  case gs_STORtype::LINL_RES:
-
-    std::cout << "The gs_STORE is a LINL reservoir." << std::endl;
-
-    break;
-
-  case gs_STORtype::LINBY_RES:
-
-    std::cout << "The gs_STORE is a LINBY reservoir." << std::endl;
-
-    break;
-
-  case gs_STORtype::LIN_2SE:
-
-    std::cout << "The gs_STORE is a LIN_2SE reservoir." << std::endl;
-
-    break;
-
-  case gs_STORtype::LIN_2PA:
-
-    std::cout << "The gs_STORE is a LIN_2PA reservoir." << std::endl;
-
-    break;
-
-  case gs_STORtype::POW_RES:
-
-    std::cout << "The gs_STORE is a POW reservoir." << std::endl;
-
-    break;
-
-  case gs_STORtype::EXP_RES:
-
-    std::cout << "The gs_STORE is a EXP reservoir." << std::endl;
-
-    break;
-
-  case gs_STORtype::FLEX_RES:
-
-    std::cout << "The gs_STORE is a FLEX reservoir." << std::endl;
-
-    break;
-
-  }
-
-}
+// void single_HMunit::print_GStype() {
+//
+//   switch(gs_STORAGE) {
+//
+//   case gs_STORtype::LIN_RES:
+//
+//     std::cout << "The gs_STORE is a LIN reservoir." << std::endl;
+//
+//     break;
+//
+//   case gs_STORtype::LINL_RES:
+//
+//     std::cout << "The gs_STORE is a LINL reservoir." << std::endl;
+//
+//     break;
+//
+//   case gs_STORtype::LINBY_RES:
+//
+//     std::cout << "The gs_STORE is a LINBY reservoir." << std::endl;
+//
+//     break;
+//
+//   case gs_STORtype::LIN_2SE:
+//
+//     std::cout << "The gs_STORE is a LIN_2SE reservoir." << std::endl;
+//
+//     break;
+//
+//   case gs_STORtype::LIN_2PA:
+//
+//     std::cout << "The gs_STORE is a LIN_2PA reservoir." << std::endl;
+//
+//     break;
+//
+//   case gs_STORtype::POW_RES:
+//
+//     std::cout << "The gs_STORE is a POW reservoir." << std::endl;
+//
+//     break;
+//
+//   case gs_STORtype::EXP_RES:
+//
+//     std::cout << "The gs_STORE is a EXP reservoir." << std::endl;
+//
+//     break;
+//
+//   case gs_STORtype::FLEX_RES:
+//
+//     std::cout << "The gs_STORE is a FLEX reservoir." << std::endl;
+//
+//     break;
+//
+//   }
+//
+// }
 

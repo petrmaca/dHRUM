@@ -562,8 +562,8 @@ numberSel data_HB_1d::g_initState(const init_Stype& _Stype) {
   case init_Stype::SURFRET:
     return init_SurS;
     break;
-  case init_Stype::FASTRES:
-    exit(EXIT_FAILURE);
+  // case init_Stype::FASTRES:
+    // exit(EXIT_FAILURE);
   }
 
   return 0;
@@ -997,13 +997,13 @@ numberSel data_HB_1d::get_daysInMonth(const unsigned& tstMonth, const unsigned& 
  *
  *
  */
-void data_HB_1d::p_calender() {
-
-  std::cout << std::endl << "Printing the calender" << std::endl << std::endl;
-  for (unsigned dt=0; dt<numTS ; dt++ )
-    std::cout << year[dt] << "\t" << month[dt] << "\t" << day[dt] << "\t" << Jday[dt] << std:: endl;
-
-}
+// void data_HB_1d::p_calender() {
+//
+//   std::cout << std::endl << "Printing the calender" << std::endl << std::endl;
+//   for (unsigned dt=0; dt<numTS ; dt++ )
+//     std::cout << year[dt] << "\t" << month[dt] << "\t" << day[dt] << "\t" << Jday[dt] << std:: endl;
+//
+// }
 
 /** \brief Initialization of the first Date
  *
@@ -1245,11 +1245,12 @@ void data_HB_1d::printDataToFile(const std::string& Filet) {
     }
     outfilet.close();
 
-  } else {
-
-    std::cout << "There is a error in opening and writing to the file with path and name: " << Filet.c_str() << std::endl;
-
   }
+  // else {
+  //
+  //   std::cout << "There is a error in opening and writing to the file with path and name: " << Filet.c_str() << std::endl;
+  //
+  // }
 
 
 }

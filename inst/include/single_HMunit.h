@@ -85,7 +85,7 @@ class single_HMunit {
 
   void set_GStype(gs_STORtype _gs_STORtype);
   gs_STORtype get_GStype();
-  void print_GStype();
+  // void print_GStype();
 
 protected:
 

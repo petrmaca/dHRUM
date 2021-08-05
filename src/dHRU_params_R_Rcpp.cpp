@@ -27,7 +27,7 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
   if((numParsNames!=numParsVals) || (numParsNames>21) || (numParsVals>21)) {
     Rcpp::Rcout << "The number of names of params is " << numParsNames <<"\n";
     Rcpp::Rcout << "The number of values of params is " << numParsVals <<"\n";
-    Rcpp::stop("\n Those values are different then required number of dHRU Par Values.\n");
+    Rcpp::stop("\n Those values are different or higher or smaller then required number of dHRU Par Values =21.\n");
   } else {
     std::vector<std::string>  parNameStr = Rcpp::as<std::vector<std::string> >(ParsNames);
     // std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF","ADIV","CDIV", \

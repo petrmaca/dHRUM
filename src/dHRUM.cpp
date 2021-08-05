@@ -7,7 +7,8 @@ dHRUM::dHRUM(): dHruVec(),
   Areas(0),
   numTs(0),
   numParsAllHRus(0),
-  basinDta() {
+  basinDta(),
+  gs_STORtypes(){
   //ctor
 }
 
@@ -22,7 +23,8 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   Areas(0),
   numTs(0),
   numParsAllHRus(0),
-  basinDta() {
+  basinDta(),
+  gs_STORtypes(){
 
   dHruVec = other.dHruVec;
   dHruVecId = other.dHruVecId;
@@ -32,6 +34,7 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   numTs = other.numTs;
   numParsAllHRus = other.numParsAllHRus;
   basinDta = other.basinDta;
+  gs_STORtypes = other.gs_STORtypes;
 }
 
 dHRUM& dHRUM::operator=(const dHRUM& rhs) {
@@ -45,6 +48,7 @@ dHRUM& dHRUM::operator=(const dHRUM& rhs) {
     numTs = rhs.numTs;
     numParsAllHRus = rhs.numParsAllHRus;
     basinDta = rhs.basinDta;
+    gs_STORtypes = rhs.gs_STORtypes;
   }
   return *this;
 }
@@ -463,7 +467,7 @@ void dHRUM::set_numPars() {
 #pragma omp parallel for
   for(unsigned it=0;it<dimHM;it++){
     numParsAllHRus[it] = get_singleHRUnumPars(it);
-    std::cout <<"The number of params for HRU unit "<< it<< " is " << get_singleHRUnumPars(it) << std::endl;
+    //std::cout <<"The number of params for HRU unit "<< it<< " is " << get_singleHRUnumPars(it) << std::endl;
   }
 
   return;

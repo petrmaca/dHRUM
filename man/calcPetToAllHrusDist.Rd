@@ -2,29 +2,36 @@
 % Please edit documentation in R/RcppExports.R
 \name{calcPetToAllHrusDist}
 \alias{calcPetToAllHrusDist}
-\title{Calculates the values of Potential evapotranspiration on all singleHrus taking nonconstant latitude}
+\title{Calculates the values of Potential evapotranspiration on all singleHrus}
 \usage{
 calcPetToAllHrusDist(dHRUM_ptr, Latitude, PetTypeStrNames, HruIds)
 }
 \arguments{
 \item{dHRUM_ptr}{pointer to dHRUM instance}
 
-\item{Latitude}{single number for Oudin method}
+\item{Latitude}{vector for latitude based methods}
 
-\item{PetTypeStr}{variable on selection of PET models}
+\item{PetTypeStrNames}{char vector on selection of PET models}
+
+\item{HruIds}{vector of Hru Ids}
 }
 \description{
-Setting of Pet method is done by \code{PetTypeStr}, methods implemented are: \code{Oudin}, \code{Hamon}
+Setting of Pet method is done by \code{PetTypeStr}, methods implemented are:
+\code{OUDIN}, \code{HAMON}, \code{THORNTHWAITE}, \code{BLANEYCRIDDLE}, \code{JENSENHAISE}, \code{MCGUINNESSBORDNE}
 }
 \examples{
-nHrus <- 200
+nHrus <- 20
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
-setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2,TRUE,0)
-ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
-SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
-setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
-calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+filname2 = "/home/hubert/prg/dHRUM/Calibrations/Amalie/indata/BP_1960_01_01.txt"
+setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
+ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 1,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.3,
+                      SDIV = 0.3, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
+                      RETCAP = 10 ,L = 0.5, D_BYPASS = 0.8, B_EXP=1, KS2 = 0.1, THR = 10, ALPHA =0.5)
+setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
+latits = runif(nHrus)
+pets =c("OUDIN", "HAMON", "THORNTHWAITE","BLANEYCRIDDLE","JENSENHAISE", "MCGUINNESSBORDNE")
+PetsNams = rep(pets,times=4)
+calcPetToAllHrusDist(dHRUM_ptr = dhrus,latits,PetTypeStrNames = PetsNams[1:nHrus],IdsHrus)
 }

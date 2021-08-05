@@ -11,10 +11,11 @@ setGWtypeToAlldHrus(dHRUM_ptr, gwTypes, hruIds)
 
 \item{gwTypes}{a charater vector of GW type names}
 
-\item{dimdHru}{a single \code{numberDta} number of single Hrus.}
+\item{hruIds}{ids on Hrus}
 }
 \description{
-Setting of params to dHRUM.
+Setting the groudnwater type of dHRUM equal to all HRUs. Possibe types: \code{LIN_RES} \code{LINL_RES} \code{LINBY_RES}
+\code{POW_RES}, \code{EXP_RES} \code{LIN_2SE} \code{LIN_2PA} \code{FLEX_RES}
 }
 \examples{
 nHrus <- 200

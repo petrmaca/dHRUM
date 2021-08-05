@@ -72,7 +72,7 @@ private:
   caldata numParsAllHRus;//< Vector with Numbers of params
 
   data_HB_1d basinDta;//!< The HB data on all basin
-  std::vector<gs_STORtype> gs_STORtypes;
+  std::vector<gs_STORtype> gs_STORtypes;//!< The vector on groundwater storage types
 };
 
 #endif // DHRUM_H
