@@ -61,7 +61,7 @@ class data_HB_1d {
 
 
   void s_calender();
-  void p_calender();
+  // void p_calender();
   void s_initDate(const unsigned& Year, const unsigned& Month,const unsigned& Day,const unsigned& initNumTS);
 
   numberDta g_calDta(const cal_Type& calDate, const unsigned& ts);

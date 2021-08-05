@@ -463,7 +463,7 @@ void dHRUM::set_numPars() {
 #pragma omp parallel for
   for(unsigned it=0;it<dimHM;it++){
     numParsAllHRus[it] = get_singleHRUnumPars(it);
-    std::cout <<"The number of params for HRU unit "<< it<< " is " << get_singleHRUnumPars(it) << std::endl;
+    //std::cout <<"The number of params for HRU unit "<< it<< " is " << get_singleHRUnumPars(it) << std::endl;
   }
 
   return;

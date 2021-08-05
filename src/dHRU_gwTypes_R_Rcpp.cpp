@@ -2,11 +2,12 @@
 #include "dHRUM.h"
 //' Sets the similar values of params to dHRU model for all single HRUs.
 //'
-//' Setting of params to dHRUM.
+//' Setting the groudnwater type of dHRUM equal to all HRUs. Possibe types: \code{LIN_RES} \code{LINL_RES} \code{LINBY_RES}
+//' \code{POW_RES}, \code{EXP_RES} \code{LIN_2SE} \code{LIN_2PA} \code{FLEX_RES}
 //'
 //' @param dHRUM_ptr pointer to dHRUM instance
-//' @param dimdHru a single \code{numberDta} number of single Hrus.
 //' @param gwTypes a charater vector of GW type names
+//' @param hruIds ids on Hrus
 //' @export
 //' @examples
 //' nHrus <- 200

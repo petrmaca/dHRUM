@@ -18,7 +18,7 @@
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
-#' calcPetToHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+#' calcPetToHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 #' calcHBInAlldHrus(dHRUM_ptr = dhrus)
 calcHBInAlldHrus <- function(dHRUM_ptr) {
     invisible(.Call(`_dHRUM_calcHBInAlldHrus`, dHRUM_ptr))
@@ -42,7 +42,7 @@ calcHBInAlldHrus <- function(dHRUM_ptr) {
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
-#' calcPetToHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+#' calcPetToHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 #' calcHBInAlldHrus(dHRUM_ptr = dhrus)
 #' gatherHBdata(dHRUM_ptr = dhrus)
 gatherHBdata <- function(dHRUM_ptr) {
@@ -51,11 +51,12 @@ gatherHBdata <- function(dHRUM_ptr) {
 
 #' Sets the similar values of params to dHRU model for all single HRUs.
 #'
-#' Setting of params to dHRUM.
+#' Setting the groudnwater type of dHRUM equal to all HRUs. Possibe types: \code{LIN_RES} \code{LINL_RES} \code{LINBY_RES}
+#' \code{POW_RES}, \code{EXP_RES} \code{LIN_2SE} \code{LIN_2PA} \code{FLEX_RES}
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
-#' @param dimdHru a single \code{numberDta} number of single Hrus.
 #' @param gwTypes a charater vector of GW type names
+#' @param hruIds ids on Hrus
 #' @export
 #' @examples
 #' nHrus <- 200
@@ -188,7 +189,7 @@ initdHruModel <- function(dimdHru, vecAreas, hrusIDs) {
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
-#' calcPetToHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+#' calcPetToHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 #' calcHBInAlldHrus(dHRUM_ptr = dhrus)
 #' gatherHBdata(dHRUM_ptr = dhrus)
 #' outDta <- getOutput(dHRUM_ptr = dhrus)
@@ -212,7 +213,7 @@ getOutput <- function(dHRUM_ptr) {
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToAlldHrus(dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
-#' calcPetToHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+#' calcPetToHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 #' calcHBInAlldHrus(dHRUM_ptr = dhrus)
 #' gatherHBdata(dHRUM_ptr = dhrus)
 #' printToFile(dhrus,file)
@@ -239,7 +240,7 @@ printToFile <- function(dHRUM_ptr, namOutFilet) {
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #'                       SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
-#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 #' calcHBInAlldHrus(dHRUM_ptr = dhrus)
 #' gatherHBdata(dHRUM_ptr = dhrus)
 #' outDta <- getOutputDist(dHRUM_ptr = dhrus)
@@ -270,7 +271,7 @@ getOutputDist <- function(dHRUM_ptr) {
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #'                       SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
-#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 #' outDta <- dHRUMrun(dHRUM_ptr = dhrus)
 #' outDF <- data.frame(outDta$outDta)
 #' names(outDF) <-c(outDta$VarsNams)
@@ -297,7 +298,7 @@ dHRUMrun <- function(dHRUM_ptr) {
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #'                       SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
-#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 #' outDta <- dHRUMrunDist(dHRUM_ptr = dhrus)
 #' outDF <- data.frame(outDta$outDta)
 #' outDF <- cbind(outDF, outDta$Ids)
@@ -382,8 +383,8 @@ setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
 
 #' Calculates the values of Potential evapotranspiration on all singleHrus taking constant latitude
 #'
-#' Setting of Pet method is done by \code{PetTypeStr}, methods implemented are: \code{Oudin}, \code{Hamon}
-#'
+#' Setting of Pet method is done by \code{PetTypeStr}, methods implemented are:
+#' \code{OUDIN}, \code{HAMON}, \code{THORNTHWAITE}, \code{BLANEYCRIDDLE}, \code{JENSENHAISE}, \code{MCGUINNESSBORDNE}
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
 #' @param Latitude single number for Oudin method
@@ -399,31 +400,37 @@ setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
-#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 calcPetToAllHrus <- function(dHRUM_ptr, Latitude, PetTypeStr) {
     invisible(.Call(`_dHRUM_calcPetToAllHrus`, dHRUM_ptr, Latitude, PetTypeStr))
 }
 
-#' Calculates the values of Potential evapotranspiration on all singleHrus taking nonconstant latitude
+#' Calculates the values of Potential evapotranspiration on all singleHrus
 #'
-#' Setting of Pet method is done by \code{PetTypeStr}, methods implemented are: \code{Oudin}, \code{Hamon}
+#' Setting of Pet method is done by \code{PetTypeStr}, methods implemented are:
+#' \code{OUDIN}, \code{HAMON}, \code{THORNTHWAITE}, \code{BLANEYCRIDDLE}, \code{JENSENHAISE}, \code{MCGUINNESSBORDNE}
 #'
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
-#' @param Latitude single number for Oudin method
-#' @param PetTypeStr variable on selection of PET models
+#' @param Latitude vector for latitude based methods
+#' @param PetTypeStrNames char vector on selection of PET models
+#' @param HruIds vector of Hru Ids
 #' @export
 #' @examples
-#' nHrus <- 200
+#' nHrus <- 20
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
-#' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2,TRUE,0)
-#' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
-#' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
-#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
-#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"Hamon")
+#' filname2 = "/home/hubert/prg/dHRUM/Calibrations/Amalie/indata/BP_1960_01_01.txt"
+#' setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
+#' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 1,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.3,
+#'                       SDIV = 0.3, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
+#'                       RETCAP = 10 ,L = 0.5, D_BYPASS = 0.8, B_EXP=1, KS2 = 0.1, THR = 10, ALPHA =0.5)
+#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
+#' latits = runif(nHrus)
+#' pets =c("OUDIN", "HAMON", "THORNTHWAITE","BLANEYCRIDDLE","JENSENHAISE", "MCGUINNESSBORDNE")
+#' PetsNams = rep(pets,times=4)
+#' calcPetToAllHrusDist(dHRUM_ptr = dhrus,latits,PetTypeStrNames = PetsNams[1:nHrus],IdsHrus)
 calcPetToAllHrusDist <- function(dHRUM_ptr, Latitude, PetTypeStrNames, HruIds) {
     invisible(.Call(`_dHRUM_calcPetToAllHrusDist`, dHRUM_ptr, Latitude, PetTypeStrNames, HruIds))
 }

@@ -63,14 +63,14 @@ sse = function(myPar){
 
 library(RcppDE)
 
-itermaxW=15
+itermaxW=100
 
-decntr<-DEoptim.control(VTR = 0, strategy = 2, bs = FALSE, NP = 200,
+decntr<-DEoptim.control(VTR = 0, strategy = 2, bs = FALSE, NP = 300,
                 itermax = itermaxW, CR = 0.75, F = 0.95, trace = TRUE,
                 initialpop = NULL, storepopfrom = itermaxW + 1,
                 storepopfreq = 1, p = 0.2, c = 0, reltol = sqrt(.Machine$double.eps),
                 steptol = itermaxW)
-n_ens=2
+n_ens=1
 parsBPmatrix=matrix(0,nrow=n_ens, ncol=ncol(ParBest))
 for(i in 1:n_ens){
   u=DEoptim( lower=as.numeric(ParDFlow[1,]), upper=as.numeric(ParDFup[1,]), fn=sse, control = decntr)
