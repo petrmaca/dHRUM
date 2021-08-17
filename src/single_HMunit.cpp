@@ -493,7 +493,7 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
     break;
 
   case gs_STORtype::POW_RES:
-    if(get_par(par_HRUtype::B_EXP) > 1/3 && get_par(par_HRUtype::B_EXP) < 1) {
+    if(get_par(par_HRUtype::B_EXP) > 1/3 && get_par(par_HRUtype::B_EXP) < 1 && prev_Grou != 0) {
       BaseOut = std::pow(prev_Grou, get_par(par_HRUtype::B_EXP)) * get_par(par_HRUtype::KS);
       prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
 
