@@ -399,7 +399,7 @@ void single_HMunit::soil_buffer() {
 
 //
   // Hymod formulation
-  c_init = get_par(par_HRUtype::C_MAX) * (1 - pow((1 - prev_Soil / get_par(par_HRUtype::SMAX)),(1/(get_par(par_HRUtype::B_SOIL) + 1))));
+  c_init = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(((get_par(par_HRUtype::SMAX) - prev_Soil) / (get_par(par_HRUtype::SMAX)- get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1))));
   //Overflow if soil tank fully filled
   overFl1 = std::max(static_cast<numberSel>(c_init + get_dta(tstRM, ts_type::PREF) - get_par(par_HRUtype::C_MAX)), static_cast<numberSel>(0.0));
   // if(tstRM ==0){
@@ -411,7 +411,7 @@ void single_HMunit::soil_buffer() {
     //  //remaining soil input
   //  pref = get_dta(tstRM, ts_type::PREF) -   overFl1;
   //New proposal of state of soil buffer  not affected by evapotranspiration
-  next_soil = get_par(par_HRUtype::SMAX) * (1 - pow(1 - c_prop / get_par(par_HRUtype::C_MAX),(get_par(par_HRUtype::B_SOIL) + 1)));
+  next_soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow((get_par(par_HRUtype::C_MAX) - c_prop) / (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)),(get_par(par_HRUtype::B_SOIL) + 1)));
   //Overflow for small C according to Jherman
   overFl2 = std::max(static_cast<numberSel>(0.0),(ppInf - next_soil + prev_Soil));
   //Overflow for small C according to Montanari

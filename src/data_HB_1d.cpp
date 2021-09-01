@@ -562,8 +562,9 @@ numberSel data_HB_1d::g_initState(const init_Stype& _Stype) {
   case init_Stype::SURFRET:
     return init_SurS;
     break;
-  // case init_Stype::FASTRES:
-    // exit(EXIT_FAILURE);
+ case init_Stype::FASTRES:
+    return StateFastRes[1];// returns only the init state of the first reservoir
+    break;
   }
 
   return 0;

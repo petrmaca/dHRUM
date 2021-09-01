@@ -9,7 +9,7 @@ params::params(): numPars(0),
 //    b_soil = 2.0;
 //    c_max = 100.0;
 //    b_evap = 1;
-  numPars = 22;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
+  numPars = 23;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
 
   pars.resize(numPars,numPars);
   up_pars.resize(numPars,numPars);
@@ -18,7 +18,7 @@ params::params(): numPars(0),
   pars[1] = 10.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
   pars[2] = 1.0;//!< B_EVAP Parameter controlling soil evapotranspiration [0,infty] how ever [0.5,3],VC1
   numberSel helpSmax;
-  helpSmax = pars[1] / (pars[0]+1);
+  helpSmax = (pars[0] * pars[22] +pars[1]) / (pars[0]+1);
   pars[3] = helpSmax;//!< SMAX Max soil storage calculate using Cmax and b_soil
   pars[4] = 0.1;//!< KS Storage coefficient of groundwater storage [0,1],VC1
   pars[5] = 0.5;//!< KF Storage coefficient of runoff response reservoirs [0,1],VC1
@@ -38,12 +38,13 @@ params::params(): numPars(0),
   pars[19] = 0.1;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
   pars[20] = 1;//!< THR Threshold coefficient for threshold-controlled linear storage [0,inf]
   pars[21] = 0.5;//!< ALPHA Divider for two parallel linear reservoirs
+  pars[22] = 0;//!< Cmin for pdmsoil reservoir []0,inf]
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   up_pars[1] = 500.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
   up_pars[2] = 3.0;//!< B_EVAP Parameter controlling soil evapotranspiration [0,infty] how ever [0.5,3],VC1
   numberSel helpSmaxUp;
-  helpSmaxUp = up_pars[1] / (up_pars[0]+1);
+  helpSmaxUp = (up_pars[0]*up_pars[22] + up_pars[1]) / (up_pars[0]+1);
   up_pars[3] = helpSmaxUp;//!< SMAX Max soil storage calculate using Cmax and b_soil
   up_pars[4] = 1;//!< KS Storage coefficient of groundwater storage [0,1],VC1
   up_pars[5] = 1;//!< KF Storage coefficient of runoff response reservoirs [0,1],VC1
@@ -63,12 +64,13 @@ params::params(): numPars(0),
   up_pars[19] = 1;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
   up_pars[20] = 100;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
   up_pars[21] = 1;//!< ALPHA Divider for two parallel linear reservoirs
+  up_pars[22] = 1000;//!< CIMN lower limit of c in soils pdm reservoir
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   low_pars[1] = 0.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
   low_pars[2] = 0.0;//!< B_EVAP Parameter controlling soil evapotranspiration [0,infty] how ever [0.5,3],VC1
   numberSel helpSmaxLow;
-  helpSmaxLow = low_pars[1] / (low_pars[0]+1);
+  helpSmaxLow = (low_pars[0] *low_pars[22] +low_pars[1]) / (low_pars[0]+1);
   low_pars[3] = helpSmaxLow;//!< SMAX Max soil storage calculate using Cmax and b_soil
   low_pars[4] = 0.0;//!< KS Storage coefficient of groundwater storage [0,1],VC1
   low_pars[5] = 0.0;//!< KF Storage coefficient of runoff response reservoirs [0,1],VC1
@@ -88,6 +90,7 @@ params::params(): numPars(0),
   low_pars[19] = 0.0;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
   low_pars[20] = 0.0;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
   low_pars[21] = 0.0;//!< ALPHA Divider for two parallel linear reservoirs
+  low_pars[22] = 1000;//!< CMIN lower limit of c in soils pdm reservoir
 //  std::cout << "Params are initialized." << std::endl;
 }
 
@@ -134,12 +137,12 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
   switch(_parType) {
   case par_HRUtype::B_SOIL:
     pars[0] = par_dta;
-    pars[3] = pars[1] / (pars[0]+1);
+    pars[3] = (pars[0]*pars[22] + pars[1]) / (pars[0]+1);
 //    std::cout << "New b_soil --> loaded\n";
     break;
   case par_HRUtype::C_MAX:
     pars[1] = par_dta;
-    pars[3] = pars[1] / (pars[0]+1);
+    pars[3] = (pars[0]*pars[22] + pars[1]) / (pars[0]+1);
 //    std::cout << "New c_max --> loaded\n";
     break;
   case par_HRUtype::B_EVAP:
@@ -148,7 +151,7 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     break;
   case par_HRUtype::SMAX:
     pars[3] = par_dta;
-    pars[3] = pars[1] / (pars[0]+1);//For preventing the losing the link between b_soil and cmax
+    pars[3] = (pars[0]*pars[22]+pars[1]) / (pars[0]+1);//For preventing the losing the link between b_soil and cmax
 //    std::cout << "New Smax --> loaded\n";
     break;
   case par_HRUtype::KS:
@@ -221,6 +224,9 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     break;
   case par_HRUtype::ALPHA:
     pars[21] = par_dta;
+    break;
+  case par_HRUtype::CMIN:
+    pars[22] = par_dta;
 //    std::cout << "New ALPHA --> loaded\n";
     break;
   }
@@ -328,6 +334,10 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
     pars[21] = par_dta;
 //    std::cout << "New ALPHA --> loaded\n";
     break;
+  case par_HRUtype::CMIN:
+    pars[22] = par_dta;
+//    std::cout << "New ALPHA --> loaded\n";
+    break;
   }
   return ;
 }
@@ -410,9 +420,12 @@ numberSel params::g_par(const par_HRUtype& _parType) {
   case par_HRUtype::ALPHA:
     value =  pars[21];
     break;
-  }
-
+  case par_HRUtype::CMIN:
+    value =  pars[22];
+    break;
+}
   return value;
+
 }
 
 /** \brief returns the number of fast runoff reservoirs
@@ -482,6 +495,8 @@ void params::s_default() {
   pars[19] = 0.1;//!< Second storage coefficient of groundwater storage [0,1],VC1
   pars[20] = 1.0;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
   pars[21] = 0.5;//!< Divider for two parallel linear reservoirs
+  pars[22] = 0;//!< The Cmin for pdm reservoir
+
   numFastRes = 1;
 
 //  std::cout << "Params are initialized." << std::endl;
@@ -494,7 +509,7 @@ void params::s_default() {
 void params::p_param() {
 
   std::vector<std::string> parsNames {"B_SOIL: ", "C_MAX: ", "B_EVAP: ", "SMAX: ", "KS: ", "KF: ", \
-                                      "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: "};
+                                      "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: ", "CMIN: "};
 
   std::cout << std::endl << "Printing the values of parameters:" << std::endl << std::endl;
   for(unsigned pp=0; pp<numPars ; pp++ ) {

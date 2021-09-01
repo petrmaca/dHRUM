@@ -99,7 +99,7 @@ mae = function(myPar){
 }
 
 
-itermaxW=5
+itermaxW=2
 decntr<-DEoptim.control(VTR = 0, strategy = 2, bs = FALSE, NP = 5550,
                         itermax = itermaxW, CR = 0.25, F = 0.7, trace = TRUE,
                         initialpop = NULL, storepopfrom = itermaxW + 1,
