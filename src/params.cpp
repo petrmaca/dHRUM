@@ -142,7 +142,7 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     break;
   case par_HRUtype::C_MAX:
     pars[1] = par_dta;
-    pars[3] = (pars[0]*pars[22] + pars[1]) / (pars[0]+1);
+    pars[3] = (pars[0]*pars[22] +  pars[1]) / (pars[0]+1);
 //    std::cout << "New c_max --> loaded\n";
     break;
   case par_HRUtype::B_EVAP:
