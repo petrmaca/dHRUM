@@ -151,7 +151,7 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     break;
   case par_HRUtype::SMAX:
     pars[3] = par_dta;
-    pars[3] = (pars[0]*pars[22]+pars[1]) / (pars[0]+1);//For preventing the losing the link between b_soil and cmax
+    pars[1] = pars[3]*(pars[0]+1) - (pars[0]*pars[22]);//For preventing the losing the link between b_soil and cmax and cmin see pdm paper hess 2007
 //    std::cout << "New Smax --> loaded\n";
     break;
   case par_HRUtype::KS:
@@ -227,6 +227,7 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     break;
   case par_HRUtype::CMIN:
     pars[22] = par_dta;
+    pars[3] = (pars[0] * pars[22] +pars[2]) / (pars[0] +1 );//for preventing consisntency beteewn cmin cmax smax in pdm model
 //    std::cout << "New ALPHA --> loaded\n";
     break;
   }
@@ -246,12 +247,12 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
   switch(_parType) {
   case par_HRUtype::B_SOIL:
     pars[0] = par_dta;
-    pars[3] = pars[1] / (pars[0]+1);
+    pars[3] = (pars[1] + pars[0] * pars[22])/ (pars[0]+1);
 //    std::cout << "New b_soil --> loaded\n";
     break;
   case par_HRUtype::C_MAX:
     pars[1] = par_dta;
-    pars[3] = pars[1] / (pars[0]+1);
+    pars[3] = (pars[1] + pars[0] * pars[22])/ (pars[0]+1);
 //    std::cout << "New c_max --> loaded\n";
     break;
   case par_HRUtype::B_EVAP:
@@ -260,6 +261,7 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
     break;
   case par_HRUtype::SMAX:
     pars[3] = par_dta;
+    pars[1] = pars[3]*(pars[0]+1) -(pars[0]*pars[22]);
 //    std::cout << "New Smax --> loaded\n";
     break;
   case par_HRUtype::KS:
@@ -336,6 +338,7 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
     break;
   case par_HRUtype::CMIN:
     pars[22] = par_dta;
+    pars[3] = (pars[1] + pars[0] * pars[22])/ (pars[0]+1);
 //    std::cout << "New ALPHA --> loaded\n";
     break;
   }
