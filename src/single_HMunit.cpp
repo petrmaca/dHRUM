@@ -19,7 +19,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   IdHru(),
   gs_STORAGE{}{
 
-  set_nmbFastres(10);
+  set_nmbFastres(1);
   help_nmbFR = get_nmbFastRes();
 //  std::cout << "\nFast runoff response has " << help_nmbFR << " reservoirs." << std::endl;
   set_ZeroinitStates(help_nmbFR);
@@ -469,7 +469,7 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
   switch(_gs_STORtype) {
 
   case gs_STORtype::LIN_RES:
-    BaseOut = prev_Grou * get_par(par_HRUtype::KS) ;
+    BaseOut = prev_Grou * get_par(par_HRUtype::KS);
     prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
 
     set_varValue(BaseOut, tstRM, ts_type::BASF);
@@ -578,7 +578,7 @@ void single_HMunit::fast_response() {
   numberSel helpFastOut = 0.0, help_State =0.0;
 
   //  help_State = get_stateFastres(0);
-
+std::cout << " help_nmbr " << help_nmbFR << std::endl;
   for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
     help_State = get_stateFastres(ifrb);
     helpFastOut = get_par(par_HRUtype::KF) * help_State;
@@ -588,6 +588,7 @@ void single_HMunit::fast_response() {
     } else help_State = help_State + get_outFastRes((ifrb-1))- helpFastOut;
     set_stateFastRes(help_State,ifrb);
     set_outFastRes(helpFastOut,ifrb);
+    std::cout << ifrb << " ifrb " << get_stateFastres(ifrb) << " state " << ifrb << " ifrb " << helpFastOut << " adivresc " << get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC) << std::endl;
   }
 
   set_varValue(helpFastOut,tstRM,ts_type::DIRR);
