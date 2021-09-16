@@ -58,6 +58,8 @@ class dHRUM {
   void print_Pars();
   void initGWtypeToAlldHrus(std::vector<std::pair<unsigned, gs_STORtype>>& gs_STORtypes);
   numberSel getTsDta(const ts_type& _tsType, const unsigned& HruIndex, const unsigned& tst);
+
+  void set_numFastReservoirsToHrus();
   //std::vector<gs_STORtype> get_STORtypes();
 
 protected:
@@ -73,6 +75,8 @@ private:
 
   data_HB_1d basinDta;//!< The HB data on all basin
   std::vector<gs_STORtype> gs_STORtypes;//!< The vector on groundwater storage types
+
+  caldata NumFastRes;//!< The number of fastre reservoirs in serie
 };
 
 #endif // DHRUM_H

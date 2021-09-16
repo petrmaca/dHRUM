@@ -8,7 +8,8 @@ dHRUM::dHRUM(): dHruVec(),
   numTs(0),
   numParsAllHRus(0),
   basinDta(),
-  gs_STORtypes(){
+  gs_STORtypes(),
+  NumFastRes(0){
   //ctor
 }
 
@@ -24,7 +25,8 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   numTs(0),
   numParsAllHRus(0),
   basinDta(),
-  gs_STORtypes(){
+  gs_STORtypes(),
+  NumFastRes(0){
 
   dHruVec = other.dHruVec;
   dHruVecId = other.dHruVecId;
@@ -35,6 +37,7 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   numParsAllHRus = other.numParsAllHRus;
   basinDta = other.basinDta;
   gs_STORtypes = other.gs_STORtypes;
+  NumFastRes = other.NumFastRes;
 }
 
 dHRUM& dHRUM::operator=(const dHRUM& rhs) {
@@ -49,6 +52,7 @@ dHRUM& dHRUM::operator=(const dHRUM& rhs) {
     numParsAllHRus = rhs.numParsAllHRus;
     basinDta = rhs.basinDta;
     gs_STORtypes = rhs.gs_STORtypes;
+    NumFastRes = rhs.NumFastRes;
   }
   return *this;
 }
@@ -510,4 +514,11 @@ numberSel dHRUM::getTsDta(const ts_type& _tsType, const unsigned& HruIndex, cons
 }
 
 
+void dHRUM::set_numFastReservoirsToHrus(){
 
+#pragma omp parallel for
+  for(unsigned it=0;it<dimHM;it++){
+    dHruVec[it].set_nmbFastres(NumFastRes[it]);
+  }
+
+}
