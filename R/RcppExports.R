@@ -435,3 +435,22 @@ calcPetToAllHrusDist <- function(dHRUM_ptr, Latitude, PetTypeStrNames, HruIds) {
     invisible(.Call(`_dHRUM_calcPetToAllHrusDist`, dHRUM_ptr, Latitude, PetTypeStrNames, HruIds))
 }
 
+#' Sets the similar values of params to dHRU model for all single HRUs.
+#'
+#' Setting the groudnwater type of dHRUM equal to all HRUs. Possibe types: \code{LIN_RES} \code{LINL_RES} \code{LINBY_RES}
+#' \code{POW_RES}, \code{EXP_RES} \code{LIN_2SE} \code{LIN_2PA} \code{FLEX_RES}
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @param gwTypes a charater vector of GW type names
+#' @param hruIds ids on Hrus
+#' @export
+#' @examples
+#' nHrus <- 200
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' ups = 1:nHrus
+#' setNumFastResAlldHrus(dHRUM_ptr = dhrus,numFastRes=ups,hruIds=IdsHrus)
+setNumFastResAlldHrus <- function(dHRUM_ptr, numFastRes, hruIds) {
+    invisible(.Call(`_dHRUM_setNumFastResAlldHrus`, dHRUM_ptr, numFastRes, hruIds))
+}
+

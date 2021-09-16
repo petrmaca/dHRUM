@@ -221,6 +221,18 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// setNumFastResAlldHrus
+void setNumFastResAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector numFastRes, Rcpp::CharacterVector hruIds);
+RcppExport SEXP _dHRUM_setNumFastResAlldHrus(SEXP dHRUM_ptrSEXP, SEXP numFastResSEXP, SEXP hruIdsSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type numFastRes(numFastResSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type hruIds(hruIdsSEXP);
+    setNumFastResAlldHrus(dHRUM_ptr, numFastRes, hruIds);
+    return R_NilValue;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_calcHBInAlldHrus", (DL_FUNC) &_dHRUM_calcHBInAlldHrus, 1},
@@ -241,6 +253,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_setParsToDistdHRUM", (DL_FUNC) &_dHRUM_setParsToDistdHRUM, 3},
     {"_dHRUM_calcPetToAllHrus", (DL_FUNC) &_dHRUM_calcPetToAllHrus, 3},
     {"_dHRUM_calcPetToAllHrusDist", (DL_FUNC) &_dHRUM_calcPetToAllHrusDist, 4},
+    {"_dHRUM_setNumFastResAlldHrus", (DL_FUNC) &_dHRUM_setNumFastResAlldHrus, 3},
     {NULL, NULL, 0}
 };
 

@@ -522,3 +522,16 @@ void dHRUM::set_numFastReservoirsToHrus(){
   }
 
 }
+
+
+void dHRUM::set_numFastReservoirs(caldata numFR){
+  unsigned numNFR=0;
+
+  NumFastRes.resize(dimHM);
+
+#pragma omp parallel for
+  for(unsigned it=0;it<dimHM;it++){
+    NumFastRes[it] = numFR[it];
+  }
+
+}

@@ -60,6 +60,7 @@ class dHRUM {
   numberSel getTsDta(const ts_type& _tsType, const unsigned& HruIndex, const unsigned& tst);
 
   void set_numFastReservoirsToHrus();
+  void set_numFastReservoirs(caldata numFR);
   //std::vector<gs_STORtype> get_STORtypes();
 
 protected:
