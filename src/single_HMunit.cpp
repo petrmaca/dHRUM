@@ -578,7 +578,7 @@ void single_HMunit::fast_response() {
   numberSel helpFastOut = 0.0, help_State =0.0;
 
   //  help_State = get_stateFastres(0);
-std::cout << " help_nmbr " << help_nmbFR << std::endl;
+// std::cout << " help_nmbr " << help_nmbFR << std::endl;
   for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
     help_State = get_stateFastres(ifrb);
     helpFastOut = get_par(par_HRUtype::KF) * help_State;
@@ -588,7 +588,7 @@ std::cout << " help_nmbr " << help_nmbFR << std::endl;
     } else help_State = help_State + get_outFastRes((ifrb-1))- helpFastOut;
     set_stateFastRes(help_State,ifrb);
     set_outFastRes(helpFastOut,ifrb);
-    std::cout << ifrb << " ifrb " << get_stateFastres(ifrb) << " state " << ifrb << " ifrb " << helpFastOut << " adivresc " << get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC) << std::endl;
+    // std::cout << ifrb << " ifrb " << get_stateFastres(ifrb) << " state " << ifrb << " ifrb " << helpFastOut << " adivresc " << get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC) << std::endl;
   }
 
   set_varValue(helpFastOut,tstRM,ts_type::DIRR);
