@@ -17,12 +17,18 @@
 //' setNumFastResAlldHrus(dHRUM_ptr = dhrus,numFastRes=ups,hruIds=IdsHrus)
 // [[Rcpp::export]]
 void setNumFastResAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector numFastRes, Rcpp::CharacterVector hruIds) {
+  unsigned dimdHRUM = 0;
+
   unsigned numNFR = numFastRes.size();
   unsigned numHruIdNames = hruIds.size();
 
-  //check if names are consistent
-  //for which hrus we want to change the stor type - vector of character
-  if(numNFR!=numHruIdNames) {
+  dimdHRUM = dHRUM_ptr.get()->getdHRUdim();
+
+
+  if(dimdHRUM!=numHruIdNames) {
+    Rcpp::Rcout << "The dim of dHRUs is different than number of Ids provided   " << numHruIdNames <<"\n";
+    Rcpp::stop("\nWrong size of numbers Ids and dim DHRUM.\n");
+  } else if(numNFR!=numHruIdNames) {
     Rcpp::Rcout << "The dim of vector with numbers of fast reservoirs does not correspond to the number of HRUs " << numNFR <<"\n";
     Rcpp::stop("\nWrong size of numbers of fast reservoirs types.\n");
   } else {
