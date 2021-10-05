@@ -779,7 +779,7 @@ void data_HB_1d::ThornthwaitePET() {
     part1 = I_annualHeatindex[helpIn] * I_annualHeatindex[helpIn]* I_annualHeatindex[helpIn];
     part2 = I_annualHeatindex[helpIn] * I_annualHeatindex[helpIn];
     part0 = 0.01729 * I_annualHeatindex[helpIn];
-    acoeff[helpIn] = 0.0000006751 * part1 + 0.0000771 * part2 +  part0 + 0.49239;
+    acoeff[helpIn] = 0.0000006751 * part1 - 0.0000771 * part2 +  part0 + 0.49239;
     if((helpyear[it] != helpyear[it-1])){
       helpIn++;
       helpsumI = i_heatindex[it];
