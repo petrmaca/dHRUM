@@ -808,7 +808,7 @@ void data_HB_1d::ThornthwaitePET() {
 
   hdata Epet(1.01,1);
   Epet.resize(nmonthsinData);
-  for(unsigned it=1; it<nmonthsinData; it++){
+  for(unsigned it=0; it<nmonthsinData; it++){
     Epet[it] = Epetraw[it] * (Nmeanmonth[it] / 12) * (numDaysMonth[it] / 30);
   }
 
