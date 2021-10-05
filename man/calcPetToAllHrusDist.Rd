@@ -24,8 +24,10 @@ nHrus <- 20
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-filname2 = "/home/hubert/prg/dHRUM/Calibrations/Amalie/indata/BP_1960_01_01.txt"
-setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
+prec=c(1,2,3)
+temp=c(1,2,3)
+setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+  DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 1,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.3,
                       SDIV = 0.3, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
                       RETCAP = 10 ,L = 0.5, D_BYPASS = 0.8, B_EXP=1, KS2 = 0.1, THR = 10, ALPHA =0.5)

@@ -21,5 +21,6 @@ Setting the groudnwater type of dHRUM equal to all HRUs. Possibe types: \code{LI
 nHrus <- 200
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
-setGWtypeToAlldHrus(dHRUM_ptr = dhrus)
+dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
 }

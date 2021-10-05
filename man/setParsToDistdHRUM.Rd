@@ -21,8 +21,10 @@ nHrus <- 200
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
-setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
+prec=c(1,2,3)
+temp=c(1,2,3)
+setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+  DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 parsvec=as.numeric(ParDF[1,])
@@ -30,7 +32,7 @@ for(i in 1:(nHrus-1)){
 ParDF <- rbind(ParDF,parsvec)
 }
 ParDF[,1] <- seq(1:nHrus)
-setParsToDistdHRUM(dhrus, ParDF, TRUE)
+setParsToDistdHRUM(dhrus, ParDF, FALSE)
 ParDF[,2] <- seq(1:nHrus)
 setParsToDistdHRUM(dhrus, ParDF, FALSE)
 }

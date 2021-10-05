@@ -13,7 +13,8 @@
 //' nHrus <- 200
 //' Areas <- runif(nHrus,min = 1,max  = 10)
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
-//' setGWtypeToAlldHrus(dHRUM_ptr = dhrus)
+//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+//' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
 // [[Rcpp::export]]
 void setGWtypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector gwTypes, Rcpp::CharacterVector hruIds) {
   unsigned numGWTypes = gwTypes.size();

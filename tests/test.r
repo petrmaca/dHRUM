@@ -19,3 +19,4 @@ outDF <- data.frame(outDF)
 names(outDF) <-c(outDta$VarsNams,"HruIDs")
 
 outDF
+

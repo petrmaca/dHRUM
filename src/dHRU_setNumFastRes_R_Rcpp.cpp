@@ -1,12 +1,11 @@
 #include <Rcpp.h>
 #include "dHRUM.h"
-//' Sets the similar values of params to dHRU model for all single HRUs.
+//' Sets the number of fast runoff reservoirs to dHRU model for all single HRUs.
 //'
-//' Setting the groudnwater type of dHRUM equal to all HRUs. Possibe types: \code{LIN_RES} \code{LINL_RES} \code{LINBY_RES}
-//' \code{POW_RES}, \code{EXP_RES} \code{LIN_2SE} \code{LIN_2PA} \code{FLEX_RES}
+//' Setting the number of reservoir for direct runoff on dHRUM  HRUs.
 //'
 //' @param dHRUM_ptr pointer to dHRUM instance
-//' @param gwTypes a charater vector of GW type names
+//' @param numFastRes vector with integer numbers
 //' @param hruIds ids on Hrus
 //' @export
 //' @examples
@@ -14,6 +13,7 @@
 //' Areas <- runif(nHrus,min = 1,max  = 10)
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 //' ups = 1:nHrus
+//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 //' setNumFastResAlldHrus(dHRUM_ptr = dhrus,numFastRes=ups,hruIds=IdsHrus)
 // [[Rcpp::export]]
 void setNumFastResAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector numFastRes, Rcpp::CharacterVector hruIds) {

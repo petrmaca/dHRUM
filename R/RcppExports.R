@@ -13,12 +13,14 @@
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "Calibrations/Amalie/indata/BP_1960_01_01.txt"
-#' setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
-#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
-#' calcPetToHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
+#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
+#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 #' calcHBInAlldHrus(dHRUM_ptr = dhrus)
 calcHBInAlldHrus <- function(dHRUM_ptr) {
     invisible(.Call(`_dHRUM_calcHBInAlldHrus`, dHRUM_ptr))
@@ -37,12 +39,14 @@ calcHBInAlldHrus <- function(dHRUM_ptr) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "Calibrations/Amalie/indata/BP_1960_01_01.txt"
-#' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
-#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
-#' calcPetToHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
+#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
+#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 #' calcHBInAlldHrus(dHRUM_ptr = dhrus)
 #' gatherHBdata(dHRUM_ptr = dhrus)
 gatherHBdata <- function(dHRUM_ptr) {
@@ -62,7 +66,8 @@ gatherHBdata <- function(dHRUM_ptr) {
 #' nHrus <- 200
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
-#' setGWtypeToAlldHrus(dHRUM_ptr = dhrus)
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
 setGWtypeToAlldHrus <- function(dHRUM_ptr, gwTypes, hruIds) {
     invisible(.Call(`_dHRUM_setGWtypeToAlldHrus`, dHRUM_ptr, gwTypes, hruIds))
 }
@@ -184,12 +189,14 @@ initdHruModel <- function(dimdHru, vecAreas, hrusIDs) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "../tests/indata/BP_1960_01_01.txt"
-#' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
-#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
-#' calcPetToHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
+#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
+#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 #' calcHBInAlldHrus(dHRUM_ptr = dhrus)
 #' gatherHBdata(dHRUM_ptr = dhrus)
 #' outDta <- getOutput(dHRUM_ptr = dhrus)
@@ -208,15 +215,17 @@ getOutput <- function(dHRUM_ptr) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "../data/inBP_1960_01_01.txt"
-#' setInputsToAlldHrus(dhrus, filname2)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
-#' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
-#' setParamsToAlldHrus(dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
-#' calcPetToHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
+#'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+#' setParamsToAlldHrus(dhrus,as.numeric(ParDF[1,]),names(ParDF))
+#' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 #' calcHBInAlldHrus(dHRUM_ptr = dhrus)
 #' gatherHBdata(dHRUM_ptr = dhrus)
-#' printToFile(dhrus,file)
+#' #printToFile(dHRUM_ptr = dhrus, "path/filename")
 printToFile <- function(dHRUM_ptr, namOutFilet) {
     invisible(.Call(`_dHRUM_printToFile`, dHRUM_ptr, namOutFilet))
 }
@@ -320,11 +329,13 @@ dHRUMrunDist <- function(dHRUM_ptr) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
-#' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
-#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
+#' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
 setParamsToAlldHrus <- function(dHRUM_ptr, ParsVec, ParsNames) {
     invisible(.Call(`_dHRUM_setParamsToAlldHrus`, dHRUM_ptr, ParsVec, ParsNames))
 }
@@ -343,8 +354,10 @@ setParamsToAlldHrus <- function(dHRUM_ptr, ParsVec, ParsNames) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
-#' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToOnedHru(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),0)
@@ -365,8 +378,10 @@ setParamsToOnedHru <- function(dHRUM_ptr, ParsVec, ParsNames, singleHruId) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
-#' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' parsvec=as.numeric(ParDF[1,])
@@ -374,7 +389,7 @@ setParamsToOnedHru <- function(dHRUM_ptr, ParsVec, ParsNames, singleHruId) {
 #' ParDF <- rbind(ParDF,parsvec)
 #' }
 #' ParDF[,1] <- seq(1:nHrus)
-#' setParsToDistdHRUM(dhrus, ParDF, TRUE)
+#' setParsToDistdHRUM(dhrus, ParDF, FALSE)
 #' ParDF[,2] <- seq(1:nHrus)
 #' setParsToDistdHRUM(dhrus, ParDF, FALSE)
 setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
@@ -395,12 +410,15 @@ setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "../../PDM/Development/PDM_dist/data/tests/inALL/BP_1960_01_01.txt"
-#' setInputsToAlldHrus(dHRUM_ptr = dhrus, filname2,TRUE,0)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
-#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
+#' setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 #' calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
+#' calcHBInAlldHrus(dHRUM_ptr = dhrus)
 calcPetToAllHrus <- function(dHRUM_ptr, Latitude, PetTypeStr) {
     invisible(.Call(`_dHRUM_calcPetToAllHrus`, dHRUM_ptr, Latitude, PetTypeStr))
 }
@@ -421,8 +439,10 @@ calcPetToAllHrus <- function(dHRUM_ptr, Latitude, PetTypeStr) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-#' filname2 = "/home/hubert/prg/dHRUM/Calibrations/Amalie/indata/BP_1960_01_01.txt"
-#' setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 1,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.3,
 #'                       SDIV = 0.3, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
 #'                       RETCAP = 10 ,L = 0.5, D_BYPASS = 0.8, B_EXP=1, KS2 = 0.1, THR = 10, ALPHA =0.5)
@@ -435,13 +455,12 @@ calcPetToAllHrusDist <- function(dHRUM_ptr, Latitude, PetTypeStrNames, HruIds) {
     invisible(.Call(`_dHRUM_calcPetToAllHrusDist`, dHRUM_ptr, Latitude, PetTypeStrNames, HruIds))
 }
 
-#' Sets the similar values of params to dHRU model for all single HRUs.
+#' Sets the number of fast runoff reservoirs to dHRU model for all single HRUs.
 #'
-#' Setting the groudnwater type of dHRUM equal to all HRUs. Possibe types: \code{LIN_RES} \code{LINL_RES} \code{LINBY_RES}
-#' \code{POW_RES}, \code{EXP_RES} \code{LIN_2SE} \code{LIN_2PA} \code{FLEX_RES}
+#' Setting the number of reservoir for direct runoff on dHRUM  HRUs.
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
-#' @param gwTypes a charater vector of GW type names
+#' @param numFastRes vector with integer numbers
 #' @param hruIds ids on Hrus
 #' @export
 #' @examples
@@ -449,6 +468,7 @@ calcPetToAllHrusDist <- function(dHRUM_ptr, Latitude, PetTypeStrNames, HruIds) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' ups = 1:nHrus
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setNumFastResAlldHrus(dHRUM_ptr = dhrus,numFastRes=ups,hruIds=IdsHrus)
 setNumFastResAlldHrus <- function(dHRUM_ptr, numFastRes, hruIds) {
     invisible(.Call(`_dHRUM_setNumFastResAlldHrus`, dHRUM_ptr, numFastRes, hruIds))
