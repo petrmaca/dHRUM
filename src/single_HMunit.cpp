@@ -619,11 +619,11 @@ void single_HMunit::interception_NoSnow() {
   prevCanS =  prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT));
 
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
-  EvapStem = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
-  prevSteS = prevSteS - EvapStem;
-
   OverflowStem = std::max((prevSteS - get_par(par_HRUtype::STEM_ST)),0.0);
   prevSteS = prevSteS - OverflowStem;
+
+  EvapStem = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+  prevSteS = prevSteS - EvapStem;
 
   StemOut = std::min((prevCanS) / get_par(par_HRUtype::CAN_ST) * EvapStem, prevSteS);
   prevSteS = prevSteS - StemOut;
