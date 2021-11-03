@@ -300,12 +300,19 @@ void single_HMunit::surface_retention() {
   prev_SurS = prev_SurS - RetOut;
 
   // Evaporation according to Beran VTEI
-  if (get_dta(tstRM, ts_type::TEMP) > 0.0) {
-    EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
-  } else EvapSR = 0.0;
+  // if (get_dta(tstRM, ts_type::TEMP) > 0.0) {
+  //   EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+  // } else EvapSR = 0.0;
+
+  // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
+  EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
 
   if (EvapSR > prev_SurS) {
     EvapSR = prev_SurS;
+  }
+
+  if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
+    EvapSR = 0.0;
   }
 
    // std::cout << EvapSR << "  EvapSR " << tstRM << " " << get_dta(tstRM, ts_type::TEMP) << " u " << (std::pow((-1.5),1.289)) <<std::endl;
