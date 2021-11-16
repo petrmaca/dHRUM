@@ -13,6 +13,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   prevSteS(0.0),
   prevSnoS(0.0),
   prev_SurS(0.0),
+  et_demand(0.0),
   help_nmbFR(0),
   ifrb(0),
   Area(0),
@@ -67,6 +68,7 @@ prevCanS(0.0),
 prevSteS(0.0),
 prevSnoS(0.0),
 prev_SurS(0.0),
+et_demand(0.0),
 help_nmbFR(0),
 ifrb(0),
 Area(0),
@@ -83,6 +85,7 @@ gs_STORAGE{}
   prevSteS = other.prevSteS;//!<  The helper variable for Stem interception storage
   prevSnoS = other.prevSnoS;//!<  The helper variable for Snow storage
   prev_SurS = other.prev_SurS;//!< The helper variable for updating surface storage
+  et_demand = other.et_demand;
   help_nmbFR = other.help_nmbFR;//!< The helper for number of fast reservoirs
   ifrb = other.ifrb;//!< For loop counter
   Area = other.Area;//!< The area of HM unit in m2
@@ -113,6 +116,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     prevSteS = rhs.prevSteS;//!<  The helper variable for Stem interception storage
     prevSnoS = rhs.prevSnoS;//!<  The helper variable for Snow storage
     prev_SurS = rhs.prev_SurS;//!< The helper variable for updating surface storage
+    et_demand = rhs.et_demand;
     help_nmbFR = rhs.help_nmbFR;//!< The helper for number of fast reservoirs
     ifrb = rhs.ifrb;//!< For loop counter
     Area = rhs.Area;//!< The area of HM unit in m2
@@ -307,6 +311,14 @@ void single_HMunit::surface_retention() {
   // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
   EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
 
+  if(EvapSR >= et_demand) {
+    EvapSR = et_demand;
+    et_demand = 0.0;
+  }
+  else {
+    et_demand = et_demand - EvapSR;
+    }
+
   if (EvapSR > prev_SurS) {
     EvapSR = prev_SurS;
   }
@@ -332,6 +344,7 @@ void single_HMunit::surface_retention() {
 
   set_varValue(EvapSR, tstRM, ts_type::AET);
   set_varValue(RetOut,tstRM,ts_type::PREF);
+  // set_varValue(prev_SurS, tstRM, ts_type::SURS);
 
   return ;
 }
@@ -414,18 +427,38 @@ void single_HMunit::soil_buffer() {
   // }
   ppInf = get_dta(tstRM, ts_type::PREF) - overFl1;
   //Newly proposed soil water depth C
-  c_prop = std::min(ppInf + c_init, get_par(par_HRUtype::C_MAX));
+  c_prop = std::min(static_cast<numberSel>(ppInf + c_init), static_cast<numberSel>(get_par(par_HRUtype::C_MAX)));
     //  //remaining soil input
   //  pref = get_dta(tstRM, ts_type::PREF) -   overFl1;
   //New proposal of state of soil buffer  not affected by evapotranspiration
   next_soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow((get_par(par_HRUtype::C_MAX) - c_prop) / (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)),(get_par(par_HRUtype::B_SOIL) + 1)));
   //Overflow for small C according to Jherman
-  overFl2 = std::max(static_cast<numberSel>(0.0),(ppInf - next_soil + prev_Soil));
+  overFl2 = std::max(static_cast<numberSel>(0.0),static_cast<numberSel>(ppInf - next_soil + prev_Soil));
   //Overflow for small C according to Montanari
   //    overFl2 = std::max(0.0, (c_prop - c_init) - (next_soil - prev_Soil));
   //Evapotranspiration from Soil
   evap =  std::min(static_cast<numberSel>(next_soil), static_cast<numberSel>(get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - next_soil) / get_par(par_HRUtype::SMAX)), get_par(par_HRUtype::B_EVAP)))));
-  //Soil buffer state
+  if(std::isnan(et_demand)) {
+    et_demand = 0.0;
+  }
+  // if(tstRM == 35){
+   // std::cout << et_demand << "\n";
+  // }
+  if(evap >= et_demand){
+    evap = et_demand;
+    et_demand = 0.0;
+    // if(tstRM == 35){
+    //   std::cout <<" Inevap"<<  evap << " etdem "<< et_demand << std::endl;
+    // }
+  }
+  else {
+    et_demand = et_demand - evap;
+  }
+
+  // if(tstRM == 35){
+  //   std::cout <<" AFTRevap"<<  evap << " etdem "<< et_demand << std::endl;
+  // }
+ //Soil buffer state
   next_soil = std::max(static_cast<numberSel>(next_soil - evap),static_cast<numberSel>(0.0));
   //Total overflow
   overFL = overFl1 + overFl2;
@@ -617,6 +650,14 @@ void single_HMunit::interception_NoSnow() {
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
   prevCanS = prevCanS - OverflowCan;
   EvapCanop = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  if(EvapCanop >= et_demand) {
+    EvapCanop = et_demand;
+    et_demand = 0.0;
+  }
+  else {
+    et_demand = et_demand - EvapCanop;
+  }
+
   prevCanS = prevCanS - EvapCanop;
 
   CanOut = std::min((prevCanS / get_par(par_HRUtype::CAN_ST) * EvapCanop),prevCanS);
@@ -630,7 +671,15 @@ void single_HMunit::interception_NoSnow() {
   prevSteS = prevSteS - OverflowStem;
 
   EvapStem = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
-  prevSteS = prevSteS - EvapStem;
+  if(EvapStem >= et_demand) {
+    EvapStem = et_demand;
+    et_demand = 0.0;
+  }
+  else {
+    et_demand = et_demand - EvapStem;
+  }
+
+    prevSteS = prevSteS - EvapStem;
 
   StemOut = std::min((prevCanS) / get_par(par_HRUtype::CAN_ST) * EvapStem, prevSteS);
   prevSteS = prevSteS - StemOut;
@@ -668,7 +717,16 @@ void single_HMunit::interception_WithSnow() {
   OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
   prevCanS = prevCanS - OverflowCan;
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
-   EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+
+  if(EvapCanop >= et_demand) {
+    EvapCanop = et_demand;
+    et_demand = 0.0;
+    }
+   else {
+     et_demand = et_demand - EvapCanop;
+     }
+
   //EvapCanop = 0.0;
   prevCanS = prevCanS - EvapCanop;
   //  CanOut = (prevCanS - OverflowCan) / get_par(par_HRUtype::CAN_ST) * EvapCanop;
@@ -680,7 +738,17 @@ void single_HMunit::interception_WithSnow() {
   OverflowStem = std::max((prevSteS - get_par(par_HRUtype::STEM_ST)),0.0);
   prevSteS = prevSteS - OverflowStem;
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
-   EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+  EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+
+  if(EvapStem >= et_demand) {
+    EvapStem = et_demand;
+    et_demand = 0.0;
+  }
+  else {
+    et_demand = et_demand - EvapStem;
+  }
+
+
   //EvapStem = 0.0;
   prevSteS = prevSteS - EvapStem;
   //  StemOut = (prevCanS - OverflowCan) / get_par(par_HRUtype::CAN_ST) * EvapStem;
@@ -795,9 +863,11 @@ void single_HMunit::run_HB() {
   // }
   numberSel helprm=0.0;
   for(tstRM=0; tstRM < Numdta ; tstRM++) {
-    interception_snow();
-    surface_retention();
-    soil_buffer();
+    et_demand = get_dta(tstRM,ts_type::PET);
+    // std::cout << et_demand << "\n";
+    interception_snow();//
+    surface_retention();//
+    soil_buffer();//
     slow_response(gs_STORAGE);
     fast_response();
     helprm = (get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR));

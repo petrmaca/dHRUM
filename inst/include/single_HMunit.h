@@ -102,6 +102,8 @@ private:
   numberSel prevSnoS;//!<  The helper variable for Snow storage
   numberSel prev_SurS;//!< The helper variable for updating surface storage
 
+  numberSel et_demand;//!< The helper on ET demand
+
   numberDta help_nmbFR;//!< The helper for number of fast reservoirs
   numberDta ifrb;//!< For loop counter
 
