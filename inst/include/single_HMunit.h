@@ -87,6 +87,9 @@ class single_HMunit {
   gs_STORtype get_GStype();
   // void print_GStype();
 
+  numberSel update_ETDEMAND(const numberSel& ET, bool ET_demand);
+
+
 protected:
 
 private:

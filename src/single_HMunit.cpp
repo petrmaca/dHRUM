@@ -37,6 +37,7 @@ single_HMunit::single_HMunit(): tstRM(0),
 
   tstRM = 0;
   gs_STORAGE = gs_STORtype::LIN_RES;
+  et_demand = 0.0;
 
 }
 
@@ -311,13 +312,17 @@ void single_HMunit::surface_retention() {
   // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
   EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
 
-  if(EvapSR >= et_demand) {
-    EvapSR = et_demand;
-    et_demand = 0.0;
-  }
-  else {
-    et_demand = et_demand - EvapSR;
-    }
+  numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
+  et_demand = update_ETDEMAND(EvapSR, true);
+  EvapSR = help_EvapSR;
+
+  // if(EvapSR >= et_demand) {
+  //   EvapSR = et_demand;
+  //   et_demand = 0.0;
+  // }
+  // else {
+  //   et_demand = et_demand - EvapSR;
+  //   }
 
   if (EvapSR > prev_SurS) {
     EvapSR = prev_SurS;
@@ -438,22 +443,29 @@ void single_HMunit::soil_buffer() {
   //    overFl2 = std::max(0.0, (c_prop - c_init) - (next_soil - prev_Soil));
   //Evapotranspiration from Soil
   evap =  std::min(static_cast<numberSel>(next_soil), static_cast<numberSel>(get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - next_soil) / get_par(par_HRUtype::SMAX)), get_par(par_HRUtype::B_EVAP)))));
-  if(std::isnan(et_demand)) {
-    et_demand = 0.0;
-  }
-  // if(tstRM == 35){
-   // std::cout << et_demand << "\n";
+
+  numberSel help_evap = update_ETDEMAND(evap, false);
+  et_demand = update_ETDEMAND(evap, true);
+  evap = help_evap;
+
+  //
+  //
+  // if(std::isnan(et_demand)) {
+  //   et_demand = 0.0;
   // }
-  if(evap >= et_demand){
-    evap = et_demand;
-    et_demand = 0.0;
-    // if(tstRM == 35){
-    //   std::cout <<" Inevap"<<  evap << " etdem "<< et_demand << std::endl;
-    // }
-  }
-  else {
-    et_demand = et_demand - evap;
-  }
+  // // if(tstRM == 35){
+  //  // std::cout << et_demand << "\n";
+  // // }
+  // if(evap >= et_demand){
+  //   evap = et_demand;
+  //   et_demand = 0.0;
+  //   // if(tstRM == 35){
+  //   //   std::cout <<" Inevap"<<  evap << " etdem "<< et_demand << std::endl;
+  //   // }
+  // }
+  // else {
+  //   et_demand = et_demand - evap;
+  // }
 
   // if(tstRM == 35){
   //   std::cout <<" AFTRevap"<<  evap << " etdem "<< et_demand << std::endl;
@@ -650,13 +662,19 @@ void single_HMunit::interception_NoSnow() {
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
   prevCanS = prevCanS - OverflowCan;
   EvapCanop = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
-  if(EvapCanop >= et_demand) {
-    EvapCanop = et_demand;
-    et_demand = 0.0;
-  }
-  else {
-    et_demand = et_demand - EvapCanop;
-  }
+
+  numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
+  et_demand = update_ETDEMAND(EvapCanop, true);
+  EvapCanop = help_EvapCanop;
+  //
+  //
+  // if(EvapCanop >= et_demand) {
+  //   EvapCanop = et_demand;
+  //   et_demand = 0.0;
+  // }
+  // else {
+  //   et_demand = et_demand - EvapCanop;
+  // }
 
   prevCanS = prevCanS - EvapCanop;
 
@@ -671,6 +689,11 @@ void single_HMunit::interception_NoSnow() {
   prevSteS = prevSteS - OverflowStem;
 
   EvapStem = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+
+  numberSel help_EvapStem = update_ETDEMAND(EvapStem, false);
+  et_demand = update_ETDEMAND(EvapStem, true);
+  EvapStem = help_EvapStem;
+
   if(EvapStem >= et_demand) {
     EvapStem = et_demand;
     et_demand = 0.0;
@@ -719,13 +742,17 @@ void single_HMunit::interception_WithSnow() {
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
   EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
 
-  if(EvapCanop >= et_demand) {
-    EvapCanop = et_demand;
-    et_demand = 0.0;
-    }
-   else {
-     et_demand = et_demand - EvapCanop;
-     }
+  numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
+  et_demand = update_ETDEMAND(EvapCanop, true);
+  EvapCanop = help_EvapCanop;
+
+  // if(EvapCanop >= et_demand) {
+  //   EvapCanop = et_demand;
+  //   et_demand = 0.0;
+  //   }
+  //  else {
+  //    et_demand = et_demand - EvapCanop;
+  //    }
 
   //EvapCanop = 0.0;
   prevCanS = prevCanS - EvapCanop;
@@ -740,14 +767,18 @@ void single_HMunit::interception_WithSnow() {
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
   EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
 
-  if(EvapStem >= et_demand) {
-    EvapStem = et_demand;
-    et_demand = 0.0;
-  }
-  else {
-    et_demand = et_demand - EvapStem;
-  }
-
+  numberSel help_EvapStem = update_ETDEMAND(EvapStem, false);
+  et_demand = update_ETDEMAND(EvapStem, true);
+  EvapStem = help_EvapStem;
+  //
+  // if(EvapStem >= et_demand) {
+  //   EvapStem = et_demand;
+  //   et_demand = 0.0;
+  // }
+  // else {
+  //   et_demand = et_demand - EvapStem;
+  // }
+  //
 
   //EvapStem = 0.0;
   prevSteS = prevSteS - EvapStem;
@@ -1288,6 +1319,29 @@ void single_HMunit::set_GStype(gs_STORtype _gs_STORtype) {
 gs_STORtype single_HMunit::get_GStype() {
   return gs_STORAGE;
 
+}
+
+numberSel single_HMunit::update_ETDEMAND(const numberSel& ET, bool ET_demand){
+
+  numberSel et_corrected = 0.0, et_demand_updated = 0.0, value = 0.0;
+  if(std::isnan(et_demand)) et_demand = 0.0;
+
+  if(ET >= et_demand) {
+    et_corrected = et_demand;
+    et_demand_updated = 0.0;
+  }
+  else {
+    et_demand_updated = et_demand - ET;
+    et_corrected = ET;
+  }
+
+  if(ET_demand) {
+    value = et_demand_updated;
+  } else {
+      value  = et_corrected;
+         }
+
+  return value;
 }
 
 // void single_HMunit::print_GStype() {
