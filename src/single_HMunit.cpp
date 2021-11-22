@@ -37,6 +37,7 @@ single_HMunit::single_HMunit(): tstRM(0),
 
   tstRM = 0;
   gs_STORAGE = gs_STORtype::LIN_RES;
+  soil_STORAGE = soil_STORtype::PDM;
   et_demand = 0.0;
 
 }
@@ -361,7 +362,7 @@ void single_HMunit::surface_retention() {
  *  calculating related fluxes
  *
  */
-void single_HMunit::soil_buffer() {
+void single_HMunit::soil_buffer(soil_STORtype _soil_STORtype) {
   //     if(tstRM == 0){
   //     if(prev_Soil > get_par(par_HRUtype::SMAX)) {
   //     // overFl0 = prev_Soil - get_par(par_HRUtype::SMAX);
@@ -369,7 +370,8 @@ void single_HMunit::soil_buffer() {
   //   }
   // }
 
-  numberSel c_init = 0.0, overFl1 = 0.0, ppInf = 0.0, overFl2 = 0.0, c_prop = 0.0, next_soil = 0.0, overFL = 0.0, evap = 0.0, aet = 0.0, c_contr=0.0;
+  numberSel c_init = 0.0, overFl1 = 0.0, ppInf = 0.0, overFl2 = 0.0, overFl3 = 0.0, c_prop = 0.0, next_soil = 0.0, overFL = 0.0, evap = 0.0, aet = 0.0, c_contr=0.0, E_b = 0.0, E_v = 0.0, E_s = 0.0,E_p = 0.0, P_s = 0.0, P_n = 0.0;
+
   ////  overflow from previous day
   // if(prev_Soil > get_par(par_HRUtype::SMAX)) {
   //   overFl0 = prev_Soil - get_par(par_HRUtype::SMAX);
@@ -423,30 +425,33 @@ void single_HMunit::soil_buffer() {
   // prev_Soil = next_soil;
 
 //
-  // Hymod formulation
-  c_init = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(((get_par(par_HRUtype::SMAX) - prev_Soil) / (get_par(par_HRUtype::SMAX)- get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1))));
-  //Overflow if soil tank fully filled
-  overFl1 = std::max(static_cast<numberSel>(c_init + get_dta(tstRM, ts_type::PREF) - get_par(par_HRUtype::C_MAX)), static_cast<numberSel>(0.0));
-  // if(tstRM ==0){
-  //   std::cout << overFl1 <<" prevS "<< prev_Soil << std::endl;
-  // }
-  ppInf = get_dta(tstRM, ts_type::PREF) - overFl1;
-  //Newly proposed soil water depth C
-  c_prop = std::min(static_cast<numberSel>(ppInf + c_init), static_cast<numberSel>(get_par(par_HRUtype::C_MAX)));
-    //  //remaining soil input
-  //  pref = get_dta(tstRM, ts_type::PREF) -   overFl1;
-  //New proposal of state of soil buffer  not affected by evapotranspiration
-  next_soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow((get_par(par_HRUtype::C_MAX) - c_prop) / (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)),(get_par(par_HRUtype::B_SOIL) + 1)));
-  //Overflow for small C according to Jherman
-  overFl2 = std::max(static_cast<numberSel>(0.0),static_cast<numberSel>(ppInf - next_soil + prev_Soil));
-  //Overflow for small C according to Montanari
-  //    overFl2 = std::max(0.0, (c_prop - c_init) - (next_soil - prev_Soil));
-  //Evapotranspiration from Soil
-  evap =  std::min(static_cast<numberSel>(next_soil), static_cast<numberSel>(get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - next_soil) / get_par(par_HRUtype::SMAX)), get_par(par_HRUtype::B_EVAP)))));
+switch(_soil_STORtype) {
 
-  numberSel help_evap = update_ETDEMAND(evap, false);
-  et_demand = update_ETDEMAND(evap, true);
-  evap = help_evap;
+case soil_STORtype::PDM: {
+    // Hymod formulation
+    c_init = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(((get_par(par_HRUtype::SMAX) - prev_Soil) / (get_par(par_HRUtype::SMAX)- get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1))));
+    //Overflow if soil tank fully filled
+    overFl1 = std::max(static_cast<numberSel>(c_init + get_dta(tstRM, ts_type::PREF) - get_par(par_HRUtype::C_MAX)), static_cast<numberSel>(0.0));
+    // if(tstRM ==0){
+    //   std::cout << overFl1 <<" prevS "<< prev_Soil << std::endl;
+    // }
+    ppInf = get_dta(tstRM, ts_type::PREF) - overFl1;
+    //Newly proposed soil water depth C
+    c_prop = std::min(static_cast<numberSel>(ppInf + c_init), static_cast<numberSel>(get_par(par_HRUtype::C_MAX)));
+      //  //remaining soil input
+    //  pref = get_dta(tstRM, ts_type::PREF) -   overFl1;
+    //New proposal of state of soil buffer  not affected by evapotranspiration
+    next_soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow((get_par(par_HRUtype::C_MAX) - c_prop) / (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)),(get_par(par_HRUtype::B_SOIL) + 1)));
+   //Overflow for small C according to Jherman
+    overFl2 = std::max(static_cast<numberSel>(0.0),static_cast<numberSel>(ppInf - next_soil + prev_Soil));
+    //Overflow for small C according to Montanari
+    //    overFl2 = std::max(0.0, (c_prop - c_init) - (next_soil - prev_Soil));
+    //Evapotranspiration from Soil
+    evap =  std::min(static_cast<numberSel>(next_soil), static_cast<numberSel>(get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - next_soil) / get_par(par_HRUtype::SMAX)), get_par(par_HRUtype::B_EVAP)))));
+
+    numberSel help_evap = update_ETDEMAND(evap, false);
+    et_demand = update_ETDEMAND(evap, true);
+    evap = help_evap;
 
   //
   //
@@ -471,19 +476,363 @@ void single_HMunit::soil_buffer() {
   //   std::cout <<" AFTRevap"<<  evap << " etdem "<< et_demand << std::endl;
   // }
  //Soil buffer state
-  next_soil = std::max(static_cast<numberSel>(next_soil - evap),static_cast<numberSel>(0.0));
+    next_soil = std::max(static_cast<numberSel>(next_soil - evap),static_cast<numberSel>(0.0));
   //Total overflow
-  overFL = overFl1 + overFl2;
+    overFL = overFl1 + overFl2;
 
-set_varValue(next_soil, tstRM, ts_type::SOIS);
-set_varValue(evap,tstRM, ts_type::EVBS);
-set_varValue(overFL, tstRM, ts_type::PERC);
+    set_varValue(next_soil, tstRM, ts_type::SOIS);
+    set_varValue(evap,tstRM, ts_type::EVBS);
+    set_varValue(overFL, tstRM, ts_type::PERC);
 
-// aet = get_dta(tstRM,ts_type::EVAC) +  get_dta(tstRM,ts_type::EVAS)  +  evap;
-// set_varValue(aet, tstRM, ts_type::AET);
+    prev_Soil = next_soil;
+    break;
+}
 
-prev_Soil = next_soil;
+case soil_STORtype::COLLIE_V2: {
+    //actual evaporation is split between bare soil evaporation E_b and transpiration through vegetation E_v
+    E_b = prev_Soil / get_par(par_HRUtype::SMAX) * (1 - get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
 
+    if (prev_Soil > get_par(par_HRUtype::FC)) {
+      E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+      //overFl2 [mm/d] is subsurface flow regulated by runoff coefficient KF
+      overFl2 = get_par(par_HRUtype::KF) * (prev_Soil - get_par(par_HRUtype::FC));
+    } else {
+      E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) * (prev_Soil/get_par(par_HRUtype::FC));
+      overFl2 = 0;
+    }
+
+    if (prev_Soil > get_par(par_HRUtype::SMAX)) {
+      //overFl1 [mm/d] is saturation excess overland flow
+      overFl1 = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+    } else {
+      overFl1 = 0;
+    }
+
+    next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+
+    if(next_soil >= 0) {
+      if(next_soil < E_v) {
+        E_v = next_soil;
+      }
+      next_soil = next_soil - E_v;
+      evap = evap + E_v;
+
+      if(next_soil >= 0) {
+        if(next_soil < E_b) {
+          E_b = next_soil;
+        }
+        next_soil = next_soil - E_b;
+        evap = evap + E_b;
+
+        if(next_soil >= 0) {
+          if(next_soil < overFl1) {
+            overFl1 = next_soil;
+          }
+          next_soil = next_soil - overFl1;
+          overFL = overFL + overFl1;
+
+          if(next_soil >= 0) {
+            if(next_soil < overFl2) {
+              overFl2 = next_soil;
+            }
+            next_soil = next_soil - overFl2;
+            overFL = overFL + overFl2;
+          }
+        }
+      }
+    }
+
+    set_varValue(next_soil, tstRM, ts_type::SOIS);
+    set_varValue(evap,tstRM, ts_type::EVBS);
+    set_varValue(overFL, tstRM, ts_type::PERC);
+
+    prev_Soil = next_soil;
+
+    break;
+}
+
+
+case soil_STORtype::NEW_ZEALAND: {
+    if(prev_Soil > get_par(par_HRUtype::FC)) {
+      //E_v is evaporation through vegetation
+      E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+    } else {
+      E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) * (next_soil / get_par(par_HRUtype::FC));
+    }
+
+    //E_b is bare soil evaporation
+    E_b = prev_Soil / get_par(par_HRUtype::SMAX) * (1 - get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+
+    if(prev_Soil >= get_par(par_HRUtype::FC)) {
+      //overFl2 is subsurface runoff
+      overFl2 = pow(get_par(par_HRUtype::KF) * (prev_Soil - get_par(par_HRUtype::FC)),get_par(par_HRUtype::KF_NONLIN));
+    } else {
+      overFl2 = 0;
+    }
+
+    if(prev_Soil >= get_par(par_HRUtype::SMAX)) {
+      //saturation excess runoff
+      overFl1 = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+    } else {
+      overFl1 = 0;
+    }
+
+    //overFl3 represents baseflow controlled by time scale parameter KF2
+    overFl3 = get_par(par_HRUtype::KF2) * prev_Soil;
+    //std::cout << overFl3 << " " << prev_Soil << " " << std::endl;
+
+    next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+
+    if(next_soil >= 0) {
+      if(next_soil < E_v) {
+        E_v = next_soil;
+      }
+      next_soil = next_soil - E_v;
+      evap = evap + E_v;
+
+      if(next_soil >= 0) {
+        if(next_soil < E_b) {
+          E_b = next_soil;
+        }
+        next_soil = next_soil - E_b;
+        evap = evap + E_b;
+
+        if(next_soil >= 0) {
+          if(next_soil < overFl1) {
+            overFl1 = next_soil;
+          }
+          next_soil = next_soil - overFl1;
+          overFL = overFL + overFl1;
+
+          if(next_soil >= 0) {
+            if(next_soil < overFl2) {
+              overFl2 = next_soil;
+            }
+            next_soil = next_soil - overFl2;
+            overFL = overFL + overFl2;
+
+            if(next_soil >= 0) {
+              if(next_soil < overFl3) {
+                overFl3 = next_soil;
+              }
+              next_soil = next_soil - overFl3;
+              overFL = overFL + overFl3;
+            }
+          }
+        }
+      }
+    }
+
+    set_varValue(next_soil, tstRM, ts_type::SOIS);
+    set_varValue(evap,tstRM, ts_type::EVBS);
+    set_varValue(overFL, tstRM, ts_type::PERC);
+
+    prev_Soil = next_soil;
+
+    break;
+}
+
+case soil_STORtype::GR4J: {
+    //P_n is the net precipitation
+    if(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) >= static_cast<numberSel>(get_dta(tstRM, ts_type::PET))) {
+      P_n = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) - static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+    } else {
+      P_n = 0;
+    }
+
+    //P_s is fraction of the net precipitation P_n redirected to soil moisture
+    P_s = P_n * (1 - std::pow(prev_Soil / get_par(par_HRUtype::SMAX), 2));
+    //P_s = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+
+    //evap is the net evaporation
+    if (static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) > static_cast<numberSel>(get_dta(tstRM, ts_type::PREF))) {
+      E_p = static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) - static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+    } else {
+      E_p = 0;
+    }
+
+    //E_s is fraction of the net evaporation evap subtracted from soil moisture
+    E_s = E_p * (2 * (prev_Soil/get_par(par_HRUtype::SMAX)) - std::pow(prev_Soil/get_par(par_HRUtype::SMAX), 2));
+
+    //overFl is the percolation to deeper soil waters
+    overFl1 = std::pow(get_par(par_HRUtype::SMAX), -4) / 4 * (std::pow(4.0/9.0, -4)) * std::pow(std::abs(prev_Soil),5);
+
+    next_soil = prev_Soil + P_s;
+
+    if(next_soil >= 0) {
+      if(next_soil < E_s) {
+        E_s = next_soil;
+      }
+      next_soil = next_soil - E_s;
+      evap = evap + E_s;
+      if(next_soil >= 0) {
+        if(next_soil < overFl1) {
+          overFl1 = next_soil;
+        }
+        next_soil = next_soil - overFl1;
+        overFL = overFL + overFl1;
+      }
+    }
+
+    set_varValue(next_soil, tstRM, ts_type::SOIS);
+    set_varValue(evap,tstRM, ts_type::EVBS);
+    set_varValue(overFL, tstRM, ts_type::PERC);
+
+    prev_Soil = next_soil;
+
+    break;
+}
+
+case soil_STORtype::SBROOK_V1: {
+    //E_b is bare soil evaporation
+    E_b = prev_Soil / get_par(par_HRUtype::SMAX) * (1 - get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+
+    //E_v is transpiration from vegetation
+    //overFl2 is non-linear subsurface flow using the wilting point FC as
+    //a threshold for flow generation and two flow parameters KF[d] and RUONOFF_NONLIN[-]
+    if(prev_Soil > get_par(par_HRUtype::FC)) {
+      E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+      overFl2 = std::pow((prev_Soil - get_par(par_HRUtype::FC)) / get_par(par_HRUtype::KF), 1/get_par(par_HRUtype::KF_NONLIN));
+    } else {
+      E_v = prev_Soil / get_par(par_HRUtype::FC) * get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+      overFl2 = 0;
+    }
+
+    //overFl1 is saturation excess from flow [mm/d]
+
+    if(prev_Soil >= get_par(par_HRUtype::SMAX)) {
+      overFl1 = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+    } else {
+      overFl1 = 0;
+    }
+
+    next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+
+    if(next_soil >= 0) {
+      if(next_soil < E_v) {
+        E_v = next_soil;
+      }
+      next_soil = next_soil - E_v;
+      evap = evap + E_v;
+
+      if(next_soil >= 0) {
+        if(next_soil < E_b) {
+          E_b = next_soil;
+        }
+        next_soil = next_soil - E_b;
+        evap = evap + E_b;
+
+        if(next_soil >= 0) {
+          if(next_soil < overFl1) {
+            overFl1 = next_soil;
+          }
+          next_soil = next_soil - overFl1;
+          overFL = overFL + overFl1;
+
+          if(next_soil >= 0) {
+            if(next_soil < overFl2) {
+              overFl2 = next_soil;
+            }
+            next_soil = next_soil - overFl2;
+            overFL = overFL + overFl2;
+          }
+        }
+      }
+    }
+
+
+    set_varValue(next_soil, tstRM, ts_type::SOIS);
+    set_varValue(evap,tstRM, ts_type::EVBS);
+    set_varValue(overFL, tstRM, ts_type::PERC);
+
+    prev_Soil = next_soil;
+
+    break;
+}
+
+case soil_STORtype::HILLSLOPE: {
+    //P_n is effective precipitation
+    P_n = std::max(static_cast<numberSel>(get_dta(tstRM, ts_type::PREC)) - static_cast<numberSel>(get_dta(tstRM, ts_type::EVAC)), static_cast<numberSel>(0.0));
+    if(prev_Soil > 0) {
+      evap = static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+    } else {
+      evap = 0;
+    }
+
+    //overFL is storage excess surface runoff [mm/d] which depends on the fraction of the catchment which is
+    //currently saturated, expressed through parameters SMAX [mm] and KF_NONLIN[-]
+    overFL = (1 - std::pow((1 - prev_Soil / get_par(par_HRUtype::SMAX)),get_par(par_HRUtype::KF_NONLIN))) * P_n;
+
+    next_soil = prev_Soil + P_n + get_par(par_HRUtype::C);
+
+    if(next_soil >= 0) {
+      if(next_soil < evap) {
+        evap = next_soil;
+      }
+      next_soil = next_soil - evap;
+
+      if(next_soil >= 0) {
+        if(next_soil < overFL) {
+          overFL = next_soil;
+        }
+        next_soil = next_soil - overFL;
+      }
+
+    }
+
+    set_varValue(next_soil, tstRM, ts_type::SOIS);
+    set_varValue(evap,tstRM, ts_type::EVBS);
+    set_varValue(overFL, tstRM, ts_type::PERC);
+
+    prev_Soil = next_soil;
+
+    break;
+}
+
+case soil_STORtype::PLATEAU: {
+    //ppInf is infiltration based on maximum infiltration rate INFR_MAX [mm/d] and infiltration excess [mm/d]
+    ppInf = std::min(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)), get_par(par_HRUtype::INFR_MAX));
+
+    //c_init represents the wilting point
+    c_init = get_par(par_HRUtype::WP) * get_par(par_HRUtype::SMAX);
+
+    //evac is evaporation from soil moisture [mm/d] which occurs at the potential rate PET when
+    //prev_Soil is above wilting point c_init [mm] and is further constrained by coefficient RF [-]
+    evap = static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) * std::max((get_par(par_HRUtype::RF) * (prev_Soil - c_init)/(get_par(par_HRUtype::SMAX) - c_init)), static_cast<numberSel>(0.0));
+
+    //overFL is storage excess
+    if(prev_Soil == get_par(par_HRUtype::SMAX)) {
+      overFL = ppInf + get_par(par_HRUtype::C);
+    } else {
+      overFL = 0;
+    }
+
+    next_soil = prev_Soil + ppInf + get_par(par_HRUtype::C);
+
+    if(next_soil >= 0) {
+      if(next_soil < evap) {
+        evap = next_soil;
+      }
+      next_soil = next_soil - evap;
+
+      if(next_soil >= 0) {
+        if(next_soil < overFL) {
+          overFL = next_soil;
+        }
+        next_soil = next_soil - overFL;
+      }
+
+    }
+
+    set_varValue(next_soil, tstRM, ts_type::SOIS);
+    set_varValue(evap,tstRM, ts_type::EVBS);
+    set_varValue(overFL, tstRM, ts_type::PERC);
+
+    prev_Soil = next_soil;
+
+    break;
+  }
+}
   return ;
 }
 
@@ -898,7 +1247,7 @@ void single_HMunit::run_HB() {
     // std::cout << et_demand << "\n";
     interception_snow();//
     surface_retention();//
-    soil_buffer();//
+    soil_buffer(soil_STORAGE);//
     slow_response(gs_STORAGE);
     fast_response();
     helprm = (get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR));
@@ -1399,4 +1748,53 @@ numberSel single_HMunit::update_ETDEMAND(const numberSel& ET, bool ET_demand){
 //   }
 //
 // }
+
+void single_HMunit::set_soilStorType(soil_STORtype _soil_STORtype) {
+
+  soil_STORAGE = _soil_STORtype;
+  //print_soilStorType();
+
+  return ;
+
+}
+
+soil_STORtype single_HMunit::get_soilStorType() {
+  return soil_STORAGE;
+
+}
+
+void single_HMunit::print_soilStorType() {
+
+  switch(soil_STORAGE) {
+
+  case soil_STORtype::PDM:
+    std::cout << "The soil_STOR is a PDM reservoir." << std::endl;
+    break;
+
+  case soil_STORtype::COLLIE_V2:
+    std::cout << "The soil_STOR is a COLLIE_V2 reservoir." << std::endl;
+    break;
+
+  case soil_STORtype::NEW_ZEALAND:
+    std::cout << "The soil_STOR is a NEW_ZEALAND reservoir." << std::endl;
+    break;
+
+  case soil_STORtype::GR4J:
+    std::cout << "The soil_STOR is a GR4J reservoir" << std::endl;
+    break;
+
+  case soil_STORtype::SBROOK_V1:
+    std::cout << "The soil_STOR is a SBROOK_V1 reservoir" << std::endl;
+    break;
+
+  case soil_STORtype::HILLSLOPE:
+    std::cout << "The soil_STOR is a HILLSLOPE reservoir" << std::endl;
+    break;
+
+  case soil_STORtype::PLATEAU:
+    std::cout << "The soil_STOR is a PLATEAU reservoir" << std::endl;
+    break;
+  }
+
+}
 
