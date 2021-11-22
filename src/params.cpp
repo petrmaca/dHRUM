@@ -9,7 +9,7 @@ params::params(): numPars(0),
 //    b_soil = 2.0;
 //    c_max = 100.0;
 //    b_evap = 1;
-  numPars = 23;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
+  numPars = 31;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
 
   pars.resize(numPars,numPars);
   up_pars.resize(numPars,numPars);
@@ -39,6 +39,14 @@ params::params(): numPars(0),
   pars[20] = 1;//!< THR Threshold coefficient for threshold-controlled linear storage [0,inf]
   pars[21] = 0.5;//!< ALPHA Divider for two parallel linear reservoirs
   pars[22] = 0;//!< Cmin for pdmsoil reservoir []0,inf]
+  pars[23] = 10;//!< FC Field capacity [mm] [0,inf)
+  pars[24] = 0.5;//!< Forest fraction [0,1]
+  pars[25] = 0.5;//!< KF2 Storage coefficient of runoff response reservoirs [0,1]
+  pars[26] = 0.5;//!< KF_NONLIN runoff non-linearity parameter [-] [0,inf)
+  pars[27] = 1;//!< C capillary rise [mm d-1] [0, inf)
+  pars[28] = 1;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
+  pars[29] = 0.5;//!< RF evaporation reduction factor [-] [0,1]
+  pars[30] = 0.5;//!< WP wilting point [-] [0,1]
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   up_pars[1] = 500.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -65,6 +73,14 @@ params::params(): numPars(0),
   up_pars[20] = 100;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
   up_pars[21] = 1;//!< ALPHA Divider for two parallel linear reservoirs
   up_pars[22] = 1000;//!< CIMN lower limit of c in soils pdm reservoir
+  up_pars[23] = 100;//!< FC Field capacity [mm] [0,inf)
+  up_pars[24] = 1;//!< Forest fraction [0,1]
+  up_pars[25] = 1;//!< KF2 Storage coefficient of runoff response reservoirs [0,1],VC1
+  up_pars[26] = 1;//!< KF_NONLIN runoff non-linearity parameter [-] [0,inf)
+  up_pars[27] = 100;//!< C capillary rise [mm d-1] [0, inf)
+  up_pars[28] = 100;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
+  up_pars[29] = 1;//!< RF evaporation reduction factor [-] [0,1]
+  up_pars[30] = 1;//!< WP wilting point [-] [0,1]
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   low_pars[1] = 0.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -91,6 +107,14 @@ params::params(): numPars(0),
   low_pars[20] = 0.0;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
   low_pars[21] = 0.0;//!< ALPHA Divider for two parallel linear reservoirs
   low_pars[22] = 1000;//!< CMIN lower limit of c in soils pdm reservoir
+  low_pars[23] = 0;//!< FC Field capacity [mm] [0,inf)
+  low_pars[24] = 0.0;//!< Forest fraction [0,1]
+  low_pars[25] = 0.0;//!< KF2 Storage coefficient of runoff response reservoirs [0,1]
+  low_pars[26] = 0.0;//!< KF_NONLIN runoff non-linearity parameter [-] [0,inf)
+  low_pars[27] = 0.0;//!< C capillary rise [mm d-1] [0, inf)
+  low_pars[28] = 0.0;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
+  low_pars[29] = 0.0;//!< RF evaporation reduction factor [-] [0,1]
+  low_pars[30] = 0.0;//!< WP wilting point [-] [0,1]
 //  std::cout << "Params are initialized." << std::endl;
 }
 
@@ -230,6 +254,38 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     pars[3] = (pars[0] * pars[22] +pars[2]) / (pars[0] +1 );//for preventing consisntency beteewn cmin cmax smax in pdm model
 //    std::cout << "New ALPHA --> loaded\n";
     break;
+  case par_HRUtype::FC:
+    pars[23] = par_dta;
+    //    std::cout << "New FC --> loaded\n";
+    break;
+  case par_HRUtype::FOREST_FRACT:
+    pars[24] = par_dta;
+    //    std::cout << "New FOREST_FRACT --> loaded\n";
+    break;
+  case par_HRUtype::KF2:
+    pars[25] = par_dta;
+    //    std::cout << "New KF2 --> loaded\n";
+    break;
+  case par_HRUtype::KF_NONLIN:
+    pars[26] = par_dta;
+    //    std::cout << "New KF_NONLIN --> loaded\n";
+    break;
+  case par_HRUtype::C:
+    pars[27] = par_dta;
+    //    std::cout << "New C --> loaded\n";
+    break;
+  case par_HRUtype::INFR_MAX:
+    pars[28] = par_dta;
+    //    std::cout << "New INFR_MAX --> loaded\n";
+    break;
+  case par_HRUtype::RF:
+    pars[29] = par_dta;
+    //    std::cout << "New RF --> loaded\n";
+    break;
+  case par_HRUtype::WP:
+    pars[30] = par_dta;
+    //    std::cout << "New WP --> loaded\n";
+    break;
   }
   return ;
 }
@@ -341,6 +397,38 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
     pars[3] = (pars[1] + pars[0] * pars[22])/ (pars[0]+1);
 //    std::cout << "New ALPHA --> loaded\n";
     break;
+  case par_HRUtype::FC:
+    pars[23] = par_dta;
+    //    std::cout << "New FC --> loaded\n";
+    break;
+  case par_HRUtype::FOREST_FRACT:
+    pars[24] = par_dta;
+    //    std::cout << "New FOREST_FRACT --> loaded\n";
+    break;
+  case par_HRUtype::KF2:
+    pars[25] = par_dta;
+    //    std::cout << "New KF2 --> loaded\n";
+    break;
+  case par_HRUtype::KF_NONLIN:
+    pars[26] = par_dta;
+    //    std::cout << "New KF_NONLIN --> loaded\n";
+    break;
+  case par_HRUtype::C:
+    pars[27] = par_dta;
+    //    std::cout << "New C --> loaded\n";
+    break;
+  case par_HRUtype::INFR_MAX:
+    pars[28] = par_dta;
+    //    std::cout << "New INFR_MAX --> loaded\n";
+    break;
+  case par_HRUtype::RF:
+    pars[29] = par_dta;
+    //    std::cout << "New RF --> loaded\n";
+    break;
+  case par_HRUtype::WP:
+    pars[30] = par_dta;
+    //    std::cout << "New WP --> loaded\n";
+    break;
   }
   return ;
 }
@@ -426,6 +514,30 @@ numberSel params::g_par(const par_HRUtype& _parType) {
   case par_HRUtype::CMIN:
     value =  pars[22];
     break;
+  case par_HRUtype::FC:
+    value =  pars[23];
+    break;
+  case par_HRUtype::FOREST_FRACT:
+    value =  pars[24];
+    break;
+  case par_HRUtype::KF2:
+    value =  pars[25];
+    break;
+  case par_HRUtype::KF_NONLIN:
+    value =  pars[26];
+    break;
+  case par_HRUtype::C:
+    value =  pars[27];
+    break;
+  case par_HRUtype::INFR_MAX:
+    value =  pars[28];
+    break;
+  case par_HRUtype::RF:
+    value =  pars[29];
+    break;
+  case par_HRUtype::WP:
+    value =  pars[30];
+    break;
 }
   return value;
 
@@ -499,6 +611,14 @@ void params::s_default() {
   pars[20] = 1.0;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
   pars[21] = 0.5;//!< Divider for two parallel linear reservoirs
   pars[22] = 0;//!< The Cmin for pdm reservoir
+  pars[23] = 10;//!< Field capacity
+  pars[24] = 0.5;//!< Forest fraction
+  pars[25] = 0.5;//!< KF2 Storage coefficient of runoff response reservoirs [0,1]
+  pars[26] = 0.5;//!< KF_NONLIN non-linearity parameter, [-] [0,inf)
+  pars[27] = 10;//!< C capillary rise [mm d-1] [0, inf)
+  pars[28] = 10;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
+  pars[29] = 0.5;//!< RF evaporation reduction factor [-] [0,1]
+  pars[30] = 0.5;//!< WP wilting point [-] [0,1]
 
   numFastRes = 1;
 
@@ -512,7 +632,10 @@ void params::s_default() {
 void params::p_param() {
 
   std::vector<std::string> parsNames {"B_SOIL: ", "C_MAX: ", "B_EVAP: ", "SMAX: ", "KS: ", "KF: ", \
-                                      "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: ", "CMIN: "};
+                                      "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", \
+                                      "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: ", "CMIN: ", \
+                                      "KS2: ", "THR: ", "ALPHA: ","FC: ","FOREST_FRACT: ", "KF2: ", \
+                                      "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: "};
 
   std::cout << std::endl << "Printing the values of parameters:" << std::endl << std::endl;
   for(unsigned pp=0; pp<numPars ; pp++ ) {
