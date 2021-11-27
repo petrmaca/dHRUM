@@ -474,3 +474,7 @@ setNumFastResAlldHrus <- function(dHRUM_ptr, numFastRes, hruIds) {
     invisible(.Call(`_dHRUM_setNumFastResAlldHrus`, dHRUM_ptr, numFastRes, hruIds))
 }
 
+setSoilStorTypeToAlldHrus <- function(dHRUM_ptr, soilTypes, hruIds) {
+    invisible(.Call(`_dHRUM_setSoilStorTypeToAlldHrus`, dHRUM_ptr, soilTypes, hruIds))
+}
+
