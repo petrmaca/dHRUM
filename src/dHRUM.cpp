@@ -137,28 +137,28 @@ std::vector<std::string> dHRUM::getRequiredParamsForHru(unsigned hruId) {
 
   switch(gwType) {
     case gs_STORtype::LIN_RES:
-      params = {"KS"};
+      params = {"KS","ADIV"};
       break;
     case gs_STORtype::LINL_RES:
-      params = {"KS","L"};
+      params = {"KS","L","ADIV"};
       break;
     case gs_STORtype::LINBY_RES:
-      params = {"KS","D_BYPASS"};
+      params = {"KS","D_BYPASS","ADIV"};
       break;
     case gs_STORtype::POW_RES:
-      params = {"KS","B_EXP"};
+      params = {"KS","B_EXP","ADIV"};
       break;
     case gs_STORtype::EXP_RES:
-      params = {"KS","B_EXP"};
+      params = {"KS","B_EXP","ADIV"};
       break;
     case gs_STORtype::LIN_2SE:
-      params = {"KS","KS2"};
+      params = {"KS","KS2","ADIV"};
       break;
     case gs_STORtype::LIN_2PA:
-      params = {"KS","KS2","ALPHA"};
+      params = {"KS","KS2","ALPHA","ADIV"};
       break;
     case gs_STORtype::FLEX_RES:
-      params = {"KS","KS2","THR"};
+      params = {"KS","KS2","THR","ADIV"};
       break;
   }
 
