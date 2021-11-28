@@ -130,7 +130,7 @@ void dHRUM::setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> pa
   return ;
 }
 
-std::vector<std::string> dHRUM::getRequiredParamsForHru(unsigned hruId) {
+std::vector<std::string> dHRUM::getGWSRequiredParamsForHru(unsigned hruId) {
 
   gs_STORtype gwType = dHruVec[hruId].get_GStype();
   std::vector<std::string> params = {};
