@@ -130,10 +130,14 @@ void dHRUM::setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> pa
   return ;
 }
 
-std::vector<std::string> dHRUM::getGWSRequiredParamsForHru(unsigned hruId) {
+std::vector<std::string> dHRUM::getRequiredParamsForHru(unsigned hruId) {
 
   gs_STORtype gwType = dHruVec[hruId].get_GStype();
+  //soil_STORtype swType = dHruVec[hruId].get_soilStorType();
+
   std::vector<std::string> params = {};
+  //std::vector<std::string> params2 = {};
+  // params.reserve(50);
 
   switch(gwType) {
     case gs_STORtype::LIN_RES:
@@ -161,6 +165,38 @@ std::vector<std::string> dHRUM::getGWSRequiredParamsForHru(unsigned hruId) {
       params = {"KS","KS2","THR","ADIV"};
       break;
   }
+
+  // switch(swType) {
+  // case soil_STORtype::PDM:
+  //   params2 = {"SMAX","CMIN","C_MAX","B_SOIL","B_EVAP"};
+  //   break;
+  // case soil_STORtype::COLLIE_V2:
+  //   params2 = {"SMAX","FOREST_FRACT","FC","KF"};
+  //   break;
+  // case soil_STORtype::NEW_ZEALAND:
+  //   params2 = {"FC","FOREST_FRACT","FC","SMAX","KF","KF_NONLIN","KF2"};
+  //   break;
+  // case soil_STORtype::GR4J:
+  //   params2 = {"SMAX"};
+  //   break;
+  // case soil_STORtype::SBROOK_V1:
+  //   params2 = {"SMAX","FOREST_FRACT","FC","KF_NONLIN"};
+  //   break;
+  // case soil_STORtype::HILLSLOPE:
+  //   params2 = {"KF_NONLIN","SMAX","C"};
+  //   break;
+  // case soil_STORtype::PLATEAU:
+  //   params2 = {"INFR_MAX","WP","SMAX","RF","C"};
+  //   break;
+  // }
+
+  //std::vector<std::string> v(params);
+  //
+  //v.insert(v.end(), params2.begin(), params2.end());
+
+  // for(unsigned i=0;i<v.size();i++){
+  //   std::cout << v[i] <<  std::endl;
+  // }
 
   return params;
 }

@@ -1,16 +1,20 @@
 #include <Rcpp.h>
 #include "dHRUM.h"
-
-// This is a simple example of exporting a C++ function to R. You can
-// source this function into an R session using the Rcpp::sourceCpp
-// function (or via the Source button on the editor toolbar). Learn
-// more about Rcpp at:
-//
-//   http://www.rcpp.org/
-//   http://adv-r.had.co.nz/Rcpp.html
-//   http://gallery.rcpp.org/
-//
-
+//' Sets the similar values of params to dHRU model for all single HRUs.
+//'
+//' Setting the groudnwater type of dHRUM equal to all HRUs. Possibe types: \code{LIN_RES} \code{LINL_RES} \code{LINBY_RES}
+//' \code{POW_RES}, \code{EXP_RES} \code{LIN_2SE} \code{LIN_2PA} \code{FLEX_RES}
+//'
+//' @param dHRUM_ptr pointer to dHRUM instance
+//' @param soilTypes a charater vector of GW type names
+//' @param hruIds ids on Hrus
+//' @export
+//' @examples
+//' nHrus <- 200
+//' Areas <- runif(nHrus,min = 1,max  = 10)
+//' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
 // [[Rcpp::export]]
 void setSoilStorTypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector soilTypes, Rcpp::CharacterVector hruIds) {
 

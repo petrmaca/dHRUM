@@ -33,7 +33,7 @@ class dHRUM {
   void loadPTInputsToOneHru(hdata Prec, hdata Temp, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay, unsigned HruIt);
   void setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad);
   void setParamsToOneHru(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad, unsigned Id);
-  std::vector<std::string> getGWSRequiredParamsForHru(unsigned Id);
+  std::vector<std::string> getRequiredParamsForHru(unsigned Id);
 
   void calcPetToAllHrus(numberSel Latit, pet_Type myPetType = pet_Type::OUDIN);
   void calcPetToOneHru(numberSel Latit, pet_Type myPetType, unsigned HruId);
@@ -56,6 +56,7 @@ class dHRUM {
   unsigned get_singleHRUnumPars(unsigned Id);
   void set_numPars();
   void print_Pars();
+
   void initGWtypeToAlldHrus(std::vector<std::pair<unsigned, gs_STORtype>>& gs_STORtypes);
   void initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype>>& soil_STORtypes);
   numberSel getTsDta(const ts_type& _tsType, const unsigned& HruIndex, const unsigned& tst);
