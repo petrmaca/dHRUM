@@ -93,6 +93,8 @@ class single_HMunit {
   soil_STORtype get_soilStorType();
   void print_soilStorType();
 
+  std::vector<numberSel> water_balance(numberSel next_soil, numberSel val, std::vector<numberSel> vals);//!< Method for preserving mass balance
+
 
 protected:
 

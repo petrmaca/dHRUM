@@ -453,6 +453,9 @@ case soil_STORtype::PDM: {
     et_demand = update_ETDEMAND(evap, true);
     evap = help_evap;
 
+    std::vector<numberSel> updated_vals;
+
+
   //
   //
   // if(std::isnan(et_demand)) {
@@ -478,7 +481,10 @@ case soil_STORtype::PDM: {
  //Soil buffer state
     next_soil = std::max(static_cast<numberSel>(next_soil - evap),static_cast<numberSel>(0.0));
   //Total overflow
-    overFL = overFl1 + overFl2;
+
+    updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{overFl1, overFl2});
+    next_soil = updated_vals[0];
+    overFL = updated_vals[1];
 
     set_varValue(next_soil, tstRM, ts_type::SOIS);
     set_varValue(evap,tstRM, ts_type::EVBS);
@@ -510,37 +516,19 @@ case soil_STORtype::COLLIE_V2: {
 
     next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
 
-    if(next_soil >= 0) {
-      if(next_soil < E_v) {
-        E_v = next_soil;
-      }
-      next_soil = next_soil - E_v;
-      evap = evap + E_v;
+    std::vector<numberSel> updated_vals;
 
-      if(next_soil >= 0) {
-        if(next_soil < E_b) {
-          E_b = next_soil;
-        }
-        next_soil = next_soil - E_b;
-        evap = evap + E_b;
+    updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_v, E_b});
+    next_soil = updated_vals[0];
+    evap = updated_vals[1];
 
-        if(next_soil >= 0) {
-          if(next_soil < overFl1) {
-            overFl1 = next_soil;
-          }
-          next_soil = next_soil - overFl1;
-          overFL = overFL + overFl1;
+    updated_vals.clear();
 
-          if(next_soil >= 0) {
-            if(next_soil < overFl2) {
-              overFl2 = next_soil;
-            }
-            next_soil = next_soil - overFl2;
-            overFL = overFL + overFl2;
-          }
-        }
-      }
-    }
+    updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1, overFl2});
+    next_soil = updated_vals[0];
+    overFL = updated_vals[1];
+
+    updated_vals.clear();
 
     set_varValue(next_soil, tstRM, ts_type::SOIS);
     set_varValue(evap,tstRM, ts_type::EVBS);
@@ -583,45 +571,19 @@ case soil_STORtype::NEW_ZEALAND: {
 
     next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
 
-    if(next_soil >= 0) {
-      if(next_soil < E_v) {
-        E_v = next_soil;
-      }
-      next_soil = next_soil - E_v;
-      evap = evap + E_v;
+    std::vector<numberSel> updated_vals;
 
-      if(next_soil >= 0) {
-        if(next_soil < E_b) {
-          E_b = next_soil;
-        }
-        next_soil = next_soil - E_b;
-        evap = evap + E_b;
+    updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_v, E_b});
+    next_soil = updated_vals[0];
+    evap = updated_vals[1];
 
-        if(next_soil >= 0) {
-          if(next_soil < overFl1) {
-            overFl1 = next_soil;
-          }
-          next_soil = next_soil - overFl1;
-          overFL = overFL + overFl1;
+    updated_vals.clear();
 
-          if(next_soil >= 0) {
-            if(next_soil < overFl2) {
-              overFl2 = next_soil;
-            }
-            next_soil = next_soil - overFl2;
-            overFL = overFL + overFl2;
+    updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1, overFl2, overFl3});
+    next_soil = updated_vals[0];
+    overFL = updated_vals[1];
 
-            if(next_soil >= 0) {
-              if(next_soil < overFl3) {
-                overFl3 = next_soil;
-              }
-              next_soil = next_soil - overFl3;
-              overFL = overFL + overFl3;
-            }
-          }
-        }
-      }
-    }
+    updated_vals.clear();
 
     set_varValue(next_soil, tstRM, ts_type::SOIS);
     set_varValue(evap,tstRM, ts_type::EVBS);
@@ -659,20 +621,19 @@ case soil_STORtype::GR4J: {
 
     next_soil = prev_Soil + P_s;
 
-    if(next_soil >= 0) {
-      if(next_soil < E_s) {
-        E_s = next_soil;
-      }
-      next_soil = next_soil - E_s;
-      evap = evap + E_s;
-      if(next_soil >= 0) {
-        if(next_soil < overFl1) {
-          overFl1 = next_soil;
-        }
-        next_soil = next_soil - overFl1;
-        overFL = overFL + overFl1;
-      }
-    }
+    std::vector<numberSel> updated_vals;
+
+    updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_s});
+    next_soil = updated_vals[0];
+    evap = updated_vals[1];
+
+    updated_vals.clear();
+
+    updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1});
+    next_soil = updated_vals[0];
+    overFL = updated_vals[1];
+
+    updated_vals.clear();
 
     set_varValue(next_soil, tstRM, ts_type::SOIS);
     set_varValue(evap,tstRM, ts_type::EVBS);
@@ -708,38 +669,19 @@ case soil_STORtype::SBROOK_V1: {
 
     next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
 
-    if(next_soil >= 0) {
-      if(next_soil < E_v) {
-        E_v = next_soil;
-      }
-      next_soil = next_soil - E_v;
-      evap = evap + E_v;
+    std::vector<numberSel> updated_vals;
 
-      if(next_soil >= 0) {
-        if(next_soil < E_b) {
-          E_b = next_soil;
-        }
-        next_soil = next_soil - E_b;
-        evap = evap + E_b;
+    updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_v, E_b});
+    next_soil = updated_vals[0];
+    evap = updated_vals[1];
 
-        if(next_soil >= 0) {
-          if(next_soil < overFl1) {
-            overFl1 = next_soil;
-          }
-          next_soil = next_soil - overFl1;
-          overFL = overFL + overFl1;
+    updated_vals.clear();
 
-          if(next_soil >= 0) {
-            if(next_soil < overFl2) {
-              overFl2 = next_soil;
-            }
-            next_soil = next_soil - overFl2;
-            overFL = overFL + overFl2;
-          }
-        }
-      }
-    }
+    updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1, overFl2});
+    next_soil = updated_vals[0];
+    overFL = updated_vals[1];
 
+    updated_vals.clear();
 
     set_varValue(next_soil, tstRM, ts_type::SOIS);
     set_varValue(evap,tstRM, ts_type::EVBS);
@@ -751,34 +693,36 @@ case soil_STORtype::SBROOK_V1: {
 }
 
 case soil_STORtype::HILLSLOPE: {
-    //P_n is effective precipitation
-    P_n = std::max(static_cast<numberSel>(get_dta(tstRM, ts_type::PREC)) - static_cast<numberSel>(get_dta(tstRM, ts_type::EVAC)), static_cast<numberSel>(0.0));
+    //incomming interception is reduced by interception storage which is assumed to evaporate before the next
+    //precipitation event
+    P_n = std::max(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) - static_cast<numberSel>(get_dta(tstRM, ts_type::INTS)),static_cast<numberSel>(0.0));
+
+    //Evaporation from soil moisture evap [mm/d] occurs at the potential rate PET whenever possible
     if(prev_Soil > 0) {
-      evap = static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+      E_b = static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
     } else {
-      evap = 0;
+      E_b = 0;
     }
 
-    //overFL is storage excess surface runoff [mm/d] which depends on the fraction of the catchment which is
-    //currently saturated, expressed through parameters SMAX [mm] and KF_NONLIN[-]
-    overFL = (1 - std::pow((1 - prev_Soil / get_par(par_HRUtype::SMAX)),get_par(par_HRUtype::KF_NONLIN))) * P_n;
+    //Storage excess surface runoff overFL [mm/d] depends on the fraction of the catchment that is currently saturated,
+    //expressed through parameters SMAX [mm] and KF_NONLIN
+    overFl1 = (1 - std::pow(1 - prev_Soil / get_par(par_HRUtype::SMAX), get_par(par_HRUtype::KF_NONLIN))) * P_n;
 
     next_soil = prev_Soil + P_n + get_par(par_HRUtype::C);
 
-    if(next_soil >= 0) {
-      if(next_soil < evap) {
-        evap = next_soil;
-      }
-      next_soil = next_soil - evap;
+    std::vector<numberSel> updated_vals;
 
-      if(next_soil >= 0) {
-        if(next_soil < overFL) {
-          overFL = next_soil;
-        }
-        next_soil = next_soil - overFL;
-      }
+    updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_b});
+    next_soil = updated_vals[0];
+    evap = updated_vals[1];
 
-    }
+    updated_vals.clear();
+
+    updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1});
+    next_soil = updated_vals[0];
+    overFL = updated_vals[1];
+
+    updated_vals.clear();
 
     set_varValue(next_soil, tstRM, ts_type::SOIS);
     set_varValue(evap,tstRM, ts_type::EVBS);
@@ -1795,6 +1739,26 @@ void single_HMunit::print_soilStorType() {
     std::cout << "The soil_STOR is a PLATEAU reservoir" << std::endl;
     break;
   }
+
+}
+
+std::vector<numberSel> single_HMunit::water_balance(numberSel next_soil, numberSel val, std::vector<numberSel> vals) {
+
+
+  for(unsigned i=0; i<vals.size(); i++) {
+    if(next_soil >= 0) {
+      if(next_soil < vals[i]) {
+        vals[i] = next_soil;
+      }
+      next_soil = next_soil - vals[i];
+      val = val + vals[i];
+    }
+
+  }
+
+  std::vector<numberSel> updated_vals{next_soil, val};
+
+  return updated_vals;
 
 }
 
