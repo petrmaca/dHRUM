@@ -17,9 +17,7 @@ params::params(): numPars(0),
   pars[0] = 2.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   pars[1] = 10.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
   pars[2] = 1.0;//!< B_EVAP Parameter controlling soil evapotranspiration [0,infty] how ever [0.5,3],VC1
-  numberSel helpSmax;
-  helpSmax = (pars[0] * pars[22] +pars[1]) / (pars[0]+1);
-  pars[3] = helpSmax;//!< SMAX Max soil storage calculate using Cmax and b_soil
+  pars[3] = 0.0001;//!< SMAX Max soil storage calculate using Cmax and b_soil
   pars[4] = 0.1;//!< KS Storage coefficient of groundwater storage [0,1],VC1
   pars[5] = 0.5;//!< KF Storage coefficient of runoff response reservoirs [0,1],VC1
   pars[6] = 0.5;//!< ADIV Divider of percolation into the direct runoff input par[6]*Perc and  groundwater input (1-par[6])*Perc [0,1],VC1
@@ -39,13 +37,14 @@ params::params(): numPars(0),
   pars[20] = 1;//!< THR Threshold coefficient for threshold-controlled linear storage [0,inf]
   pars[21] = 0.5;//!< ALPHA Divider for two parallel linear reservoirs
   pars[22] = 0;//!< Cmin for pdmsoil reservoir []0,inf]
+
+  numberSel helpSmax;
+  helpSmax = (pars[0] * pars[22] +pars[1]) / (pars[0]+1);
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   up_pars[1] = 500.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
   up_pars[2] = 3.0;//!< B_EVAP Parameter controlling soil evapotranspiration [0,infty] how ever [0.5,3],VC1
-  numberSel helpSmaxUp;
-  helpSmaxUp = (up_pars[0]*up_pars[22] + up_pars[1]) / (up_pars[0]+1);
-  up_pars[3] = helpSmaxUp;//!< SMAX Max soil storage calculate using Cmax and b_soil
+  up_pars[3] = 0.0;//!< SMAX Max soil storage calculate using Cmax and b_soil
   up_pars[4] = 1;//!< KS Storage coefficient of groundwater storage [0,1],VC1
   up_pars[5] = 1;//!< KF Storage coefficient of runoff response reservoirs [0,1],VC1
   up_pars[6] = 1;//!< ADIV Divider of percolation into the overflow input par[6]*Perc and  groundwater input (1-par[6])*Perc [0,1],VC1
@@ -64,14 +63,17 @@ params::params(): numPars(0),
   up_pars[19] = 1;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
   up_pars[20] = 100;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
   up_pars[21] = 1;//!< ALPHA Divider for two parallel linear reservoirs
-  up_pars[22] = 1000;//!< CIMN lower limit of c in soils pdm reservoir
+  up_pars[22] = 200;//!< CIMN lower limit of c in soils pdm reservoir
+
+  numberSel helpSmaxUp;
+  helpSmaxUp = (up_pars[0]*up_pars[22] + up_pars[1]) / (up_pars[0]+1);
+  pars[3] = helpSmax;
+
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   low_pars[1] = 0.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
   low_pars[2] = 0.0;//!< B_EVAP Parameter controlling soil evapotranspiration [0,infty] how ever [0.5,3],VC1
-  numberSel helpSmaxLow;
-  helpSmaxLow = (low_pars[0] *low_pars[22] +low_pars[1]) / (low_pars[0]+1);
-  low_pars[3] = helpSmaxLow;//!< SMAX Max soil storage calculate using Cmax and b_soil
+  low_pars[3] = 0.0;//!< SMAX Max soil storage calculate using Cmax and b_soil
   low_pars[4] = 0.0;//!< KS Storage coefficient of groundwater storage [0,1],VC1
   low_pars[5] = 0.0;//!< KF Storage coefficient of runoff response reservoirs [0,1],VC1
   low_pars[6] = 0.0;//!< ADIV Divider of percolation into the overflow input par[6]*Perc and  groundwater input (1-par[6])*Perc [0,1],VC1
@@ -90,7 +92,12 @@ params::params(): numPars(0),
   low_pars[19] = 0.0;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
   low_pars[20] = 0.0;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
   low_pars[21] = 0.0;//!< ALPHA Divider for two parallel linear reservoirs
-  low_pars[22] = 1000;//!< CMIN lower limit of c in soils pdm reservoir
+  low_pars[22] = 0;//!< CMIN lower limit of c in soils pdm reservoir
+
+  numberSel helpSmaxLow;
+  helpSmaxLow = (low_pars[0] *low_pars[22] +low_pars[1]) / (low_pars[0]+1);
+  low_pars[3] = 0.0;
+
 //  std::cout << "Params are initialized." << std::endl;
 }
 
@@ -231,6 +238,9 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
 //    std::cout << "New ALPHA --> loaded\n";
     break;
   }
+
+  pars[3] = (pars[0] * pars[22] +pars[2]) / (pars[0] +1 );
+
   return ;
 }
 

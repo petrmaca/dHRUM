@@ -22,9 +22,9 @@ single_HMunit::single_HMunit(): tstRM(0),
 
   set_nmbFastres(1);
   help_nmbFR = get_nmbFastRes();
-//  std::cout << "\nFast runoff response has " << help_nmbFR << " reservoirs." << std::endl;
+  // std::cout << "\nFast runoff response has " << help_nmbFR << " reservoirs." << std::endl;
   set_ZeroinitStates(help_nmbFR);
-//  std::cout<< "Soil init " << get_initState(init_Stype::SOIL) << std::endl;
+  // std::cout<< "Soil init " << get_initState(init_Stype::SOIL) << std::endl;
   prev_Soil = get_initState(init_Stype::SOIL);
   prev_Grou = get_initState(init_Stype::GROUNDWAT);
   prevCanS = get_initState(init_Stype::CANS);
@@ -310,11 +310,18 @@ void single_HMunit::surface_retention() {
   // } else EvapSR = 0.0;
 
   // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
-  EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+  if(get_dta(tstRM, ts_type::TEMP)>0) {
+    EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+    // std::cout << EvapSR << "\n";
+  } else {
+    EvapSR =0.0; //no evaporation when temperature below zero
+  }
 
+  // std::cout << EvapSR << "\n";
   numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
   et_demand = update_ETDEMAND(EvapSR, true);
   EvapSR = help_EvapSR;
+
 
   // if(EvapSR >= et_demand) {
   //   EvapSR = et_demand;
@@ -328,9 +335,11 @@ void single_HMunit::surface_retention() {
     EvapSR = prev_SurS;
   }
 
-  if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
-    EvapSR = 0.0;
-  }
+  // std::cout << EvapSR << "\n";
+
+  // if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
+  //   EvapSR = 0.0;
+  // }
 
    // std::cout << EvapSR << "  EvapSR " << tstRM << " " << get_dta(tstRM, ts_type::TEMP) << " u " << (std::pow((-1.5),1.289)) <<std::endl;
   // if(tstRM == 469) std::cout <<  " e " << EvapSR <<std::endl;
@@ -349,6 +358,10 @@ void single_HMunit::surface_retention() {
 
   set_varValue(EvapSR, tstRM, ts_type::AET);
   set_varValue(RetOut,tstRM,ts_type::PREF);
+
+  // std::cout <<  get_dta(tstRM, ts_type::AET) << " ups1\n";
+
+  // std::cout << EvapSR << " ups\n " << get_dta(tstRM, ts_type::AET) << " ups1\n";
   // set_varValue(prev_SurS, tstRM, ts_type::SURS);
 
   return ;
@@ -442,11 +455,19 @@ void single_HMunit::soil_buffer() {
   //Overflow for small C according to Montanari
   //    overFl2 = std::max(0.0, (c_prop - c_init) - (next_soil - prev_Soil));
   //Evapotranspiration from Soil
-  evap =  std::min(static_cast<numberSel>(next_soil), static_cast<numberSel>(get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - next_soil) / get_par(par_HRUtype::SMAX)), get_par(par_HRUtype::B_EVAP)))));
+  // evap =  static_cast<numberSel>(get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - next_soil) / get_par(par_HRUtype::SMAX)), get_par(par_HRUtype::B_EVAP))));
+  // evap =  (get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - next_soil) / get_par(par_HRUtype::SMAX)), get_par(par_HRUtype::B_EVAP))));
+   // evap = (next_soil) *0.008;
+   // evap =  get_dta(tstRM, ts_type::PET)*0.1;
+   evap =  get_dta(tstRM, ts_type::PET)*prev_Soil/get_par(par_HRUtype::SMAX);
+  // std::cout << get_par(par_HRUtype::SMAX) << "\n";
+  // evap = std::min(static_cast<numberSel>(next_soil), evap);
 
-  numberSel help_evap = update_ETDEMAND(evap, false);
-  et_demand = update_ETDEMAND(evap, true);
-  evap = help_evap;
+   // std::cout << " et1 " << et_demand << " evap1 " << evap << " " << next_soil << " Smax " << get_par(par_HRUtype::SMAX) << "\n";
+
+  // numberSel help_evap = update_ETDEMAND(evap, false);
+  // et_demand = update_ETDEMAND(evap, true);
+  // evap = help_evap;
 
   //
   //
@@ -475,6 +496,8 @@ void single_HMunit::soil_buffer() {
   //Total overflow
   overFL = overFl1 + overFl2;
 
+  // if(next_soil<0.0) next_soil=0.0;
+  // if(std::isnan(next_soil)) next_soil=0.0;
 set_varValue(next_soil, tstRM, ts_type::SOIS);
 set_varValue(evap,tstRM, ts_type::EVBS);
 set_varValue(overFL, tstRM, ts_type::PERC);
@@ -483,7 +506,7 @@ set_varValue(overFL, tstRM, ts_type::PERC);
 // set_varValue(aet, tstRM, ts_type::AET);
 
 prev_Soil = next_soil;
-
+ // std::cout << " et2 " << et_demand << " evap2 " << evap << "\n";
   return ;
 }
 
@@ -661,7 +684,7 @@ void single_HMunit::interception_NoSnow() {
   OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
   prevCanS = prevCanS - OverflowCan;
-  EvapCanop = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  EvapCanop = std::min(get_dta(tstRM, ts_type::PET)*std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
 
   numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
   et_demand = update_ETDEMAND(EvapCanop, true);
@@ -688,21 +711,21 @@ void single_HMunit::interception_NoSnow() {
   OverflowStem = std::max((prevSteS - get_par(par_HRUtype::STEM_ST)),0.0);
   prevSteS = prevSteS - OverflowStem;
 
-  EvapStem = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+  EvapStem = std::min(get_dta(tstRM, ts_type::PET)*std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
 
   numberSel help_EvapStem = update_ETDEMAND(EvapStem, false);
   et_demand = update_ETDEMAND(EvapStem, true);
   EvapStem = help_EvapStem;
 
-  if(EvapStem >= et_demand) {
-    EvapStem = et_demand;
-    et_demand = 0.0;
-  }
-  else {
-    et_demand = et_demand - EvapStem;
-  }
+  // if(EvapStem >= et_demand) {
+  //   EvapStem = et_demand;
+  //   et_demand = 0.0;
+  // }
+  // else {
+  //   et_demand = et_demand - EvapStem;
+  // }
 
-    prevSteS = prevSteS - EvapStem;
+  prevSteS = prevSteS - EvapStem;
 
   StemOut = std::min((prevCanS) / get_par(par_HRUtype::CAN_ST) * EvapStem, prevSteS);
   prevSteS = prevSteS - StemOut;
@@ -740,7 +763,7 @@ void single_HMunit::interception_WithSnow() {
   OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
   prevCanS = prevCanS - OverflowCan;
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
-  EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  EvapCanop = std::min(get_dta(tstRM, ts_type::PET)*pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
 
   numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
   et_demand = update_ETDEMAND(EvapCanop, true);
@@ -765,7 +788,7 @@ void single_HMunit::interception_WithSnow() {
   OverflowStem = std::max((prevSteS - get_par(par_HRUtype::STEM_ST)),0.0);
   prevSteS = prevSteS - OverflowStem;
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
-  EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+  EvapStem = std::min(get_dta(tstRM, ts_type::PET)*pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
 
   numberSel help_EvapStem = update_ETDEMAND(EvapStem, false);
   et_demand = update_ETDEMAND(EvapStem, true);
@@ -885,6 +908,11 @@ void single_HMunit::interception_snow() {
 void single_HMunit::run_HB() {
 
   unsigned Numdta;
+  help_nmbFR = get_nmbFastRes();
+  // std::cout << "\nFast runoff response has " << help_nmbFR << " reservoirs." << std::endl;
+  set_ZeroinitStates(help_nmbFR);
+
+  set_ZeroStates();
 
   Numdta =  get_numdta();
   // if( !(Numdta >0)) {
@@ -895,9 +923,10 @@ void single_HMunit::run_HB() {
   numberSel helprm=0.0;
   for(tstRM=0; tstRM < Numdta ; tstRM++) {
     et_demand = get_dta(tstRM,ts_type::PET);
-    // std::cout << et_demand << "\n";
     interception_snow();//
     surface_retention();//
+    // std::cout << et_demand << "\n";
+    // std::cout <<  get_dta(tstRM, ts_type::AET) << " ups1\n";
     soil_buffer();//
     slow_response(gs_STORAGE);
     fast_response();
@@ -919,6 +948,10 @@ void single_HMunit::run_HB() {
 
   //  set_ZeroinitStates(help_nmbFR);
   //  std::cout << "prev_Grouendfrb  " << prev_Grou << std::endl;
+  help_nmbFR = get_nmbFastRes();
+  // std::cout << "\nFast runoff response has " << help_nmbFR << " reservoirs." << std::endl;
+  set_ZeroinitStates(help_nmbFR);
+
   set_ZeroStates();
   //  std::cout << "prev_Ground storage after zeros " << prev_Grou << std::endl;
 
@@ -1321,18 +1354,18 @@ gs_STORtype single_HMunit::get_GStype() {
 
 }
 
-numberSel single_HMunit::update_ETDEMAND(const numberSel& ET, bool ET_demand){
+numberSel single_HMunit::update_ETDEMAND(const numberSel& ETa, bool ET_demand){
 
   numberSel et_corrected = 0.0, et_demand_updated = 0.0, value = 0.0;
-  if(std::isnan(et_demand)) et_demand = 0.0;
+  // if(std::isnan(et_demand)) et_demand = 0.0;
 
-  if(ET >= et_demand) {
-    et_corrected = et_demand;
-    et_demand_updated = 0.0;
+  if(ETa < et_demand) {
+    et_demand_updated = et_demand - ETa;
+    et_corrected = ETa;
   }
   else {
-    et_demand_updated = et_demand - ET;
-    et_corrected = ET;
+    et_corrected = et_demand;
+    et_demand_updated = 0.0;
   }
 
   if(ET_demand) {
