@@ -114,6 +114,17 @@ void dHRUM::initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& g
 
 }
 
+
+void dHRUM::initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype>>& soil_STORtypes) {
+
+    for(unsigned int i=0; i<soil_STORtypes.size(); i++) {
+      dHruVec[soil_STORtypes[i].first].set_soilStorType(soil_STORtypes[i].second);
+    }
+
+    return;
+
+  }
+
 void dHRUM::setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad) {
   //  #pragma omp parallel
   //  {
