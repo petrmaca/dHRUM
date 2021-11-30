@@ -26,7 +26,7 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
   unsigned numParsNames = ParsNames.size();
   unsigned numParsVals = ParsVec.size();
 
-  if((numParsNames!=numParsVals) || (numParsNames>22) || (numParsVals>22)) {
+  if((numParsNames!=numParsVals) || (numParsNames>31) || (numParsVals>31)) {
     Rcpp::Rcout << "The number of names of params is " << numParsNames <<"\n";
     Rcpp::Rcout << "The number of values of params is " << numParsVals <<"\n";
     Rcpp::stop("\n Those values are different or higher or smaller then required number of dHRU Par Values =22.\n");
@@ -65,7 +65,15 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       {"KS2", par_HRUtype::KS2},
       {"THR", par_HRUtype::THR},
       {"ALPHA", par_HRUtype::ALPHA},
-      {"CMIN", par_HRUtype::CMIN}
+      {"CMIN", par_HRUtype::CMIN},
+      {"FC", par_HRUtype::FC},
+      {"FOREST_FRACT", par_HRUtype::FOREST_FRACT},
+      {"KF2", par_HRUtype::KF2},
+      {"KF_NONLIN", par_HRUtype::KF_NONLIN},
+      {"C", par_HRUtype::C},
+      {"INFR_MAX", par_HRUtype::INFR_MAX},
+      {"RF", par_HRUtype::RF},
+      {"WP", par_HRUtype::WP}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -188,8 +196,48 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
         break;
       case par_HRUtype::CMIN:
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::CMIN));
-        // pars[21] = par_dta;
+        // pars[22] = par_dta;
         // std::cout << "New ALPHA --> loaded\n";
+        break;
+      case par_HRUtype::FC:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::FC));
+        // pars[23] = par_dta;
+        // std::cout << "New FC --> loaded\n";
+        break;
+      case par_HRUtype::FOREST_FRACT:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::FOREST_FRACT));
+        // pars[24] = par_dta;
+        // std::cout << "New FOREST_FRACT --> loaded\n";
+        break;
+      case par_HRUtype::KF2:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::KF2));
+        // pars[25] = par_dta;
+        // std::cout << "New KF2 --> loaded\n";
+        break;
+      case par_HRUtype::KF_NONLIN:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::KF_NONLIN));
+        // pars[26] = par_dta;
+        // std::cout << "New KF_NONLIN --> loaded\n";
+        break;
+      case par_HRUtype::C:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::C));
+        // pars[27] = par_dta;
+        // std::cout << "New C --> loaded\n";
+        break;
+      case par_HRUtype::INFR_MAX:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::INFR_MAX));
+        // pars[28] = par_dta;
+        // std::cout << "New INFR_MAX --> loaded\n";
+        break;
+      case par_HRUtype::RF:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::RF));
+        // pars[29] = par_dta;
+        // std::cout << "New RF --> loaded\n";
+        break;
+      case par_HRUtype::WP:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::WP));
+        // pars[30] = par_dta;
+        // std::cout << "New WP --> loaded\n";
         break;
       }
     }
@@ -274,7 +322,15 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
       {"B_EXP", par_HRUtype::B_EXP},
       {"KS2", par_HRUtype::KS2},
       {"THR", par_HRUtype::THR},
-      {"ALPHA", par_HRUtype::ALPHA}
+      {"ALPHA", par_HRUtype::ALPHA},
+      {"FC", par_HRUtype::FC},
+      {"FOREST_FRACT", par_HRUtype::FOREST_FRACT},
+      {"KF2", par_HRUtype::KF2},
+      {"KF_NONLIN", par_HRUtype::KF_NONLIN},
+      {"C", par_HRUtype::C},
+      {"INFR_MAX", par_HRUtype::INFR_MAX},
+      {"RF", par_HRUtype::RF},
+      {"WP", par_HRUtype::WP}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -397,8 +453,48 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
         break;
       case par_HRUtype::CMIN:
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::CMIN));
-        // pars[21] = par_dta;
+        // pars[22] = par_dta;
         // std::cout << "New ALPHA --> loaded\n";
+        break;
+      case par_HRUtype::FC:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::FC));
+        // pars[23] = par_dta;
+        // std::cout << "New FC --> loaded\n";
+        break;
+      case par_HRUtype::FOREST_FRACT:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::FOREST_FRACT));
+        // pars[24] = par_dta;
+        // std::cout << "New FOREST_FRACT --> loaded\n";
+        break;
+      case par_HRUtype::KF2:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::KF2));
+        // pars[25] = par_dta;
+        // std::cout << "New KF2 --> loaded\n";
+        break;
+      case par_HRUtype::KF_NONLIN:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::KF_NONLIN));
+        // pars[26] = par_dta;
+        // std::cout << "New KF_NONLIN --> loaded\n";
+        break;
+      case par_HRUtype::C:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::C));
+        // pars[27] = par_dta;
+        // std::cout << "New C --> loaded\n";
+        break;
+      case par_HRUtype::INFR_MAX:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::INFR_MAX));
+        // pars[28] = par_dta;
+        // std::cout << "New INFR_MAX --> loaded\n";
+        break;
+      case par_HRUtype::RF:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::RF));
+        // pars[29] = par_dta;
+        // std::cout << "New RF --> loaded\n";
+        break;
+      case par_HRUtype::WP:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::WP));
+        // pars[30] = par_dta;
+        // std::cout << "New WP --> loaded\n";
         break;
       }
     }

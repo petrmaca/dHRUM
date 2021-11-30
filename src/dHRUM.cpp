@@ -133,34 +133,70 @@ void dHRUM::setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> pa
 std::vector<std::string> dHRUM::getRequiredParamsForHru(unsigned hruId) {
 
   gs_STORtype gwType = dHruVec[hruId].get_GStype();
+  //soil_STORtype swType = dHruVec[hruId].get_soilStorType();
+
   std::vector<std::string> params = {};
+  //std::vector<std::string> params2 = {};
+  // params.reserve(50);
 
   switch(gwType) {
     case gs_STORtype::LIN_RES:
-      params = {"KS"};
+      params = {"KS","ADIV"};
       break;
     case gs_STORtype::LINL_RES:
-      params = {"KS","L"};
+      params = {"KS","L","ADIV"};
       break;
     case gs_STORtype::LINBY_RES:
-      params = {"KS","D_BYPASS"};
+      params = {"KS","D_BYPASS","ADIV"};
       break;
     case gs_STORtype::POW_RES:
-      params = {"KS","B_EXP"};
+      params = {"KS","B_EXP","ADIV"};
       break;
     case gs_STORtype::EXP_RES:
-      params = {"KS","B_EXP"};
+      params = {"KS","B_EXP","ADIV"};
       break;
     case gs_STORtype::LIN_2SE:
-      params = {"KS","KS2"};
+      params = {"KS","KS2","ADIV"};
       break;
     case gs_STORtype::LIN_2PA:
-      params = {"KS","KS2","ALPHA"};
+      params = {"KS","KS2","ALPHA","ADIV"};
       break;
     case gs_STORtype::FLEX_RES:
-      params = {"KS","KS2","THR"};
+      params = {"KS","KS2","THR","ADIV"};
       break;
   }
+
+  // switch(swType) {
+  // case soil_STORtype::PDM:
+  //   params2 = {"SMAX","CMIN","C_MAX","B_SOIL","B_EVAP"};
+  //   break;
+  // case soil_STORtype::COLLIE_V2:
+  //   params2 = {"SMAX","FOREST_FRACT","FC","KF"};
+  //   break;
+  // case soil_STORtype::NEW_ZEALAND:
+  //   params2 = {"FC","FOREST_FRACT","FC","SMAX","KF","KF_NONLIN","KF2"};
+  //   break;
+  // case soil_STORtype::GR4J:
+  //   params2 = {"SMAX"};
+  //   break;
+  // case soil_STORtype::SBROOK_V1:
+  //   params2 = {"SMAX","FOREST_FRACT","FC","KF_NONLIN"};
+  //   break;
+  // case soil_STORtype::HILLSLOPE:
+  //   params2 = {"KF_NONLIN","SMAX","C"};
+  //   break;
+  // case soil_STORtype::PLATEAU:
+  //   params2 = {"INFR_MAX","WP","SMAX","RF","C"};
+  //   break;
+  // }
+
+  //std::vector<std::string> v(params);
+  //
+  //v.insert(v.end(), params2.begin(), params2.end());
+
+  // for(unsigned i=0;i<v.size();i++){
+  //   std::cout << v[i] <<  std::endl;
+  // }
 
   return params;
 }
