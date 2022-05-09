@@ -1,4 +1,4 @@
-sessionInfo()
+# sessionInfo()
 library(dHRUM)
 library(data.table)
 nHrus <- 1
@@ -84,9 +84,9 @@ BP_df = data.frame(parsBPmatrix)
 names(BP_df) = names(ParBest)
 BP_df=cbind(BP_df,ID=rep("BP",times=n_ens))
 # save(BP_df,file="par_dHRUM_lumped_PET_HAMON_50_1_BP.rda")
-save(BP_df,file="./Calibrations/Amalie/outdata/par_dHRUM_lumped_PET_HAMON_50_1_BP.rda")
+# save(BP_df,file="./Calibrations/Amalie/outdata/par_dHRUM_lumped_PET_HAMON_50_1_BP.rda")
 
-load("./Calibrations/Amalie/outdata/par_dHRUM_lumped_PET_HAMON_50_1_BP.rda")
+# load("./Calibrations/Amalie/outdata/par_dHRUM_lumped_PET_HAMON_50_1_BP.rda")
 BP_df
 !
 
@@ -108,7 +108,7 @@ Par_dHRUm_Amalie_lumped = list(
   latitude =50.1
 )
 
-save(Par_dHRUm_Amalie_lumped ,file = "./Calibrations/Amalie/outdata/Amalie_lumped_dHRUM.rda")
+# save(Par_dHRUm_Amalie_lumped ,file = "./Calibrations/Amalie/outdata/Amalie_lumped_dHRUM.rda")
 Par_dHRUm_Amalie_lumped$areaM2$BP
 BP_df=cbind(ID=rep("BP",times=n_ens))
 BP_df=cbind(ID=rep("CMIN",times=n_ens))

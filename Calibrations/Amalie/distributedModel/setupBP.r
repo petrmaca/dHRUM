@@ -27,6 +27,7 @@ p_OBS=dny/365.25
 RaBP = 96# odhad Martin Hanel
 QmBP = c(26, 18, 14, 12, 10, 8.0, 7.0, 6.0, 4.5, 3.5, 2.5, 1.0, 0.5)
 A=sum(SoilBP$Area)# plocha BP
+A=4.42
 RmBP = QmBP * (3600*24) / A #CHMU ZHU 4.42 v datech SoilBP 4.41
 
 nHrus <- NhrusBP

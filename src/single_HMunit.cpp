@@ -494,17 +494,18 @@ case soil_STORtype::PDM: {
   //  //remaining soil input
   //  pref = get_dta(tstRM, ts_type::PREF) -   overFl1;
   //New proposal of state of soil buffer  not affected by evapotranspiration
-  next_soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow((get_par(par_HRUtype::C_MAX) - c_prop) / (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)),(get_par(par_HRUtype::B_SOIL) + 1)));
+  // next_soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow((get_par(par_HRUtype::C_MAX) - c_prop) / (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)),(get_par(par_HRUtype::B_SOIL) + 1)));
+  next_soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(1- (c_prop / (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))),(get_par(par_HRUtype::B_SOIL) + 1)));
   //Overflow for small C according to Jherman
   overFl2 = std::max(static_cast<numberSel>(0.0),static_cast<numberSel>(ppInf - next_soil + prev_Soil));
   //Overflow for small C according to Montanari
-  //    overFl2 = std::max(0.0, (c_prop - c_init) - (next_soil - prev_Soil));
+  // overFl2 = std::max(0.0, (c_prop - c_init) - (next_soil - prev_Soil));
   //Evapotranspiration from Soil
   // evap =  static_cast<numberSel>(get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - next_soil) / get_par(par_HRUtype::SMAX)), get_par(par_HRUtype::B_EVAP))));
   // evap =  (get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - next_soil) / get_par(par_HRUtype::SMAX)), get_par(par_HRUtype::B_EVAP))));
   // evap = (next_soil) *0.008;
   // evap =  get_dta(tstRM, ts_type::PET)*0.1;
-  evap =  get_dta(tstRM, ts_type::PET)*prev_Soil/get_par(par_HRUtype::SMAX);
+  evap =  std::min(next_soil,get_dta(tstRM, ts_type::PET)*prev_Soil/get_par(par_HRUtype::SMAX));
   // std::cout << get_par(par_HRUtype::SMAX) << "\n";
   // evap = std::min(static_cast<numberSel>(next_soil), evap);
 
@@ -1678,7 +1679,7 @@ gs_STORtype single_HMunit::get_GStype() {
 numberSel single_HMunit::update_ETDEMAND(const numberSel& ET, bool ET_demand){
 
   numberSel et_corrected = 0.0, et_demand_updated = 0.0, value = 0.0;
-  if(std::isnan(et_demand)) et_demand = 0.0;
+  // if(std::isnan(et_demand)) et_demand = 0.0;
 
   if(ET >= et_demand) {
     et_corrected = et_demand;
