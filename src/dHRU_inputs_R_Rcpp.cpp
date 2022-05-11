@@ -19,7 +19,7 @@
 //' filname2 = "../Calibrations/Amalie/indata/BP_1960_01_01.txt"
 //' setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 // [[Rcpp::export]]
 void setPTInputsToAlldHrusFromFile(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namInpFilet) {
   // Rcpp::Rcout << "Input data fully loaded.";
@@ -46,7 +46,7 @@ void setPTInputsToAlldHrusFromFile(Rcpp::XPtr<dHRUM> dHRUM_ptr, std::string namI
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 //' prec=c(1,2,3)
 //' temp=c(1,2,3)
 //' setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
@@ -102,7 +102,7 @@ void setPTInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Prec
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 //' prec=c(1,2,3)
 //' temp=c(1,2,3)
 //' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
@@ -170,7 +170,7 @@ void setPTDateInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector 
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 // [[Rcpp::export]]
 void setPTInputsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame DataDF) {
 

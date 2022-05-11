@@ -16,7 +16,7 @@
 //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 //' setNumFastResAlldHrus(dHRUM_ptr = dhrus,numFastRes=ups,hruIds=IdsHrus)
 //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 // [[Rcpp::export]]
 void setNumFastResAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector numFastRes, Rcpp::CharacterVector hruIds) {
   unsigned dimdHRUM = 0;

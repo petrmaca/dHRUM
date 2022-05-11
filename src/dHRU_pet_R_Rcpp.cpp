@@ -16,7 +16,7 @@
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 //' prec=c(1,2,3)
 //' temp=c(1,2,3)
 //' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
@@ -96,7 +96,7 @@ void calcPetToAllHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, numberSel Latitude, std::stri
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 //' prec=c(1,2,3)
 //' temp=c(1,2,3)
 //' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,

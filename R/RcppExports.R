@@ -14,7 +14,7 @@
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
@@ -42,7 +42,7 @@ calcHBInAlldHrus <- function(dHRUM_ptr) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
@@ -94,7 +94,7 @@ setGWtypeToAlldHrus <- function(dHRUM_ptr, gwTypes, hruIds) {
 #' filname2 = "../Calibrations/Amalie/indata/BP_1960_01_01.txt"
 #' setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 setPTInputsToAlldHrusFromFile <- function(dHRUM_ptr, namInpFilet) {
     invisible(.Call(`_dHRUM_setPTInputsToAlldHrusFromFile`, dHRUM_ptr, namInpFilet))
 }
@@ -115,7 +115,7 @@ setPTInputsToAlldHrusFromFile <- function(dHRUM_ptr, namInpFilet) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
@@ -139,7 +139,7 @@ setPTInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, inDate) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
@@ -162,7 +162,7 @@ setPTDateInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, DateVec) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 setPTInputsToDistdHRUM <- function(dHRUM_ptr, DataDF) {
     invisible(.Call(`_dHRUM_setPTInputsToDistdHRUM`, dHRUM_ptr, DataDF))
 }
@@ -201,7 +201,7 @@ initdHruModel <- function(dimdHru, vecAreas, hrusIDs) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
@@ -229,7 +229,7 @@ getOutput <- function(dHRUM_ptr) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
@@ -259,7 +259,7 @@ printToFile <- function(dHRUM_ptr, namOutFilet) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
@@ -292,7 +292,7 @@ getOutputDist <- function(dHRUM_ptr) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
@@ -321,7 +321,7 @@ dHRUMrun <- function(dHRUM_ptr) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
@@ -350,7 +350,7 @@ dHRUMrunDist <- function(dHRUM_ptr) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
@@ -378,7 +378,7 @@ setParamsToAlldHrus <- function(dHRUM_ptr, ParsVec, ParsNames) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
@@ -404,7 +404,7 @@ setParamsToOnedHru <- function(dHRUM_ptr, ParsVec, ParsNames, singleHruId) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
@@ -438,7 +438,7 @@ setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
@@ -469,7 +469,7 @@ calcPetToAllHrus <- function(dHRUM_ptr, Latitude, PetTypeStr) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
@@ -502,7 +502,7 @@ calcPetToAllHrusDist <- function(dHRUM_ptr, Latitude, PetTypeStrNames, HruIds) {
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setNumFastResAlldHrus(dHRUM_ptr = dhrus,numFastRes=ups,hruIds=IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 setNumFastResAlldHrus <- function(dHRUM_ptr, numFastRes, hruIds) {
     invisible(.Call(`_dHRUM_setNumFastResAlldHrus`, dHRUM_ptr, numFastRes, hruIds))
 }
@@ -522,7 +522,7 @@ setNumFastResAlldHrus <- function(dHRUM_ptr, numFastRes, hruIds) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
-#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 setSoilStorTypeToAlldHrus <- function(dHRUM_ptr, soilTypes, hruIds) {
     invisible(.Call(`_dHRUM_setSoilStorTypeToAlldHrus`, dHRUM_ptr, soilTypes, hruIds))
 }
