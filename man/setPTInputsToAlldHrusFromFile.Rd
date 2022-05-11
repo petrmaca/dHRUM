@@ -23,4 +23,6 @@ IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 filname2 = "../Calibrations/Amalie/indata/BP_1960_01_01.txt"
 setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
+setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
 }
