@@ -571,7 +571,7 @@ case soil_STORtype::PDM2: {
   dummy = std::max(dummy,0.0);
   w2 = (get_par(par_HRUtype::C_MAX) / (get_par(par_HRUtype::B_SOIL)+1)) * (1-(std::pow(dummy,(get_par(par_HRUtype::B_SOIL)+1))));
   er2 = std::max(((c2-c1) - (w2-w1)),0.0);
-  evap = (1- ((get_par(par_HRUtype::C_MAX) -c2)/(get_par(par_HRUtype::B_SOIL)+1))/(get_par(par_HRUtype::C_MAX)/(get_par(par_HRUtype::B_SOIL)+1)))* get_dta(tstRM, ts_type::PET);
+  evap = (1- ((get_par(par_HRUtype::SMAX) -c2)/(get_par(par_HRUtype::B_SOIL)+1))/(get_par(par_HRUtype::C_MAX)/(get_par(par_HRUtype::B_SOIL)+1)))* get_dta(tstRM, ts_type::PET);
 
   w2 = std::max(w2-evap,0.0);
 
