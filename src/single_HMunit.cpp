@@ -550,11 +550,39 @@ case soil_STORtype::PDM: {
 
   // aet = get_dta(tstRM,ts_type::EVAC) +  get_dta(tstRM,ts_type::EVAS)  +  evap;
   // set_varValue(aet, tstRM, ts_type::AET);
-
   prev_Soil = next_soil;
   // std::cout << " et2 " << et_demand << " evap2 " << evap << "\n";
   break;
 }
+
+// Alberto Montanari implementation from hi R package
+// https://github.com/albertomontanari/hymodbluecat/blob/main/src/hymodfortran.f95
+case soil_STORtype::PDM2: {
+  numberSel w1 = 0.0, dummy = 0.0, c1 = 0.0, c2 = 0.0, er1 =0.0, w2 = 0.0, er2 = 0.0,evap = 0.0, overFL =0.0;
+
+  w1 = prev_Soil;
+  dummy = (1 - (get_par(par_HRUtype::B_SOIL)+1)*w1/get_par(par_HRUtype::C_MAX));
+  dummy = std::max(dummy,0.0);
+  c1 = get_par(par_HRUtype::C_MAX) * (1- (std::pow(dummy,(1/(get_par(par_HRUtype::B_SOIL)+1)))));
+  c2 = std::min((c1 + get_dta(tstRM, ts_type::PREF)), get_par(par_HRUtype::C_MAX));
+  c2 = std::max(c2,0.0);
+  er1=std::max(get_dta(tstRM, ts_type::PREF) + get_par(par_HRUtype::C_MAX) +c1,0.0);
+  dummy = 1- c2 / get_par(par_HRUtype::C_MAX);
+  dummy = std::max(dummy,0.0);
+  w2 = (get_par(par_HRUtype::C_MAX) / (get_par(par_HRUtype::B_SOIL)+1)) * (1-(std::pow(dummy,(get_par(par_HRUtype::B_SOIL)+1))));
+  er2 = std::max(((c2-c1) - (w2-w1)),0.0);
+  evap = (1- ((get_par(par_HRUtype::C_MAX) -c2)/(get_par(par_HRUtype::B_SOIL)+1))/(get_par(par_HRUtype::C_MAX)/(get_par(par_HRUtype::B_SOIL)+1)))* get_dta(tstRM, ts_type::PET);
+
+  w2 = std::max(w2-evap,0.0);
+
+  overFL = er1 + er2;
+
+  prev_Soil = w2;
+  set_varValue(w2, tstRM, ts_type::SOIS);
+  set_varValue(evap,tstRM, ts_type::EVBS);
+  set_varValue(overFL, tstRM, ts_type::PERC);
+  }
+
 
 case soil_STORtype::COLLIE_V2: {
     //actual evaporation is split between bare soil evaporation E_b and transpiration through vegetation E_v

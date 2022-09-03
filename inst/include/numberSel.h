@@ -53,12 +53,12 @@ const gs_STORtype all_gs_STORs[]{ gs_STORtype::LIN_RES, gs_STORtype::LINL_RES, g
 const std::vector<std::string> allGWStorTypeNames {"LIN_RES", "LINL_RES", "LINBY_RES", "POW_RES",
                                                  "EXP_RES", "LIN_2SE", "LIN_2PA", "FLEX_RES" };
 
-enum class soil_STORtype { PDM, COLLIE_V2, NEW_ZEALAND, GR4J, SBROOK_V1, HILLSLOPE, PLATEAU };
+enum class soil_STORtype { PDM, COLLIE_V2, NEW_ZEALAND, GR4J, SBROOK_V1, HILLSLOPE, PLATEAU, PDM2 };
 const soil_STORtype all_soil_STORs[]{ soil_STORtype::PDM, soil_STORtype::COLLIE_V2, soil_STORtype::NEW_ZEALAND, \
                                       soil_STORtype::GR4J, soil_STORtype::SBROOK_V1, soil_STORtype::HILLSLOPE,  \
-                                      soil_STORtype::PLATEAU};
+                                      soil_STORtype::PLATEAU,soil_STORtype::PDM};
 
 const std::vector<std::string> allSoilStorTypeNames {"PDM", "COLLIE_V2", "NEW_ZEALAND", "GR4J", "SBROOK_V1", \
-                                                     "HILLSLOPE", "PLATEAU"};
+                                                     "HILLSLOPE", "PLATEAU","PDM2"};
 
 #endif // NUMBERSEL_H_INCLUDED
