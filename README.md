@@ -1,5 +1,5 @@
 # dHRUM
-A repo for dHRUM  -- distributed Hydrological Response Unit Model
+A repo for dHRUM  -- distributed Hydrological Response Unit Model.
 
 
 ```{r} 
