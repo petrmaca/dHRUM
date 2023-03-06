@@ -106,6 +106,7 @@ void dHRUM::setInputsToOneHru(std::string namesFilePath, unsigned Id) {
 
 void dHRUM::initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& gs_STORtypes) {
 
+#pragma omp parallel for
   for(unsigned int i=0; i<gs_STORtypes.size(); i++) {
     dHruVec[gs_STORtypes[i].first].set_GStype(gs_STORtypes[i].second);
   }
@@ -117,6 +118,7 @@ void dHRUM::initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& g
 
 void dHRUM::initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype>>& soil_STORtypes) {
 
+#pragma omp parallel for
     for(unsigned int i=0; i<soil_STORtypes.size(); i++) {
       dHruVec[soil_STORtypes[i].first].set_soilStorType(soil_STORtypes[i].second);
     }
