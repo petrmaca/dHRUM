@@ -375,13 +375,14 @@ void dHRUM::gatherTsFromHrus() {
     basinDta.setOneTstoZero(it);
   }
   //  for(const auto& itr : all_ts) {
-#pragma omp parallel for
+// #pragma omp parallel for
   for(unsigned int itRts=0; itRts<numTSvars; itRts++) {
     ts_type    itTS =all_ts[itRts];
     hdata helpValAr(0.0,numTs);
     //    std::cout << helpValAr[0] << " " << dHruVec[0].getSingleHruTsDta(it)[0] << " fdsoi " <<std::endl;
     //  dHruVec[itHru].getSingleHruTsDta(it) * Areas[itHru] /
     // dHruVec[0].getSingleHruTsDta(it) *
+#pragma omp parallel for
     for(unsigned itHru=0; itHru<dimHM; itHru++) {
       helpValAr +=   dHruVec[itHru].getSingleHruTsDta(itTS) * Areas[itHru] / basinArea;
       //      std::cout << helpValAr[0] << " " << Areas[0] << " ba " << basinArea <<std::endl;

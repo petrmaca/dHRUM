@@ -160,7 +160,7 @@ Rcpp::List getOutputDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
     }
   }
 
-    Rcpp::StringVector VarsNams({"YEAR", "MONTH", "DAY", "JDAY",    \
+  Rcpp::StringVector VarsNams({"YEAR", "MONTH", "DAY", "JDAY",    \
                               "PREC","SNOW","AET","PET","TEMP",   \
                               "MELT","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \

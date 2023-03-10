@@ -1,10 +1,13 @@
 library(dHRUM)
-nHrus <- 1
+nHrus <- 100000
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-prec=c(100,200,300,100,200,300)
-temp=c(1,2,3,1,2,3)
+numdata =500
+probwet =0.3
+meanifwet = 0.1
+prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
+temp=rnorm(numdata,4,3)
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
 setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM2",times= length(Areas)),hruIds=IdsHrus)
 setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
@@ -15,8 +18,8 @@ calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"THORNTHWAITE")
 calcHBInAlldHrus(dHRUM_ptr = dhrus)
 gatherHBdata(dHRUM_ptr = dhrus)
 outDt <- getOutputDist(dHRUM_ptr = dhrus)
-outDF <- cbind(outDt$outDta, outDta$Ids)
-outDF <- data.frame(outDF)
-names(outDF) <-c(outDta$VarsNams,"HruIDs")
-outDF
+# outDF <- cbind(outDt$outDta, outDt$Ids)
+# outDF <- data.frame(outDF)
+# names(outDF) <-c(outDt$VarsNams,"HruIDs")
+# outDF
 
