@@ -128,16 +128,17 @@ Rcpp::List getOutputDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
 
   hdata helpVal = dHRUM_ptr.get()->get_HbDta(all_ts[0]);
 
+  // building the vector with IDs
   unsigned indexrow=0;
   for(unsigned itHRU=0; itHRU<dHRUM_ptr->getdHRUdim(); itHRU++){
     for(unsigned i=0;i<dHRUM_ptr.get()->get_numTS();i++){
       Ids[indexrow] = dHRUM_ptr.get()->getSingleHruId(itHRU);
       indexrow++;
       }
-
     }
   // numTSvar
 
+#pragma omp parallel for
   for(unsigned j=0;j<4;j++){
     unsigned indexrowCal=0;
     for(unsigned itHRU=0; itHRU<dHRUM_ptr->getdHRUdim(); itHRU++){
@@ -149,6 +150,7 @@ Rcpp::List getOutputDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
     }
   }
 
+#pragma omp parallel for
   for(unsigned j=4;j<ncolOutMat;j++){
     unsigned indexrowNu=0;
     for(unsigned itHRU=0; itHRU<dHRUM_ptr->getdHRUdim(); itHRU++){

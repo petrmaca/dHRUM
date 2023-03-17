@@ -1,9 +1,9 @@
 library(dHRUM)
-nHrus <- 10
+nHrus <- 10000
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-numdata =5
+numdata =36500
 probwet =0.3
 meanifwet = 0.1
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
