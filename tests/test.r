@@ -1,13 +1,15 @@
+library(profvis)
+profvis({
 library(dHRUM)
-nHrus <- 10000
-Areas <- runif(nHrus,min = 1,max  = 10)
-IdsHrus <- paste0("ID",seq(1:length(Areas)))
-dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 numdata =36500
-probwet =0.3
+probwet =0.6
 meanifwet = 0.1
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 temp=rnorm(numdata,4,3)
+nHrus <- 15000
+Areas <- runif(nHrus,min = 1,max  = 10)
+IdsHrus <- paste0("ID",seq(1:length(Areas)))
+dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
 setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM2",times= length(Areas)),hruIds=IdsHrus)
 setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
@@ -22,4 +24,4 @@ outDt <- getOutputDist(dHRUM_ptr = dhrus)
 # outDF <- data.frame(outDF)
 # names(outDF) <-c(outDt$VarsNams,"HruIDs")
 # outDF
-
+})

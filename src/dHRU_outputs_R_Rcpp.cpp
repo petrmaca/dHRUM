@@ -34,6 +34,7 @@ Rcpp::List getOutput(Rcpp::XPtr<dHRUM> dHRUM_ptr){
   Rcpp::NumericMatrix outDta( nrowOutMat, ncolOutMat ) ;
   hdata helpVal = dHRUM_ptr.get()->get_HbDta(all_ts[0]);
   // numTSvar
+#pragma omp parallel for
   for(unsigned j=0;j<4;j++){
     caldata helpVal = dHRUM_ptr.get()->get_CalDta(all_caDT[j]);
     for(unsigned i=0; i<nrowOutMat; i++){
@@ -41,6 +42,7 @@ Rcpp::List getOutput(Rcpp::XPtr<dHRUM> dHRUM_ptr){
     }
   }
 
+#pragma omp parallel for
   for(unsigned j=4;j<ncolOutMat;j++){
     hdata helpVal = dHRUM_ptr.get()->get_HbDta(all_ts[j-4]);
     for(unsigned i=0; i<nrowOutMat; i++){

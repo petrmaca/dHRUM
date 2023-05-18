@@ -56,7 +56,7 @@ const std::vector<std::string> allGWStorTypeNames {"LIN_RES", "LINL_RES", "LINBY
 enum class soil_STORtype { PDM, COLLIE_V2, NEW_ZEALAND, GR4J, SBROOK_V1, HILLSLOPE, PLATEAU, PDM2 };
 const soil_STORtype all_soil_STORs[]{ soil_STORtype::PDM, soil_STORtype::COLLIE_V2, soil_STORtype::NEW_ZEALAND, \
                                       soil_STORtype::GR4J, soil_STORtype::SBROOK_V1, soil_STORtype::HILLSLOPE,  \
-                                      soil_STORtype::PLATEAU,soil_STORtype::PDM};
+                                      soil_STORtype::PLATEAU,soil_STORtype::PDM2};
 
 const std::vector<std::string> allSoilStorTypeNames {"PDM", "COLLIE_V2", "NEW_ZEALAND", "GR4J", "SBROOK_V1", \
                                                      "HILLSLOPE", "PLATEAU","PDM2"};
