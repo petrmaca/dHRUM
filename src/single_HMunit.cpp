@@ -536,6 +536,10 @@ case soil_STORtype::PDM: {
   //   std::cout <<" AFTRevap"<<  evap << " etdem "<< et_demand << std::endl;
   // }
   //Soil buffer state
+  numberSel help_EvapSR = update_ETDEMAND(evap, false);
+  et_demand = update_ETDEMAND(evap, true);
+  evap = help_EvapSR;
+
   next_soil = std::max(static_cast<numberSel>(next_soil - evap),static_cast<numberSel>(0.0));
   //Total overflow
   overFL = overFl1 + overFl2;
@@ -1830,6 +1834,11 @@ void single_HMunit::print_soilStorType() {
   case soil_STORtype::PLATEAU:
     std::cout << "The soil_STOR is a PLATEAU reservoir" << std::endl;
     break;
+
+  case soil_STORtype::PDM2:
+    std::cout << "The soil_STOR is a PDM2 reservoir." << std::endl;
+    break;
+
   }
 
 }

@@ -47,6 +47,7 @@ void setSoilStorTypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVecto
     }
     std::map<std::string, soil_STORtype> s_mapStringToSoilSType_HRUtype = {
       {"PDM", soil_STORtype::PDM},
+      {"PDM2", soil_STORtype::PDM2},
       {"COLLIE_V2", soil_STORtype::COLLIE_V2},
       {"NEW_ZEALAND", soil_STORtype::NEW_ZEALAND},
       {"GR4J", soil_STORtype::GR4J},
