@@ -36,7 +36,7 @@ params::params(): numPars(0),
   pars[19] = 0.1;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
   pars[20] = 1;//!< THR Threshold coefficient for threshold-controlled linear storage [0,inf]
   pars[21] = 0.5;//!< ALPHA Divider for two parallel linear reservoirs
-  pars[22] = 0;//!< Cmin for pdmsoil reservoir []0,inf]
+  pars[22] = 0;//!< Cmin for pdmsoil reservoir [0,inf]
   numberSel helpSmax;
   helpSmax = (pars[0] * pars[22] +pars[1]) / (pars[0]+1);
   pars[23] = 10;//!< FC Field capacity [mm] [0,inf)

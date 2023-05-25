@@ -72,6 +72,9 @@ void setSoilStorTypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVecto
       case soil_STORtype::PDM:
         soilTypesToLoad.push_back(std::make_pair(indexHru[id], soil_STORtype::PDM));
         break;
+      case soil_STORtype::PDM2:
+        soilTypesToLoad.push_back(std::make_pair(indexHru[id], soil_STORtype::PDM2));
+        break;
       case soil_STORtype::COLLIE_V2:
         soilTypesToLoad.push_back(std::make_pair(indexHru[id], soil_STORtype::COLLIE_V2));
         break;

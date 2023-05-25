@@ -32,9 +32,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   prevSnoS = get_initState(init_Stype::SNOS);
   prev_SurS = get_initState(init_Stype::SURFRET);
   p_defaultParams(false);
-
 //  std::cout << "INITprevDR " << prev_Grou << std::endl;
-
   tstRM = 0;
   gs_STORAGE = gs_STORtype::LIN_RES;
   soil_STORAGE = soil_STORtype::PDM;
@@ -1480,6 +1478,10 @@ void single_HMunit::set_ZeroStates() {
   prevSteS = 0.0;
   prevSnoS = 0.0;
   prev_SurS = 0.0;
+
+  help_nmbFR = get_nmbFastRes();
+  //  std::cout << "\nFast runoff response has " << help_nmbFR << " reservoirs." << std::endl;
+  set_ZeroinitStates(help_nmbFR);
 
   return ;
 
