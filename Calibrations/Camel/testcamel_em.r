@@ -42,6 +42,8 @@ for(i in 1:nrow(gaugeChars)){
   print(sum(pr[1:nt]))
   print(sum(Qm[1:nt]))
 
+
+
   nHrus <- 1
   IdsHrus <- paste0("ID_",0,gaugeChars$GAGE_ID[i])
   dhrus <- initdHruModel(nHrus,area,IdsHrus)
