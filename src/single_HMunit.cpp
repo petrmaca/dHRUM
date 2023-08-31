@@ -33,8 +33,8 @@ single_HMunit::single_HMunit(): tstRM(0),
   prevSteS  = get_initState(init_Stype::STES);
   prevSnoS = get_initState(init_Stype::SNOS);
   prev_SurS = get_initState(init_Stype::SURFRET);
-  prev_SurS = get_initState(init_Stype::GROS1);
-  prev_SurS = get_initState(init_Stype::GROS2);
+  prev_GroS1 = get_initState(init_Stype::GROS1);
+  prev_GroS2 = get_initState(init_Stype::GROS2);
   p_defaultParams(false);
 //  std::cout << "INITprevDR " << prev_Grou << std::endl;
   tstRM = 0;
@@ -942,8 +942,11 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
     break;
 
   case gs_STORtype::POW_RES:
-      if( prev_Grou >0) BaseOut = std::pow(prev_Grou, get_par(par_HRUtype::B_EXP)) * get_par(par_HRUtype::KS);
-        else BaseOut = 0.0;
+      if( prev_Grou > 0) {
+        BaseOut = std::pow(prev_Grou, get_par(par_HRUtype::B_EXP)) * get_par(par_HRUtype::KS);
+      } else {
+        BaseOut = 0.0;
+      }
       prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
 
       set_varValue(BaseOut, tstRM, ts_type::BASF);
@@ -1493,6 +1496,8 @@ void single_HMunit::set_ZeroStates() {
   prevSteS = 0.0;
   prevSnoS = 0.0;
   prev_SurS = 0.0;
+  prev_GroS1 = 0.0;
+  prev_GroS2 = 0.0;
 
   help_nmbFR = get_nmbFastRes();
   //  std::cout << "\nFast runoff response has " << help_nmbFR << " reservoirs." << std::endl;
