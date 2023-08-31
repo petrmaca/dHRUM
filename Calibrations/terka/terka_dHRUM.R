@@ -6,14 +6,14 @@ library(data.table)
 # numdata =14671
 # probwet =0.3
 # meanifwet = 0.5
-# 
+#
 # namsP= dir("./data/meteo156stanic/P/")
-# 
+#
 # data.table(readRDS("./data/meteo156stanic/P/P_1989.rds"))
 # data.table(readRDS("./data/meteo156stanic/T/T_1989.rds"))
 # data.table(readRDS("./data/meteo156stanic/E/EVAP_1969.rds"))
-# 
-# 
+#
+#
 # length(namsP)
 # prec=list()
 # for(i in 1:2){
@@ -21,11 +21,10 @@ library(data.table)
 # }
 # prec=rbindlist(prec)
 # prec[ID %in% 905,]
-# # 
+# #
 # prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 # temp=20*sin((1:14671)/45+35)+rnorm(numdata,0,2)
 # plot(temp,type="l")
-
 # dtaMPX <- read.table("./data/mopex/12027500.txt")
 
 
@@ -50,12 +49,12 @@ dtaMPX[,T:=(Tmax+Tmin)/2]
 #                     SDIV = 0.1, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = -1.0,
 #                     RETCAP = 2, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
 #                     KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3)
-# 
+#
 # ParDFup = data.frame( B_SOIL = 2, C_MAX = 200, CMIN=5, B_EVAP = 1,  KS = 0.1, KF = 0.3, ADIV = 0.8, CDIV = 0.3,
 #                       SDIV = 0.1, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = -1.0,
 #                       RETCAP = 2, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
 #                       KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3)
-# 
+#
 # ParDFlow = data.frame(B_SOIL = 1, C_MAX = 1, CMIN=5, B_EVAP = 1,  KS = 0.001, KF = 0.003, ADIV = 0.8, CDIV = 0.3,
 #                       SDIV = 0.1, CAN_ST = 1., STEM_ST = 1., CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = -1.0,
 #                       RETCAP = 2, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
@@ -99,7 +98,7 @@ ParBest = ParDF
 
 fitness = function(myPar){
   # myPar =ParDF[1,]
-  
+
   setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(myPar),names(ParDF))
   # # for( i in 1:1000){
   outDta <- dHRUMrun(dHRUM_ptr = dhrus)
@@ -110,13 +109,13 @@ fitness = function(myPar){
   # print((-1)*as.double(KGE(sim=dF$TOTR[365:nt],obs=Qm[365:nt])))
   sim=log(dF$TOTR[365:nt])
   obs=log(dtaMPX$R[365:nt])
-  
+
   mae = mae(sim = sim, obs = obs)
-  
+
   if (is.na(mae)) {
     mae = 99999999
   }
-  
+
   mae
   #myfitnes = sum((sim-obs)^2) / sum((obs- mean(obs))^2)
   # # mymae=NA

@@ -39,6 +39,8 @@ data_HB_1d::data_HB_1d(): numTS(0),
   init_SteS(0.0),
   init_SnoS(0.0),
   init_SurS(0.0),
+  init_GroS1(0.0),
+  init_GroS2(0.0),
   numfastRes(1),
   StateFastRes(1.0,1),
   OutFastRes(1.0,1) {
@@ -162,6 +164,8 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   init_SteS(0.0),
   init_SnoS(0.0),
   init_SurS(0.0),
+  init_GroS1(0.0),
+  init_GroS2(0.0),
   numfastRes(1),
   StateFastRes(1,1),
   OutFastRes(1,1) {
@@ -204,6 +208,8 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   init_SteS = other.init_SteS;//!< Initial value of Stem Interception storage
   init_SnoS = other.init_SnoS;//!< Initial variable of Snow storage
   init_SurS = other.init_SurS;//!< Initial value of Surface retention storage
+  init_GroS1 = other.init_GroS1;
+  init_GroS2 = other.init_GroS2;
   numfastRes = other.numfastRes;
   StateFastRes = other.StateFastRes;
   OutFastRes = other.OutFastRes;
@@ -252,6 +258,8 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     init_SteS = rhs.init_SteS;//!< Initial value of Stem Interception storage
     init_SnoS = rhs.init_SnoS;//!< Initial variable of Snow storage
     init_SurS = rhs.init_SurS;//!< Initial value of Surface retention storage
+    init_GroS1 = rhs.init_GroS1;
+    init_GroS2 = rhs.init_GroS2;
     numfastRes = rhs.numfastRes;
     StateFastRes = rhs.StateFastRes;
     OutFastRes = rhs.OutFastRes;
@@ -528,6 +536,12 @@ void data_HB_1d::s_initStates(const hdata& initfastRes, const numberSel& init_St
   case init_Stype::FASTRES:
     s_init_states_fastRes(initfastRes);
     break;
+  case init_Stype::GROS1:
+    init_GroS1 = init_State;
+    break;
+  case init_Stype::GROS2:
+    init_GroS2 = init_State;
+    break;
   }
 
   return ;
@@ -562,7 +576,13 @@ numberSel data_HB_1d::g_initState(const init_Stype& _Stype) {
   case init_Stype::SURFRET:
     return init_SurS;
     break;
- case init_Stype::FASTRES:
+  case init_Stype::GROS1:
+    return init_GroS1;
+    break;
+  case init_Stype::GROS2:
+    return init_GroS2;
+    break;
+  case init_Stype::FASTRES:
     return StateFastRes[1];// returns only the init state of the first reservoir
     break;
   }

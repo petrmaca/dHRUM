@@ -130,6 +130,10 @@ class data_HB_1d {
   numberSel init_SnoS;//!< Initial variable of Snow storage
   numberSel init_SurS;//!< Initial value of Surface retention storage
 
+
+  numberSel init_GroS1;//!< Initial value of groundwater storage for LIN_2SE and LIN_2PA
+  numberSel init_GroS2;//!< Initial value of groundwater storage for LIN_2SE and LIN_2PA
+
   unsigned numfastRes;//!<  the number of fast response reservoirs
   hdata StateFastRes;//!< The state variables of fast response reservoirs
   hdata OutFastRes;//!< The outputs of serie for fast response reservoirs

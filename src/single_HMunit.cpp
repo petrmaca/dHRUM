@@ -13,6 +13,8 @@ single_HMunit::single_HMunit(): tstRM(0),
   prevSteS(0.0),
   prevSnoS(0.0),
   prev_SurS(0.0),
+  prev_GroS1(0.0),
+  prev_GroS2(0.0),
   et_demand(0.0),
   help_nmbFR(0),
   ifrb(0),
@@ -31,6 +33,8 @@ single_HMunit::single_HMunit(): tstRM(0),
   prevSteS  = get_initState(init_Stype::STES);
   prevSnoS = get_initState(init_Stype::SNOS);
   prev_SurS = get_initState(init_Stype::SURFRET);
+  prev_SurS = get_initState(init_Stype::GROS1);
+  prev_SurS = get_initState(init_Stype::GROS2);
   p_defaultParams(false);
 //  std::cout << "INITprevDR " << prev_Grou << std::endl;
   tstRM = 0;
@@ -68,6 +72,8 @@ prevCanS(0.0),
 prevSteS(0.0),
 prevSnoS(0.0),
 prev_SurS(0.0),
+prev_GroS1(0.0),
+prev_GroS2(0.0),
 et_demand(0.0),
 help_nmbFR(0),
 ifrb(0),
@@ -85,6 +91,8 @@ gs_STORAGE{}
   prevSteS = other.prevSteS;//!<  The helper variable for Stem interception storage
   prevSnoS = other.prevSnoS;//!<  The helper variable for Snow storage
   prev_SurS = other.prev_SurS;//!< The helper variable for updating surface storage
+  prev_GroS1 = other.prev_GroS1;
+  prev_GroS2 = other.prev_GroS2;
   et_demand = other.et_demand;
   help_nmbFR = other.help_nmbFR;//!< The helper for number of fast reservoirs
   ifrb = other.ifrb;//!< For loop counter
@@ -116,6 +124,8 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     prevSteS = rhs.prevSteS;//!<  The helper variable for Stem interception storage
     prevSnoS = rhs.prevSnoS;//!<  The helper variable for Snow storage
     prev_SurS = rhs.prev_SurS;//!< The helper variable for updating surface storage
+    prev_GroS1 = rhs.prev_GroS1;
+    prev_GroS2 = rhs.prev_GroS2;
     et_demand = rhs.et_demand;
     help_nmbFR = rhs.help_nmbFR;//!< The helper for number of fast reservoirs
     ifrb = rhs.ifrb;//!< For loop counter
@@ -239,6 +249,8 @@ void single_HMunit::set_ZeroinitStates(const unsigned& numres) {
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::FASTRES);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::SNOS);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::SURFRET);
+  hyd_dta.s_initStates(help_data,zeroState,init_Stype::GROS1);
+  hyd_dta.s_initStates(help_data,zeroState,init_Stype::GROS2);
 
   return ;
 }
@@ -900,8 +912,8 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
   numberSel BaseOut = 0.0;
   numberSel BaseOut_1 = 0.0;
   numberSel BaseOut_2 = 0.0;
-  numberSel prev_Grou1 = 0.0;
-  numberSel prev_Grou2 = 0.0;
+  // numberSel prev_Grou1 = 0.0;
+  // numberSel prev_Grou2 = 0.0;
 
   switch(_gs_STORtype) {
 
@@ -930,13 +942,12 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
     break;
 
   case gs_STORtype::POW_RES:
-    if(get_par(par_HRUtype::B_EXP) > 1/3 && get_par(par_HRUtype::B_EXP) < 1 && prev_Grou != 0) {
-      BaseOut = std::pow(prev_Grou, get_par(par_HRUtype::B_EXP)) * get_par(par_HRUtype::KS);
+      if( prev_Grou >0) BaseOut = std::pow(prev_Grou, get_par(par_HRUtype::B_EXP)) * get_par(par_HRUtype::KS);
+        else BaseOut = 0.0;
       prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
 
       set_varValue(BaseOut, tstRM, ts_type::BASF);
       set_varValue(prev_Grou, tstRM,ts_type::GROS);
-    }
     break;
 
   case gs_STORtype::EXP_RES:
@@ -950,31 +961,31 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
     break;
 
   case gs_STORtype::LIN_2SE:
-    BaseOut = prev_Grou2 * get_par(par_HRUtype::KS2);
-    BaseOut_1 = prev_Grou1 * get_par(par_HRUtype::KS);
+    BaseOut = prev_GroS2 * get_par(par_HRUtype::KS2);
+    BaseOut_1 = prev_GroS1 * get_par(par_HRUtype::KS);
 
-    prev_Grou1 = prev_Grou1 + ((1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC)) - BaseOut_1;
-    prev_Grou2 = prev_Grou2 + BaseOut_1 - BaseOut;
+    prev_GroS1 = prev_GroS1 + ((1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC)) - BaseOut_1;
+    prev_GroS2 = prev_GroS2 + BaseOut_1 - BaseOut;
 
     set_varValue(BaseOut, tstRM, ts_type::BASF);
-    set_varValue(prev_Grou1, tstRM,ts_type::GROS);
-    set_varValue(prev_Grou2, tstRM,ts_type::GROS);
-    set_varValue(prev_Grou1 + prev_Grou2, tstRM,ts_type::GROS);
+    // set_varValue(prev_Grou1, tstRM,ts_type::GROS);
+    // set_varValue(prev_Grou2, tstRM,ts_type::GROS);
+    set_varValue(prev_GroS1 + prev_GroS2, tstRM,ts_type::GROS);
     break;
 
   case gs_STORtype::LIN_2PA:
-    BaseOut_1 = prev_Grou1 * get_par(par_HRUtype::KS);
-    prev_Grou1 = prev_Grou1 + (1 - get_par(par_HRUtype::ADIV)) * get_par(par_HRUtype::ALPHA) * get_dta(tstRM, ts_type::PERC) - BaseOut_1;
+    BaseOut_1 = prev_GroS1 * get_par(par_HRUtype::KS);
+    prev_GroS1 = prev_GroS1 + (1 - get_par(par_HRUtype::ADIV)) * get_par(par_HRUtype::ALPHA) * get_dta(tstRM, ts_type::PERC) - BaseOut_1;
 
-    BaseOut_2 = prev_Grou2 * get_par(par_HRUtype::KS2);
-    prev_Grou2 = prev_Grou2 + (1 - get_par(par_HRUtype::ADIV)) * (1 - get_par(par_HRUtype::ALPHA)) * get_dta(tstRM, ts_type::PERC) - BaseOut_2;
+    BaseOut_2 = prev_GroS2 * get_par(par_HRUtype::KS2);
+    prev_GroS2 = prev_GroS2 + (1 - get_par(par_HRUtype::ADIV)) * (1 - get_par(par_HRUtype::ALPHA)) * get_dta(tstRM, ts_type::PERC) - BaseOut_2;
 
     BaseOut = BaseOut_1 + BaseOut_2;
 
     set_varValue(BaseOut, tstRM, ts_type::BASF);
-    set_varValue(prev_Grou1, tstRM,ts_type::GROS);
-    set_varValue(prev_Grou2, tstRM,ts_type::GROS);
-    set_varValue(prev_Grou1 + prev_Grou2, tstRM,ts_type::GROS);
+    // set_varValue(prev_Grou1, tstRM,ts_type::GROS);
+    // set_varValue(prev_Grou2, tstRM,ts_type::GROS);
+    set_varValue(prev_GroS1 + prev_GroS2, tstRM,ts_type::GROS);
 
     break;
 
