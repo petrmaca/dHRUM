@@ -812,7 +812,9 @@ case soil_STORtype::HILLSLOPE: {
     //expressed through parameters SMAX [mm] and KF_NONLIN
     overFl1 = (1 - std::pow(1 - prev_Soil / get_par(par_HRUtype::SMAX), get_par(par_HRUtype::KF_NONLIN))) * P_n;
 
-    next_soil = prev_Soil + P_n + get_par(par_HRUtype::C);
+    next_soil = prev_Soil + P_n + get_par(par_HRUtype::C) * overFl1;
+
+    overFl1 = overFl1 * (1-get_par(par_HRUtype::C));
 
     std::vector<numberSel> updated_vals;
 
@@ -855,7 +857,9 @@ case soil_STORtype::PLATEAU: {
       overFL = 0;
     }
 
-    next_soil = prev_Soil + ppInf + get_par(par_HRUtype::C);
+    next_soil = prev_Soil + ppInf + get_par(par_HRUtype::C) * overFL;
+
+    overFL = overFL * (1-get_par(par_HRUtype::C) );
 
     if(next_soil >= 0) {
       if(next_soil < evap) {
