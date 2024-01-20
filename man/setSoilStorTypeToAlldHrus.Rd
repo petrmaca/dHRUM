@@ -14,13 +14,14 @@ setSoilStorTypeToAlldHrus(dHRUM_ptr, soilTypes, hruIds)
 \item{hruIds}{ids on Hrus}
 }
 \description{
-Setting the Soil type of dHRUM equal to all HRUs. Possibe types: \code{PDM}; \code{PDM2}; \code{COLLIE_V2};
-\code{NEW_ZEALAND}; \code{GR4J} ;\code{SBROOK_V1}; \code{HILLSLOPE}; \code{PLATEAU}
+Setting the Soil type of dHRUM equal to all HRUs. Possibe types: \code{PDM}, \code{PDM2}, \code{COLLIE_V2},
+\code{NEW_ZEALAND}, \code{GR4J}, \code{SBROOK_V1}, \code{HILLSLOPE}, \code{PLATEAU}
 }
 \details{
 the \code{PDM} is the Moore implementation of soil PDM bucket with c_min and cmax
-
-the \code{PDM2} is the Monatnari implementation of soil PDM bucket only with cmax (requires the setting of cmin to 0]
+the \code{PDM2} is the Montanari implementation of soil PDM bucket only with cmax (requires the setting of cmin to 0]
+the \code{COLLIE_V2} is bucket with threshold outflow and overflow with pars: SMAX, FOREST_FRACT, FC,
+the \code{NEW_ZEALAND} is buckect with two outflows separted by treshold with pars:  FOREST_FRACT,FC, SMAX,KF_NONLIN
 }
 \examples{
 nHrus <- 200
