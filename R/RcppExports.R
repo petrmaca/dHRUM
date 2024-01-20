@@ -509,8 +509,13 @@ setNumFastResAlldHrus <- function(dHRUM_ptr, numFastRes, hruIds) {
 
 #' Sets the similar values of params to dHRU model for all single HRUs.
 #'
-#' Setting the groudnwater type of dHRUM equal to all HRUs. Possibe types: \code{LIN_RES} \code{LINL_RES} \code{LINBY_RES}
-#' \code{POW_RES}, \code{EXP_RES} \code{LIN_2SE} \code{LIN_2PA} \code{FLEX_RES}
+#' Setting the Soil type of dHRUM equal to all HRUs. Possibe types: \code{PDM}, \code{PDM2}, \code{COLLIE_V2},
+#' \code{NEW_ZEALAND}, \code{GR4J}, \code{SBROOK_V1}, \code{HILLSLOPE}, \code{PLATEAU}
+#'
+#' the \code{PDM} is the Moore implementation of soil PDM bucket with c_min and cmax
+#' the \code{PDM2} is the Montanari implementation of soil PDM bucket only with cmax (requires the setting of cmin to 0]
+#' the \code{COLLIE_V2} is bucket with threshold outflow and overflow with pars: SMAX, FOREST_FRACT, FC,
+#' the \code{NEW_ZEALAND} is buckect with two outflows separted by treshold with pars:  FOREST_FRACT,FC, SMAX,KF_NONLIN
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
 #' @param soilTypes a charater vector of GW type names

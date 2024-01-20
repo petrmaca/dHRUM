@@ -492,8 +492,10 @@ case soil_STORtype::PDM: {
 
   //
   // Hymod formulation
+  // std::cout <<"cinit 1 "<< c_init << " cmin " <<get_par(par_HRUtype::CMIN)<< "\n";
   c_init = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(((get_par(par_HRUtype::SMAX) - prev_Soil) / (get_par(par_HRUtype::SMAX)- get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1))));
   //Overflow if soil tank fully filled
+  // std::cout <<"cinit 2 "<< c_init << " cmin " <<get_par(par_HRUtype::CMIN)<< "\n";
   overFl1 = std::max(static_cast<numberSel>(c_init + get_dta(tstRM, ts_type::PREF) - get_par(par_HRUtype::C_MAX)), static_cast<numberSel>(0.0));
   // if(tstRM ==0){
   //   std::cout << overFl1 <<" prevS "<< prev_Soil << std::endl;

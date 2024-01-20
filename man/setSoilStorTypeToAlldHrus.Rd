@@ -14,8 +14,13 @@ setSoilStorTypeToAlldHrus(dHRUM_ptr, soilTypes, hruIds)
 \item{hruIds}{ids on Hrus}
 }
 \description{
-Setting the groudnwater type of dHRUM equal to all HRUs. Possibe types: \code{LIN_RES} \code{LINL_RES} \code{LINBY_RES}
-\code{POW_RES}, \code{EXP_RES} \code{LIN_2SE} \code{LIN_2PA} \code{FLEX_RES}
+Setting the Soil type of dHRUM equal to all HRUs. Possibe types: \code{PDM}; \code{PDM2}; \code{COLLIE_V2};
+\code{NEW_ZEALAND}; \code{GR4J} ;\code{SBROOK_V1}; \code{HILLSLOPE}; \code{PLATEAU}
+}
+\details{
+the \code{PDM} is the Moore implementation of soil PDM bucket with c_min and cmax
+
+the \code{PDM2} is the Monatnari implementation of soil PDM bucket only with cmax (requires the setting of cmin to 0]
 }
 \examples{
 nHrus <- 200
