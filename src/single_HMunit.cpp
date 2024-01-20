@@ -1321,7 +1321,7 @@ void single_HMunit::run_HB() {
     // std::cout << et_demand << "\n";
     interception_snow();//
     surface_retention();//
-    std::cout << tstRM << "\n\n";
+    // std::cout << tstRM << "\n\n";
     soil_buffer(soil_STORAGE);//
     slow_response(gs_STORAGE);
     fast_response();
