@@ -492,14 +492,14 @@ case soil_STORtype::PDM: {
 
   //
   // Hymod formulation
-  std::cout <<"cinit 1 "<< c_init << " cmin " <<get_par(par_HRUtype::CMIN)<< " presoil "<< prev_Soil << " smax " << get_par(par_HRUtype::SMAX)<< " smax - prev soil "<< (get_par(par_HRUtype::C_MAX) - prev_Soil) <<"\n";
+  // std::cout <<"cinit 1 "<< c_init << " cmin " <<get_par(par_HRUtype::CMIN)<< " presoil "<< prev_Soil << " smax " << get_par(par_HRUtype::SMAX)<< " smax - prev soil "<< (get_par(par_HRUtype::C_MAX) - prev_Soil) <<"\n";
 
   if((get_par(par_HRUtype::C_MAX) - prev_Soil)>0){
     c_init = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(((get_par(par_HRUtype::C_MAX) - prev_Soil) / (get_par(par_HRUtype::C_MAX)- get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1))));
   } else c_init = get_par(par_HRUtype::SMAX);
 
   //Overflow if soil tank fully filled
-  std::cout <<"cinit 2 "<< c_init << " cmin " <<get_par(par_HRUtype::CMIN)<< " presoil "<< prev_Soil << " smax " << get_par(par_HRUtype::SMAX)<< " smax - prev soil "<< (get_par(par_HRUtype::C_MAX) - prev_Soil) <<"\n";
+  // std::cout <<"cinit 2 "<< c_init << " cmin " <<get_par(par_HRUtype::CMIN)<< " presoil "<< prev_Soil << " smax " << get_par(par_HRUtype::SMAX)<< " smax - prev soil "<< (get_par(par_HRUtype::C_MAX) - prev_Soil) <<"\n";
   overFl1 = std::max(static_cast<numberSel>(prev_Soil + get_dta(tstRM, ts_type::PREF) - get_par(par_HRUtype::C_MAX)), static_cast<numberSel>(0.0));
   // if(tstRM ==0){
   //   std::cout << overFl1 <<" prevS "<< prev_Soil << std::endl;
@@ -574,7 +574,7 @@ case soil_STORtype::PDM: {
 
   // aet = get_dta(tstRM,ts_type::EVAC) +  get_dta(tstRM,ts_type::EVAS)  +  evap;
   // set_varValue(aet, tstRM, ts_type::AET);
-  std::cout <<  " prev_soil 1 " << prev_Soil <<"\n";
+  // std::cout <<  " prev_soil 1 " << prev_Soil <<"\n";
   // prev_Soil = next_soil;
 
   if((get_par(par_HRUtype::SMAX) - next_soil)>0){
@@ -582,7 +582,7 @@ case soil_STORtype::PDM: {
   } else prev_Soil = get_par(par_HRUtype::C_MAX);
 
 
-  std::cout <<  " prev_soil 2 " << prev_Soil <<"\n";
+  // std::cout <<  " prev_soil 2 " << prev_Soil <<"\n";
 
 
   // std::cout << " et2 " << et_demand << " evap2 " << evap << "\n";
