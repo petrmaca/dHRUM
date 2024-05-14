@@ -969,6 +969,7 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
       if( prev_Grou > 0) {
         BaseOut = std::pow(prev_Grou, get_par(par_HRUtype::B_EXP)) * get_par(par_HRUtype::KS);
         BaseOut = std::min(BaseOut, prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC));
+        prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
       } else {
         BaseOut = 0.0;
         prev_Grou = 0.0 + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC);
