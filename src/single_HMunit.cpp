@@ -950,7 +950,7 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
     break;
 
   case gs_STORtype::LINL_RES:
-    BaseOut = prev_Grou * get_par(par_HRUtype::KS) ;
+    BaseOut = (prev_Grou * get_par(par_HRUtype::L)) * get_par(par_HRUtype::KS) ;
     prev_Grou = (prev_Grou * get_par(par_HRUtype::L)) + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut;
 
     set_varValue(BaseOut, tstRM, ts_type::BASF);
