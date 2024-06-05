@@ -45,13 +45,13 @@ const std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP", "SMAX","K
                                       "ALPHA","CMIN","FC","FOREST_FRACT", "KF2", "KF_NONLIN", "C", \
                                       "INFR_MAX", "RF", "WP"};
 
-enum class gs_STORtype { LIN_RES, LINL_RES, LINBY_RES, POW_RES, EXP_RES, LIN_2SE, LIN_2PA, FLEX_RES };
+enum class gs_STORtype { LIN_RES, LINL_RES, LINBY_RES, POW_RES, EXP_RES, LIN_2SE, LIN_2PA, FLEX_RES,EXP_LOG};
 const gs_STORtype all_gs_STORs[]{ gs_STORtype::LIN_RES, gs_STORtype::LINL_RES, gs_STORtype::LINBY_RES,
                                   gs_STORtype::POW_RES, gs_STORtype::EXP_RES, gs_STORtype::LIN_2SE,
-                                  gs_STORtype::LIN_2PA, gs_STORtype::FLEX_RES };
+                                  gs_STORtype::LIN_2PA, gs_STORtype::FLEX_RES, gs_STORtype::EXP_LOG };
 
 const std::vector<std::string> allGWStorTypeNames {"LIN_RES", "LINL_RES", "LINBY_RES", "POW_RES",
-                                                 "EXP_RES", "LIN_2SE", "LIN_2PA", "FLEX_RES" };
+                                                 "EXP_RES", "LIN_2SE", "LIN_2PA", "FLEX_RES","EXP_LOG" };
 
 enum class soil_STORtype { PDM, COLLIE_V2, NEW_ZEALAND, GR4J, SBROOK_V1, HILLSLOPE, PLATEAU, PDM2 };
 const soil_STORtype all_soil_STORs[]{ soil_STORtype::PDM, soil_STORtype::COLLIE_V2, soil_STORtype::NEW_ZEALAND, \

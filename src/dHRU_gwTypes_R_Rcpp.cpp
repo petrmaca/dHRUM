@@ -51,7 +51,8 @@ void setGWtypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector gwTy
        {"EXP_RES",  gs_STORtype::EXP_RES},
        {"LIN_2SE",  gs_STORtype::LIN_2SE},
        {"LIN_2PA",  gs_STORtype::LIN_2PA},
-       {"FLEX_RES", gs_STORtype::FLEX_RES}
+       {"FLEX_RES", gs_STORtype::FLEX_RES},
+       {"EXP_LOG", gs_STORtype::EXP_LOG}
      };
     std::vector<unsigned> indexHru;
     indexHru.resize(hruIds.size());
@@ -91,6 +92,9 @@ void setGWtypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector gwTy
            break;
          case gs_STORtype::FLEX_RES:
            gwTypesToLoad.push_back(std::make_pair(indexHru[id], gs_STORtype::FLEX_RES));
+           break;
+         case gs_STORtype::EXP_LOG:
+           gwTypesToLoad.push_back(std::make_pair(indexHru[id], gs_STORtype::EXP_LOG));
            break;
          }
        }
