@@ -177,6 +177,9 @@ std::vector<std::string> dHRUM::getRequiredParamsForHru(unsigned hruId) {
     case gs_STORtype::FLEX_RES:
       params = {"KS","KS2","THR","ADIV"};
       break;
+  case gs_STORtype::EXP_LOG:
+    params = {"B_EXP","ADIV"};
+    break;
   }
 
   // switch(swType) {
