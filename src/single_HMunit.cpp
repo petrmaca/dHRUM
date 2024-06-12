@@ -1019,28 +1019,30 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
     break;
 
   case gs_STORtype::FLEX_RES:
-   if(get_par(par_HRUtype::THR) > prev_Grou) {
+   if(get_par(par_HRUtype::THR) >= prev_Grou) {
       //lower outlet working
       BaseOut_1 = prev_Grou * get_par(par_HRUtype::KS);
       prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut_1;
       set_varValue(BaseOut_1, tstRM, ts_type::BASF);
 
     } else {
-      //lower and upper outlets working
-
-      //upper outlet
+    //   //lower and upper outlets working
+    //
+    //   //upper outlet
+      // BaseOut_1=0.0;
       BaseOut_2 = get_par(par_HRUtype::KS2) * (prev_Grou - get_par(par_HRUtype::THR));
       prev_Grou = prev_Grou - BaseOut_2;
-
-      //lower outlet
+    //
+    //   //lower outlet
+    // BaseOut_2=0.0;
       BaseOut_1 = prev_Grou * get_par(par_HRUtype::KS);
       prev_Grou = prev_Grou - BaseOut_1;
-
-
+    //
+    //
       prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC);
-
+    //
       BaseOut = BaseOut_1 + BaseOut_2;
-
+    //
       set_varValue(BaseOut, tstRM, ts_type::BASF);
     }
 
