@@ -1045,6 +1045,7 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
     }
 
     set_varValue(prev_Grou, tstRM,ts_type::GROS);
+    break;
 
   case gs_STORtype::EXP_LOG:
     if(get_par(par_HRUtype::B_EXP) != 0) {
