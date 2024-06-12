@@ -15,7 +15,7 @@ setGWtypeToAlldHrus(dHRUM_ptr, gwTypes, hruIds)
 }
 \description{
 Setting the groudnwater type of dHRUM equal to all HRUs. Possibe types: \code{LIN_RES} \code{LINL_RES} \code{LINBY_RES}
-\code{POW_RES}, \code{EXP_RES} \code{LIN_2SE} \code{LIN_2PA} \code{FLEX_RES}
+\code{POW_RES}, \code{EXP_RES} \code{LIN_2SE} \code{LIN_2PA} \code{FLEX_RES} \code{EXP_LOG}
 }
 \examples{
 nHrus <- 200

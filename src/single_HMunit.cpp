@@ -1028,9 +1028,10 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
     } else {
       //lower and upper outlets working
       BaseOut_2 = get_par(par_HRUtype::KS2) * (prev_Grou - get_par(par_HRUtype::THR));
-      prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut_2;
       BaseOut_1 = prev_Grou * get_par(par_HRUtype::KS);
-      prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC) - BaseOut_1;
+      prev_Grou = prev_Grou - BaseOut_1 - BaseOut_2;
+
+      prev_Grou = prev_Grou + (1 - get_par(par_HRUtype::ADIV) ) * get_dta(tstRM, ts_type::PERC);
 
       BaseOut = BaseOut_1 + BaseOut_2;
 
