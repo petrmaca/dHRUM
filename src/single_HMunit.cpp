@@ -817,44 +817,78 @@ case soil_STORtype::SBROOK_V1: {
 }
 
 case soil_STORtype::HILLSLOPE: {
-    //incomming interception is reduced by interception storage which is assumed to evaporate before the next
-    //precipitation event
-    P_n = std::max(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) - static_cast<numberSel>(get_dta(tstRM, ts_type::INTS)),static_cast<numberSel>(0.0));
+
+  numberSel perc = 0.0;
+
+    // //OLD 1st version
+    // //incomming interception is reduced by interception storage which is assumed to evaporate before the next
+    // //precipitation event
+    // //P_n = std::max(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) - static_cast<numberSel>(get_dta(tstRM, ts_type::INTS)),static_cast<numberSel>(0.0));
+    //
+    // //Evaporation from soil moisture evap [mm/d] occurs at the potential rate PET whenever possible
+    // if(prev_Soil > 0) {
+    //   E_b = static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+    // } else {
+    //   E_b = 0;
+    // }
+    //
+    // //Storage excess surface runoff overFL [mm/d] depends on the fraction of the catchment that is currently saturated,
+    // //expressed through parameters SMAX [mm] and KF_NONLIN
+    // // overFl1 = (1 - std::pow(1 - prev_Soil / get_par(par_HRUtype::SMAX), get_par(par_HRUtype::KF_NONLIN))) * P_n;
+    //
+    //
+    // next_soil = prev_Soil + P_n + get_par(par_HRUtype::C) * overFl1;
+    //
+    // overFl1 = overFl1 * (1-get_par(par_HRUtype::C));
+    //
+    // std::vector<numberSel> updated_vals;
+    //
+    // updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_b});
+    // next_soil = updated_vals[0];
+    // evap = updated_vals[1];
+    //
+    // updated_vals.clear();
+    //
+    // updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1});
+    // next_soil = updated_vals[0];
+    // overFL = updated_vals[1];
+    //
+    // updated_vals.clear();
+    //
+    // set_varValue(next_soil, tstRM, ts_type::SOIS);
+    // set_varValue(evap,tstRM, ts_type::EVBS);
+    // set_varValue(overFL, tstRM, ts_type::PERC);
+    //
+    // prev_Soil = next_soil;
 
     //Evaporation from soil moisture evap [mm/d] occurs at the potential rate PET whenever possible
+    //PET calcculated without consideration on et demand
     if(prev_Soil > 0) {
       E_b = static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
     } else {
       E_b = 0;
     }
 
-    //Storage excess surface runoff overFL [mm/d] depends on the fraction of the catchment that is currently saturated,
-    //expressed through parameters SMAX [mm] and KF_NONLIN
-    overFl1 = (1 - std::pow(1 - prev_Soil / get_par(par_HRUtype::SMAX), get_par(par_HRUtype::KF_NONLIN))) * P_n;
+    if(prev_Soil > E_b) {
+      prev_Soil = prev_Soil - E_b;
+    } else {
+      E_b = prev_Soil;
+      prev_Soil = 0.0;
+    }
 
-    next_soil = prev_Soil + P_n + get_par(par_HRUtype::C) * overFl1;
+    // Percolation and soil storage update
+    perc = (1-(pow((1 - prev_Soil / get_par(par_HRUtype::SMAX)),get_par(par_HRUtype::KF_NONLIN)))) * get_dta(tstRM,ts_type::PREF);
 
-    overFl1 = overFl1 * (1-get_par(par_HRUtype::C));
+    if((prev_Soil + get_dta(tstRM,ts_type::PREF)) > perc) {
+      prev_Soil = prev_Soil + get_dta(tstRM,ts_type::PREF) - perc;
+    } else {
+      perc = prev_Soil + get_dta(tstRM,ts_type::PREF);
+      prev_Soil = 0.0;
+    }
 
-    std::vector<numberSel> updated_vals;
-
-    updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_b});
-    next_soil = updated_vals[0];
-    evap = updated_vals[1];
-
-    updated_vals.clear();
-
-    updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1});
-    next_soil = updated_vals[0];
-    overFL = updated_vals[1];
-
-    updated_vals.clear();
-
-    set_varValue(next_soil, tstRM, ts_type::SOIS);
-    set_varValue(evap,tstRM, ts_type::EVBS);
-    set_varValue(overFL, tstRM, ts_type::PERC);
-
-    prev_Soil = next_soil;
+    set_varValue(prev_Soil, tstRM, ts_type::SOIS);
+    set_varValue(E_b,tstRM, ts_type::EVBS);
+    set_varValue(perc, tstRM, ts_type::PERC);
 
     break;
 }
