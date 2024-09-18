@@ -24,6 +24,7 @@ void setNumFastResAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector numF
   unsigned numNFR = numFastRes.size();
   unsigned numHruIdNames = hruIds.size();
 
+
   dimdHRUM = dHRUM_ptr.get()->getdHRUdim();
 
 

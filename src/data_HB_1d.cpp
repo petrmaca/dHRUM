@@ -1312,3 +1312,16 @@ void data_HB_1d::loadCalData(const caldata& yyear, const caldata& mmonth, const 
   return ;
 
 }
+
+void data_HB_1d::s_numFastRes(const numberDta& nFastRes) {
+
+  numfastRes = nFastRes;
+
+  return ;
+}
+
+numberDta data_HB_1d::g_numFastRes() {
+
+  return numfastRes;
+
+}

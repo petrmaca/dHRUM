@@ -200,6 +200,8 @@ numberSel single_HMunit::get_par(const par_HRUtype& _parType) {
  */
 numberSel single_HMunit::get_dta(const unsigned& tst, const ts_type& _tsType) {
 
+
+
   return hyd_dta.g_dta(tst, _tsType);
 
 }
@@ -208,11 +210,16 @@ numberSel single_HMunit::get_dta(const unsigned& tst, const ts_type& _tsType) {
 void single_HMunit::set_nmbFastres(const unsigned& nmbRes) {
 
   par_HRU.s_numFastRes(nmbRes);
+  hyd_dta.s_numFastRes(nmbRes);
+
+  hdata help_data(0.0,nmbRes);
+  hyd_dta.s_initStates(help_data,0.0,init_Stype::FASTRES);
 
   return;
 }
 
 unsigned single_HMunit::get_nmbFastRes() {
+
 
   return par_HRU.g_numFastRes();
 

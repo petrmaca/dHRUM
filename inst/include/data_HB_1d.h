@@ -38,6 +38,8 @@ class data_HB_1d {
   void s_oneFastreResUout(const numberSel& resOut,const unsigned& itFasRes);
   numberSel g_oneFastResState(const unsigned& itFasRes);
   void s_oneFastreResUstate(const numberSel& resState,const unsigned& itFasRes);
+  void s_numFastRes(const numberDta& nFastRes);
+  numberDta g_numFastRes();
 
   unsigned g_numdta();
 
@@ -134,7 +136,7 @@ class data_HB_1d {
   numberSel init_GroS1;//!< Initial value of groundwater storage for LIN_2SE and LIN_2PA
   numberSel init_GroS2;//!< Initial value of groundwater storage for LIN_2SE and LIN_2PA
 
-  unsigned numfastRes;//!<  the number of fast response reservoirs
+  numberDta numfastRes;//!<  the number of fast response reservoirs
   hdata StateFastRes;//!< The state variables of fast response reservoirs
   hdata OutFastRes;//!< The outputs of serie for fast response reservoirs
 };
