@@ -214,6 +214,15 @@ void single_HMunit::set_nmbFastres(const unsigned& nmbRes) {
 
   hdata help_data(0.0,nmbRes);
   hyd_dta.s_initStates(help_data,0.0,init_Stype::FASTRES);
+  help_nmbFR = nmbRes;
+
+//
+//   for(unsigned i=0;i<nmbRes;i++){
+//     std::cout << hyd_dta.g_oneFastResOut(i) << " hh \n ";
+//   }
+
+  // std::cout << nmbRes << " hh " << hyd_dta.g_numFastRes() << "\n";
+  // std::cout << nmbRes << " pp " << par_HRU.g_numFastRes()<< "\n";
 
   return;
 }
@@ -1120,7 +1129,7 @@ void single_HMunit::fast_response() {
   numberSel helpFastOut = 0.0, help_State =0.0;
 
   //  help_State = get_stateFastres(0);
-// std::cout << " help_nmbr " << help_nmbFR << std::endl;
+// std::cout << " help_nmbr before" << help_nmbFR << std::endl;
   for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
     help_State = get_stateFastres(ifrb);
     helpFastOut = get_par(par_HRUtype::KF) * help_State;
@@ -1382,6 +1391,8 @@ void single_HMunit::run_HB() {
   //   std::cout << "It is impossible to calculate the basic for loop in runHB function" << std:: endl << "It is controlled by the length " << Numdta << "." << std::endl;
   //   std::exit(EXIT_FAILURE);
   // }
+
+  // std::cout << "blalal " << help_nmbFR <<"\n";
   numberSel helprm=0.0;
   for(tstRM=0; tstRM < Numdta ; tstRM++) {
     et_demand = get_dta(tstRM,ts_type::PET);

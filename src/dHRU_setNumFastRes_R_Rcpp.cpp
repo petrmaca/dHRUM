@@ -40,7 +40,9 @@ void setNumFastResAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector numF
     for(unsigned it=0;it<numNFR;it++){
       helpVec[it] = numFastRes[it];
     }
-    dHRUM_ptr.get()->set_numFastReservoirs(helpVec);
+
+    // std::cout << numFastRes.size() << " ups " << helpVec[0] << std::endl;
+    dHRUM_ptr.get()->set_numFastReservoirsVEC(helpVec);
     dHRUM_ptr.get()->set_numFastReservoirsToHrus();
   }
 
