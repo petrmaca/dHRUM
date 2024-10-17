@@ -893,14 +893,16 @@ case soil_STORtype::HILLSLOPE: {
     }
 
     // Percolation and soil storage update
-    perc = (1-(pow((1 - prev_Soil / get_par(par_HRUtype::SMAX)),get_par(par_HRUtype::KF_NONLIN)))) * get_dta(tstRM,ts_type::PREF);
+    // perc = (1-(pow((1 - prev_Soil / get_par(par_HRUtype::SMAX)),get_par(par_HRUtype::KF_NONLIN)))) * get_dta(tstRM,ts_type::PREF);
 
-    if((prev_Soil + get_dta(tstRM,ts_type::PREF)) > perc) {
-      prev_Soil = prev_Soil + get_dta(tstRM,ts_type::PREF) - perc;
+    if(((prev_Soil + get_dta(tstRM,ts_type::PREF))) > get_par(par_HRUtype::SMAX)) {
+     // prev_Soil = get_par(par_HRUtype::SMAX);
+      perc = prev_Soil + get_dta(tstRM,ts_type::PREF) - get_par(par_HRUtype::SMAX);
     } else {
-      perc = prev_Soil + get_dta(tstRM,ts_type::PREF);
-      prev_Soil = 0.0;
-    }
+      perc = (1-(pow((1 - prev_Soil / get_par(par_HRUtype::SMAX)),get_par(par_HRUtype::KF_NONLIN)))) * get_dta(tstRM,ts_type::PREF);
+      }
+
+    prev_Soil = prev_Soil + get_dta(tstRM,ts_type::PREF) - perc;
 
     set_varValue(prev_Soil, tstRM, ts_type::SOIS);
     set_varValue(E_b,tstRM, ts_type::EVBS);

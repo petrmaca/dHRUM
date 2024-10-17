@@ -26,4 +26,4 @@ outDta <- dHRUMrun(dHRUM_ptr = dhrus)
 outDF <- data.frame(outDta$outDta)
 names(outDF) <-c(outDta$VarsNams)
 })
-h
+
