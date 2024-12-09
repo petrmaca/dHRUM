@@ -1804,7 +1804,7 @@ unsigned single_HMunit::get_numPars(){
 
 }
 
-/** \brief Prints all names and values of parameters of HRU
+/** \brief Prints all names and values of parameters of given  HRU
  *
  *
  */
