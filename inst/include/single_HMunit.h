@@ -43,6 +43,7 @@ class single_HMunit {
   void soil_buffer(soil_STORtype _soil_STORtype);//!< Update the soil buffer states
   void fast_response();//!< The fast runoff response
   void slow_response(gs_STORtype _gs_STORtype);//!< The slow runoff response
+  void upadate_actualET();//!< The estimation of actual evapotranspiration
 
   void run_HB();//!< Update hydrological balance (HB) of single pdm unit run single pdm model
 

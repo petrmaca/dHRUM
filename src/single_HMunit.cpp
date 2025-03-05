@@ -1408,6 +1408,7 @@ void single_HMunit::run_HB() {
     fast_response();
     helprm = (get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR));
     set_varValue(helprm ,tstRM,ts_type::TOTR);
+    upadate_actualET();
 
     //    std::cout <<(get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR)) << " "<< get_dta(tstRM,ts_type::BASF) << " "<< get_dta(tstRM,ts_type::DIRR)<< "\n";
   }
@@ -1983,6 +1984,15 @@ std::vector<numberSel> single_HMunit::water_balance(numberSel next_soil, numberS
   std::vector<numberSel> updated_vals{next_soil, val};
 
   return updated_vals;
+
+}
+
+void single_HMunit::upadate_actualET() {
+
+  numberSel aet = 0.0;
+
+  aet = get_dta(tstRM, ts_type::EVAC) + get_dta(tstRM, ts_type::EVAS) + get_dta(tstRM, ts_type::ETSW) + get_dta(tstRM, ts_type::EVBS);
+  set_varValue(aet, tstRM,ts_type::AET);
 
 }
 
