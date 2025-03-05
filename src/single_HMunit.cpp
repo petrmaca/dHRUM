@@ -375,6 +375,7 @@ void single_HMunit::surface_retention() {
       }
 
   set_varValue(EvapSR, tstRM, ts_type::AET);
+  set_varValue(EvapSR, tstRM, ts_type::ETSW);
   set_varValue(RetOut,tstRM,ts_type::PREF);
   // set_varValue(prev_SurS, tstRM, ts_type::SURS);
 
@@ -1458,6 +1459,7 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   set_data(dta,ts_type::INTS);
   //!< Surface retention
   set_data(dta,ts_type::SURS);
+  set_data(dta,ts_type::ETSW);
   set_data(dta,ts_type::PREF);
   // std::cout << " precf ok\n";
   //!< soil percolation
