@@ -53,7 +53,8 @@ Rcpp::List getOutput(Rcpp::XPtr<dHRUM> dHRUM_ptr){
                               "PREC","SNOW","AET","PET","TEMP",   \
                               "MELT","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \
-                              "SOIS","GROS","SURS","TOTR","BASF","DIRR","PERC","PREF", "ETSW"});
+                              "SOIS","GROS","SURS","TOTR","BASF",\
+                              "DIRR","PERC","PREF", "ETSW"});
 
   return Rcpp::List::create(
     Rcpp::Named("outDta") = outDta,
@@ -168,7 +169,8 @@ Rcpp::List getOutputDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
                               "PREC","SNOW","AET","PET","TEMP",   \
                               "MELT","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \
-                              "SOIS","GROS","SURS","TOTR","BASF","DIRR","PERC","PREF", "ETSW"});
+                              "SOIS","GROS","SURS","TOTR","BASF",\
+                              "DIRR","PERC","PREF", "ETSW"});
 
   return Rcpp::List::create(
     Rcpp::Named("outDta") = outDta,
@@ -231,7 +233,8 @@ Rcpp::List dHRUMrun(Rcpp::XPtr<dHRUM> dHRUM_ptr){
                               "PREC","SNOW","AET","PET","TEMP",   \
                               "MELT","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \
-                              "SOIS","GROS","SURS","TOTR","BASF","DIRR","PERC","PREF", "ETWS"});
+                              "SOIS","GROS","SURS","TOTR","BASF", \
+                              "DIRR","PERC","PREF", "ETWS"});
   return Rcpp::List::create(
     Rcpp::Named("outDta") = outDta,
     Rcpp::Named("VarsNams") = VarsNams
@@ -312,7 +315,8 @@ Rcpp::List dHRUMrunDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
                               "PREC","SNOW","AET","PET","TEMP",   \
                               "MELT","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \
-                              "SOIS","GROS","SURS","TOTR","BASF","DIRR","PERC","PREF", "ETWS","HruIds"});
+                              "SOIS","GROS","SURS","TOTR","BASF",\
+                              "DIRR","PERC","PREF", "ETWS","HruIds"});
 
   return Rcpp::List::create(
     Rcpp::Named("outDta") = outDta,
