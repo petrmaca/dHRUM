@@ -125,6 +125,8 @@ class data_HB_1d {
   hdata Perc;//!< Percolation
   hdata Pref;//!< Effective Precipitation
 
+  hdata Etsw;//!< Evaporation from surface water retention
+
   numberSel init_SoiS;//!< Initial value of soil storage
   numberSel init_GroS;//!< Initial value of groundwater storage
   numberSel init_CanS;//!< Initial value of Canopy Interception storage
