@@ -110,7 +110,7 @@ class data_HB_1d {
 
   hdata EvaC;//!< Canopy Evaporation
   hdata EvaS;//!< Stem Evaporation
-  hdata EvbS;//!< Bare soil Evapotranspiration
+  hdata EvbS;//!< Bare soil Evapotranspiration and transpiration
   hdata IntS;//!< Interception storage
 
   hdata SoiS;//!< Soil storage

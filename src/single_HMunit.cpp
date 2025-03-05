@@ -374,7 +374,7 @@ void single_HMunit::surface_retention() {
       (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT) + (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) *get_dta(tstRM, ts_type::PREC));
       }
 
-  set_varValue(EvapSR, tstRM, ts_type::AET);
+  // set_varValue(EvapSR, tstRM, ts_type::AET);
   set_varValue(EvapSR, tstRM, ts_type::ETSW);
   set_varValue(RetOut,tstRM,ts_type::PREF);
   // set_varValue(prev_SurS, tstRM, ts_type::SURS);
