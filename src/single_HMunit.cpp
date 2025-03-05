@@ -507,7 +507,7 @@ case soil_STORtype::PDM: {
   // prev_Soil = next_soil;
 
   //
-  // Hymod formulation
+  // Hymod formulatio
   // std::cout <<"cinit 1 "<< c_init << " cmin " <<get_par(par_HRUtype::CMIN)<< " presoil "<< prev_Soil << " smax " << get_par(par_HRUtype::SMAX)<< " smax - prev soil "<< (get_par(par_HRUtype::C_MAX) - prev_Soil) <<"\n";
 
   if((get_par(par_HRUtype::C_MAX) - prev_Soil)>0){
