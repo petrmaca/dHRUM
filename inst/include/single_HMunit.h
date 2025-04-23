@@ -94,6 +94,12 @@ class single_HMunit {
   soil_STORtype get_soilStorType();
   void print_soilStorType();
 
+  void set_inteceptionType(interception_type _intrc_STORAGE);
+  interception_type get_intercetionStorType();
+  // void print_soilStorType();
+
+
+
   std::vector<numberSel> water_balance(numberSel next_soil, numberSel val, std::vector<numberSel> vals);//!< Method for preserving mass balance
 
 
@@ -126,6 +132,7 @@ private:
 
   gs_STORtype gs_STORAGE;
   soil_STORtype soil_STORAGE;
+  interception_type intrc_STORAGE;
 
 };
 

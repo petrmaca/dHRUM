@@ -9,6 +9,8 @@ dHRUM::dHRUM(): dHruVec(),
   numParsAllHRus(0),
   basinDta(),
   gs_STORtypes(),
+  sw_STORtypes(),
+  interception_STORtypes(),
   NumFastRes(0){
   //ctor
 }
@@ -26,6 +28,8 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   numParsAllHRus(0),
   basinDta(),
   gs_STORtypes(),
+  sw_STORtypes(),
+  interception_STORtypes(),
   NumFastRes(0){
 
   dHruVec = other.dHruVec;
@@ -37,6 +41,9 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   numParsAllHRus = other.numParsAllHRus;
   basinDta = other.basinDta;
   gs_STORtypes = other.gs_STORtypes;
+  sw_STORtypes = other.sw_STORtypes;
+  interception_STORtypes = other.interception_STORtypes;
+
   NumFastRes = other.NumFastRes;
 }
 
@@ -52,6 +59,8 @@ dHRUM& dHRUM::operator=(const dHRUM& rhs) {
     numParsAllHRus = rhs.numParsAllHRus;
     basinDta = rhs.basinDta;
     gs_STORtypes = rhs.gs_STORtypes;
+    sw_STORtypes = rhs.sw_STORtypes;
+    interception_STORtypes = rhs.interception_STORtypes;
     NumFastRes = rhs.NumFastRes;
   }
   return *this;

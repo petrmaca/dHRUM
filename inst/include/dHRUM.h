@@ -79,6 +79,7 @@ private:
   data_HB_1d basinDta;//!< The HB data on all basin
   std::vector<gs_STORtype> gs_STORtypes;//!< The vector on groundwater storage types
   std::vector<soil_STORtype> sw_STORtypes;//!< The vector on soil water storage types
+  std::vector<interception_type> interception_STORtypes;// The vector on interception storage types
 
   caldata NumFastRes;//!< The number of fastre reservoirs in serie
 };
