@@ -167,6 +167,25 @@ setPTInputsToDistdHRUM <- function(dHRUM_ptr, DataDF) {
     invisible(.Call(`_dHRUM_setPTInputsToDistdHRUM`, dHRUM_ptr, DataDF))
 }
 
+#' Sets the types of interception models types to dHRU model for all single HRUs.
+#'
+#' Setting the interception type to dHRUM to all HRUs. Possibe types: \code{Rutter_Gash}
+#'
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @param intcptnTypes a charater vector of Interception type names
+#' @param hruIds ids on Hrus
+#' @export
+#' @examples
+#' nHrus <- 200
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
+setInterceptiontypeToAlldHrus <- function(dHRUM_ptr, intcptnTypes, hruIds) {
+    invisible(.Call(`_dHRUM_setInterceptiontypeToAlldHrus`, dHRUM_ptr, intcptnTypes, hruIds))
+}
+
 #' Initialization of dHRU pointer to a dHRUM
 #'
 #' Creates pointer instance of dHRUM for the catchment.

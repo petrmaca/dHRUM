@@ -61,4 +61,11 @@ const soil_STORtype all_soil_STORs[]{ soil_STORtype::PDM, soil_STORtype::COLLIE_
 const std::vector<std::string> allSoilStorTypeNames {"PDM", "COLLIE_V2", "NEW_ZEALAND", "GR4J", "SBROOK_V1", \
                                                      "HILLSLOPE", "PLATEAU","PDM2"};
 
+enum class interception_STORtype { Rutter_Gash};
+
+const interception_STORtype all_Interceptions[]{ interception_STORtype::Rutter_Gash};
+
+const std::vector<std::string> allTnterceptionStorTypeNames {"Rutter_Gash"};
+
+
 #endif // NUMBERSEL_H_INCLUDED

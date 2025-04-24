@@ -59,6 +59,8 @@ class dHRUM {
 
   void initGWtypeToAlldHrus(std::vector<std::pair<unsigned, gs_STORtype>>& gs_STORtypes);
   void initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype>>& soil_STORtypes);
+  void initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,interception_STORtype>>& interception_STORtype);
+
   numberSel getTsDta(const ts_type& _tsType, const unsigned& HruIndex, const unsigned& tst);
 
   void set_numFastReservoirsToHrus();
@@ -79,6 +81,7 @@ private:
   data_HB_1d basinDta;//!< The HB data on all basin
   std::vector<gs_STORtype> gs_STORtypes;//!< The vector on groundwater storage types
   std::vector<soil_STORtype> sw_STORtypes;//!< The vector on soil water storage types
+  std::vector<interception_STORtype> interception_STORtypes;// The vector on interception storage types
 
   caldata NumFastRes;//!< The number of fastre reservoirs in serie
 };

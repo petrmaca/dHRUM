@@ -9,6 +9,8 @@ dHRUM::dHRUM(): dHruVec(),
   numParsAllHRus(0),
   basinDta(),
   gs_STORtypes(),
+  sw_STORtypes(),
+  interception_STORtypes(),
   NumFastRes(0){
   //ctor
 }
@@ -26,6 +28,8 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   numParsAllHRus(0),
   basinDta(),
   gs_STORtypes(),
+  sw_STORtypes(),
+  interception_STORtypes(),
   NumFastRes(0){
 
   dHruVec = other.dHruVec;
@@ -37,6 +41,9 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   numParsAllHRus = other.numParsAllHRus;
   basinDta = other.basinDta;
   gs_STORtypes = other.gs_STORtypes;
+  sw_STORtypes = other.sw_STORtypes;
+  interception_STORtypes = other.interception_STORtypes;
+
   NumFastRes = other.NumFastRes;
 }
 
@@ -52,6 +59,8 @@ dHRUM& dHRUM::operator=(const dHRUM& rhs) {
     numParsAllHRus = rhs.numParsAllHRus;
     basinDta = rhs.basinDta;
     gs_STORtypes = rhs.gs_STORtypes;
+    sw_STORtypes = rhs.sw_STORtypes;
+    interception_STORtypes = rhs.interception_STORtypes;
     NumFastRes = rhs.NumFastRes;
   }
   return *this;
@@ -126,6 +135,18 @@ void dHRUM::initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype
     return;
 
   }
+
+
+void dHRUM::initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,interception_STORtype>>& interception_STORtypes) {
+
+#pragma omp parallel for
+  for(unsigned int i=0; i<interception_STORtypes.size(); i++) {
+    dHruVec[interception_STORtypes[i].first].set_inteceptionType(interception_STORtypes[i].second);
+  }
+
+  return;
+
+}
 
 void dHRUM::setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad) {
   //  #pragma omp parallel
