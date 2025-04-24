@@ -136,6 +136,18 @@ void dHRUM::initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype
 
   }
 
+
+void dHRUM::initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,interception_STORtype>>& interception_STORtypes) {
+
+#pragma omp parallel for
+  for(unsigned int i=0; i<interception_STORtypes.size(); i++) {
+    dHruVec[interception_STORtypes[i].first].set_inteceptionType(interception_STORtypes[i].second);
+  }
+
+  return;
+
+}
+
 void dHRUM::setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad) {
   //  #pragma omp parallel
   //  {

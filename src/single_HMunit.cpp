@@ -42,7 +42,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   tstRM = 0;
   gs_STORAGE = gs_STORtype::LIN_RES;
   soil_STORAGE = soil_STORtype::PDM;
-  intrc_STORAGE = interception_type::Rutter_Gash;
+  intrc_STORAGE = interception_STORtype::Rutter_Gash;
   et_demand = 0.0;
 
 }
@@ -1248,9 +1248,11 @@ void single_HMunit::interception_WithSnow() {
   //  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
   numberSel OverflowCan = 0.0, OverflowStem= 0.0, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
 
-  OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
-  prevCanS = prevCanS - OverflowCan;
+  // OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
+  // prevCanS = prevCanS - OverflowCan;
+  // prevCanS = prevCanS - OverflowCan;
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
+  //the sublimation of snow
   EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
 
   numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
@@ -2006,13 +2008,13 @@ void single_HMunit::upadate_actualET() {
 }
 
 
-void single_HMunit::set_inteceptionType(interception_type _intrc_STORAGE){
+void single_HMunit::set_inteceptionType(interception_STORtype _intrc_STORAGE){
 
   intrc_STORAGE = _intrc_STORAGE;
 
 }
 
-interception_type single_HMunit::get_intercetionStorType(){
+interception_STORtype single_HMunit::get_intercetionStorType(){
 
   return intrc_STORAGE;
 

@@ -94,8 +94,8 @@ class single_HMunit {
   soil_STORtype get_soilStorType();
   void print_soilStorType();
 
-  void set_inteceptionType(interception_type _intrc_STORAGE);
-  interception_type get_intercetionStorType();
+  void set_inteceptionType(interception_STORtype _intrc_STORAGE);
+  interception_STORtype get_intercetionStorType();
   // void print_soilStorType();
 
 
@@ -132,7 +132,7 @@ private:
 
   gs_STORtype gs_STORAGE;
   soil_STORtype soil_STORAGE;
-  interception_type intrc_STORAGE;
+  interception_STORtype intrc_STORAGE;
 
 };
 
