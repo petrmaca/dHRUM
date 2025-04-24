@@ -1165,7 +1165,13 @@ void single_HMunit::fast_response() {
  *  calculating related fluxes
  *
  */
-void single_HMunit::interception_NoSnow() {
+void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
+
+
+  //
+  switch(_intrc_STORAGE) {
+
+  case interception_STORtype::Rutter_Gash:
 
   numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
 
@@ -1233,6 +1239,10 @@ void single_HMunit::interception_NoSnow() {
 
   set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
 
+
+  break ;
+  }
+
   return ;
 }
 
@@ -1244,7 +1254,11 @@ void single_HMunit::interception_NoSnow() {
  *  calculating related fluxes
  *
  */
-void single_HMunit::interception_WithSnow() {
+void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) {
+
+  switch(_intrc_STORAGE) {
+
+  case interception_STORtype::Rutter_Gash:
   //  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
   numberSel OverflowCan = 0.0, OverflowStem= 0.0, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
 
@@ -1317,6 +1331,9 @@ void single_HMunit::interception_WithSnow() {
   set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
 
   //   std::cout <<  " prevCanS " << prevCanS << " EvapCanop " << EvapCanop << "\n";
+  break;
+  }
+
   return ;
 }
 
@@ -1361,13 +1378,13 @@ void single_HMunit::interception_snow() {
     Snoww = get_dta(tstRM, ts_type::PREC);
     set_varValue(Snoww,tstRM,ts_type::SNOW);
     snow_melt();
-    interception_WithSnow();
+    interception_WithSnow(intrc_STORAGE);
     //    std::cout << " snow " << Snoww << " \n";
   } else {
     Snoww = 0.0;
     set_varValue(Snoww,tstRM,ts_type::SNOW);
     snow_melt();
-    interception_NoSnow();
+    interception_NoSnow(intrc_STORAGE);
   }
 
   // set_varValue(Snoww,tstRM,ts_type::SNOW);
