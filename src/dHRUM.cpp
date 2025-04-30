@@ -630,3 +630,18 @@ void dHRUM::set_numFastReservoirsVEC(caldata numFR){
   }
 
 }
+
+unsigned dHRUM::get_num_treads(){
+
+  return num_threads;
+
+}
+
+void dHRUM::set_num_treads(const unsigned&  numTHR){
+
+  num_threads = numTHR;
+
+  return ;
+}
+
+

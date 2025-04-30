@@ -104,15 +104,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // initdHruModel
-Rcpp::XPtr<dHRUM> initdHruModel(numberDta dimdHru, Rcpp::NumericVector vecAreas, Rcpp::StringVector hrusIDs);
-RcppExport SEXP _dHRUM_initdHruModel(SEXP dimdHruSEXP, SEXP vecAreasSEXP, SEXP hrusIDsSEXP) {
+Rcpp::XPtr<dHRUM> initdHruModel(numberDta dimdHru, Rcpp::NumericVector vecAreas, Rcpp::StringVector hrusIDs, unsigned nthreads);
+RcppExport SEXP _dHRUM_initdHruModel(SEXP dimdHruSEXP, SEXP vecAreasSEXP, SEXP hrusIDsSEXP, SEXP nthreadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< numberDta >::type dimdHru(dimdHruSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type vecAreas(vecAreasSEXP);
     Rcpp::traits::input_parameter< Rcpp::StringVector >::type hrusIDs(hrusIDsSEXP);
-    rcpp_result_gen = Rcpp::wrap(initdHruModel(dimdHru, vecAreas, hrusIDs));
+    Rcpp::traits::input_parameter< unsigned >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(initdHruModel(dimdHru, vecAreas, hrusIDs, nthreads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -267,7 +268,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_setPTDateInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTDateInputsToAlldHrus, 4},
     {"_dHRUM_setPTInputsToDistdHRUM", (DL_FUNC) &_dHRUM_setPTInputsToDistdHRUM, 2},
     {"_dHRUM_setInterceptiontypeToAlldHrus", (DL_FUNC) &_dHRUM_setInterceptiontypeToAlldHrus, 3},
-    {"_dHRUM_initdHruModel", (DL_FUNC) &_dHRUM_initdHruModel, 3},
+    {"_dHRUM_initdHruModel", (DL_FUNC) &_dHRUM_initdHruModel, 4},
     {"_dHRUM_getOutput", (DL_FUNC) &_dHRUM_getOutput, 1},
     {"_dHRUM_printToFile", (DL_FUNC) &_dHRUM_printToFile, 2},
     {"_dHRUM_getOutputDist", (DL_FUNC) &_dHRUM_getOutputDist, 1},

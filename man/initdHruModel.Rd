@@ -4,7 +4,7 @@
 \alias{initdHruModel}
 \title{Initialization of dHRU pointer to a dHRUM}
 \usage{
-initdHruModel(dimdHru, vecAreas, hrusIDs)
+initdHruModel(dimdHru, vecAreas, hrusIDs, nthreads)
 }
 \arguments{
 \item{dimdHru}{a single \code{numberDta} number of single Hrus.}
@@ -12,6 +12,8 @@ initdHruModel(dimdHru, vecAreas, hrusIDs)
 \item{vecAreas}{a \code{numeric vector} of size \code{dimHru} of Areas for all single HRUs on dHRU.}
 
 \item{hrusIDs}{a \code{character vector} of size \code{dimHru} of Id's for all single HRUs on dHRU.}
+
+\item{nthreads}{the number of r dHRUM instance}
 }
 \value{
 dHRUM_ptr pointer to dHru instance.
@@ -25,5 +27,5 @@ and ID's of all single Hrus.
 nHrus <- 200
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
-dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+dhrus <- initdHruModel(nHrus,Areas,IdsHrus,1)
 }

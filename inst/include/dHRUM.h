@@ -67,6 +67,10 @@ class dHRUM {
   void set_numFastReservoirsVEC(caldata numFR);
   //std::vector<gs_STORtype> get_STORtypes();
 
+  unsigned get_num_treads();
+  void set_num_treads(const unsigned&  numTHR);
+
+
 protected:
 
 private:
@@ -78,7 +82,7 @@ private:
   numberDta numTs;//!< Number of time intervals
   caldata numParsAllHRus;//< Vector with Numbers of params
 
-  int num_threads;
+  unsigned num_threads;
 
   data_HB_1d basinDta;//!< The HB data on all basin
   std::vector<gs_STORtype> gs_STORtypes;//!< The vector on groundwater storage types

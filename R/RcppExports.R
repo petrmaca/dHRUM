@@ -195,15 +195,16 @@ setInterceptiontypeToAlldHrus <- function(dHRUM_ptr, intcptnTypes, hruIds) {
 #' @param dimdHru a single \code{numberDta} number of single Hrus.
 #' @param vecAreas a \code{numeric vector} of size \code{dimHru} of Areas for all single HRUs on dHRU.
 #' @param hrusIDs a \code{character vector} of size \code{dimHru} of Id's for all single HRUs on dHRU.
+#' @param nthreads the number of r dHRUM instance
 #' @return dHRUM_ptr pointer to dHru instance.
 #' @export
 #' @examples
 #' nHrus <- 200
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
-#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
-initdHruModel <- function(dimdHru, vecAreas, hrusIDs) {
-    .Call(`_dHRUM_initdHruModel`, dimdHru, vecAreas, hrusIDs)
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus,1)
+initdHruModel <- function(dimdHru, vecAreas, hrusIDs, nthreads) {
+    .Call(`_dHRUM_initdHruModel`, dimdHru, vecAreas, hrusIDs, nthreads)
 }
 
 #' Provides dHRUM outputs - time series

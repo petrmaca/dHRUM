@@ -7,10 +7,10 @@ probwet =0.6
 meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 temp=rnorm(numdata,10,3)
-nHrus <- 100
+nHrus <- 1000
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
-dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+dhrus <- initdHruModel(nHrus,Areas,IdsHrus,1)
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("EXP_LOG", times =nHrus), IdsHrus)
 setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM2",times= length(Areas)),hruIds=IdsHrus)
 setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
