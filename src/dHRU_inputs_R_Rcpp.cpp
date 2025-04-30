@@ -81,6 +81,10 @@ void setPTInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Prec
   //   Rcpp::Rcout << mPrec[it] << "\n";
   //   Rcpp::Rcout << mTemp[it] << "\n";
   // }
+  Rcpp::Rcout <<  "Loading the gw type  to HRU ID "  << std::endl;
+  //    dHruVec[it].set_paramsToSim(parsToLoad);
+  Rcpp::Rcout<<"threads="<<omp_get_num_threads()<<std::endl;
+
   dHRUM_ptr.get()->loadPTDatToAllHrus(mPrec, mTemp, 0.0, Myear, Mmonth, Mday);
 
   return  ;

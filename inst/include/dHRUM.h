@@ -78,6 +78,8 @@ private:
   numberDta numTs;//!< Number of time intervals
   caldata numParsAllHRus;//< Vector with Numbers of params
 
+  int num_threads;
+
   data_HB_1d basinDta;//!< The HB data on all basin
   std::vector<gs_STORtype> gs_STORtypes;//!< The vector on groundwater storage types
   std::vector<soil_STORtype> sw_STORtypes;//!< The vector on soil water storage types

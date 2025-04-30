@@ -11,8 +11,10 @@ dHRUM::dHRUM(): dHruVec(),
   gs_STORtypes(),
   sw_STORtypes(),
   interception_STORtypes(),
-  NumFastRes(0){
+  NumFastRes(0),
+  num_threads(0){
   //ctor
+  num_threads = 1;
 }
 
 dHRUM::~dHRUM() {
@@ -30,7 +32,8 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   gs_STORtypes(),
   sw_STORtypes(),
   interception_STORtypes(),
-  NumFastRes(0){
+  NumFastRes(0),
+  num_threads(0){
 
   dHruVec = other.dHruVec;
   dHruVecId = other.dHruVecId;
@@ -43,6 +46,7 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   gs_STORtypes = other.gs_STORtypes;
   sw_STORtypes = other.sw_STORtypes;
   interception_STORtypes = other.interception_STORtypes;
+  num_threads = other.num_threads;
 
   NumFastRes = other.NumFastRes;
 }
@@ -62,6 +66,7 @@ dHRUM& dHRUM::operator=(const dHRUM& rhs) {
     sw_STORtypes = rhs.sw_STORtypes;
     interception_STORtypes = rhs.interception_STORtypes;
     NumFastRes = rhs.NumFastRes;
+    num_threads = rhs.num_threads;
   }
   return *this;
 }
@@ -90,16 +95,17 @@ void dHRUM::setInputsToAllHrus(std::string namesFilePath) {
 
   //  #pragma omp parallel
   //  {
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
   for(unsigned it=0; it<dimHM; it++) {
-                    // std::cout << "Loading the input data  to HRU ID " << it << std::endl;
+    std::cout << "Loading the input data  to HRU ID " << it << std::endl;
     //    dHruVec[it].set_paramsToSim(parsToLoad);
+    std::cout<<"threads="<<omp_get_num_threads()<<std::endl;
 
     dHruVec[it].read_InputFromFile(namesFilePath.c_str());
-    //  dHruVec[it].set_PetVars(50.1,pet_Type::OUDIN);
+        //  dHruVec[it].set_PetVars(50.1,pet_Type::OUDIN);
     //  dHruVec[it].calc_Pet();
     //  dHruVec[it].run_HB();
-    // std::cout << "Loading the input data  to HRU ID " << it << std::endl;
+    std::cout << "Loading the input data  to HRU ID " << it << std::endl;
   }
   //  }
   initdHRUbasinDTA();
@@ -115,8 +121,13 @@ void dHRUM::setInputsToOneHru(std::string namesFilePath, unsigned Id) {
 
 void dHRUM::initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& gs_STORtypes) {
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
   for(unsigned int i=0; i<gs_STORtypes.size(); i++) {
+    std::cout << "Loading the gw type  to HRU ID " << i << std::endl;
+    //    dHruVec[it].set_paramsToSim(parsToLoad);
+    std::cout <<"threads="<<omp_get_num_threads()<<std::endl;
+    std::cout << "gw stor size=" << gs_STORtypes.size()<<std::endl;
+
     dHruVec[gs_STORtypes[i].first].set_GStype(gs_STORtypes[i].second);
   }
 
@@ -127,7 +138,7 @@ void dHRUM::initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& g
 
 void dHRUM::initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype>>& soil_STORtypes) {
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
     for(unsigned int i=0; i<soil_STORtypes.size(); i++) {
       dHruVec[soil_STORtypes[i].first].set_soilStorType(soil_STORtypes[i].second);
     }
@@ -139,7 +150,7 @@ void dHRUM::initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype
 
 void dHRUM::initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,interception_STORtype>>& interception_STORtypes) {
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
   for(unsigned int i=0; i<interception_STORtypes.size(); i++) {
     dHruVec[interception_STORtypes[i].first].set_inteceptionType(interception_STORtypes[i].second);
   }
@@ -151,7 +162,7 @@ void dHRUM::initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,intercept
 void dHRUM::setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad) {
   //  #pragma omp parallel
   //  {
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
   for(unsigned it=0; it<dimHM; it++) {
     dHruVec[it].set_paramsToSim(parsToLoad);
     //    dHruVec[it].read_InputFromFile(namesFilePath.c_str());
@@ -267,10 +278,14 @@ void dHRUM::calcPetToAllHrus(numberSel Latit, pet_Type myPetType) {
 
   //  #pragma omp parallel
   //  {
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
   for(unsigned it=0; it<dimHM; it++) {
     ////    dHruVec[it].set_paramsToSim(parsToLoad);
     //    dHruVec[it].read_InputFromFile(namesFilePath.c_str());
+    std::cout << "Loading the PET types to HRU ID " << it << std::endl;
+    //    dHruVec[it].set_paramsToSim(parsToLoad);
+    std::cout<<"threads="<<omp_get_num_threads()<<std::endl;
+
     dHruVec[it].set_PetVars(Latit,myPetType);
     dHruVec[it].calc_Pet();
     //  dHruVec[it].run_HB();
@@ -302,8 +317,12 @@ void dHRUM::calcPetToAllHrusDist(hdata LatitVec, std::vector<std::string> petTyp
     {"MCGUINNESSBORDNE",  pet_Type::MCGUINNESSBORDNE}
   };
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
   for(unsigned it=0; it<dimHM; it++) {
+    std::cout << "Calculating the PET  to HRU ID " << it << std::endl;
+    //    dHruVec[it].set_paramsToSim(parsToLoad);
+    std::cout<<"threads="<<omp_get_num_threads()<<std::endl;
+
     switch(s_mapString_ToPet_Type[petTypeString[it]]) {
      case pet_Type::OUDIN:
       calcPetToOneHru(LatitVec[it], pet_Type::OUDIN, it);
@@ -350,9 +369,12 @@ void dHRUM::calcHbToAllHrus() {
   //
   //  #pragma omp parallel
   //  {
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
 
   for(unsigned it=0; it<dimHM; it++) {
+    std::cout << "Calculating water balance on HRU " << it << std::endl;
+    //    dHruVec[it].set_paramsToSim(parsToLoad);
+    std::cout<<"threads="<<omp_get_num_threads()<<std::endl;
     ////    dHruVec[it].set_paramsToSim(parsToLoad);
     //    dHruVec[it].read_InputFromFile(namesFilePath.c_str());
     //  dHruVec[it].set_PetVars(50.1,pet_Type::OUDIN);
@@ -372,7 +394,7 @@ void dHRUM::setAreasToHrus(hdata vec_Areas) {
   //
   //  #pragma omp parallel
   //  {
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
 
   for(unsigned it=0; it<dimHM; it++) {
     dHruVec[it].set_Area(Areas[it]);
@@ -406,7 +428,7 @@ void dHRUM::gatherTsFromHrus() {
     //    std::cout << helpValAr[0] << " " << dHruVec[0].getSingleHruTsDta(it)[0] << " fdsoi " <<std::endl;
     //  dHruVec[itHru].getSingleHruTsDta(it) * Areas[itHru] /
     // dHruVec[0].getSingleHruTsDta(it) *
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
     for(unsigned itHru=0; itHru<dimHM; itHru++) {
       helpValAr +=   dHruVec[itHru].getSingleHruTsDta(itTS) * Areas[itHru] / basinArea;
       //      std::cout << helpValAr[0] << " " << Areas[0] << " ba " << basinArea <<std::endl;
@@ -489,7 +511,7 @@ caldata dHRUM::get_CalDta(const cal_Type& _calType){
 
 void dHRUM::loadPTDatToAllHrus(hdata Prec, hdata Temp, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay) {
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
   for(unsigned it=0; it<dimHM; it++) {
     dHruVec[it].load_data_PT(Prec,Temp,val,inYear,inMonth,inDay);
   }
@@ -507,7 +529,7 @@ numberDta dHRUM::getdHRUdim() {
 
 void dHRUM::load_CalDataToAllHrus(const caldata& yyear, const caldata& mmonth, const caldata& dday) {
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
  for(unsigned it=0; it<dimHM; it++) {
    dHruVec[it].load_calData(yyear, mmonth, dday);
  }
@@ -523,7 +545,7 @@ void dHRUM::load_PrecTempToAllHrus(const hdata& Prec, const hdata& Temp) {
   numDTA = Prec.size();
 // std::cout << numDTA << "\n";
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
   for(unsigned it=0; it<dimHM; it++) {
     dHruVec[it].init_inputs(0.0,numDTA);
     dHruVec[it].set_data_prec_temp(Prec, Temp);
@@ -542,7 +564,7 @@ void dHRUM::set_numPars() {
 
   numParsAllHRus.resize(dimHM);
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
   for(unsigned it=0;it<dimHM;it++){
     numParsAllHRus[it] = get_singleHRUnumPars(it);
     //std::cout <<"The number of params for HRU unit "<< it<< " is " << get_singleHRUnumPars(it) << std::endl;
@@ -590,7 +612,7 @@ numberSel dHRUM::getTsDta(const ts_type& _tsType, const unsigned& HruIndex, cons
 
 void dHRUM::set_numFastReservoirsToHrus(){
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
   for(unsigned it=0;it<dimHM;it++){
     dHruVec[it].set_nmbFastres(NumFastRes[it]);
   }
@@ -602,7 +624,7 @@ void dHRUM::set_numFastReservoirsVEC(caldata numFR){
   // unsigned numNFR=0;
   // NumFastRes.resize(dimHM);
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(num_threads)
   for(unsigned it=0;it<dimHM;it++){
     NumFastRes[it] = numFR[it];
   }
