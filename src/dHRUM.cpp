@@ -97,15 +97,15 @@ void dHRUM::setInputsToAllHrus(std::string namesFilePath) {
   //  {
 #pragma omp parallel for num_threads(num_threads)
   for(unsigned it=0; it<dimHM; it++) {
-    std::cout << "Loading the input data  to HRU ID " << it << std::endl;
+    // std::cout << "Loading the input data  to HRU ID " << it << std::endl;
     //    dHruVec[it].set_paramsToSim(parsToLoad);
-    std::cout<<"threads="<<omp_get_num_threads()<<std::endl;
+    // std::cout<<"threads="<<omp_get_num_threads()<<std::endl;
 
     dHruVec[it].read_InputFromFile(namesFilePath.c_str());
         //  dHruVec[it].set_PetVars(50.1,pet_Type::OUDIN);
     //  dHruVec[it].calc_Pet();
     //  dHruVec[it].run_HB();
-    std::cout << "Loading the input data  to HRU ID " << it << std::endl;
+    // std::cout << "Loading the input data  to HRU ID " << it << std::endl;
   }
   //  }
   initdHRUbasinDTA();
@@ -123,10 +123,10 @@ void dHRUM::initGWtypeToAlldHrus(std::vector<std::pair<unsigned,gs_STORtype>>& g
 
 #pragma omp parallel for num_threads(num_threads)
   for(unsigned int i=0; i<gs_STORtypes.size(); i++) {
-    std::cout << "Loading the gw type  to HRU ID " << i << std::endl;
+    // std::cout << "Loading the gw type  to HRU ID " << i << std::endl;
     //    dHruVec[it].set_paramsToSim(parsToLoad);
-    std::cout <<"threads="<<omp_get_num_threads()<<std::endl;
-    std::cout << "gw stor size=" << gs_STORtypes.size()<<std::endl;
+    // std::cout <<"threads="<<omp_get_num_threads()<<std::endl;
+    // std::cout << "gw stor size=" << gs_STORtypes.size()<<std::endl;
 
     dHruVec[gs_STORtypes[i].first].set_GStype(gs_STORtypes[i].second);
   }
@@ -282,9 +282,9 @@ void dHRUM::calcPetToAllHrus(numberSel Latit, pet_Type myPetType) {
   for(unsigned it=0; it<dimHM; it++) {
     ////    dHruVec[it].set_paramsToSim(parsToLoad);
     //    dHruVec[it].read_InputFromFile(namesFilePath.c_str());
-    std::cout << "Loading the PET types to HRU ID " << it << std::endl;
+    // std::cout << "Loading the PET types to HRU ID " << it << std::endl;
     //    dHruVec[it].set_paramsToSim(parsToLoad);
-    std::cout<<"threads="<<omp_get_num_threads()<<std::endl;
+    // std::cout<<"threads="<<omp_get_num_threads()<<std::endl;
 
     dHruVec[it].set_PetVars(Latit,myPetType);
     dHruVec[it].calc_Pet();
@@ -319,9 +319,9 @@ void dHRUM::calcPetToAllHrusDist(hdata LatitVec, std::vector<std::string> petTyp
 
 #pragma omp parallel for num_threads(num_threads)
   for(unsigned it=0; it<dimHM; it++) {
-    std::cout << "Calculating the PET  to HRU ID " << it << std::endl;
+    // std::cout << "Calculating the PET  to HRU ID " << it << std::endl;
     //    dHruVec[it].set_paramsToSim(parsToLoad);
-    std::cout<<"threads="<<omp_get_num_threads()<<std::endl;
+    // std::cout<<"threads="<<omp_get_num_threads()<<std::endl;
 
     switch(s_mapString_ToPet_Type[petTypeString[it]]) {
      case pet_Type::OUDIN:
@@ -372,9 +372,9 @@ void dHRUM::calcHbToAllHrus() {
 #pragma omp parallel for num_threads(num_threads)
 
   for(unsigned it=0; it<dimHM; it++) {
-    std::cout << "Calculating water balance on HRU " << it << std::endl;
+    // std::cout << "Calculating water balance on HRU " << it << std::endl;
     //    dHruVec[it].set_paramsToSim(parsToLoad);
-    std::cout<<"threads="<<omp_get_num_threads()<<std::endl;
+    // std::cout<<"threads="<<omp_get_num_threads()<<std::endl;
     ////    dHruVec[it].set_paramsToSim(parsToLoad);
     //    dHruVec[it].read_InputFromFile(namesFilePath.c_str());
     //  dHruVec[it].set_PetVars(50.1,pet_Type::OUDIN);

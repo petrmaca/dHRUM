@@ -7,7 +7,7 @@ probwet =0.6
 meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 temp=rnorm(numdata,10,3)
-nHrus <- 1
+nHrus <- 100
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
