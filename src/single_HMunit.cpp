@@ -626,7 +626,7 @@ case soil_STORtype::PDM2: {
   c1 = get_par(par_HRUtype::C_MAX) * (1- (std::pow(dummy,(1/(get_par(par_HRUtype::B_SOIL)+1)))));
   c2 = std::min((c1 + get_dta(tstRM, ts_type::PREF)), get_par(par_HRUtype::C_MAX));
   c2 = std::max(c2,0.0);
-  er1=std::max(get_dta(tstRM, ts_type::PREF) + get_par(par_HRUtype::C_MAX) +c1,0.0);
+  er1=std::max(get_dta(tstRM, ts_type::PREF) - get_par(par_HRUtype::C_MAX) +c1,0.0);
   dummy = 1- c2 / get_par(par_HRUtype::C_MAX);
   dummy = std::max(dummy,0.0);
   w2 = (get_par(par_HRUtype::C_MAX) / (get_par(par_HRUtype::B_SOIL)+1)) * (1-(std::pow(dummy,(get_par(par_HRUtype::B_SOIL)+1))));
