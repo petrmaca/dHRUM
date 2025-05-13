@@ -621,19 +621,28 @@ case soil_STORtype::PDM2: {
   numberSel w1 = 0.0, dummy = 0.0, c1 = 0.0, c2 = 0.0, er1 =0.0, w2 = 0.0, er2 = 0.0,evap = 0.0, overFL =0.0;
 
   w1 = prev_Soil;
-  dummy = (1 - (get_par(par_HRUtype::B_SOIL)+1)*w1/get_par(par_HRUtype::C_MAX));
+
+  dummy = (1 - ((get_par(par_HRUtype::B_SOIL)+1)*w1/get_par(par_HRUtype::C_MAX)));
   dummy = std::max(dummy,0.0);
+
   c1 = get_par(par_HRUtype::C_MAX) * (1- (std::pow(dummy,(1/(get_par(par_HRUtype::B_SOIL)+1)))));
+
   c2 = std::min((c1 + get_dta(tstRM, ts_type::PREF)), get_par(par_HRUtype::C_MAX));
+  //the potential lost of water
   c2 = std::max(c2,0.0);
+
   er1=std::max(get_dta(tstRM, ts_type::PREF) - get_par(par_HRUtype::C_MAX) +c1,0.0);
+
   dummy = 1- c2 / get_par(par_HRUtype::C_MAX);
   dummy = std::max(dummy,0.0);
+
   w2 = (get_par(par_HRUtype::C_MAX) / (get_par(par_HRUtype::B_SOIL)+1)) * (1-(std::pow(dummy,(get_par(par_HRUtype::B_SOIL)+1))));
+
   er2 = std::max(((c2-c1) - (w2-w1)),0.0);
-  evap = (1- ((get_par(par_HRUtype::SMAX) -c2)/(get_par(par_HRUtype::B_SOIL)+1))/(get_par(par_HRUtype::C_MAX)/(get_par(par_HRUtype::B_SOIL)+1)))* get_dta(tstRM, ts_type::PET);
+  evap = (1- (((get_par(par_HRUtype::C_MAX) - c2)/(get_par(par_HRUtype::B_SOIL)+1))/(get_par(par_HRUtype::C_MAX)/(get_par(par_HRUtype::B_SOIL)+1)))) * get_dta(tstRM, ts_type::PET);
 
   w2 = std::max(w2-evap,0.0);
+  //the potential lost of et
 
   overFL = er1 + er2;
 
