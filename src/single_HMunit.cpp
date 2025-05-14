@@ -464,6 +464,8 @@ void single_HMunit::soil_buffer(soil_STORtype _soil_STORtype) {
 switch(_soil_STORtype) {
 
 case soil_STORtype::PDM: {
+
+  numberSel diff = 0.0;
   ////  overflow from previous day
   // if(prev_Soil > get_par(par_HRUtype::SMAX)) {
   //   overFl0 = prev_Soil - get_par(par_HRUtype::SMAX);
@@ -590,7 +592,15 @@ case soil_STORtype::PDM: {
 
   // std::cout << " evap 2 " << evap <<  " next_soil " << next_soil <<"\n";
   //Total overflow
-  overFL = overFl1 + overFl2;
+
+  if((get_par(par_HRUtype::SMAX) - next_soil)>0){
+    prev_Soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))*(1-(pow(((get_par(par_HRUtype::SMAX) - next_soil)/(get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1)))));
+  } else {
+    diff = get_par(par_HRUtype::SMAX) - next_soil;
+    prev_Soil = get_par(par_HRUtype::C_MAX);
+  }
+
+  overFL = overFl1 + overFl2 + diff;
 
   // if(next_soil<0.0) next_soil=0.0;
   // if(std::isnan(next_soil)) next_soil=0.0;
@@ -603,9 +613,6 @@ case soil_STORtype::PDM: {
   // std::cout <<  " prev_soil 1 " << prev_Soil <<"\n";
   // prev_Soil = next_soil;
 
-  if((get_par(par_HRUtype::SMAX) - next_soil)>0){
-    prev_Soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))*(1-(pow(((get_par(par_HRUtype::SMAX) - next_soil)/(get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1)))));
-  } else prev_Soil = get_par(par_HRUtype::C_MAX);
 
 
   // std::cout <<  " prev_soil 2 " << prev_Soil <<"\n";
@@ -628,7 +635,7 @@ case soil_STORtype::PDM2: {
   c1 = get_par(par_HRUtype::C_MAX) * (1- (std::pow(dummy,(1/(get_par(par_HRUtype::B_SOIL)+1)))));
 
   c2 = std::min((c1 + get_dta(tstRM, ts_type::PREF)), get_par(par_HRUtype::C_MAX));
-  //the potential lost of water
+  //the  lost of water
   c2 = std::max(c2,0.0);
 
   er1=std::max(get_dta(tstRM, ts_type::PREF) - get_par(par_HRUtype::C_MAX) +c1,0.0);
@@ -642,7 +649,7 @@ case soil_STORtype::PDM2: {
   evap = (1- (((get_par(par_HRUtype::C_MAX) - c2)/(get_par(par_HRUtype::B_SOIL)+1))/(get_par(par_HRUtype::C_MAX)/(get_par(par_HRUtype::B_SOIL)+1)))) * get_dta(tstRM, ts_type::PET);
 
   w2 = std::max(w2-evap,0.0);
-  //the potential lost of et
+  //the  lost of et
 
   overFL = er1 + er2;
 
