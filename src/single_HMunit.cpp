@@ -559,26 +559,7 @@ case soil_STORtype::PDM: {
   // et_demand = update_ETDEMAND(evap, true);
   // evap = help_evap;
 
-  //
-  //
-  // if(std::isnan(et_demand)) {
-  //   et_demand = 0.0;
-  // }
-  // // if(tstRM == 35){
-  //  // std::cout << et_demand << "\n";
-  // // }
-  // if(evap >= et_demand){
-  //   evap = et_demand;
-  //   et_demand = 0.0;
-  //   // if(tstRM == 35){
-  //   //   std::cout <<" Inevap"<<  evap << " etdem "<< et_demand << std::endl;
-  //   // }
-  // }
-  // else {
-  //   et_demand = et_demand - evap;
-  // }
-
-  // if(tstRM == 35){
+// if(tstRM == 35){
   //   std::cout <<" AFTRevap"<<  evap << " etdem "<< et_demand << std::endl;
   // }
   //Soil buffer state
@@ -599,7 +580,6 @@ case soil_STORtype::PDM: {
     diff = get_par(par_HRUtype::SMAX) - next_soil;
     prev_Soil = get_par(par_HRUtype::C_MAX);
   }
-
   overFL = overFl1 + overFl2 + diff;
 
   // if(next_soil<0.0) next_soil=0.0;
