@@ -549,6 +549,15 @@ case soil_STORtype::PDM: {
   // evap =  (get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - next_soil) / get_par(par_HRUtype::SMAX)), get_par(par_HRUtype::B_EVAP))));
   // evap = (next_soil) *0.008;
   // evap =  get_dta(tstRM, ts_type::PET)*0.1;
+
+  if((get_par(par_HRUtype::SMAX) - next_soil)>0){
+    prev_Soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))*(1-(pow(((get_par(par_HRUtype::SMAX) - next_soil)/(get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1)))));
+  } else {
+    diff = get_par(par_HRUtype::SMAX) - next_soil;
+    prev_Soil = get_par(par_HRUtype::C_MAX);
+  }
+
+  next_soil =next_soil - diff;
   evap =  std::min(next_soil,get_dta(tstRM, ts_type::PET)*next_soil/get_par(par_HRUtype::SMAX));
   // std::cout << get_par(par_HRUtype::SMAX) << "\n";
   // evap = std::min(static_cast<numberSel>(next_soil), evap);
@@ -574,12 +583,6 @@ case soil_STORtype::PDM: {
   // std::cout << " evap 2 " << evap <<  " next_soil " << next_soil <<"\n";
   //Total overflow
 
-  if((get_par(par_HRUtype::SMAX) - next_soil)>0){
-    prev_Soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))*(1-(pow(((get_par(par_HRUtype::SMAX) - next_soil)/(get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1)))));
-  } else {
-    diff = get_par(par_HRUtype::SMAX) - next_soil;
-    prev_Soil = get_par(par_HRUtype::C_MAX);
-  }
   overFL = overFl1 + overFl2 + diff;
 
   // if(next_soil<0.0) next_soil=0.0;
