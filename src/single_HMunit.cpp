@@ -551,7 +551,7 @@ case soil_STORtype::PDM: {
   // evap =  get_dta(tstRM, ts_type::PET)*0.1;
 
   if((get_par(par_HRUtype::SMAX) - next_soil)>0){
-    prev_Soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))*(1-(pow(((get_par(par_HRUtype::SMAX) - next_soil)/(get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1)))));
+    prev_Soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))*(1-(pow(((get_par(par_HRUtype::SMAX) - next_soil)/(get_par(par_HRUtype::S_MAX)-get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1)))));
   } else {
     diff = get_par(par_HRUtype::SMAX) - next_soil;
     prev_Soil = get_par(par_HRUtype::C_MAX);
