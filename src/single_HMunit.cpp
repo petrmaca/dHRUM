@@ -557,8 +557,11 @@ case soil_STORtype::PDM: {
     prev_Soil = get_par(par_HRUtype::C_MAX);
   }
 
-  next_soil =next_soil - diff;
-  evap =  std::min(next_soil,get_dta(tstRM, ts_type::PET)*next_soil/get_par(par_HRUtype::SMAX));
+  next_soil = next_soil - diff;
+
+  // evap =  std::min(next_soil,get_dta(tstRM, ts_type::PET)*next_soil/get_par(par_HRUtype::SMAX));
+
+  evap =  std::min(next_soil,(get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - next_soil) / get_par(par_HRUtype::SMAX)), get_par(par_HRUtype::B_EVAP)))));
   // std::cout << get_par(par_HRUtype::SMAX) << "\n";
   // evap = std::min(static_cast<numberSel>(next_soil), evap);
 
