@@ -522,22 +522,50 @@ case soil_STORtype::PDM: {
   // Hymod formulatio
   // std::cout <<"cinit 1 "<< c_init << " cmin " <<get_par(par_HRUtype::CMIN)<< " presoil "<< prev_Soil << " smax " << get_par(par_HRUtype::SMAX)<< " smax - prev soil "<< (get_par(par_HRUtype::C_MAX) - prev_Soil) <<"\n";
 
-  if((get_par(par_HRUtype::C_MAX) - prev_Soil)>0){
-    c_init = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(((get_par(par_HRUtype::C_MAX) - prev_Soil) / (get_par(par_HRUtype::C_MAX)- get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1))));
-  } else c_init = get_par(par_HRUtype::SMAX);
 
-  //Overflow if soil tank fully filled
-   std::cout <<"cinit 2 "<< c_init << " cmin " <<get_par(par_HRUtype::CMIN)<< " presoil "<< prev_Soil << " smax " << get_par(par_HRUtype::SMAX)<< " smax - prev soil "<< (get_par(par_HRUtype::C_MAX) - prev_Soil) <<"\n";
-  overFl1 = std::max(static_cast<numberSel>(prev_Soil + get_dta(tstRM, ts_type::PREF) - get_par(par_HRUtype::C_MAX)), static_cast<numberSel>(0.0));
-  // if(tstRM ==0){
-     std::cout << overFl1 <<" prevS "<< prev_Soil << std::endl;
-  // }
-  ppInf = get_dta(tstRM, ts_type::PREF) - overFl1;
-  //Newly proposed soil water depth C
-  c_prop = std::min(static_cast<numberSel>(ppInf + prev_Soil), static_cast<numberSel>(get_par(par_HRUtype::C_MAX)));
-  //  //remaining soil input
-  //  pref = get_dta(tstRM, ts_type::PREF) -   overFl1;
-  //New proposal of state of soil buffer  not affected by evapotranspiration
+  if(prev_Soil <= get_par(par_HRUtype::CMIN)){
+    // the storages in soil filled with c<=c_min
+    // no pdm Snew = Sold + PrecEf - evap from c with c<=c_min
+
+    prev_Soil = prev_Soil + get_dta(tstRM, ts_type::PREF);
+    if(prev_Soil > get_par(par_HRUtype::SMAX)){
+      overFL = prev_Soil - get_par(par_HRUtype::SMAX);
+      prev_Soil = prev_Soil - overFL;
+    }
+
+    evap  = get_dta(tstRM, ts_type::PET)* prev_Soil /  get_par(par_HRUtype::C_MAX);
+
+    numberSel help_EvapSR = update_ETDEMAND(evap, false);
+    et_demand = update_ETDEMAND(evap, true);
+    evap = help_EvapSR;
+
+    // std::cout <<" c < cmin overflow1 " <<  overFL <<" prevSoil "<< prev_Soil << std::endl;
+    // std::cout <<" c < cmin evap " <<  evap <<" etdemand "<< et_demand << std::endl;
+
+  } else{
+
+    if((get_par(par_HRUtype::C_MAX) - prev_Soil)>0){
+      c_init = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(((get_par(par_HRUtype::C_MAX) - prev_Soil) / (get_par(par_HRUtype::C_MAX)- get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1))));
+    } else c_init = get_par(par_HRUtype::SMAX);
+
+    //Overflow if soil tank fully filled
+    std::cout <<"cinit 2 "<< c_init << " cmin " <<get_par(par_HRUtype::CMIN)<< " presoil "<< prev_Soil << " smax " << get_par(par_HRUtype::SMAX)<< " smax - prev soil "<< (get_par(par_HRUtype::SMAX) - prev_Soil) <<"\n";
+    overFl1 = std::max(static_cast<numberSel>(prev_Soil + get_dta(tstRM, ts_type::PREF) - get_par(par_HRUtype::C_MAX)), static_cast<numberSel>(0.0));
+    // if(tstRM ==0){
+    std::cout <<"overflow1 " <<  overFl1 <<" prevS "<< prev_Soil << std::endl;
+    // }
+    ppInf = get_dta(tstRM, ts_type::PREF) - overFl1;
+    //Newly proposed soil water depth C
+    c_prop = std::min(static_cast<numberSel>(ppInf + prev_Soil), static_cast<numberSel>(get_par(par_HRUtype::C_MAX)));
+    //  //remaining soil input
+    //  pref = get_dta(tstRM, ts_type::PREF) -   overFl1;
+    //New proposal of state of soil buffer  not affected by evapotranspiration
+
+
+
+
+
+  std::cout << "c_pro ef dest + predchozi zasoba " << c_prop << "\n";
   // next_soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow((get_par(par_HRUtype::C_MAX) - c_prop) / (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)),(get_par(par_HRUtype::B_SOIL) + 1)));
   next_soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(( (get_par(par_HRUtype::C_MAX) -c_prop )/ (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))),(get_par(par_HRUtype::B_SOIL) + 1)));
   //Overflow for small C according to Jherman
@@ -590,6 +618,8 @@ case soil_STORtype::PDM: {
 
   overFL = overFl1 + overFl2 + diff;
 
+
+  }
   // if(next_soil<0.0) next_soil=0.0;
   // if(std::isnan(next_soil)) next_soil=0.0;
   set_varValue(next_soil, tstRM, ts_type::SOIS);

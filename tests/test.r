@@ -2,11 +2,11 @@
 # profvis(
 # {
 library(dHRUM)
-numdata =36500
+numdata =40
 probwet =0.6
 meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
-temp=rnorm(numdata,10,3)
+temp=rnorm(numdata,20,3)
 nHrus <- 1
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
@@ -23,9 +23,9 @@ setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 # calcHBInAlldHrus(dHRUM_ptr = dhrus)
 # gatherHBdata(dHRUM_ptr = dhrus)
-outDt <- getOutputDist(dHRUM_ptr = dhrus)
+# outDt <- getOutputDist(dHRUM_ptr = dhrus)
 library(data.table)
-dd=as.data.table(outDt$outDta)
+# dd=as.data.table(outDt$outDta)
 
 outDta <- dHRUMrun(dHRUM_ptr = dhrus)
 outDF <- data.frame(outDta$outDta)
