@@ -408,7 +408,7 @@ switch(_soil_STORtype) {
 
 case soil_STORtype::PDM: {
 
-  numberSel diff = 0.0;
+  numberSel diff = 0.0, diff2= 0.0;
   // Estimation of Soil Water Depth C using total soil basin Storage S from previous day see Moore description of PDM HESS 2007,
   //  Wood and bascics from 1992
   // Eric F. Wood, D. P. Lettenmaier, V. G. Zartarian A land-surface hydrology parameterization with subgrid variability for general circulation models
@@ -437,7 +437,7 @@ case soil_STORtype::PDM: {
       c_init = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(((get_par(par_HRUtype::SMAX) - prev_Soil) / (get_par(par_HRUtype::SMAX)- get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1))));
      } else {
        c_init = get_par(par_HRUtype::C_MAX);
-       diff = get_par(par_HRUtype::SMAX) - prev_Soil;
+       diff = prev_Soil - get_par(par_HRUtype::SMAX);
      }
 
     //Overflow if soil tank fully filled
@@ -450,25 +450,22 @@ case soil_STORtype::PDM: {
 
     //Newly proposed soil water depth C
     c_prop = std::min(static_cast<numberSel>(ppInf + c_init), static_cast<numberSel>(get_par(par_HRUtype::C_MAX)));
-
+    // newly proposed storage
     next_soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(( (get_par(par_HRUtype::C_MAX) -c_prop )/ (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))),(get_par(par_HRUtype::B_SOIL) + 1)));
-  //Overflow for small C according to Jherman
+  //Overflow for small C than C_max according to Jherman https://github.com/jdherman/hymod/blob/master/HyMod.cpp
   overFl2 = std::max(static_cast<numberSel>(0.0),static_cast<numberSel>(ppInf - next_soil + prev_Soil + diff));
 
   if((get_par(par_HRUtype::SMAX) - next_soil)>0){
     prev_Soil = next_soil;
   } else {
-    diff = get_par(par_HRUtype::SMAX) - next_soil;
+    diff2 =  next_soil - get_par(par_HRUtype::SMAX);
     prev_Soil = get_par(par_HRUtype::SMAX);
   }
 
-  if((get_par(par_HRUtype::SMAX) - next_soil)>0) {
-      evap =  std::min(next_soil,(get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - prev_Soil) / get_par(par_HRUtype::SMAX)), (get_par(par_HRUtype::B_EVAP))))));
+  if((get_par(par_HRUtype::SMAX) - prev_Soil)>0) {
+      evap =  std::min(prev_Soil,(get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - prev_Soil) / get_par(par_HRUtype::SMAX)), (get_par(par_HRUtype::B_EVAP))))));
   } else evap =  std::min(prev_Soil,(get_dta(tstRM, ts_type::PET)));
-   // std::cout <<"Smax "<< get_par(par_HRUtype::SMAX) << " next soil "<< next_soil <<"\n";
-  // evap = std::min(static_cast<numberSel>(next_soil), evap);
 
-  // std::cout << " et1 " << et_demand << " evap1 " << evap << " " << next_soil << " Smax " << get_par(par_HRUtype::SMAX) << "\n";
 
   numberSel help_evap = update_ETDEMAND(evap, false);
   et_demand = update_ETDEMAND(evap, true);
@@ -486,10 +483,10 @@ case soil_STORtype::PDM: {
 
   prev_Soil = std::max(static_cast<numberSel>(prev_Soil - evap),static_cast<numberSel>(0.0));
 
-   // std::cout << "ending evap  " << evap <<  " prev_Soil " << prev_Soil << " first part "<< (get_par(par_HRUtype::SMAX) - prev_Soil) / get_par(par_HRUtype::SMAX) <<"\n";
+  // std::cout << "ending evap  " << evap <<  " prev_Soil " << prev_Soil << " first part "<< (get_par(par_HRUtype::SMAX) - prev_Soil) / get_par(par_HRUtype::SMAX) <<"\n";
   //Total overflow
-
-  overFL = overFl1 + overFl2;
+  // std::cout << "diff " << diff << " diff 2 " << diff2 << std::endl; // by the definition of pdm diff + diff2 = 0
+  overFL = overFl1 + overFl2 ;
 
 
   }
