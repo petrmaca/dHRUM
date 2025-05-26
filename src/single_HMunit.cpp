@@ -1359,11 +1359,11 @@ void single_HMunit::run_HB() {
   numberSel helprm=0.0;
   for(tstRM=0; tstRM < Numdta ; tstRM++) {
     et_demand = get_dta(tstRM,ts_type::PET);
-    std::cout << " beg "<< et_demand << "\n";
+    // std::cout << " beg "<< et_demand << "\n";
     interception_snow();//
-    std::cout << " interception "<< et_demand << " evac " << get_dta(tstRM, ts_type::EVAC) << " evas " << get_dta(tstRM, ts_type::EVAS) <<"\n";
+    // std::cout << " interception "<< et_demand << " evac " << get_dta(tstRM, ts_type::EVAC) << " evas " << get_dta(tstRM, ts_type::EVAS) <<"\n";
     surface_retention();//
-    std::cout << " surf ret "<< et_demand << " ewsr " << get_dta(tstRM,ts_type::ETSW) <<"\n";
+    // std::cout << " surf ret "<< et_demand << " ewsr " << get_dta(tstRM,ts_type::ETSW) <<"\n";
     // std::cout << tstRM << "\n\n";
     soil_buffer(soil_STORAGE);//
     slow_response(gs_STORAGE);
