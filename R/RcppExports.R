@@ -203,7 +203,7 @@ setInterceptiontypeToAlldHrus <- function(dHRUM_ptr, intcptnTypes, hruIds) {
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus,1)
-initdHruModel <- function(dimdHru, vecAreas, hrusIDs, nthreads) {
+initdHruModel <- function(dimdHru, vecAreas, hrusIDs, nthreads = 1L) {
     .Call(`_dHRUM_initdHruModel`, dimdHru, vecAreas, hrusIDs, nthreads)
 }
 

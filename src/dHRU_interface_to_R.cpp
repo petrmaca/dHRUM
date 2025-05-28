@@ -19,7 +19,7 @@
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus,1)
 // [[Rcpp::export]]
-Rcpp::XPtr<dHRUM> initdHruModel(numberDta dimdHru, Rcpp::NumericVector vecAreas, Rcpp::StringVector hrusIDs,unsigned nthreads) {
+Rcpp::XPtr<dHRUM> initdHruModel(numberDta dimdHru, Rcpp::NumericVector vecAreas, Rcpp::StringVector hrusIDs,unsigned nthreads=1) {
   // implicit form
   // 1) creates dHRU instance on the heap (allocates memory and call constructor with no arguments)
   // 2) creates dhruPTR variable on the stack initialized with pointer to dHRU's instance
