@@ -455,7 +455,7 @@ case soil_STORtype::PDM: {
   //Overflow for small C than C_max according to Jherman https://github.com/jdherman/hymod/blob/master/HyMod.cpp
   overFl2 = std::max(static_cast<numberSel>(0.0),static_cast<numberSel>(ppInf - next_soil + prev_Soil + diff));
 
-  if((get_par(par_HRUtype::SMAX) - next_soil)<0){
+  if((get_par(par_HRUtype::SMAX) - next_soil)>0){
     prev_Soil = next_soil;
   } else {
     diff2 =  next_soil - get_par(par_HRUtype::SMAX);
