@@ -489,10 +489,10 @@ case soil_STORtype::PDM: {
   overFL = overFl1 + overFl2 ;
   }
 
-  if((prev_Soil - get_par(par_HRUtype::SMAX) )>0){
-    overFL = overFL + (prev_Soil - (get_par(par_HRUtype::SMAX)));
-    prev_Soil =  (get_par(par_HRUtype::SMAX));
-  }
+  // if((prev_Soil - get_par(par_HRUtype::SMAX) )>0){
+  //   overFL = overFL + (prev_Soil - (get_par(par_HRUtype::SMAX)));
+  //   prev_Soil =  (get_par(par_HRUtype::SMAX));
+  // }
 
 
   // if(next_soil<0.0) next_soil=0.0;
