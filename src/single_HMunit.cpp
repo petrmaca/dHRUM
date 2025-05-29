@@ -487,9 +487,14 @@ case soil_STORtype::PDM: {
   //Total overflow
   // std::cout << "diff " << diff << " diff 2 " << diff2 << std::endl; // by the definition of pdm diff + diff2 = 0
   overFL = overFl1 + overFl2 ;
-
-
   }
+
+  if((get_par(par_HRUtype::SMAX) - prev_Soil)<=0){
+    overFL = overFL + (prev_Soil - (get_par(par_HRUtype::SMAX));
+    prev_Soil =  (get_par(par_HRUtype::SMAX);
+  }
+
+
   // if(next_soil<0.0) next_soil=0.0;
   // if(std::isnan(next_soil)) next_soil=0.0;
   set_varValue(prev_Soil, tstRM, ts_type::SOIS);
