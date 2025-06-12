@@ -11,18 +11,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// setSurfaceStortypeToAlldHrus
-void setSurfaceStortypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector surfaceStorTypes, Rcpp::CharacterVector hruIds);
-RcppExport SEXP _dHRUM_setSurfaceStortypeToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP surfaceStorTypesSEXP, SEXP hruIdsSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type surfaceStorTypes(surfaceStorTypesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type hruIds(hruIdsSEXP);
-    setSurfaceStortypeToAlldHrus(dHRUM_ptr, surfaceStorTypes, hruIds);
-    return R_NilValue;
-END_RCPP
-}
 // calcHBInAlldHrus
 void calcHBInAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr);
 RcppExport SEXP _dHRUM_calcHBInAlldHrus(SEXP dHRUM_ptrSEXP) {
@@ -270,9 +258,20 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// setSurfaceStortypeToAlldHrus
+void setSurfaceStortypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector surfaceStorTypes, Rcpp::CharacterVector hruIds);
+RcppExport SEXP _dHRUM_setSurfaceStortypeToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP surfaceStorTypesSEXP, SEXP hruIdsSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type surfaceStorTypes(surfaceStorTypesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type hruIds(hruIdsSEXP);
+    setSurfaceStortypeToAlldHrus(dHRUM_ptr, surfaceStorTypes, hruIds);
+    return R_NilValue;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_dHRUM_setSurfaceStortypeToAlldHrus", (DL_FUNC) &_dHRUM_setSurfaceStortypeToAlldHrus, 3},
     {"_dHRUM_calcHBInAlldHrus", (DL_FUNC) &_dHRUM_calcHBInAlldHrus, 1},
     {"_dHRUM_gatherHBdata", (DL_FUNC) &_dHRUM_gatherHBdata, 1},
     {"_dHRUM_setGWtypeToAlldHrus", (DL_FUNC) &_dHRUM_setGWtypeToAlldHrus, 3},
@@ -294,6 +293,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_calcPetToAllHrusDist", (DL_FUNC) &_dHRUM_calcPetToAllHrusDist, 4},
     {"_dHRUM_setNumFastResAlldHrus", (DL_FUNC) &_dHRUM_setNumFastResAlldHrus, 3},
     {"_dHRUM_setSoilStorTypeToAlldHrus", (DL_FUNC) &_dHRUM_setSoilStorTypeToAlldHrus, 3},
+    {"_dHRUM_setSurfaceStortypeToAlldHrus", (DL_FUNC) &_dHRUM_setSurfaceStortypeToAlldHrus, 3},
     {NULL, NULL, 0}
 };
 

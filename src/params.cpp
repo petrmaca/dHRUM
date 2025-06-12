@@ -9,7 +9,7 @@ params::params(): numPars(0),
 //    b_soil = 2.0;
 //    c_max = 100.0;
 //    b_evap = 1;
-  numPars = 31;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
+  numPars = 32;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
 
   pars.resize(numPars,numPars);
   up_pars.resize(numPars,numPars);
