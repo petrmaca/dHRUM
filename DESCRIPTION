@@ -1,14 +1,15 @@
 Package: dHRUM
 Type: Package
 Title: dHRUM - distributed Hydrological Response Units Model
-Version: 0.1.5
+Version: 1.0.0
 Author: Petr Maca, Eleni Mickovska
 Maintainer: Petr Maca <maca@fzp.czu.cz>
 Description: The R interface to dHRUM - distributed Hydrological Response Units Model.
     It initializes dHRUM with given number of single HRUs with known IDs and areas, 
     enable to set inputs and parameters to all single HRUs, 
     run dHRU model, gather data on states and fluxes spatially averaged for the catchment
-    from all single HRUs.
+    from all single HRUs. DHRUM enables to select soil storage types, groundwater models on HRU, usrface retention modles,
+    and interception models.
 Depends: R (>= 3.5.0)
 License: MIT + file LICENSE 
 Encoding: UTF-8
