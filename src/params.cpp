@@ -17,7 +17,7 @@ params::params(): numPars(0),
   pars[0] = 2.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   pars[1] = 10.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
   pars[2] = 1.0;//!< B_EVAP Parameter controlling soil evapotranspiration [0,infty] how ever [0.5,3],VC1
-  pars[3] = 0.0001;//!< SMAX Max soil storage calculate using Cmax and b_soil
+  pars[3] = 0.0001;//!< SMAXpdm Max soil storage calculate using Cmax and b_soil
   pars[4] = 0.1;//!< KS Storage coefficient of groundwater storage [0,1],VC1
   pars[5] = 0.5;//!< KF Storage coefficient of runoff response reservoirs [0,1],VC1
   pars[6] = 0.5;//!< ADIV Divider of percolation into the direct runoff input par[6]*Perc and  groundwater input (1-par[6])*Perc [0,1],VC1
@@ -47,11 +47,12 @@ params::params(): numPars(0),
   pars[28] = 1;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
   pars[29] = 0.5;//!< RF evaporation reduction factor [-] [0,1]
   pars[30] = 0.5;//!< WP wilting point [-] [0,1]
+  pars[30] = 20;//!< SMAX  [mm] [0,inf]
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   up_pars[1] = 500.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
   up_pars[2] = 3.0;//!< B_EVAP Parameter controlling soil evapotranspiration [0,infty] how ever [0.5,3],VC1
-  up_pars[3] = 0.0;//!< SMAX Max soil storage calculate using Cmax and b_soil
+  up_pars[3] = 0.0;//!< SMAXpdm Max soil storage calculate using Cmax and b_soil
   up_pars[4] = 1;//!< KS Storage coefficient of groundwater storage [0,1],VC1
   up_pars[5] = 1;//!< KF Storage coefficient of runoff response reservoirs [0,1],VC1
   up_pars[6] = 1;//!< ADIV Divider of percolation into the overflow input par[6]*Perc and  groundwater input (1-par[6])*Perc [0,1],VC1
@@ -85,12 +86,13 @@ params::params(): numPars(0),
   up_pars[28] = 100;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
   up_pars[29] = 1;//!< RF evaporation reduction factor [-] [0,1]
   up_pars[30] = 1;//!< WP wilting point [-] [0,1]
+  up_pars[31] = 100;//!< SMAX  [mm] [0,inf]
 
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   low_pars[1] = 0.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
   low_pars[2] = 0.0;//!< B_EVAP Parameter controlling soil evapotranspiration [0,infty] how ever [0.5,3],VC1
-  low_pars[3] = 0.0;//!< SMAX Max soil storage calculate using Cmax and b_soil
+  low_pars[3] = 0.0;//!< SMAXpdm Max soil storage calculate using Cmax and b_soil
   low_pars[4] = 0.0;//!< KS Storage coefficient of groundwater storage [0,1],VC1
   low_pars[5] = 0.0;//!< KF Storage coefficient of runoff response reservoirs [0,1],VC1
   low_pars[6] = 0.0;//!< ADIV Divider of percolation into the overflow input par[6]*Perc and  groundwater input (1-par[6])*Perc [0,1],VC1
@@ -126,6 +128,7 @@ params::params(): numPars(0),
   low_pars[28] = 0.0;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
   low_pars[29] = 0.0;//!< RF evaporation reduction factor [-] [0,1]
   low_pars[30] = 0.0;//!< WP wilting point [-] [0,1]
+  low_pars[31] = 0.0;//!< SMAX  [mm] [0,inf]
 
 //  std::cout << "Params are initialized." << std::endl;
 }
@@ -185,7 +188,7 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     pars[2] = par_dta;
 //    std::cout << "New b_evap --> loaded\n";
     break;
-  case par_HRUtype::SMAX:
+  case par_HRUtype::SMAXpdm:
     pars[3] = par_dta;
     pars[1] = pars[3]*(pars[0]+1) - (pars[0]*pars[22]);//For preventing the losing the link between b_soil and cmax and cmin see pdm paper hess 2007
 //    std::cout << "New Smax --> loaded\n";
@@ -298,6 +301,9 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     pars[30] = par_dta;
     //    std::cout << "New WP --> loaded\n";
     break;
+  case par_HRUtype::SMAX:
+    pars[31] = par_dta;
+    break;
   }
 
   pars[3] = (pars[0] * pars[22] +pars[2]) / (pars[0] +1 );
@@ -330,7 +336,7 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
     pars[2] = par_dta;
 //    std::cout << "New b_evap --> loaded\n";
     break;
-  case par_HRUtype::SMAX:
+  case par_HRUtype::SMAXpdm:
     pars[3] = par_dta;
     pars[1] = pars[3]*(pars[0]+1) -(pars[0]*pars[22]);
 //    std::cout << "New Smax --> loaded\n";
@@ -444,6 +450,9 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
     pars[30] = par_dta;
     //    std::cout << "New WP --> loaded\n";
     break;
+  case par_HRUtype::SMAX:
+    pars[31] = par_dta;
+    break;
   }
   return ;
 }
@@ -469,7 +478,7 @@ numberSel params::g_par(const par_HRUtype& _parType) {
   case par_HRUtype::B_EVAP:
     value =  pars[2];
     break;
-  case par_HRUtype::SMAX:
+  case par_HRUtype::SMAXpdm:
     value =  pars[3];
     break;
   case par_HRUtype::KS:
@@ -553,6 +562,9 @@ numberSel params::g_par(const par_HRUtype& _parType) {
   case par_HRUtype::WP:
     value =  pars[30];
     break;
+  case par_HRUtype::SMAX:
+    value =  pars[31];
+    break;
 }
   return value;
 
@@ -606,7 +618,7 @@ void params::s_default() {
   pars[2] = 1.0;//!< Parameter controlling soil evapotranspiration [0,infty] how ever [0.5,3],VC1
   numberSel helpSmax;
   helpSmax = pars[1] / (pars[0]+1);
-  pars[3] = helpSmax;//!< Smax calculate using Cmax and b_soil
+  pars[3] = helpSmax;//!< Smaxpdm calculate using Cmax and b_soil
   pars[4] = 0.1;//!< Storage coefficient of groundwater storage [0,1],VC1
   pars[5] = 0.5;//!< Storage coefficient of runoff response reservoirs [0,1],VC1
   pars[6] = 0.5;//!< Divider of percolation into the direct flow input par[6]*Perc and  groundwater input (1-par[6])*Perc [0,1],VC1
@@ -634,6 +646,7 @@ void params::s_default() {
   pars[28] = 10;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
   pars[29] = 0.5;//!< RF evaporation reduction factor [-] [0,1]
   pars[30] = 0.5;//!< WP wilting point [-] [0,1]
+  pars[31] = 10.0;//!< SMAX soil storage capacity [mm] [0,inf]
 
   numFastRes = 1;
 
@@ -646,11 +659,11 @@ void params::s_default() {
  */
 void params::p_param() {
 
-  std::vector<std::string> parsNames {"B_SOIL: ", "C_MAX: ", "B_EVAP: ", "SMAX: ", "KS: ", "KF: ", \
+  std::vector<std::string> parsNames {"B_SOIL: ", "C_MAX: ", "B_EVAP: ", "SMAXpdm: ", "KS: ", "KF: ", \
                                       "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", \
                                       "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: ", "CMIN: ", \
                                       "KS2: ", "THR: ", "ALPHA: ","FC: ","FOREST_FRACT: ", "KF2: ", \
-                                      "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: "};
+                                      "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: ", "SMAX: "};
 
   std::cout << std::endl << "Printing the values of parameters:" << std::endl << std::endl;
   for(unsigned pp=0; pp<numPars ; pp++ ) {

@@ -412,16 +412,16 @@ case soil_STORtype::PDM: {
   // Eric F. Wood, D. P. Lettenmaier, V. G. Zartarian A land-surface hydrology parameterization with subgrid variability for general circulation models
   //   // eq 3a or 18a Vic paper
 
-  // prev_soil is soil storage from previous time step
-
   if(prev_Soil <= get_par(par_HRUtype::CMIN)){
 // the storages in soil filled with c<=c_min
 // no pdm Snew = Sold + PrecEf - evap from c with c<=c_min
     prev_Soil = prev_Soil + get_dta(tstRM, ts_type::PREF);
 // checking the ooverflow during one interval
-    if(prev_Soil > get_par(par_HRUtype::SMAX)){
-      overFL = prev_Soil - get_par(par_HRUtype::SMAX);
+    if(prev_Soil > get_par(par_HRUtype::SMAXpdm)){
+      overFL = prev_Soil - get_par(par_HRUtype::SMAXpdm);
       prev_Soil = prev_Soil - overFL;
+    } else {
+      overFL = 0.0;
     }
 
     evap  = get_dta(tstRM, ts_type::PET)* prev_Soil /  get_par(par_HRUtype::C_MAX);
@@ -431,11 +431,11 @@ case soil_STORtype::PDM: {
 
   } else{
 // c_init height in pdm soil storage
-     if((get_par(par_HRUtype::SMAX) - prev_Soil)>=0.0){
-      c_init = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(((get_par(par_HRUtype::SMAX) - prev_Soil) / (get_par(par_HRUtype::SMAX)- get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1))));
+     if((get_par(par_HRUtype::SMAXpdm) - prev_Soil)>=0.0){
+      c_init = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(((get_par(par_HRUtype::SMAXpdm) - prev_Soil) / (get_par(par_HRUtype::SMAXpdm)- get_par(par_HRUtype::CMIN))),(1/(get_par(par_HRUtype::B_SOIL) + 1))));
      } else {
        c_init = get_par(par_HRUtype::C_MAX);
-       diff = prev_Soil - get_par(par_HRUtype::SMAX);
+       diff = prev_Soil - get_par(par_HRUtype::SMAXpdm);
      }
 
     //Overflow if soil tank fully filled
@@ -449,19 +449,19 @@ case soil_STORtype::PDM: {
     //Newly proposed soil water depth C
     c_prop = std::min(static_cast<numberSel>(ppInf + c_init), static_cast<numberSel>(get_par(par_HRUtype::C_MAX)));
     // newly proposed storage
-    next_soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAX)-get_par(par_HRUtype::CMIN)) * (1 - pow(( (get_par(par_HRUtype::C_MAX) -c_prop )/ (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))),(get_par(par_HRUtype::B_SOIL) + 1)));
+    next_soil = get_par(par_HRUtype::CMIN) + (get_par(par_HRUtype::SMAXpdm)-get_par(par_HRUtype::CMIN)) * (1 - pow(( (get_par(par_HRUtype::C_MAX) -c_prop )/ (get_par(par_HRUtype::C_MAX)-get_par(par_HRUtype::CMIN))),(get_par(par_HRUtype::B_SOIL) + 1)));
   //Overflow for small C than C_max according to Jherman https://github.com/jdherman/hymod/blob/master/HyMod.cpp
   overFl2 = std::max(static_cast<numberSel>(0.0),static_cast<numberSel>(ppInf - next_soil + prev_Soil + diff));
 
-  if((get_par(par_HRUtype::SMAX) - next_soil)>0){
+  if((get_par(par_HRUtype::SMAXpdm) - next_soil)>0){
     prev_Soil = next_soil;
   } else {
-    diff2 =  next_soil - get_par(par_HRUtype::SMAX);
-    prev_Soil = get_par(par_HRUtype::SMAX);
+    diff2 =  next_soil - get_par(par_HRUtype::SMAXpdm);
+    prev_Soil = get_par(par_HRUtype::SMAXpdm);
   }
 
-  if((get_par(par_HRUtype::SMAX) - prev_Soil)>0) {
-      evap =  std::min(prev_Soil,(get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAX) - prev_Soil) / get_par(par_HRUtype::SMAX)), (get_par(par_HRUtype::B_EVAP))))));
+  if((get_par(par_HRUtype::SMAXpdm) - prev_Soil)>0) {
+      evap =  std::min(prev_Soil,(get_dta(tstRM, ts_type::PET)*(1 - pow(((get_par(par_HRUtype::SMAXpdm) - prev_Soil) / get_par(par_HRUtype::SMAXpdm)), (get_par(par_HRUtype::B_EVAP))))));
   } else evap =  std::min(prev_Soil,(get_dta(tstRM, ts_type::PET)));
 
 
@@ -487,29 +487,10 @@ case soil_STORtype::PDM: {
   overFL = overFl1 + overFl2 ;
   }
 
-  // if((prev_Soil - get_par(par_HRUtype::SMAX) )>0){
-  //   overFL = overFL + (prev_Soil - (get_par(par_HRUtype::SMAX)));
-  //   prev_Soil =  (get_par(par_HRUtype::SMAX));
-  // }
-
-
-  // if(next_soil<0.0) next_soil=0.0;
-  // if(std::isnan(next_soil)) next_soil=0.0;
   set_varValue(prev_Soil, tstRM, ts_type::SOIS);
   set_varValue(evap,tstRM, ts_type::EVBS);
   set_varValue(overFL, tstRM, ts_type::PERC);
 
-  // aet = get_dta(tstRM,ts_type::EVAC) +  get_dta(tstRM,ts_type::EVAS)  +  evap;
-  // set_varValue(aet, tstRM, ts_type::AET);
-  // std::cout <<  " prev_soil 1 " << prev_Soil <<"\n";
-  // prev_Soil = next_soil;
-
-
-
-  // std::cout <<  " prev_soil 2 " << prev_Soil <<"\n";
-
-
-  // std::cout << " et2 " << et_demand << " evap2 " << evap << "\n";
   break;
 }
 

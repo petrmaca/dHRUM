@@ -41,14 +41,14 @@ Rcpp::XPtr<dHRUM> initdHruModel(numberDta dimdHru, Rcpp::NumericVector vecAreas,
     hdata vecAreasHD(1,dimdHru);
     for(unsigned aa=0;aa<dimdHru;aa++){
       vecAreasHD[aa] = (numberSel) vecAreas[aa];
-      // Rcpp::Rcout << vecAreasHD[aa] << "\n";
+      Rcpp::Rcout << vecAreasHD[aa] << "\n";
     }
     dHRUM_ptr->initHrusID(vecIDs);
-    // for(unsigned aa=0;aa<dimdHru;aa++){
-    //   Rcpp::Rcout << "Id of  single Hru on positon " << aa << " is  " << dHRU_ptr->getSingleHruId(aa) << "\n";
-    // }
+    for(unsigned aa=0;aa<dimdHru;aa++){
+      Rcpp::Rcout << "Id of  single Hru on positon " << aa << " is  " << dHRUM_ptr->getSingleHruId(aa) << "\n";
+    }
     dHRUM_ptr->setAreasToHrus(vecAreasHD);
-    // Rcpp::Rcout << "The number of threads is set to " << dHRUM_ptr->get_num_treads() << "\n";
+    Rcpp::Rcout << "The number of threads is set to " << dHRUM_ptr->get_num_treads() << "\n";
   }
   return Rcpp::XPtr<dHRUM>(dHRUM_ptr);
 }
