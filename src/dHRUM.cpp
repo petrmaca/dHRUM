@@ -644,4 +644,15 @@ void dHRUM::set_num_treads(const unsigned&  numTHR){
   return ;
 }
 
+void dHRUM::initSurfaceStypeToAlldHrus(std::vector<std::pair<unsigned,surface_STORtype>>& surface_STORtype){
 
+#pragma omp parallel for num_threads(num_threads)
+  for(unsigned int i=0; i<surface_STORtype.size(); i++) {
+    dHruVec[surface_STORtype[i].first].set_surfaceStor(surface_STORtype[i].second);
+  }
+
+  return;
+
+  return ;
+
+}

@@ -62,10 +62,11 @@ const std::vector<std::string> allSoilStorTypeNames {"PDM", "COLLIE_V2", "NEW_ZE
                                                      "HILLSLOPE", "PLATEAU","PDM2"};
 
 enum class interception_STORtype { Rutter_Gash};
-
 const interception_STORtype all_Interceptions[]{ interception_STORtype::Rutter_Gash};
-
 const std::vector<std::string> allTnterceptionStorTypeNames {"Rutter_Gash"};
 
+enum class surface_STORtype {SurfaceAll, SurfacePRTL};
+const surface_STORtype all_SurfacStors[] {surface_STORtype::SurfaceAll, surface_STORtype::SurfacePRTL};
+const std::vector<std::string> allSurfacStorsNames {"SurfaceAll","SurfacePRTL"};
 
 #endif // NUMBERSEL_H_INCLUDED

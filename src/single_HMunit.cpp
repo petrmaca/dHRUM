@@ -22,7 +22,8 @@ single_HMunit::single_HMunit(): tstRM(0),
   IdHru(),
   gs_STORAGE{},
   soil_STORAGE{},
-  intrc_STORAGE{}{
+  intrc_STORAGE{},
+  srfs_STORAGE{}{
 
   set_nmbFastres(1);
   help_nmbFR = get_nmbFastRes();
@@ -43,6 +44,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   gs_STORAGE = gs_STORtype::LIN_RES;
   soil_STORAGE = soil_STORtype::PDM;
   intrc_STORAGE = interception_STORtype::Rutter_Gash;
+  srfs_STORAGE = surface_STORtype::SurfaceAll;
   et_demand = 0.0;
 
 }
@@ -84,7 +86,8 @@ Area(0),
 IdHru(),
 gs_STORAGE{},
 soil_STORAGE{},
-intrc_STORAGE{}
+intrc_STORAGE{},
+srfs_STORAGE{}
 {
 
   tstRM = other.tstRM;//!< The counter for main loop in run model
@@ -106,6 +109,7 @@ intrc_STORAGE{}
   gs_STORAGE = other.gs_STORAGE;
   soil_STORAGE = other.soil_STORAGE;
   intrc_STORAGE = other.intrc_STORAGE;
+  srfs_STORAGE = other.srfs_STORAGE;
 
 }
 
@@ -141,6 +145,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     gs_STORAGE = rhs.gs_STORAGE;//!< The type of groundwater storage
     soil_STORAGE = rhs.soil_STORAGE;
     intrc_STORAGE = rhs.intrc_STORAGE;
+    srfs_STORAGE =rhs.srfs_STORAGE;
 
   } // handle self assignment
   //assignment operator
@@ -332,65 +337,56 @@ void single_HMunit::set_stateFastRes(const numberSel& helpState,const unsigned& 
 /** \brief Update all surface retention
  *
  */
-void single_HMunit::surface_retention() {
+void single_HMunit::surface_retention(surface_STORtype _surf_STORtype) {
 
-  numberSel RetOut = 0.0, EvapSR = 0.0;
-  //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
-  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
-  // std::cout << RetOut << "  retout " << tstRM <<std::endl;
-  prev_SurS = prev_SurS - RetOut;
+  switch(_surf_STORtype) {
 
-  // Evaporation according to Beran VTEI
-  // if (get_dta(tstRM, ts_type::TEMP) > 0.0) {
-  //   EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
-  // } else EvapSR = 0.0;
+  case surface_STORtype::SurfaceAll: {
 
-  // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
-  EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+    numberSel RetOut = 0.0, EvapSR = 0.0;
+    //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
+    RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
+    // std::cout << RetOut << "  retout " << tstRM <<std::endl;
+    prev_SurS = prev_SurS - RetOut;
 
-  if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
-    EvapSR = 0.0;
-  }
+    // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
+    EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
 
-  if (EvapSR > prev_SurS) {
-    EvapSR = prev_SurS;
-  }
+    if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
+      EvapSR = 0.0;
+    }
 
+    if (EvapSR > prev_SurS) {
+      EvapSR = prev_SurS;
+    }
 
+    numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
+    et_demand = update_ETDEMAND(EvapSR, true);
+    EvapSR = help_EvapSR;
 
-  numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
-  et_demand = update_ETDEMAND(EvapSR, true);
-  EvapSR = help_EvapSR;
+    prev_SurS = prev_SurS - EvapSR;
+    set_varValue(prev_SurS, tstRM, ts_type::SURS);
 
-  // if(EvapSR >= et_demand) {
-  //   EvapSR = et_demand;
-  //   et_demand = 0.0;
-  // }
-  // else {
-  //   et_demand = et_demand - EvapSR;
-  //   }
-
-
-
-   // std::cout << EvapSR << "  EvapSR " << tstRM << " " << get_dta(tstRM, ts_type::TEMP) << " u " << (std::pow((-1.5),1.289)) <<std::endl;
-  // if(tstRM == 469) std::cout <<  " e " << EvapSR <<std::endl;
-  // prev_SurS = std::max((prev_SurS - EvapSR),0.0);
-  prev_SurS = prev_SurS - EvapSR;
-  // if(tstRM == 469) std::cout << RetOut << " ps " << prev_SurS << " e " << EvapSR <<std::endl;
-  set_varValue(prev_SurS, tstRM, ts_type::SURS);
-
-  if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
-    prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
-      (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT));
-  } else {
-    prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
-      (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT) + (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) *get_dta(tstRM, ts_type::PREC));
+    if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
+      prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
+        (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT));
+      } else {
+        prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
+        (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT) + (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) *get_dta(tstRM, ts_type::PREC));
       }
 
-  // set_varValue(EvapSR, tstRM, ts_type::AET);
-  set_varValue(EvapSR, tstRM, ts_type::ETSW);
-  set_varValue(RetOut,tstRM,ts_type::PREF);
-  // set_varValue(prev_SurS, tstRM, ts_type::SURS);
+    set_varValue(EvapSR, tstRM, ts_type::ETSW);
+    set_varValue(RetOut,tstRM,ts_type::PREF);
+
+    break;
+  }
+  case surface_STORtype::SurfacePRTL: {
+
+  break;
+  }
+
+  }
+
 
   return ;
 }
@@ -1343,7 +1339,7 @@ void single_HMunit::run_HB() {
     // std::cout << " beg "<< et_demand << "\n";
     interception_snow();//
     // std::cout << " interception "<< et_demand << " evac " << get_dta(tstRM, ts_type::EVAC) << " evas " << get_dta(tstRM, ts_type::EVAS) <<"\n";
-    surface_retention();//
+    surface_retention(srfs_STORAGE);//
     // std::cout << " surf ret "<< et_demand << " ewsr " << get_dta(tstRM,ts_type::ETSW) <<"\n";
     // std::cout << tstRM << "\n\n";
     soil_buffer(soil_STORAGE);//
@@ -1949,6 +1945,18 @@ void single_HMunit::set_inteceptionType(interception_STORtype _intrc_STORAGE){
 interception_STORtype single_HMunit::get_intercetionStorType(){
 
   return intrc_STORAGE;
+
+}
+
+void single_HMunit::set_surfaceStor(surface_STORtype _srfs_STORAGE){
+
+  srfs_STORAGE = _srfs_STORAGE;
+
+}
+
+surface_STORtype single_HMunit::get_surfaceStorType(){
+
+  return srfs_STORAGE;
 
 }
 

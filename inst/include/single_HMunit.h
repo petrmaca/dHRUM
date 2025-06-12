@@ -39,7 +39,7 @@ class single_HMunit {
   void interception_snow();//!< Update snow storage and interception
   void interception_NoSnow(interception_STORtype _intrc_STORAGE);//!< Update the Canopy and Stem Interception storages without snow
   void interception_WithSnow(interception_STORtype _intrc_STORAGE);//!< Update the Canopy and Stem Interception storage with snow
-  void surface_retention();//!< Update surface retention
+  void surface_retention(surface_STORtype _surf_STORtype);//!< Update surface retention
   void soil_buffer(soil_STORtype _soil_STORtype);//!< Update the soil buffer states
   void fast_response();//!< The fast runoff response
   void slow_response(gs_STORtype _gs_STORtype);//!< The slow runoff response
@@ -98,6 +98,9 @@ class single_HMunit {
   interception_STORtype get_intercetionStorType();
   // void print_soilStorType();
 
+  void set_surfaceStor(surface_STORtype _srfs_STORAGE);
+  surface_STORtype get_surfaceStorType();
+
 
 
   std::vector<numberSel> water_balance(numberSel next_soil, numberSel val, std::vector<numberSel> vals);//!< Method for preserving mass balance
@@ -133,6 +136,7 @@ private:
   gs_STORtype gs_STORAGE;
   soil_STORtype soil_STORAGE;
   interception_STORtype intrc_STORAGE;
+  surface_STORtype srfs_STORAGE;
 
 };
 

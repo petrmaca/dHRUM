@@ -60,6 +60,7 @@ class dHRUM {
   void initGWtypeToAlldHrus(std::vector<std::pair<unsigned, gs_STORtype>>& gs_STORtypes);
   void initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype>>& soil_STORtypes);
   void initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,interception_STORtype>>& interception_STORtype);
+  void initSurfaceStypeToAlldHrus(std::vector<std::pair<unsigned,surface_STORtype>>& surface_STORtype);
 
   numberSel getTsDta(const ts_type& _tsType, const unsigned& HruIndex, const unsigned& tst);
 

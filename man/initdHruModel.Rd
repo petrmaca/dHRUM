@@ -4,7 +4,7 @@
 \alias{initdHruModel}
 \title{Initialization of dHRU pointer to a dHRUM}
 \usage{
-initdHruModel(dimdHru, vecAreas, hrusIDs, nthreads)
+initdHruModel(dimdHru, vecAreas, hrusIDs, nthreads = 1L)
 }
 \arguments{
 \item{dimdHru}{a single \code{numberDta} number of single Hrus.}
