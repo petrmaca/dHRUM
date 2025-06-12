@@ -71,7 +71,6 @@ class dHRUM {
   unsigned get_num_treads();
   void set_num_treads(const unsigned&  numTHR);
 
-
 protected:
 
 private:

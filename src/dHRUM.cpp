@@ -651,8 +651,6 @@ void dHRUM::initSurfaceStypeToAlldHrus(std::vector<std::pair<unsigned,surface_ST
     dHruVec[surface_STORtype[i].first].set_surfaceStor(surface_STORtype[i].second);
   }
 
-  return;
-
   return ;
 
 }
