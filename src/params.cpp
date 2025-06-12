@@ -9,7 +9,7 @@ params::params(): numPars(0),
 //    b_soil = 2.0;
 //    c_max = 100.0;
 //    b_evap = 1;
-  numPars = 32;//!< Since the Smax is defined by the Cmax and Bsoil the real number of parameters is numPars-1
+  numPars = 32;
 
   pars.resize(numPars,numPars);
   up_pars.resize(numPars,numPars);
@@ -111,13 +111,11 @@ params::params(): numPars(0),
   low_pars[19] = 0.0;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
   low_pars[20] = 0.0;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
   low_pars[21] = 0.0;//!< ALPHA Divider for two parallel linear reservoirs
-
   low_pars[22] = 0;//!< CMIN lower limit of c in soils pdm reservoir
 
   numberSel helpSmaxLow;
   helpSmaxLow = (low_pars[0] *low_pars[22] +low_pars[1]) / (low_pars[0]+1);
   low_pars[3] = 0.0;
-
 
   low_pars[22] = 1000;//!< CMIN lower limit of c in soils pdm reservoir
   low_pars[23] = 0;//!< FC Field capacity [mm] [0,inf)
