@@ -53,6 +53,9 @@ const gs_STORtype all_gs_STORs[]{ gs_STORtype::LIN_RES, gs_STORtype::LINL_RES, g
 const std::vector<std::string> allGWStorTypeNames {"LIN_RES", "LINL_RES", "LINBY_RES", "POW_RES",
                                                  "EXP_RES", "LIN_2SE", "LIN_2PA", "FLEX_RES","EXP_LOG" };
 
+// enum class LIN_RESpar { KS, ADIV};
+
+
 enum class soil_STORtype { PDM, COLLIE_V2, NEW_ZEALAND, GR4J, SBROOK_V1, HILLSLOPE, PLATEAU, PDM2 };
 const soil_STORtype all_soil_STORs[]{ soil_STORtype::PDM, soil_STORtype::COLLIE_V2, soil_STORtype::NEW_ZEALAND, \
                                       soil_STORtype::GR4J, soil_STORtype::SBROOK_V1, soil_STORtype::HILLSLOPE,  \
@@ -68,5 +71,8 @@ const std::vector<std::string> allTnterceptionStorTypeNames {"Rutter_Gash"};
 enum class surface_STORtype {SurfaceAll, SurfacePRTL};
 const surface_STORtype all_SurfacStors[] {surface_STORtype::SurfaceAll, surface_STORtype::SurfacePRTL};
 const std::vector<std::string> allSurfacStorsNames {"SurfaceAll","SurfacePRTL"};
+
+
+
 
 #endif // NUMBERSEL_H_INCLUDED
