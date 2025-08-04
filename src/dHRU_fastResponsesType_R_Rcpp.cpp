@@ -49,6 +49,7 @@
 
      std::map<std::string, fast_Response> s_mapStringToINTCPtype_HRUtype = {
        {"SerialCascadeLinRes", fast_Response::SerialCascadeLinRes},
+       {"SerialLinResGWPerc", fast_Response::SerialLinResGWPerc}
      };
 
      std::vector<unsigned> indexHru;
@@ -68,6 +69,9 @@
        switch(s_mapStringToINTCPtype_HRUtype[fastResponsesNameStr[id]]) {
         case fast_Response::SerialCascadeLinRes:
          fastResponseTypesToLoad.push_back(std::make_pair(indexHru[id], fast_Response::SerialCascadeLinRes));
+         break;
+       case fast_Response::SerialLinResGWPerc:
+         fastResponseTypesToLoad.push_back(std::make_pair(indexHru[id], fast_Response::SerialLinResGWPerc));
          break;
        }
      }

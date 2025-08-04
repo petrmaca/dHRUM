@@ -1051,11 +1051,38 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
      }
 
      set_varValue(helpFastOut,tstRM,ts_type::DIRR);
-
+  }
     break;
 
-    }
+  case fast_Response::SerialLinResGWPerc:{
 
+    numberSel helpFastOut = 0.0, help_State =0.0;
+    //  help_State = get_stateFastres(0);
+    // std::cout << " help_nmbr before" << help_nmbFR << std::endl;
+    for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
+      help_State = get_stateFastres(ifrb);
+      helpFastOut = get_par(par_HRUtype::KF) * help_State;
+      // help_State = help_State - helpFastOut;
+      if(ifrb == 0) {
+        help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC)- helpFastOut;
+      } else help_State = help_State + get_outFastRes((ifrb-1))- helpFastOut;
+      set_stateFastRes(help_State,ifrb);
+      set_outFastRes(helpFastOut,ifrb);
+      // std::cout << ifrb << " ifrb " << get_stateFastres(ifrb) << " state " << ifrb << " ifrb " << helpFastOut << " adivresc " << get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC) << std::endl;
+    }
+    set_varValue((0.8)*helpFastOut,tstRM,ts_type::DIRR);//20 procent ma jit do GW neni implementovano
+
+    numberSel helpPercvar = 0.0;
+
+    helpPercvar = 0.2 * helpFastOut;
+    helpPercvar = helpPercvar + get_dta(tstRM, ts_type::PERC);
+
+    set_varValue(helpPercvar , tstRM,ts_type::PERC);
+
+
+
+    }
+    break ;
   }
   //  set_varValue(help_State,tstRM,ts_type::SURS);
   return ;
@@ -1338,8 +1365,8 @@ void single_HMunit::run_HB() {
     // std::cout << " surf ret "<< et_demand << " ewsr " << get_dta(tstRM,ts_type::ETSW) <<"\n";
     // std::cout << tstRM << "\n\n";
     soil_buffer(soil_STORAGE);//
-    slow_response(gs_STORAGE);
     fast_response(fast_RESPONSE);
+    slow_response(gs_STORAGE);
     helprm = (get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR));
     set_varValue(helprm ,tstRM,ts_type::TOTR);
     upadate_actualET();
