@@ -77,7 +77,6 @@ params::params(): numPars(0),
   helpSmaxUp = (up_pars[0]*up_pars[22] + up_pars[1]) / (up_pars[0]+1);
   pars[3] = helpSmax;
 
-  up_pars[22] = 1000;//!< CIMN lower limit of c in soils pdm reservoir
   up_pars[23] = 100;//!< FC Field capacity [mm] [0,inf)
   up_pars[24] = 1;//!< Forest fraction [0,1]
   up_pars[25] = 1;//!< KF2 Storage coefficient of runoff response reservoirs [0,1],VC1
@@ -101,7 +100,7 @@ params::params(): numPars(0),
   low_pars[9] = 0.0;//!< CAN_ST The Max canopy storage [0,inf],VC1
   low_pars[10] = 0.0;//!< STEM_ST The Max stem and trunk storage [0,inf],VC1
   low_pars[11] = 0.0;//!< CSDIV The divider of canopy outflow to throughflow and stemflow storage [0,1],VC1
-  low_pars[12] = 1.0;//!< TETR The threshold temperature for determining snow [-inf,inf] better [-5,5]
+  low_pars[12] = 0.0;//!< TETR The threshold temperature for determining snow [-inf,inf] better [-5,5]
   low_pars[13] = 0.0;//!<  DDFA The day degree model for snow melt [o, inf] better [0,2],VC1
   low_pars[14] = 0.0;//!<  TMEL The threshold temperature for determining melting process [-inf, inf] better [-5,5]
   low_pars[15] = 0.0;//!< RETCAP The maximum capacity of surface retention [0, inf],VC1
@@ -117,7 +116,6 @@ params::params(): numPars(0),
   helpSmaxLow = (low_pars[0] *low_pars[22] +low_pars[1]) / (low_pars[0]+1);
   low_pars[3] = 0.0;
 
-  low_pars[22] = 1000;//!< CMIN lower limit of c in soils pdm reservoir
   low_pars[23] = 0;//!< FC Field capacity [mm] [0,inf)
   low_pars[24] = 0.0;//!< Forest fraction [0,1]
   low_pars[25] = 0.0;//!< KF2 Storage coefficient of runoff response reservoirs [0,1]
