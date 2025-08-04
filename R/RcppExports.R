@@ -57,6 +57,25 @@ gatherHBdata <- function(dHRUM_ptr) {
     invisible(.Call(`_dHRUM_gatherHBdata`, dHRUM_ptr))
 }
 
+#' Sets the types of surface retention models types to dHRU model for all single HRUs.
+#'
+#' Setting the fast response type to dHRUM to all HRUs. Possibe types: \code{SerialCascadeLinRes}
+#'
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @param fastResponseTypes a character vector of fast responses
+#' @param hruIds ids on Hrus
+#' @export
+#' @examples
+#' nHrus <- 200
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
+setFastResponsesToAlldHrus <- function(dHRUM_ptr, fastResponseTypes, hruIds) {
+    invisible(.Call(`_dHRUM_setFastResponsesToAlldHrus`, dHRUM_ptr, fastResponseTypes, hruIds))
+}
+
 #' Sets the similar values of params to dHRU model for all single HRUs.
 #'
 #' Setting the groudnwater type of dHRUM equal to all HRUs. Possibe types: \code{LIN_RES} \code{LINL_RES} \code{LINBY_RES}

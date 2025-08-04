@@ -61,6 +61,7 @@ class dHRUM {
   void initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype>>& soil_STORtypes);
   void initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,interception_STORtype>>& interception_STORtype);
   void initSurfaceStypeToAlldHrus(std::vector<std::pair<unsigned,surface_STORtype>>& surface_STORtype);
+  void initFastResponsesToAlldHrus(std::vector<std::pair<unsigned,fast_Response>>& fast_RESPONSESTypes);
 
   numberSel getTsDta(const ts_type& _tsType, const unsigned& HruIndex, const unsigned& tst);
 
@@ -87,7 +88,9 @@ private:
   data_HB_1d basinDta;//!< The HB data on all basin
   std::vector<gs_STORtype> gs_STORtypes;//!< The vector on groundwater storage types
   std::vector<soil_STORtype> sw_STORtypes;//!< The vector on soil water storage types
-  std::vector<interception_STORtype> interception_STORtypes;// The vector on interception storage types
+  std::vector<interception_STORtype> interception_STORtypes;//!< The vector on interception storage types
+  std::vector<surface_STORtype> surf_STORtypes;//!< The vector on surface retentions type in HRus
+  std::vector<fast_Response> fast_RESPONSESTypes;//!< The vector on fast responses types in HRus
 
   caldata NumFastRes;//!< The number of fastre reservoirs in serie
 };

@@ -31,6 +31,18 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// setFastResponsesToAlldHrus
+void setFastResponsesToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector fastResponseTypes, Rcpp::CharacterVector hruIds);
+RcppExport SEXP _dHRUM_setFastResponsesToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP fastResponseTypesSEXP, SEXP hruIdsSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type fastResponseTypes(fastResponseTypesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type hruIds(hruIdsSEXP);
+    setFastResponsesToAlldHrus(dHRUM_ptr, fastResponseTypes, hruIds);
+    return R_NilValue;
+END_RCPP
+}
 // setGWtypeToAlldHrus
 void setGWtypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector gwTypes, Rcpp::CharacterVector hruIds);
 RcppExport SEXP _dHRUM_setGWtypeToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP gwTypesSEXP, SEXP hruIdsSEXP) {
@@ -274,6 +286,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_calcHBInAlldHrus", (DL_FUNC) &_dHRUM_calcHBInAlldHrus, 1},
     {"_dHRUM_gatherHBdata", (DL_FUNC) &_dHRUM_gatherHBdata, 1},
+    {"_dHRUM_setFastResponsesToAlldHrus", (DL_FUNC) &_dHRUM_setFastResponsesToAlldHrus, 3},
     {"_dHRUM_setGWtypeToAlldHrus", (DL_FUNC) &_dHRUM_setGWtypeToAlldHrus, 3},
     {"_dHRUM_setPTInputsToAlldHrusFromFile", (DL_FUNC) &_dHRUM_setPTInputsToAlldHrusFromFile, 2},
     {"_dHRUM_setPTInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTInputsToAlldHrus, 4},

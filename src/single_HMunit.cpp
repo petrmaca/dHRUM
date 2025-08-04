@@ -23,7 +23,8 @@ single_HMunit::single_HMunit(): tstRM(0),
   gs_STORAGE{},
   soil_STORAGE{},
   intrc_STORAGE{},
-  srfs_STORAGE{}{
+  srfs_STORAGE{},
+  fast_RESPONSE{}{
 
   set_nmbFastres(1);
   help_nmbFR = get_nmbFastRes();
@@ -45,6 +46,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   soil_STORAGE = soil_STORtype::PDM;
   intrc_STORAGE = interception_STORtype::Rutter_Gash;
   srfs_STORAGE = surface_STORtype::SurfaceAll;
+  fast_RESPONSE = fast_Response::SerialCascadeLinRes;
   et_demand = 0.0;
 
 }
@@ -87,7 +89,8 @@ IdHru(),
 gs_STORAGE{},
 soil_STORAGE{},
 intrc_STORAGE{},
-srfs_STORAGE{}
+srfs_STORAGE{},
+fast_RESPONSE{}
 {
 
   tstRM = other.tstRM;//!< The counter for main loop in run model
@@ -110,6 +113,7 @@ srfs_STORAGE{}
   soil_STORAGE = other.soil_STORAGE;
   intrc_STORAGE = other.intrc_STORAGE;
   srfs_STORAGE = other.srfs_STORAGE;
+  fast_RESPONSE = other.fast_RESPONSE;
 
 }
 
@@ -145,7 +149,8 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     gs_STORAGE = rhs.gs_STORAGE;//!< The type of groundwater storage
     soil_STORAGE = rhs.soil_STORAGE;
     intrc_STORAGE = rhs.intrc_STORAGE;
-    srfs_STORAGE =rhs.srfs_STORAGE;
+    srfs_STORAGE = rhs.srfs_STORAGE;
+    fast_RESPONSE = rhs.fast_RESPONSE;
 
   } // handle self assignment
   //assignment operator
@@ -1024,25 +1029,34 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
  *
  */
 
-void single_HMunit::fast_response() {
+void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
 
-  numberSel helpFastOut = 0.0, help_State =0.0;
+  switch(_fast_RESPONSE) {
 
-  //  help_State = get_stateFastres(0);
-// std::cout << " help_nmbr before" << help_nmbFR << std::endl;
-  for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
-    help_State = get_stateFastres(ifrb);
-    helpFastOut = get_par(par_HRUtype::KF) * help_State;
+  case fast_Response::SerialCascadeLinRes: {
+
+    numberSel helpFastOut = 0.0, help_State =0.0;
+    //  help_State = get_stateFastres(0);
+    // std::cout << " help_nmbr before" << help_nmbFR << std::endl;
+    for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
+      help_State = get_stateFastres(ifrb);
+      helpFastOut = get_par(par_HRUtype::KF) * help_State;
     // help_State = help_State - helpFastOut;
-    if(ifrb == 0) {
-      help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC)- helpFastOut;
-    } else help_State = help_State + get_outFastRes((ifrb-1))- helpFastOut;
-    set_stateFastRes(help_State,ifrb);
-    set_outFastRes(helpFastOut,ifrb);
+      if(ifrb == 0) {
+        help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC)- helpFastOut;
+       } else help_State = help_State + get_outFastRes((ifrb-1))- helpFastOut;
+      set_stateFastRes(help_State,ifrb);
+      set_outFastRes(helpFastOut,ifrb);
     // std::cout << ifrb << " ifrb " << get_stateFastres(ifrb) << " state " << ifrb << " ifrb " << helpFastOut << " adivresc " << get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC) << std::endl;
-  }
+     }
 
-  set_varValue(helpFastOut,tstRM,ts_type::DIRR);
+     set_varValue(helpFastOut,tstRM,ts_type::DIRR);
+
+    break;
+
+    }
+
+  }
   //  set_varValue(help_State,tstRM,ts_type::SURS);
   return ;
 }
@@ -1325,7 +1339,7 @@ void single_HMunit::run_HB() {
     // std::cout << tstRM << "\n\n";
     soil_buffer(soil_STORAGE);//
     slow_response(gs_STORAGE);
-    fast_response();
+    fast_response(fast_RESPONSE);
     helprm = (get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR));
     set_varValue(helprm ,tstRM,ts_type::TOTR);
     upadate_actualET();
@@ -1938,6 +1952,19 @@ void single_HMunit::set_surfaceStor(surface_STORtype _srfs_STORAGE){
 surface_STORtype single_HMunit::get_surfaceStorType(){
 
   return srfs_STORAGE;
+
+}
+
+
+void single_HMunit::set_fast_response(fast_Response _fast_RESPONSE){
+
+  fast_RESPONSE = _fast_RESPONSE;
+
+}
+
+fast_Response single_HMunit::get_fastResponseType(){
+
+  return fast_RESPONSE;
 
 }
 

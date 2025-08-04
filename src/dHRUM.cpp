@@ -11,6 +11,8 @@ dHRUM::dHRUM(): dHruVec(),
   gs_STORtypes(),
   sw_STORtypes(),
   interception_STORtypes(),
+  surf_STORtypes(),
+  fast_RESPONSESTypes(),
   NumFastRes(0),
   num_threads(0){
   //ctor
@@ -32,6 +34,8 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   gs_STORtypes(),
   sw_STORtypes(),
   interception_STORtypes(),
+  surf_STORtypes(),
+  fast_RESPONSESTypes(),
   NumFastRes(0),
   num_threads(0){
 
@@ -46,6 +50,8 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   gs_STORtypes = other.gs_STORtypes;
   sw_STORtypes = other.sw_STORtypes;
   interception_STORtypes = other.interception_STORtypes;
+  surf_STORtypes = other.surf_STORtypes;
+  fast_RESPONSESTypes = other.fast_RESPONSESTypes;
   num_threads = other.num_threads;
 
   NumFastRes = other.NumFastRes;
@@ -65,6 +71,8 @@ dHRUM& dHRUM::operator=(const dHRUM& rhs) {
     gs_STORtypes = rhs.gs_STORtypes;
     sw_STORtypes = rhs.sw_STORtypes;
     interception_STORtypes = rhs.interception_STORtypes;
+    surf_STORtypes = rhs.surf_STORtypes;
+    fast_RESPONSESTypes = rhs.fast_RESPONSESTypes;
     NumFastRes = rhs.NumFastRes;
     num_threads = rhs.num_threads;
   }
@@ -644,13 +652,26 @@ void dHRUM::set_num_treads(const unsigned&  numTHR){
   return ;
 }
 
-void dHRUM::initSurfaceStypeToAlldHrus(std::vector<std::pair<unsigned,surface_STORtype>>& surface_STORtype){
+void dHRUM::initSurfaceStypeToAlldHrus(std::vector<std::pair<unsigned,surface_STORtype>>& surface_STORtypes){
 
 #pragma omp parallel for num_threads(num_threads)
-  for(unsigned int i=0; i<surface_STORtype.size(); i++) {
-    dHruVec[surface_STORtype[i].first].set_surfaceStor(surface_STORtype[i].second);
+  for(unsigned int i=0; i<surface_STORtypes.size(); i++) {
+    dHruVec[surface_STORtypes[i].first].set_surfaceStor(surface_STORtypes[i].second);
   }
 
   return ;
+
+}
+
+
+void dHRUM::initFastResponsesToAlldHrus(std::vector<std::pair<unsigned,fast_Response>>& fast_RESPONSESTypes){
+
+#pragma omp parallel for num_threads(num_threads)
+  for(unsigned int i=0; i<fast_RESPONSESTypes.size(); i++) {
+    dHruVec[fast_RESPONSESTypes[i].first].set_fast_response(fast_RESPONSESTypes[i].second);
+  }
+
+  return ;
+
 
 }
