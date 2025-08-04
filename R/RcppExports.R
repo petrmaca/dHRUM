@@ -59,7 +59,7 @@ gatherHBdata <- function(dHRUM_ptr) {
 
 #' Sets the types of surface retention models types to dHRU model for all single HRUs.
 #'
-#' Setting the fast response type to dHRUM to all HRUs. Possibe types: \code{SerialCascadeLinRes}
+#' Setting the fast response type to dHRUM to all HRUs. Possibe types: \code{SerialCascadeLinRes}, \code{SerialLinResGWPerc}
 #'
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance

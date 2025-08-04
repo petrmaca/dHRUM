@@ -14,7 +14,7 @@ setFastResponsesToAlldHrus(dHRUM_ptr, fastResponseTypes, hruIds)
 \item{hruIds}{ids on Hrus}
 }
 \description{
-Setting the fast response type to dHRUM to all HRUs. Possibe types: \code{SerialCascadeLinRes}
+Setting the fast response type to dHRUM to all HRUs. Possibe types: \code{SerialCascadeLinRes}, \code{SerialLinResGWPerc}
 }
 \examples{
 nHrus <- 200

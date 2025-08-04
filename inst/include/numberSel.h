@@ -72,9 +72,9 @@ enum class surface_STORtype {SurfaceAll, SurfacePRTL};
 const surface_STORtype all_SurfacStors[] {surface_STORtype::SurfaceAll, surface_STORtype::SurfacePRTL};
 const std::vector<std::string> allSurfacStorsNames {"SurfaceAll","SurfacePRTL"};
 
-enum class fast_Response {SerialCascadeLinRes};
-const fast_Response all_FastResponses[] {fast_Response::SerialCascadeLinRes};
-const std::vector<std::string> all_FastResponsesNames {"SerialCascadeLinRes"};
+enum class fast_Response {SerialCascadeLinRes, SerialLinResGWPerc};
+const fast_Response all_FastResponses[] {fast_Response::SerialCascadeLinRes, fast_Response::SerialLinResGWPerc};
+const std::vector<std::string> all_FastResponsesNames {"SerialCascadeLinRes", "SerialLinResGWPerc"};
 
 
 
