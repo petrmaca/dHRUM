@@ -73,9 +73,9 @@ params::params(): numPars(0),
   up_pars[21] = 1;//!< ALPHA Divider for two parallel linear reservoirs
   up_pars[22] = 200;//!< CIMN lower limit of c in soils pdm reservoir
 
-  numberSel helpSmaxUp;
-  helpSmaxUp = (up_pars[0]*up_pars[22] + up_pars[1]) / (up_pars[0]+1);
-  pars[3] = helpSmax;
+  numberSel helpSmaxPDMUp;
+  helpSmaxPDMUp = (up_pars[0]*up_pars[22] + up_pars[1]) / (up_pars[0]+1);
+  pars[3] = helpSmaxPDMUp;
 
   up_pars[23] = 100;//!< FC Field capacity [mm] [0,inf)
   up_pars[24] = 1;//!< Forest fraction [0,1]
@@ -112,9 +112,9 @@ params::params(): numPars(0),
   low_pars[21] = 0.0;//!< ALPHA Divider for two parallel linear reservoirs
   low_pars[22] = 0;//!< CMIN lower limit of c in soils pdm reservoir
 
-  numberSel helpSmaxLow;
-  helpSmaxLow = (low_pars[0] *low_pars[22] +low_pars[1]) / (low_pars[0]+1);
-  low_pars[3] = 0.0;
+  numberSel helpSmaxPDMLow;
+  helpSmaxPDMLow = (low_pars[0] *low_pars[22] +low_pars[1]) / (low_pars[0]+1);
+  low_pars[3] = helpSmaxPDMLow;
 
   low_pars[23] = 0;//!< FC Field capacity [mm] [0,inf)
   low_pars[24] = 0.0;//!< Forest fraction [0,1]
