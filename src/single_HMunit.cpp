@@ -1073,15 +1073,12 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
     set_varValue((0.8)*helpFastOut,tstRM,ts_type::DIRR);//20 procent ma jit do GW nutno implemenyovat promenlivy parametr 0.8
 
 //exmaple for getting the percoltion from fast response in river network to GW input PERC
+//it is necessary to implement the gwperc coefficient now 0.2
     numberSel helpPercvar = 0.0;
     helpPercvar = 0.2 * helpFastOut;
     helpPercvar = helpPercvar + get_dta(tstRM, ts_type::PERC);
 
     set_varValue(helpPercvar , tstRM,ts_type::PERC);
-
-
-
-
 
     }
     break ;
