@@ -2053,3 +2053,102 @@ fast_Response single_HMunit::get_fastResponseType(){
 
 }
 
+void single_HMunit::print_gs_STORtype() {
+
+  switch(gs_STORAGE) {
+
+  case gs_STORtype::LIN_RES:
+    std::cout << "The gs_STORtype is a LIN_RES." << std::endl;
+    break;
+
+  case gs_STORtype::LINL_RES:
+    std::cout << "The gs_STORtype is a LILN_RES." << std::endl;
+    break;
+
+  case gs_STORtype::LINBY_RES:
+    std::cout << "The gs_STORtype is a LINBY_RES." << std::endl;
+    break;
+
+  case gs_STORtype::POW_RES:
+    std::cout << "The gs_STORtype is a POW_RES." << std::endl;
+    break;
+
+  case gs_STORtype::EXP_RES:
+    std::cout << "The gs_STORtype is a EXP_RES." << std::endl;
+    break;
+
+  case gs_STORtype::LIN_2SE:
+    std::cout << "The gs_STORtype is a LIN_2SE." << std::endl;
+    break;
+
+  case gs_STORtype::LIN_2PA:
+    std::cout << "The gs_STORtype is a LIN_2PA." << std::endl;
+    break;
+
+  case gs_STORtype::FLEX_RES:
+    std::cout << "The gs_STORtype is a FLEX_RES." << std::endl;
+    break;
+
+  case gs_STORtype::EXP_LOG:
+    std::cout << "The gs_STORtype is a EXP_LOG." << std::endl;
+    break;
+  }
+}
+
+void single_HMunit::print_interception_STORtype() {
+
+  switch(intrc_STORAGE) {
+
+  case interception_STORtype::Rutter_Gash:
+    std::cout << "The interception_STORtype is a Rutter_Gash." << std::endl;
+    break;
+  }
+}
+
+void single_HMunit::print_surface_STORtype() {
+
+  switch(srfs_STORAGE) {
+
+  case surface_STORtype::SurfaceAll:
+    std::cout << "The surface_STORtype is a SurfaceAll." << std::endl;
+    break;
+
+  case surface_STORtype::SurfacePRTL:
+    std::cout << "The surface_STORtype is a SurfacePRTL." << std::endl;
+    break;
+  }
+}
+
+void single_HMunit::print_fastresponseType() {
+
+  switch(fast_RESPONSE) {
+
+  case fast_Response::SerialCascadeLinRes:
+    std::cout << "The fast_Response is a SerialCascadeLinRes." << std::endl;
+    break;
+
+  case fast_Response::SerialLinResGWGros:
+    std::cout << "The fast_Response is a SerialLinResGWGros." << std::endl;
+    break;
+
+  case fast_Response::SerialLinResSoilSois:
+    std::cout << "The fast_Response is a SerialLinResSoilSois." << std::endl;
+    break;
+
+  case fast_Response::SerialLinResGWGrosSoilSois:
+    std::cout << "The fast_Response is a SerialLinResGWGrosSoilSois." << std::endl;
+    break;
+  }
+}
+
+void single_HMunit::print_sHRU_settings() {
+
+  std::cout << "The actual sHRU settings is:" << std::endl;
+  std::cout << "============================================" << std::endl;
+  print_gs_STORtype();
+  print_soilStorType();
+  print_interception_STORtype();
+  print_surface_STORtype();
+  print_fastresponseType();
+  std::cout << "============================================" << std::endl;
+}
