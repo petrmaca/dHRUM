@@ -49,7 +49,11 @@
 
      std::map<std::string, fast_Response> s_mapStringToINTCPtype_HRUtype = {
        {"SerialCascadeLinRes", fast_Response::SerialCascadeLinRes},
-       {"SerialLinResGWPerc", fast_Response::SerialLinResGWPerc}
+       {"SerialLinResGWGros", fast_Response::SerialLinResGWGros},
+       {"SerialLinResSoilSois", fast_Response::SerialLinResSoilSois},
+       {"SerialLinResGWGrosSoilSois", fast_Response::SerialLinResGWGrosSoilSois}
+
+
      };
 
      std::vector<unsigned> indexHru;
@@ -70,8 +74,14 @@
         case fast_Response::SerialCascadeLinRes:
          fastResponseTypesToLoad.push_back(std::make_pair(indexHru[id], fast_Response::SerialCascadeLinRes));
          break;
-       case fast_Response::SerialLinResGWPerc:
-         fastResponseTypesToLoad.push_back(std::make_pair(indexHru[id], fast_Response::SerialLinResGWPerc));
+       case fast_Response::SerialLinResGWGros:
+         fastResponseTypesToLoad.push_back(std::make_pair(indexHru[id], fast_Response::SerialLinResGWGros));
+         break;
+       case fast_Response::SerialLinResSoilSois:
+         fastResponseTypesToLoad.push_back(std::make_pair(indexHru[id], fast_Response::SerialLinResSoilSois));
+         break;
+       case fast_Response::SerialLinResGWGrosSoilSois:
+         fastResponseTypesToLoad.push_back(std::make_pair(indexHru[id], fast_Response::SerialLinResGWGrosSoilSois));
          break;
        }
      }

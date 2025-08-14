@@ -1054,7 +1054,7 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
   }
     break;
 
-  case fast_Response::SerialLinResGWPerc:{
+  case fast_Response::SerialLinResGWGros:{
 
     numberSel helpFastOut = 0.0, help_State =0.0;
     //  help_State = get_stateFastres(0);
@@ -1070,17 +1070,76 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
       set_outFastRes(helpFastOut,ifrb);
       // std::cout << ifrb << " ifrb " << get_stateFastres(ifrb) << " state " << ifrb << " ifrb " << helpFastOut << " adivresc " << get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC) << std::endl;
     }
-    set_varValue((0.8)*helpFastOut,tstRM,ts_type::DIRR);//20 procent ma jit do GW nutno implemenyovat promenlivy parametr 0.8
+    set_varValue((1-get_par(par_HRUtype::RBEI))*helpFastOut,tstRM,ts_type::DIRR);
 
-//exmaple for getting the percoltion from fast response in river network to GW input PERC
-//it is necessary to implement the gwperc coefficient now 0.2
-    numberSel helpPercvar = 0.0;
-    helpPercvar = 0.2 * helpFastOut;
-    helpPercvar = helpPercvar + get_dta(tstRM, ts_type::PERC);
+    //exmaple for getting the percoltion from fast response in river network to GW input GROS
+    //it is necessary to implement the gwperc coefficient now 0.2
+    numberSel helpGrosvar = 0.0;
+    helpGrosvar = get_par(par_HRUtype::RBEI) * helpFastOut;
+    helpGrosvar = helpGrosvar + get_dta(tstRM, ts_type::GROS);
 
-    set_varValue(helpPercvar , tstRM,ts_type::PERC);
+    set_varValue(helpGrosvar , tstRM,ts_type::GROS);
 
+  }
+    break ;
+
+  case fast_Response::SerialLinResSoilSois:{
+
+    numberSel helpFastOut = 0.0, help_State =0.0;
+    //  help_State = get_stateFastres(0);
+    // std::cout << " help_nmbr before" << help_nmbFR << std::endl;
+    for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
+      help_State = get_stateFastres(ifrb);
+      helpFastOut = get_par(par_HRUtype::KF) * help_State;
+      // help_State = help_State - helpFastOut;
+      if(ifrb == 0) {
+        help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC)- helpFastOut;
+      } else help_State = help_State + get_outFastRes((ifrb-1))- helpFastOut;
+      set_stateFastRes(help_State,ifrb);
+      set_outFastRes(helpFastOut,ifrb);
+      // std::cout << ifrb << " ifrb " << get_stateFastres(ifrb) << " state " << ifrb << " ifrb " << helpFastOut << " adivresc " << get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC) << std::endl;
     }
+    set_varValue((1-get_par(par_HRUtype::RBAI))*helpFastOut,tstRM,ts_type::DIRR);//20 procent ma jit do GW nutno implemenyovat promenlivy parametr 0.8
+
+    numberSel helpSoisvar = 0.0;
+    helpSoisvar = get_par(par_HRUtype::RBAI) * helpFastOut;
+    helpSoisvar = helpSoisvar + get_dta(tstRM, ts_type::SOIS);
+
+    set_varValue(helpSoisvar , tstRM,ts_type::SOIS);
+
+  }
+    break ;
+
+  case fast_Response::SerialLinResGWGrosSoilSois:{
+
+    numberSel helpFastOut = 0.0, help_State =0.0;
+    //  help_State = get_stateFastres(0);
+    // std::cout << " help_nmbr before" << help_nmbFR << std::endl;
+    for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
+      help_State = get_stateFastres(ifrb);
+      helpFastOut = get_par(par_HRUtype::KF) * help_State;
+      // help_State = help_State - helpFastOut;
+      if(ifrb == 0) {
+        help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC)- helpFastOut;
+      } else help_State = help_State + get_outFastRes((ifrb-1))- helpFastOut;
+      set_stateFastRes(help_State,ifrb);
+      set_outFastRes(helpFastOut,ifrb);
+      // std::cout << ifrb << " ifrb " << get_stateFastres(ifrb) << " state " << ifrb << " ifrb " << helpFastOut << " adivresc " << get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC) << std::endl;
+    }
+    set_varValue((1-(get_par(par_HRUtype::RBEI)+get_par(par_HRUtype::RBAI)))*helpFastOut,tstRM,ts_type::DIRR);
+
+
+    numberSel helpSoisvar = 0.0;
+    numberSel helpGrosvar = 0.0;
+    helpSoisvar = get_par(par_HRUtype::RBAI) * helpFastOut;
+    helpGrosvar  = get_par(par_HRUtype::RBEI) * helpFastOut;
+
+    helpSoisvar = helpSoisvar + get_dta(tstRM, ts_type::SOIS);
+    helpGrosvar = helpGrosvar + get_dta(tstRM, ts_type::GROS);
+
+    set_varValue(helpSoisvar , tstRM,ts_type::SOIS);
+    set_varValue(helpGrosvar , tstRM,ts_type::GROS);
+  }
     break ;
   }
   //  set_varValue(help_State,tstRM,ts_type::SURS);

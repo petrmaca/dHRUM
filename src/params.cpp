@@ -9,7 +9,7 @@ params::params(): numPars(0),
 //    b_soil = 2.0;
 //    c_max = 100.0;
 //    b_evap = 1;
-  numPars = 32;
+  numPars = 34;
 
   pars.resize(numPars,numPars);
   up_pars.resize(numPars,numPars);
@@ -47,7 +47,9 @@ params::params(): numPars(0),
   pars[28] = 1;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
   pars[29] = 0.5;//!< RF evaporation reduction factor [-] [0,1]
   pars[30] = 0.5;//!< WP wilting point [-] [0,1]
-  pars[30] = 20;//!< SMAX  [mm] [0,inf]
+  pars[31] = 20;//!< SMAX  [mm] [0,inf]
+  pars[32] = 0.05;//!< RBAI River bank infiltration rate (infiltration to Soil storage)
+  pars[33] = 0.1;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   up_pars[1] = 500.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -86,6 +88,8 @@ params::params(): numPars(0),
   up_pars[29] = 1;//!< RF evaporation reduction factor [-] [0,1]
   up_pars[30] = 1;//!< WP wilting point [-] [0,1]
   up_pars[31] = 100;//!< SMAX  [mm] [0,inf]
+  up_pars[32] = 1;//!< RBAI River bank infiltration rate (infiltration to Soil storage)
+  up_pars[33] = 1;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
 
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
@@ -125,6 +129,8 @@ params::params(): numPars(0),
   low_pars[29] = 0.0;//!< RF evaporation reduction factor [-] [0,1]
   low_pars[30] = 0.0;//!< WP wilting point [-] [0,1]
   low_pars[31] = 0.0;//!< SMAX  [mm] [0,inf]
+  low_pars[32] = 0;//!< RBAI River bank infiltration rate (infiltration to Soil storage)
+  low_pars[33] = 0;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
 
 //  std::cout << "Params are initialized." << std::endl;
 }
@@ -300,6 +306,12 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
   case par_HRUtype::SMAX:
     pars[31] = par_dta;
     break;
+  case par_HRUtype::RBAI:
+    pars[32] = par_dta;
+    break;
+  case par_HRUtype::RBEI:
+    pars[33] = par_dta;
+    break;
   }
 
   pars[3] = (pars[0] * pars[22] +pars[2]) / (pars[0] +1 );
@@ -449,6 +461,12 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
   case par_HRUtype::SMAX:
     pars[31] = par_dta;
     break;
+  case par_HRUtype::RBAI:
+    pars[32] = par_dta;
+    break;
+  case par_HRUtype::RBEI:
+    pars[33] = par_dta;
+    break;
   }
   return ;
 }
@@ -561,6 +579,12 @@ numberSel params::g_par(const par_HRUtype& _parType) {
   case par_HRUtype::SMAX:
     value =  pars[31];
     break;
+  case par_HRUtype::RBAI:
+    value =  pars[32];
+    break;
+  case par_HRUtype::RBEI:
+    value =  pars[33];
+    break;
 }
   return value;
 
@@ -643,6 +667,8 @@ void params::s_default() {
   pars[29] = 0.5;//!< RF evaporation reduction factor [-] [0,1]
   pars[30] = 0.5;//!< WP wilting point [-] [0,1]
   pars[31] = 10.0;//!< SMAX soil storage capacity [mm] [0,inf]
+  pars[32] = 0.05;//!< RBAI River bank infiltration rate (infiltration to Soil storage)
+  pars[33] = 0.1;//!< RBEI River bed infiltration rate (infiltration to groundwater storage)
 
   numFastRes = 1;
 
@@ -659,7 +685,7 @@ void params::p_param() {
                                       "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", \
                                       "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: ", "CMIN: ", \
                                       "KS2: ", "THR: ", "ALPHA: ","FC: ","FOREST_FRACT: ", "KF2: ", \
-                                      "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: ", "SMAX: "};
+                                      "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: ", "SMAX: ","RBAI:", "RBEI:"};
 
   std::cout << std::endl << "Printing the values of parameters:" << std::endl << std::endl;
   for(unsigned pp=0; pp<numPars ; pp++ ) {
@@ -679,5 +705,229 @@ void params::p_param() {
 unsigned params::g_numPars() {
 
   return(numPars);
+
+}
+
+numberSel params::g_par_low(const par_HRUtype& _parType) {
+
+  numberSel value = 0.0;
+
+  switch(_parType) {
+  case par_HRUtype::B_SOIL:
+    value = low_pars[0];
+    break;
+  case par_HRUtype::C_MAX:
+    value =  low_pars[1];
+    break;
+  case par_HRUtype::B_EVAP:
+    value =  low_pars[2];
+    break;
+  case par_HRUtype::SMAXpdm:
+    value =  low_pars[3];
+    break;
+  case par_HRUtype::KS:
+    value =  low_pars[4];
+    break;
+  case par_HRUtype::KF:
+    value =  low_pars[5];
+    break;
+  case par_HRUtype::ADIV:
+    value =  low_pars[6];
+    break;
+  case par_HRUtype::CDIV:
+    value =  low_pars[7];
+    break;
+  case par_HRUtype::SDIV:
+    value =  low_pars[8];
+    break;
+  case par_HRUtype::CAN_ST:
+    value =  low_pars[9];
+    break;
+  case par_HRUtype::STEM_ST:
+    value =  low_pars[10];
+    break;
+  case par_HRUtype::CSDIV:
+    value =  low_pars[11];
+    break;
+  case par_HRUtype::TETR:
+    value =  low_pars[12];
+    break;
+  case par_HRUtype::DDFA:
+    value =  low_pars[13];
+    break;
+  case par_HRUtype::TMEL:
+    value =  low_pars[14];
+    break;
+  case par_HRUtype::RETCAP:
+    value =  low_pars[15];
+    break;
+  case par_HRUtype::L:
+    value =  low_pars[16];
+    break;
+  case par_HRUtype::D_BYPASS:
+    value =  low_pars[17];
+    break;
+  case par_HRUtype::B_EXP:
+    value =  low_pars[18];
+    break;
+  case par_HRUtype::KS2:
+    value =  low_pars[19];
+    break;
+  case par_HRUtype::THR:
+    value =  low_pars[20];
+    break;
+  case par_HRUtype::ALPHA:
+    value =  low_pars[21];
+    break;
+  case par_HRUtype::CMIN:
+    value =  low_pars[22];
+    break;
+  case par_HRUtype::FC:
+    value =  low_pars[23];
+    break;
+  case par_HRUtype::FOREST_FRACT:
+    value =  low_pars[24];
+    break;
+  case par_HRUtype::KF2:
+    value =  low_pars[25];
+    break;
+  case par_HRUtype::KF_NONLIN:
+    value =  low_pars[26];
+    break;
+  case par_HRUtype::C:
+    value =  low_pars[27];
+    break;
+  case par_HRUtype::INFR_MAX:
+    value =  low_pars[28];
+    break;
+  case par_HRUtype::RF:
+    value =  low_pars[29];
+    break;
+  case par_HRUtype::WP:
+    value =  low_pars[30];
+    break;
+  case par_HRUtype::SMAX:
+    value =  low_pars[31];
+    break;
+  case par_HRUtype::RBAI:
+    value =  low_pars[32];
+    break;
+  case par_HRUtype::RBEI:
+    value =  low_pars[33];
+    break;
+  }
+  return value;
+
+}
+
+numberSel params::g_par_up(const par_HRUtype& _parType) {
+
+  numberSel value = 0.0;
+
+  switch(_parType) {
+  case par_HRUtype::B_SOIL:
+    value = up_pars[0];
+    break;
+  case par_HRUtype::C_MAX:
+    value =  up_pars[1];
+    break;
+  case par_HRUtype::B_EVAP:
+    value =  up_pars[2];
+    break;
+  case par_HRUtype::SMAXpdm:
+    value =  up_pars[3];
+    break;
+  case par_HRUtype::KS:
+    value =  up_pars[4];
+    break;
+  case par_HRUtype::KF:
+    value =  up_pars[5];
+    break;
+  case par_HRUtype::ADIV:
+    value =  up_pars[6];
+    break;
+  case par_HRUtype::CDIV:
+    value =  up_pars[7];
+    break;
+  case par_HRUtype::SDIV:
+    value =  up_pars[8];
+    break;
+  case par_HRUtype::CAN_ST:
+    value =  up_pars[9];
+    break;
+  case par_HRUtype::STEM_ST:
+    value =  up_pars[10];
+    break;
+  case par_HRUtype::CSDIV:
+    value =  up_pars[11];
+    break;
+  case par_HRUtype::TETR:
+    value =  up_pars[12];
+    break;
+  case par_HRUtype::DDFA:
+    value =  up_pars[13];
+    break;
+  case par_HRUtype::TMEL:
+    value =  up_pars[14];
+    break;
+  case par_HRUtype::RETCAP:
+    value =  up_pars[15];
+    break;
+  case par_HRUtype::L:
+    value =  up_pars[16];
+    break;
+  case par_HRUtype::D_BYPASS:
+    value =  up_pars[17];
+    break;
+  case par_HRUtype::B_EXP:
+    value =  up_pars[18];
+    break;
+  case par_HRUtype::KS2:
+    value =  up_pars[19];
+    break;
+  case par_HRUtype::THR:
+    value =  up_pars[20];
+    break;
+  case par_HRUtype::ALPHA:
+    value =  up_pars[21];
+    break;
+  case par_HRUtype::CMIN:
+    value =  up_pars[22];
+    break;
+  case par_HRUtype::FC:
+    value =  up_pars[23];
+    break;
+  case par_HRUtype::FOREST_FRACT:
+    value =  up_pars[24];
+    break;
+  case par_HRUtype::KF2:
+    value =  up_pars[25];
+    break;
+  case par_HRUtype::KF_NONLIN:
+    value =  up_pars[26];
+    break;
+  case par_HRUtype::C:
+    value =  up_pars[27];
+    break;
+  case par_HRUtype::INFR_MAX:
+    value =  up_pars[28];
+    break;
+  case par_HRUtype::RF:
+    value =  up_pars[29];
+    break;
+  case par_HRUtype::WP:
+    value =  up_pars[30];
+    break;
+  case par_HRUtype::SMAX:
+    value =  up_pars[31];
+    break;
+  case par_HRUtype::RBAI:
+    value =  up_pars[32];
+    break;
+  case par_HRUtype::RBEI:
+    value =  up_pars[33];
+    break;
+  }
+  return value;
 
 }

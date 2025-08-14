@@ -18,6 +18,8 @@ class params {
 
   void s_params(const numberSel& dta,par_HRUtype _parType);//!< The setting of model parameters
   numberSel g_par(const par_HRUtype& _parType);//!< The getting of model parameters
+  numberSel g_par_up(const par_HRUtype& _parType);//!< Getting upper bounds on model parameters
+  numberSel g_par_low(const par_HRUtype& _parType);//!< Getting lower bounds on model parameters
 
   unsigned g_numFastRes();//!< Get the number of fast reservoirs
   void s_numFastRes(const unsigned& numRes);//!< set number of fast reservoirs
