@@ -681,11 +681,11 @@ void params::s_default() {
  */
 void params::p_param() {
 
-  std::vector<std::string> parsNames {"B_SOIL: ", "C_MAX: ", "B_EVAP: ", "SMAXpdm: ", "KS: ", "KF: ", \
+  std::vector<std::string> parsNames {"B_SOIL: ", "C_MAX: ", "B_EVAP: ", "SMAXpdm: ", "KS: ", "KF: ",             \
                                       "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", \
-                                      "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: ", "CMIN: ", \
-                                      "KS2: ", "THR: ", "ALPHA: ","FC: ","FOREST_FRACT: ", "KF2: ", \
-                                      "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: ", "SMAX: ","RBAI:", "RBEI:"};
+                                      "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: ", "KS2: ",    \
+                                      "THR: ", "ALPHA: ","CMIN: ","FC: ","FOREST_FRACT: ", "KF2: ",               \
+                                      "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: ", "SMAX: ", "RBAI:", "RBEI:"};
 
   std::cout << std::endl << "Printing the values of parameters:" << std::endl << std::endl;
   for(unsigned pp=0; pp<numPars ; pp++ ) {
