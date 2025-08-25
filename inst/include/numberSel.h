@@ -66,9 +66,9 @@ enum class interception_STORtype { Rutter_Gash};
 const interception_STORtype all_Interceptions[]{ interception_STORtype::Rutter_Gash};
 const std::vector<std::string> allTnterceptionStorTypeNames {"Rutter_Gash"};
 
-enum class surface_STORtype {SurfaceAll, SurfacePRTL};
-const surface_STORtype all_SurfacStors[] {surface_STORtype::SurfaceAll, surface_STORtype::SurfacePRTL};
-const std::vector<std::string> allSurfacStorsNames {"SurfaceAll","SurfacePRTL"};
+enum class surface_STORtype {SurfaceAll, SurfacePRTL, Wetland, Pond, DryReservoir};
+const surface_STORtype all_SurfacStors[] {surface_STORtype::SurfaceAll, surface_STORtype::SurfacePRTL,surface_STORtype::Wetland,surface_STORtype::Pond,surface_STORtype::DryReservoir};
+const std::vector<std::string> allSurfacStorsNames {"SurfaceAll","SurfacePRTL","Wetland", "Pond", "DryReservoir"};
 
 enum class fast_Response {SerialCascadeLinRes, SerialLinResGWGros,SerialLinResSoilSois,SerialLinResGWGrosSoilSois};
 const fast_Response all_FastResponses[] {fast_Response::SerialCascadeLinRes, fast_Response::SerialLinResGWGros, fast_Response::SerialLinResSoilSois, fast_Response::SerialLinResGWGrosSoilSois};

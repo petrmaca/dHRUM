@@ -385,9 +385,27 @@ void single_HMunit::surface_retention(surface_STORtype _surf_STORtype) {
 
     break;
   }
-  case surface_STORtype::SurfacePRTL: {
+
+ case surface_STORtype::SurfacePRTL: {
 
   break;
+  }
+
+  case surface_STORtype::Wetland: {
+
+    break;
+  }
+
+  case surface_STORtype::Pond: {
+    //inputs
+
+
+    break;
+  }
+
+  case surface_STORtype::DryReservoir: {
+
+    break;
   }
 
   }

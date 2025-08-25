@@ -106,10 +106,10 @@ class single_HMunit {
 
   std::vector<numberSel> water_balance(numberSel next_soil, numberSel val, std::vector<numberSel> vals);//!< Method for preserving mass balance
 
+  void print_sHRU_settings();
   void print_gs_STORtype();
   void print_interception_STORtype();
   void print_surface_STORtype();
-  void print_sHRU_settings();
   void print_fastresponseType();
 
 protected:
@@ -130,7 +130,6 @@ private:
   numberSel prev_GroS1;//!< The helper variable for updating groundwater storage for LIN_2SE and LIN_2PA
   numberSel prev_GroS2;//!< The helper variable for updating groundwater storage for LIN_2SE and LIN_2PA
 
-
   numberSel et_demand;//!< The helper on ET demand
 
   numberDta help_nmbFR;//!< The helper for number of fast reservoirs
@@ -144,6 +143,9 @@ private:
   interception_STORtype intrc_STORAGE;//!< type of iterception storage
   surface_STORtype srfs_STORAGE;//!< the type of surface retentions storage
   fast_Response fast_RESPONSE;//!< the type of fast response
+
+
+
 
 
 };

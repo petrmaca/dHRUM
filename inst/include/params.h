@@ -8,6 +8,7 @@
 #include <string> //string
 
 #include "numberSel.h"
+#include <list>
 
 class params {
  public:
@@ -32,8 +33,6 @@ class params {
   void p_param();
 
   unsigned g_numPars();//!< Get the number of parameters
-  numberSel g_par_up(const par_HRUtype& _parType);//!< Getting upper bounds on model parameters
-  numberSel g_par_low(const par_HRUtype& _parType);//!< Getting lower bounds on model parameters
   void current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP);
 
   std::list<par_HRUtype>Current_parameter_list;
