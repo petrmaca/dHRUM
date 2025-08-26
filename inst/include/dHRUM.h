@@ -72,6 +72,12 @@ class dHRUM {
   unsigned get_num_treads();
   void set_num_treads(const unsigned&  numTHR);
 
+  std::vector<double> get_param_vec(unsigned hruId);
+  std::vector<double> get_upparam_vec(unsigned hruId);
+  std::vector<double> get_lowparam_vec(unsigned hruId);
+  std::vector<std::string> get_param_names(unsigned hruId);
+
+
 protected:
 
 private:

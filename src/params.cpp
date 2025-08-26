@@ -1033,6 +1033,7 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
   full_list.unique();
 
   std::list<par_HRUtype>Current_parameter_list(full_list);
+ Current_parameter_string=par_HRUtype_to_string(Current_parameter_list);
 
   for (auto itr : Current_parameter_list) {
     Current_parameter_val.push_back(g_par(itr));
@@ -1040,5 +1041,233 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     Current_lowparameter_val.push_back(g_par_low(itr));
   }
   //print_par_list(Current_parameter_list);
+  //std::cout<<"velikost v params: "<<Current_parameter_string.size()<<std::endl;
+}
 
+void params::print_par_list(std::list<par_HRUtype> par_list){
+  std::cout << "Param.name\t\tVal\tUp\tLow"<<std::endl;
+  int counter=0;
+  int spacer=15;
+  for (auto itr : par_list) {
+    switch(itr) {
+    case par_HRUtype::B_SOIL:
+      std::cout <<std::left << std::setw(spacer)<< "B_SOIL:"<< "\t\t";
+      break;
+    case par_HRUtype::C_MAX:
+      std::cout <<std::left << std::setw(spacer)<< "C_MAX:"<< "\t\t";
+      break;
+    case par_HRUtype::B_EVAP:
+      std::cout <<std::left << std::setw(spacer)<< "B_EVAP:"<< "\t\t";
+      break;
+    case par_HRUtype::KS:
+      std::cout <<std::left << std::setw(spacer)<< "KS:"<< "\t\t";
+      break;
+    case par_HRUtype::KF:
+      std::cout <<std::left << std::setw(spacer)<< "KF:"<< "\t\t";
+      break;
+    case par_HRUtype::ADIV:
+      std::cout <<std::left << std::setw(spacer)<< "ADIV:"<< "\t\t";
+      break;
+    case par_HRUtype::CDIV:
+      std::cout <<std::left << std::setw(spacer)<< "CDIV:"<< "\t\t";
+      break;
+    case par_HRUtype::SDIV:
+      std::cout <<std::left << std::setw(spacer)<< "SDIV:"<< "\t\t";
+      break;
+    case par_HRUtype::CAN_ST:
+      std::cout <<std::left << std::setw(spacer)<< "CAN_ST:"<< "\t\t";
+      break;
+    case par_HRUtype::STEM_ST:
+      std::cout <<std::left << std::setw(spacer)<< "STEM_ST:"<< "\t\t";
+      break;
+    case par_HRUtype::CSDIV:
+      std::cout <<std::left << std::setw(spacer)<< "CSDIV:"<< "\t\t";
+      break;
+    case par_HRUtype::TETR:
+      std::cout <<std::left << std::setw(spacer)<< "TATR:"<< "\t\t";
+      break;
+    case par_HRUtype::DDFA:
+      std::cout <<std::left << std::setw(spacer)<< "DDFA:"<< "\t\t";
+      break;
+    case par_HRUtype::TMEL:
+      std::cout <<std::left << std::setw(spacer)<< "TMEL:"<< "\t\t";
+      break;
+    case par_HRUtype::RETCAP:
+      std::cout <<std::left << std::setw(spacer)<< "RETCAP:"<< "\t\t";
+      break;
+    case par_HRUtype::L:
+      std::cout <<std::left << std::setw(spacer)<< "L:"<< "\t\t";
+      break;
+    case par_HRUtype::D_BYPASS:
+      std::cout <<std::left << std::setw(spacer)<< "D_BYPASS:"<< "\t\t";
+      break;
+    case par_HRUtype::B_EXP:
+      std::cout <<std::left << std::setw(spacer)<< "B_EXP:"<< "\t\t";
+      break;
+    case par_HRUtype::KS2:
+      std::cout <<std::left << std::setw(spacer)<< "KS2:"<< "\t\t";
+      break;
+    case par_HRUtype::THR:
+      std::cout <<std::left << std::setw(spacer)<< "THR:"<< "\t\t";
+      break;
+    case par_HRUtype::ALPHA:
+      std::cout <<std::left << std::setw(spacer)<< "ALPHA:"<< "\t\t";
+      break;
+    case par_HRUtype::CMIN:
+      std::cout <<std::left << std::setw(spacer)<< "CMIN:"<< "\t\t";
+      break;
+    case par_HRUtype::FC:
+      std::cout <<std::left << std::setw(spacer)<< "FC:"<< "\t\t";
+      break;
+    case par_HRUtype::FOREST_FRACT:
+      std::cout <<std::left << std::setw(spacer)<< "FOREST_FRACT:"<< "\t\t";
+      break;
+    case par_HRUtype::KF2:
+      std::cout <<std::left << std::setw(spacer)<< "KF2:"<< "\t\t";
+      break;
+    case par_HRUtype::KF_NONLIN:
+      std::cout <<std::left << std::setw(spacer)<< "KF_NONLIN:"<< "\t\t";
+      break;
+    case par_HRUtype::C:
+      std::cout <<std::left << std::setw(spacer)<< "C:"<< "\t\t";
+      break;
+    case par_HRUtype::INFR_MAX:
+      std::cout <<std::left << std::setw(spacer)<< "INFR_MAX:"<< "\t\t";
+      break;
+    case par_HRUtype::RF:
+      std::cout <<std::left << std::setw(spacer)<< "RF:"<< "\t\t";
+      break;
+    case par_HRUtype::WP:
+      std::cout <<std::left << std::setw(spacer)<< "WP:"<< "\t\t";
+      break;
+    case par_HRUtype::SMAX:
+      std::cout <<std::left << std::setw(spacer)<< "SMAX:"<< "\t\t";
+      break;
+    case par_HRUtype::SMAXpdm:
+      std::cout <<std::left << std::setw(spacer)<< "SMAXpdm:"<< "\t\t";
+      break;
+    case par_HRUtype::RBAI:
+      std::cout <<std::left << std::setw(spacer)<< "RBAI:"<< "\t\t";
+      break;
+    case par_HRUtype::RBEI:
+      std::cout <<std::left << std::setw(spacer)<< "RBEI:"<< "\t\t";
+      break;
+    }
+    std::cout << Current_parameter_val[counter] << "\t";
+    std::cout << Current_upparameter_val[counter] << "\t";
+    std::cout << Current_lowparameter_val[counter] << std::endl;
+    counter++;
+  }
+}
+
+std::vector<std::string> params::par_HRUtype_to_string(std::list<par_HRUtype> par_list){
+
+  std::vector<std::string> par_vec;
+   for (auto itr : par_list) {
+    switch(itr) {
+    case par_HRUtype::B_SOIL:
+      par_vec.push_back("B_SOIL");
+      break;
+    case par_HRUtype::C_MAX:
+      par_vec.push_back("C_MAX");
+      break;
+    case par_HRUtype::B_EVAP:
+      par_vec.push_back("B_EVAP");
+      break;
+    case par_HRUtype::KS:
+      par_vec.push_back("KS");
+      break;
+    case par_HRUtype::KF:
+      par_vec.push_back("KF");
+      break;
+    case par_HRUtype::ADIV:
+      par_vec.push_back("ADIV");
+      break;
+    case par_HRUtype::CDIV:
+      par_vec.push_back("CDIV");
+      break;
+    case par_HRUtype::SDIV:
+      par_vec.push_back("SDIV");
+      break;
+    case par_HRUtype::CAN_ST:
+      par_vec.push_back("CAN_ST");
+      break;
+    case par_HRUtype::STEM_ST:
+      par_vec.push_back("STEM_ST");
+      break;
+    case par_HRUtype::CSDIV:
+      par_vec.push_back("CSDIV");
+      break;
+    case par_HRUtype::TETR:
+      par_vec.push_back("TETR");
+      break;
+    case par_HRUtype::DDFA:
+      par_vec.push_back("DDFA");
+      break;
+    case par_HRUtype::TMEL:
+      par_vec.push_back("TMEL");
+      break;
+    case par_HRUtype::RETCAP:
+      par_vec.push_back("RETCAP");
+      break;
+    case par_HRUtype::L:
+      par_vec.push_back("L");
+      break;
+    case par_HRUtype::D_BYPASS:
+      par_vec.push_back("D_BYPASS");
+      break;
+    case par_HRUtype::B_EXP:
+      par_vec.push_back("B_EXP");
+      break;
+    case par_HRUtype::KS2:
+      par_vec.push_back("KS2");
+      break;
+    case par_HRUtype::THR:
+      par_vec.push_back("THR");
+      break;
+    case par_HRUtype::ALPHA:
+      par_vec.push_back("ALPHA");
+      break;
+    case par_HRUtype::CMIN:
+      par_vec.push_back("CMIN");
+      break;
+    case par_HRUtype::FC:
+      par_vec.push_back("FC");
+      break;
+    case par_HRUtype::FOREST_FRACT:
+      par_vec.push_back("FOREST_FRACT");
+      break;
+    case par_HRUtype::KF2:
+      par_vec.push_back("KF2");
+      break;
+    case par_HRUtype::KF_NONLIN:
+      par_vec.push_back("KF_NONLIN");
+      break;
+    case par_HRUtype::C:
+      par_vec.push_back("B_SOI");
+      break;
+    case par_HRUtype::INFR_MAX:
+      par_vec.push_back("INFR_MAX");
+      break;
+    case par_HRUtype::RF:
+      par_vec.push_back("RF");
+      break;
+    case par_HRUtype::WP:
+      par_vec.push_back("WP");
+      break;
+    case par_HRUtype::SMAX:
+      par_vec.push_back("SMAX");
+      break;
+    case par_HRUtype::SMAXpdm:
+      par_vec.push_back("SMAXpdm");
+      break;
+    case par_HRUtype::RBAI:
+      par_vec.push_back("RBAI");
+      break;
+    case par_HRUtype::RBEI:
+      par_vec.push_back("RBEI");
+      break;
+    }
+  }
+ return par_vec;
 }

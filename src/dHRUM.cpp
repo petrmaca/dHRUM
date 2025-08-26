@@ -177,7 +177,7 @@ void dHRUM::setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> pa
     //  dHruVec[it].set_PetVars(50.1,pet_Type::OUDIN);
     //  dHruVec[it].calc_Pet();
     //  dHruVec[it].run_HB();
-    //    std::cout << "Setting the params to the input data to HRU ID " << it << std::endl;
+    //   std::cout << "Setting the params to the input data to HRU ID " << it << std::endl;
   }
   //  }
   return ;
@@ -672,6 +672,33 @@ void dHRUM::initFastResponsesToAlldHrus(std::vector<std::pair<unsigned,fast_Resp
   }
 
   return ;
-
-
 }
+
+
+std::vector<double> dHRUM::get_param_vec(unsigned hruId) {
+  dHruVec[hruId].current_params();
+  std::vector<double> curr_par=dHruVec[hruId].Current_par_val;
+  return curr_par;
+}
+
+std::vector<double> dHRUM::get_upparam_vec(unsigned hruId) {
+  //dHruVec[hruId].current_params();
+    std::vector<double> up_par=dHruVec[hruId].Current_uppar_val;
+  return up_par;
+}
+
+std::vector<double> dHRUM::get_lowparam_vec(unsigned hruId) {
+  //dHruVec[hruId].current_params();
+  std::vector<double> low_par=dHruVec[hruId].Current_lowpar_val;
+  return low_par;
+}
+
+std::vector<std::string> dHRUM::get_param_names(unsigned hruId) {
+  //dHruVec[hruId].current_params();
+  std::vector<std::string> names=dHruVec[hruId].Current_par_names;
+  //std::cout<<"velikost dhrum: "<<dHruVec[hruId].Current_par_names.size()<<std::endl;
+  return names;
+}
+
+
+

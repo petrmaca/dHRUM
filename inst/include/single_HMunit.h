@@ -111,6 +111,11 @@ class single_HMunit {
   void print_interception_STORtype();
   void print_surface_STORtype();
   void print_fastresponseType();
+  void current_params();
+  std::vector<std::string>Current_par_names;
+  std::vector<double>Current_par_val;
+  std::vector<double>Current_uppar_val;
+  std::vector<double>Current_lowpar_val;
 
 protected:
 

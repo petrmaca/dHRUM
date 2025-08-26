@@ -2170,3 +2170,15 @@ void single_HMunit::print_sHRU_settings() {
   print_fastresponseType();
   std::cout << "============================================" << std::endl;
 }
+
+void single_HMunit::current_params() {
+
+  par_HRU.current_param(gs_STORAGE,soil_STORAGE,intrc_STORAGE,srfs_STORAGE,fast_RESPONSE );
+
+  //std::cout<<"velikost single unit: "<<par_HRU.Current_parameter_string.size()<<std::endl;
+  Current_par_names=par_HRU.Current_parameter_string;
+  Current_par_val=par_HRU.Current_parameter_val;
+  Current_uppar_val=par_HRU.Current_upparameter_val;
+  Current_lowpar_val=par_HRU.Current_lowparameter_val;
+
+}

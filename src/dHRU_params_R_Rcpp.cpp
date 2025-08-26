@@ -282,6 +282,7 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
 //' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 //' setParamsToOnedHru(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),0)
 // [[Rcpp::export]]
+
 void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec, Rcpp::CharacterVector ParsNames, unsigned singleHruId) {
   unsigned numParsNames = ParsNames.size();
   unsigned numParsVals = ParsVec.size();
@@ -584,3 +585,34 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
 
   return  ;
 }
+
+
+ //' Getting the current singeHMunit parameters.
+ //'
+ //' @param dHRUM_ptr pointer to dHRUM instance
+ //' @param ParsVec vector of values of parameters
+ //' @param ParsNames a charater vector of parameter names
+ //' @export
+ //' @examples
+ // [[Rcpp::export]]
+
+ Rcpp::List get_current_dHRUparams(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId) {
+
+   Rcpp::NumericVector cur_par;
+   Rcpp::NumericVector up_par;
+   Rcpp::NumericVector low_par;
+   Rcpp::StringVector par_names;
+   dHRUM_ptr.get()->Current_Params(singleHruId);
+   cur_par = dHRUM_ptr.get()->get_param_vec(singleHruId);
+   up_par = dHRUM_ptr.get()->get_upparam_vec(singleHruId);
+   low_par = dHRUM_ptr.get()->get_lowparam_vec(singleHruId);
+   par_names = dHRUM_ptr.get()->get_param_names(singleHruId);
+
+   return Rcpp::List::create(
+     Rcpp::Named("Cur_names") = par_names,
+     Rcpp::Named("Cur_par") = cur_par,
+     Rcpp::Named("Up_bound") = up_par,
+     Rcpp::Named("Low_bound") = low_par);
+ }
+
+
