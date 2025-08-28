@@ -1,8 +1,27 @@
 #include <Rcpp.h>
 #include "dHRUM.h"
-//' Sets the types of pond models types to dHRU model for all single HRUs.
-//'
-//'
+//' Sets the types of pond model types to dHRU model for all single HRUs.
+ //'
+ //' Setting of params to dHRUM.
+ //'
+ //' @param dHRUM_ptr pointer to dHRUM instance
+ //' @param ParsVec vector of values of parameters
+ //' @param ParsNames a charater vector of parameter names
+ //' @export
+ //' @examples
+ //' nHrus <- 200
+ //' Areas <- runif(nHrus,min = 1,max  = 10)
+ //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+ //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+ //' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
+ //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+ //' prec=c(1,2,3)
+ //' temp=c(1,2,3)
+ //' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+ //'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
+ //' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+ //'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+ //' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
 
 // [[Rcpp::export]]
  void setPondToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector PondTypes, Rcpp::CharacterVector hruIds) {
@@ -12,7 +31,7 @@
    //check if names are consistent
    //for which hrus we want to change the fast response type - vector of character
    if(numPondTypes!=numHruIdNames) {
-     Rcpp::Rcout << "The number of ponds does not correspond to the number of HRUs " << numFASTRESPONSESTYPES <<"\n";
+     Rcpp::Rcout << "The number of ponds does not correspond to the number of HRUs " << numPondTypes <<"\n";
      Rcpp::stop("\nWrong size number of ponds.\n");
    } else {
 

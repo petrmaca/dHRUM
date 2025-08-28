@@ -57,6 +57,13 @@ gatherHBdata <- function(dHRUM_ptr) {
     invisible(.Call(`_dHRUM_gatherHBdata`, dHRUM_ptr))
 }
 
+#' Sets the types of pond model types to dHRU model for all single HRUs.
+NULL
+
+setPondToAlldHrus <- function(dHRUM_ptr, PondTypes, hruIds) {
+    invisible(.Call(`_dHRUM_setPondToAlldHrus`, dHRUM_ptr, PondTypes, hruIds))
+}
+
 #' Sets the types of surface retention models types to dHRU model for all single HRUs.
 #'
 #' Setting the fast response type to dHRUM to all HRUs. Possibe types: \code{SerialCascadeLinRes}, \code{SerialLinResGWPerc}
@@ -460,6 +467,10 @@ setParamsToOnedHru <- function(dHRUM_ptr, ParsVec, ParsNames, singleHruId) {
 #' setParsToDistdHRUM(dhrus, ParDF, FALSE)
 setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
     invisible(.Call(`_dHRUM_setParsToDistdHRUM`, dHRUM_ptr, ParsDF, PrintPars))
+}
+
+get_current_dHRUparams <- function(dHRUM_ptr, singleHruId) {
+    .Call(`_dHRUM_get_current_dHRUparams`, dHRUM_ptr, singleHruId)
 }
 
 #' Calculates the values of Potential evapotranspiration on all singleHrus taking constant latitude

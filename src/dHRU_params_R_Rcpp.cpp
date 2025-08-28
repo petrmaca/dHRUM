@@ -28,7 +28,7 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
   unsigned numParsNames = ParsNames.size();
   unsigned numParsVals = ParsVec.size();
 
-  if((numParsNames!=numParsVals) || (numParsNames>31) || (numParsVals>31)) {
+  if((numParsNames!=numParsVals) || (numParsNames>33) || (numParsVals>33)) {
     Rcpp::Rcout << "The number of names of params is " << numParsNames <<"\n";
     Rcpp::Rcout << "The number of values of params is " << numParsVals <<"\n";
     Rcpp::stop("\n Those values are different or higher or smaller then required number of dHRU Par Values =22.\n");
@@ -75,7 +75,10 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       {"C", par_HRUtype::C},
       {"INFR_MAX", par_HRUtype::INFR_MAX},
       {"RF", par_HRUtype::RF},
-      {"WP", par_HRUtype::WP}
+      {"WP", par_HRUtype::WP},
+      {"RBAI", par_HRUtype::RBAI},
+      {"RBEI", par_HRUtype::RBEI}
+
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -240,6 +243,16 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::WP));
         // pars[30] = par_dta;
         // std::cout << "New WP --> loaded\n";
+      case par_HRUtype::RBAI:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::RBAI));
+        // pars[31] = par_dta;
+        // std::cout << "New RBAI --> loaded\n";
+        break;
+      case par_HRUtype::RBEI:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::RBEI));
+        // pars[32] = par_dta;
+        // std::cout << "New RBEI --> loaded\n";
+
         break;
       }
     }

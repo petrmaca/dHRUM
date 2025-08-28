@@ -62,12 +62,13 @@ class dHRUM {
   void initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,interception_STORtype>>& interception_STORtype);
   void initSurfaceStypeToAlldHrus(std::vector<std::pair<unsigned,surface_STORtype>>& surface_STORtype);
   void initFastResponsesToAlldHrus(std::vector<std::pair<unsigned,fast_Response>>& fast_RESPONSESTypes);
+  void initPondToAlldHrus(std::vector<std::pair<unsigned,pond_type>>& pondTypes);
 
   numberSel getTsDta(const ts_type& _tsType, const unsigned& HruIndex, const unsigned& tst);
 
   void set_numFastReservoirsToHrus();
   void set_numFastReservoirsVEC(caldata numFR);
-  //std::vector<gs_STORtype> get_STORtypes();
+  std::vector<gs_STORtype> get_STORtypes();
 
   unsigned get_num_treads();
   void set_num_treads(const unsigned&  numTHR);
@@ -76,6 +77,7 @@ class dHRUM {
   std::vector<double> get_upparam_vec(unsigned hruId);
   std::vector<double> get_lowparam_vec(unsigned hruId);
   std::vector<std::string> get_param_names(unsigned hruId);
+  void Current_Params(unsigned hruId);
 
 
 protected:
@@ -97,6 +99,7 @@ private:
   std::vector<interception_STORtype> interception_STORtypes;//!< The vector on interception storage types
   std::vector<surface_STORtype> surf_STORtypes;//!< The vector on surface retentions type in HRus
   std::vector<fast_Response> fast_RESPONSESTypes;//!< The vector on fast responses types in HRus
+  std::vector<pond_type> pondTypes;//!< The vector on fast responses types in HRus
 
   caldata NumFastRes;//!< The number of fastre reservoirs in serie
 };

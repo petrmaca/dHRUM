@@ -74,7 +74,9 @@ enum class fast_Response {SerialCascadeLinRes, SerialLinResGWGros,SerialLinResSo
 const fast_Response all_FastResponses[] {fast_Response::SerialCascadeLinRes, fast_Response::SerialLinResGWGros, fast_Response::SerialLinResSoilSois, fast_Response::SerialLinResGWGrosSoilSois};
 const std::vector<std::string> all_FastResponsesNames {"SerialCascadeLinRes", "SerialLinResGWGros","SerialLinResSoilSois", "SerialLinResGWGrosSoilSois"};
 
-
+enum class pond_type {noPond,pondBasic, pondGWGros, pondSoilSois};
+const pond_type all_ponds[] {pond_type::noPond,pond_type::pondBasic, pond_type::pondGWGros,pond_type::pondSoilSois};
+const std::vector<std::string> all_pondNames {"noPond","pondBasic","pondGWGros", "pondSoilSois"};
 
 
 

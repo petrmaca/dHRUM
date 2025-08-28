@@ -13,6 +13,7 @@ dHRUM::dHRUM(): dHruVec(),
   interception_STORtypes(),
   surf_STORtypes(),
   fast_RESPONSESTypes(),
+  pondTypes(),
   NumFastRes(0),
   num_threads(0){
   //ctor
@@ -52,6 +53,7 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   interception_STORtypes = other.interception_STORtypes;
   surf_STORtypes = other.surf_STORtypes;
   fast_RESPONSESTypes = other.fast_RESPONSESTypes;
+  pondTypes = other.pondTypes;
   num_threads = other.num_threads;
 
   NumFastRes = other.NumFastRes;
@@ -73,6 +75,7 @@ dHRUM& dHRUM::operator=(const dHRUM& rhs) {
     interception_STORtypes = rhs.interception_STORtypes;
     surf_STORtypes = rhs.surf_STORtypes;
     fast_RESPONSESTypes = rhs.fast_RESPONSESTypes;
+    pondTypes = rhs.pondTypes;
     NumFastRes = rhs.NumFastRes;
     num_threads = rhs.num_threads;
   }
@@ -674,31 +677,38 @@ void dHRUM::initFastResponsesToAlldHrus(std::vector<std::pair<unsigned,fast_Resp
   return ;
 }
 
+void dHRUM::Current_Params(unsigned hruId){
+  dHruVec[hruId].current_params();
+}
 
 std::vector<double> dHRUM::get_param_vec(unsigned hruId) {
-  dHruVec[hruId].current_params();
   std::vector<double> curr_par=dHruVec[hruId].Current_par_val;
   return curr_par;
 }
 
 std::vector<double> dHRUM::get_upparam_vec(unsigned hruId) {
-  //dHruVec[hruId].current_params();
     std::vector<double> up_par=dHruVec[hruId].Current_uppar_val;
   return up_par;
 }
 
 std::vector<double> dHRUM::get_lowparam_vec(unsigned hruId) {
-  //dHruVec[hruId].current_params();
   std::vector<double> low_par=dHruVec[hruId].Current_lowpar_val;
   return low_par;
 }
 
 std::vector<std::string> dHRUM::get_param_names(unsigned hruId) {
-  //dHruVec[hruId].current_params();
   std::vector<std::string> names=dHruVec[hruId].Current_par_names;
-  //std::cout<<"velikost dhrum: "<<dHruVec[hruId].Current_par_names.size()<<std::endl;
   return names;
 }
 
+
+void dHRUM::initPondToAlldHrus(std::vector<std::pair<unsigned,pond_type>>& pondTypes){
+
+#pragma omp parallel for num_threads(num_threads)
+  for(unsigned int i=0; i<pondTypes.size(); i++) {
+    dHruVec[pondTypes[i].first].set_pond_type(pondTypes[i].second);
+  }
+  return ;
+}
 
 

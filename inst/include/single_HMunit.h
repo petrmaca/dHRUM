@@ -111,11 +111,18 @@ class single_HMunit {
   void print_interception_STORtype();
   void print_surface_STORtype();
   void print_fastresponseType();
+  void print_pondType();
+
+
   void current_params();
   std::vector<std::string>Current_par_names;
   std::vector<double>Current_par_val;
   std::vector<double>Current_uppar_val;
   std::vector<double>Current_lowpar_val;
+
+  void ponds(pond_type _pondtype);
+  void set_pond_type(pond_type _pondtype);
+  pond_type get_pondtype();
 
 protected:
 
@@ -148,6 +155,9 @@ private:
   interception_STORtype intrc_STORAGE;//!< type of iterception storage
   surface_STORtype srfs_STORAGE;//!< the type of surface retentions storage
   fast_Response fast_RESPONSE;//!< the type of fast response
+  pond_type pond;//!< the type of pond (water reservoir)
+
+
 
 
 
