@@ -27,7 +27,7 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.0
                     KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =25,L=0.1, B_EXP = 0.3)
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 
-current_parameters<-get_current_dHRUparams(dHRUM_ptr = dhrus,0)
+current_parameters<-getCurdHRUpars(dHRUM_ptr = dhrus,0)
 
 calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 # calcHBInAlldHrus(dHRUM_ptr = dhrus)
@@ -52,5 +52,4 @@ smax =(ParDF$B_SOIL*ParDF$CMIN + ParDF$C_MAX) / (ParDF$B_SOIL+1)
 plot(outDF$SOIS, type ="l")
 abline(h=smax,col="red")
 plot(outDF$SURS, type ="l")
-
 plot(outDF$DIRR, type ="l")
