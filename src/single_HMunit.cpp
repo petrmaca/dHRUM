@@ -760,7 +760,7 @@ case soil_STORtype::GR4J: {
 
 
 
-
+/*
 case soil_STORtype::SBROOK_V1: {
     //E_b is bare soil evaporation
     E_b = prev_Soil / get_par(par_HRUtype::SMAX) * (1 - get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
@@ -808,6 +808,56 @@ case soil_STORtype::SBROOK_V1: {
 
     break;
 }
+*/
+
+case soil_STORtype::SBROOK_V1: {
+
+  //pocitam vypar z pudy
+  E_b = (prev_Soil / get_par(par_HRUtype::SMAX)) * (1 - get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+
+  //pocitam transpiraci a odtok z tanku
+  if(prev_Soil > get_par(par_HRUtype::FC)) {
+    E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+    overFl2 = std::pow(((prev_Soil - get_par(par_HRUtype::FC)) * get_par(par_HRUtype::KF)), (1 / get_par(par_HRUtype::KF_NONLIN)));
+  }
+  else{
+    E_v = prev_Soil / get_par(par_HRUtype::FC) * get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+    overFl2 = 0;
+  }
+
+  //vypocet mozneho prepadu z tanku
+  overFl1 = std::max((prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) - get_par(par_HRUtype::SMAX) - E_v - E_b - overFl2), 0.0);
+
+  //aktualizace zasoby o vstup
+  next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+
+  std::vector<numberSel> updated_vals;
+
+  //aktualizace zasoby o vypar
+  updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_v, E_b});
+  next_soil = updated_vals[0];
+  evap = updated_vals[1];
+  updated_vals.clear();
+
+  //aktualizacezasoby  o odtok
+  updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1, overFl2});
+  next_soil = updated_vals[0];
+  overFL = updated_vals[1];
+
+  updated_vals.clear();
+
+  set_varValue(next_soil, tstRM, ts_type::SOIS);
+  set_varValue(evap,tstRM, ts_type::EVBS);
+  set_varValue(overFL, tstRM, ts_type::PERC);
+
+  prev_Soil = next_soil;
+
+  break;
+}
+
+
+
+
 
 case soil_STORtype::HILLSLOPE: {
 
