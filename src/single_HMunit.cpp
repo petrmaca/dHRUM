@@ -583,8 +583,7 @@ case soil_STORtype::COLLIE_V2: {
       overFl1 = 0;
     }
 */
-    numberSel zero=0;
-    overFl1 = std::max((prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF))-get_par(par_HRUtype::SMAX)-E_v-E_b-overFl2), zero);
+    overFl1 = std::max((prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF))-get_par(par_HRUtype::SMAX)-E_v-E_b-overFl2), 0.0);
 
 
     next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
@@ -642,8 +641,8 @@ case soil_STORtype::NEW_ZEALAND: {
     //overFl3 represents baseflow controlled by time scale parameter KF2
     overFl3 = get_par(par_HRUtype::KF2) * prev_Soil;
     //std::cout << overFl3 << " " << prev_Soil << " " << std::endl;
-    numberSel zero=0;
-    overFl1 = std::max((prev_Soil +static_cast<numberSel>(get_dta(tstRM, ts_type::PREF))-get_par(par_HRUtype::SMAX)-E_v-E_b-overFl2-overFl3), zero);
+
+    overFl1 = std::max((prev_Soil +static_cast<numberSel>(get_dta(tstRM, ts_type::PREF))-get_par(par_HRUtype::SMAX)-E_v-E_b-overFl2-overFl3), 0.0);
     next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
 
     std::vector<numberSel> updated_vals;
@@ -669,6 +668,7 @@ case soil_STORtype::NEW_ZEALAND: {
     break;
 }
 
+  /*
 case soil_STORtype::GR4J: {
     //P_n is the net precipitation
     if(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) >= static_cast<numberSel>(get_dta(tstRM, ts_type::PET))) {
@@ -718,6 +718,48 @@ case soil_STORtype::GR4J: {
 
     break;
 }
+*/
+
+case soil_STORtype::GR4J: {
+//pocitam E_s na zaklade PET
+  E_s = static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) * (2 * (prev_Soil / get_par(par_HRUtype::SMAX)) - std::pow((prev_Soil / get_par(par_HRUtype::SMAX)), 2));
+//pocitam perkolaci ze zasobniku
+  overFl1 = std::pow(get_par(par_HRUtype::SMAX), -4) / 4 * (std::pow((4.0 / 9.0), 4)) * std::pow(std::abs(prev_Soil), 5);
+
+//aktualizace zasoby, odecitam vypar
+  std::vector<numberSel> updated_vals;
+  updated_vals = water_balance(prev_Soil, evap, std::vector<numberSel>{E_s});
+  prev_Soil = updated_vals[0];
+  evap = updated_vals[1];
+  updated_vals.clear();
+
+//aktualizace zasoby, odecitam perkolaci
+  updated_vals = water_balance(prev_Soil, overFL, std::vector<numberSel>{overFl1});
+  prev_Soil = updated_vals[0];
+  overFL = updated_vals[1];
+  updated_vals.clear();
+
+//vypocet vstupu do zasobniku a dopocet celkoveho odtoku
+  P_s = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) * (1 - std::pow((prev_Soil / get_par(par_HRUtype::SMAX)), 2));
+  if(P_s > (get_par(par_HRUtype::SMAX) - prev_Soil)){
+    P_s = get_par(par_HRUtype::SMAX) - prev_Soil;
+  }
+  next_soil = prev_Soil + P_s;
+  overFL = overFL + (static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) - P_s);
+
+//ulozeni velicin
+    set_varValue(next_soil, tstRM, ts_type::SOIS);
+    set_varValue(evap, tstRM, ts_type::EVBS);
+    set_varValue(overFL, tstRM, ts_type::PERC);
+
+    prev_Soil = next_soil;
+
+    break;
+}
+
+
+
+
 
 case soil_STORtype::SBROOK_V1: {
     //E_b is bare soil evaporation
