@@ -233,15 +233,15 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// get_current_dHRUparams
-Rcpp::List get_current_dHRUparams(Rcpp::XPtr<dHRUM> dHRUM_ptr, unsigned singleHruId);
-RcppExport SEXP _dHRUM_get_current_dHRUparams(SEXP dHRUM_ptrSEXP, SEXP singleHruIdSEXP) {
+// getCurrentdHRUparams
+Rcpp::List getCurrentdHRUparams(Rcpp::XPtr<dHRUM> dHRUM_ptr, unsigned singleHruId);
+RcppExport SEXP _dHRUM_getCurrentdHRUparams(SEXP dHRUM_ptrSEXP, SEXP singleHruIdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
     Rcpp::traits::input_parameter< unsigned >::type singleHruId(singleHruIdSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_current_dHRUparams(dHRUM_ptr, singleHruId));
+    rcpp_result_gen = Rcpp::wrap(getCurrentdHRUparams(dHRUM_ptr, singleHruId));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -327,7 +327,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_setParamsToAlldHrus", (DL_FUNC) &_dHRUM_setParamsToAlldHrus, 3},
     {"_dHRUM_setParamsToOnedHru", (DL_FUNC) &_dHRUM_setParamsToOnedHru, 4},
     {"_dHRUM_setParsToDistdHRUM", (DL_FUNC) &_dHRUM_setParsToDistdHRUM, 3},
-    {"_dHRUM_get_current_dHRUparams", (DL_FUNC) &_dHRUM_get_current_dHRUparams, 2},
+    {"_dHRUM_getCurrentdHRUparams", (DL_FUNC) &_dHRUM_getCurrentdHRUparams, 2},
     {"_dHRUM_calcPetToAllHrus", (DL_FUNC) &_dHRUM_calcPetToAllHrus, 3},
     {"_dHRUM_calcPetToAllHrusDist", (DL_FUNC) &_dHRUM_calcPetToAllHrusDist, 4},
     {"_dHRUM_setNumFastResAlldHrus", (DL_FUNC) &_dHRUM_setNumFastResAlldHrus, 3},
