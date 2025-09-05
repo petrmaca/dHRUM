@@ -31,6 +31,7 @@ class params {
   void s_default();
 
   void p_param();
+  void PDM_boundary_update(); //!< Adjusts the upper and lower parameters cmin and cmax when using the PDM model
 
   unsigned g_numPars();//!< Get the number of parameters
   void current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP);

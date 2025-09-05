@@ -52,7 +52,7 @@ params::params(): numPars(0),
   pars[33] = 0.1;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
-  up_pars[1] = 500.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
+  up_pars[1] = 1000.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
   up_pars[2] = 3.0;//!< B_EVAP Parameter controlling soil evapotranspiration [0,infty] how ever [0.5,3],VC1
   up_pars[3] = 0.0;//!< SMAXpdm Max soil storage calculate using Cmax and b_soil
   up_pars[4] = 1;//!< KS Storage coefficient of groundwater storage [0,1],VC1
@@ -87,7 +87,7 @@ params::params(): numPars(0),
   up_pars[28] = 100;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
   up_pars[29] = 1;//!< RF evaporation reduction factor [-] [0,1]
   up_pars[30] = 1;//!< WP wilting point [-] [0,1]
-  up_pars[31] = 100;//!< SMAX  [mm] [0,inf]
+  up_pars[31] = 1000;//!< SMAX  [mm] [0,inf]
   up_pars[32] = 1;//!< RBAI River bank infiltration rate (infiltration to Soil storage)
   up_pars[33] = 1;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
 
@@ -1270,4 +1270,12 @@ std::vector<std::string> params::par_HRUtype_to_string(std::list<par_HRUtype> pa
     }
   }
  return par_vec;
+}
+
+void params::PDM_boundary_update(){
+  std::cout<<""<<std::endl;
+   up_pars[1] = 1000.0;   //!< C_MAX
+   low_pars[1] = 10.001; //!< C_MAX
+   up_pars[22] = 10.0;    //!< CMIN
+   low_pars[22] = 0.0;  //!< CMIN
 }
