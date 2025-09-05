@@ -120,7 +120,7 @@ params::params(): numPars(0),
   helpSmaxPDMLow = (low_pars[0] *low_pars[22] +low_pars[1]) / (low_pars[0]+1);
   low_pars[3] = helpSmaxPDMLow;
 
-  low_pars[23] = 0;//!< FC Field capacity [mm] [0,inf)
+  low_pars[23] = 0.0;//!< FC Field capacity [mm] [0,inf)
   low_pars[24] = 0.0;//!< Forest fraction [0,1]
   low_pars[25] = 0.0;//!< KF2 Storage coefficient of runoff response reservoirs [0,1]
   low_pars[26] = 0.0;//!< KF_NONLIN runoff non-linearity parameter [-] [0,inf)
@@ -129,8 +129,8 @@ params::params(): numPars(0),
   low_pars[29] = 0.0;//!< RF evaporation reduction factor [-] [0,1]
   low_pars[30] = 0.0;//!< WP wilting point [-] [0,1]
   low_pars[31] = 0.0;//!< SMAX  [mm] [0,inf]
-  low_pars[32] = 0;//!< RBAI River bank infiltration rate (infiltration to Soil storage)
-  low_pars[33] = 0;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
+  low_pars[32] = 0.0;//!< RBAI River bank infiltration rate (infiltration to Soil storage)
+  low_pars[33] = 0.0;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
 
 //  std::cout << "Params are initialized." << std::endl;
 }
