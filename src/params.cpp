@@ -1024,10 +1024,10 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
   case fast_Response::SerialLinResGWGrosSoilSois:
     full_list.merge(L_SerialLinResGWGrosSoilSois);
     break;
-
-    full_list.merge(L_interception_snow);
-    full_list.merge(L_snow_melt);
   }
+
+  full_list.merge(L_interception_snow);
+  full_list.merge(L_snow_melt);
 
   //full_list.sort();
   full_list.unique();

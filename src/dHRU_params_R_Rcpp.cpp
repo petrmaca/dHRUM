@@ -621,9 +621,10 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
 //' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 //'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 //' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
-//' get_current_dHRUparams(dHRUM_ptr = dhrus,0)
+//' getCurdHRUpars(dHRUM_ptr = dhrus,0)
 // [[Rcpp::export]]
- Rcpp::List getCurrentdHRUparams(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId) {
+ Rcpp::List getCurdHRUpars(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId) {
+
 
    Rcpp::NumericVector cur_par;
    Rcpp::NumericVector up_par;

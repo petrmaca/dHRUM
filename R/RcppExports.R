@@ -488,8 +488,30 @@ setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
     invisible(.Call(`_dHRUM_setParsToDistdHRUM`, dHRUM_ptr, ParsDF, PrintPars))
 }
 
-getCurrentdHRUparams <- function(dHRUM_ptr, singleHruId) {
-    .Call(`_dHRUM_getCurrentdHRUparams`, dHRUM_ptr, singleHruId)
+#' Getting the current singeHMunit parameters.
+#'
+#' shows the list of parameters for selected HRU
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @param singleHruId a Id of particular Hru
+#' @export
+#' @examples
+#' nHrus <- 1
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
+#' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+#'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+#' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
+#' getCurdHRUpars(dHRUM_ptr = dhrus,0)
+getCurdHRUpars <- function(dHRUM_ptr, singleHruId) {
+    .Call(`_dHRUM_getCurdHRUpars`, dHRUM_ptr, singleHruId)
 }
 
 #' Calculates the values of Potential evapotranspiration on all singleHrus taking constant latitude
