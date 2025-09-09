@@ -402,18 +402,6 @@ void single_HMunit::surface_retention(surface_STORtype _surf_STORtype) {
     break;
   }
 
-  case surface_STORtype::Pond: {
-    //inputs
-
-
-    break;
-  }
-
-  case surface_STORtype::DryReservoir: {
-
-    break;
-  }
-
   }
 
 
@@ -429,7 +417,7 @@ void single_HMunit::surface_retention(surface_STORtype _surf_STORtype) {
  */
 void single_HMunit::soil_buffer(soil_STORtype _soil_STORtype) {
 
-  numberSel c_init = 0.0, overFl1 = 0.0, ppInf = 0.0, overFl2 = 0.0, overFl3 = 0.0, c_prop = 0.0, next_soil = 0.0, overFL = 0.0, evap = 0.0, aet = 0.0, c_contr=0.0, E_b = 0.0, E_v = 0.0, E_s = 0.0,E_p = 0.0, P_s = 0.0, P_n = 0.0;
+  numberSel c_init = 0.0, overFl1 = 0.0, ppInf = 0.0, overFl2 = 0.0, overFl3 = 0.0, c_prop = 0.0, next_soil = 0.0, overFL = 0.0, evap = 0.0, aet = 0.0, c_contr=0.0, E_b = 0.0, E_v = 0.0, E_s = 0.0,E_p = 0.0, P_s = 0.0, P_n = 0.0, ppExc= 0.0;
 
 switch(_soil_STORtype) {
 
@@ -938,7 +926,10 @@ case soil_STORtype::HILLSLOPE: {
     break;
 }
 
+
+/*
 case soil_STORtype::PLATEAU: {
+
     //ppInf is infiltration based on maximum infiltration rate INFR_MAX [mm/d] and infiltration excess [mm/d]
     ppInf = std::min(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)), get_par(par_HRUtype::INFR_MAX));
 
@@ -983,7 +974,40 @@ case soil_STORtype::PLATEAU: {
 
     break;
   }
+*/
+
+case soil_STORtype::PLATEAU: {
+  //vypocet vstupu do pudniho zasobniku a prepadu mimo zasobnik
+  ppInf = std::min(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)), get_par(par_HRUtype::INFR_MAX));
+  ppExc = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) - ppInf;
+
+  //vypocet c_init
+  c_init = get_par(par_HRUtype::WP) * get_par(par_HRUtype::SMAX);
+
+  //vypocet aktualni evptr.
+  evap = static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) * std::max((get_par(par_HRUtype::RF) * (prev_Soil - c_init)/(get_par(par_HRUtype::SMAX) - c_init)), static_cast<numberSel>(0.0));
+
+  //vypocet overFL
+  overFL = std::max((prev_Soil + ppInf + get_par(par_HRUtype::C) - get_par(par_HRUtype::SMAX) - evap), static_cast<numberSel>(0.0));
+
+  //aktualizace pudni zasoby o vstupy a ztraty
+  next_soil = prev_Soil + ppInf + get_par(par_HRUtype::C);
+  next_soil = next_soil - evap;
+  next_soil = next_soil - overFL;
+
+  //doplneni overFL
+  overFL = overFL + ppExc;
+
+  set_varValue(next_soil, tstRM, ts_type::SOIS);
+  set_varValue(evap, tstRM, ts_type::EVBS);
+  set_varValue(overFL, tstRM, ts_type::PERC);
+
+  prev_Soil = next_soil;
+
+  break;
 }
+
+  }
   return ;
 }
 
@@ -2275,6 +2299,10 @@ void single_HMunit::print_fastresponseType() {
     std::cout << "The fast_Response is a SerialLinResSoilSois." << std::endl;
     break;
 
+  case fast_Response::SerialLinResGWGrosSoilSois:
+    std::cout << "The fast_Response is a SerialLinResGWGrosSoilSois." << std::endl;
+    break;
+
   }
 }
 
@@ -2327,11 +2355,11 @@ void single_HMunit::current_params() {
 
 void single_HMunit::ponds(pond_type _pondtype) {
 
-  numberSel PSEV = 2; //pond surface evapotranspiration [mm/den] (ČSN 75241(str41) prumer je cca 750 mm/rok) ale meni se to hodně v zavislosti na rocnim obdobi v lete až 5 mm/den
+  numberSel WSET = 2; //Water surface evapotranspiration [mm/den] (ČSN 75241(str41) prumer je cca 750 mm/rok) ale meni se to hodně v zavislosti na rocnim obdobi v lete až 5 mm/den
   numberSel PBEI = 0.1; //pond bed infiltration [mm/den] //for ponds ideally 0, but for wetlands?
 
   numberSel pondMaxVolume = 50;//!< The maximum pond volume [m3]
-  numberSel MZP = 0.01;//!< The current pond volume [m3/s]
+  numberSel MRF = 0.01;//!< Minimum residual flow (MZP) [m3/s]
   numberSel pondArea = 100; //!< The area of the pond [m2]
 
   numberSel pondActualVolume = 40;//!< The current pond volume [m3] list promennych
@@ -2339,7 +2367,7 @@ void single_HMunit::ponds(pond_type _pondtype) {
 
   switch(_pondtype) {
 
-  case pond_type::noPond: { //nebude delat nic
+  case pond_type::noPond: { //do nothing, noPond is also the initial/default condition
     break;
   }
 
@@ -2347,31 +2375,33 @@ void single_HMunit::ponds(pond_type _pondtype) {
   case pond_type::pondBasic: {
 
     numberSel inflow = (get_dta(tstRM,ts_type::TOTR))/1000*Area; // objem vody [m3] pritekle za den
-    numberSel outflow = (PSEV/1000*pondArea)+(MZP*60*60*24); // objem vody odtelké nebo vypařené
+    numberSel outflow = (WSET/1000*pondArea)+(MRF*60*60*24); // objem vody odtelké nebo vypařené
     numberSel bill = inflow-outflow;
 
     if (bill>0){//když je pritok vyssi, tak se plni
       numberSel spaceToFill = pondMaxVolume-pondActualVolume; //obem ktery lze vyuzit
       if (bill>(spaceToFill)){
         pondActualVolume = pondMaxVolume;
-        set_varValue((((bill-spaceToFill)+(MZP*60*60*24))/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(PSEV*pondArea/Area)), tstRM,ts_type::AET);
+        set_varValue((((bill-spaceToFill)+(MRF*60*60*24))/Area*1000), tstRM,ts_type::TOTR);
+        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
       }else{
         pondActualVolume=pondActualVolume+bill;
-        set_varValue((MZP/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(PSEV*pondArea/Area)), tstRM,ts_type::AET);
+        set_varValue(((MRF*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
+        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
       }
     }
 
     if (bill<0){//když je pritok menší, tak se prazdni
-      if (pondActualVolume>bill){
-        pondActualVolume = pondActualVolume-bill;
-        set_varValue(((MZP*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(PSEV*pondArea/Area)), tstRM,ts_type::AET);
+      if (pondActualVolume>abs(bill)){
+        pondActualVolume = pondActualVolume-abs(bill);
+        set_varValue(((MRF*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
+        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
       }else{
+        numberSel help_ratio = pondActualVolume/(MRF*60*60*24);
+        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*help_ratio*pondArea/Area)), tstRM,ts_type::AET);//nevypari se celkovy denni vypar ale jen cast, dokud odteka MRF
+        pondActualVolume=pondActualVolume-(WSET*help_ratio/1000*pondArea); //odectu vypareny objem od zasoby
+        set_varValue((pondActualVolume/Area*1000), tstRM,ts_type::TOTR); // nevim jak rozlisit, kolik se odpari a kolik odtece... nejak pres pomer??
         pondActualVolume=0;
-        set_varValue((pondActualVolume/Area), tstRM,ts_type::TOTR); // nevim jak rozlisit, kolik se odpari a kolik odtece... nejak pres pomer??
-        set_varValue((get_dta(tstRM,ts_type::AET)+(PSEV*pondArea/Area)), tstRM,ts_type::AET);
       }
     }
 
@@ -2380,35 +2410,37 @@ void single_HMunit::ponds(pond_type _pondtype) {
 
   case pond_type::pondSoilSois: {
     numberSel inflow = (get_dta(tstRM,ts_type::TOTR))/1000*Area; // objem vody [m3] pritekle za den
-    numberSel outflow = (PSEV/1000*pondArea)+(MZP*60*60*24)+(PBEI/1000*pondArea); // objem vody odtelké nebo vypařené
+    numberSel outflow = (WSET/1000*pondArea)+(MRF*60*60*24)+(PBEI/1000*pondArea); // objem vody odtelké nebo vypařené
     numberSel bill = inflow-outflow;
 
     if (bill>0){//když je pritok vyssi, tak se plni
       numberSel spaceToFill = pondMaxVolume-pondActualVolume; //obem ktery lze vyuzit
       if (bill>(spaceToFill)){
         pondActualVolume = pondMaxVolume;
-        set_varValue((((bill-spaceToFill)+(MZP*60*60*24))/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(PSEV*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::SOIS)+PBEI), tstRM,ts_type::SOIS);
+        set_varValue((((bill-spaceToFill)+(MRF*60*60*24))/Area*1000), tstRM,ts_type::TOTR);
+        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
+        set_varValue((get_dta(tstRM,ts_type::SOIS)+(PBEI*pondArea/Area)), tstRM,ts_type::SOIS);
       }else{
         pondActualVolume=pondActualVolume+bill;
-        set_varValue(((MZP*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(PSEV*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::SOIS)+PBEI), tstRM,ts_type::SOIS);
+        set_varValue(((MRF*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
+        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
+        set_varValue((get_dta(tstRM,ts_type::SOIS)+(PBEI*pondArea/Area)), tstRM,ts_type::SOIS);
       }
     }
 
     if (bill<0){//když je pritok menší, tak se prazdni
-      if (pondActualVolume>bill){
-        pondActualVolume = pondActualVolume-bill;
-        set_varValue(((MZP*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(PSEV*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::SOIS)+PBEI), tstRM,ts_type::SOIS);
+      if (pondActualVolume>abs(bill)){
+        pondActualVolume = pondActualVolume-abs(bill);
+        set_varValue(((MRF*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
+        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
+        set_varValue((get_dta(tstRM,ts_type::SOIS)+(PBEI*pondArea/Area)), tstRM,ts_type::SOIS);
       }else{
+        numberSel help_ratio = pondActualVolume/(MRF*60*60*24);
+        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*help_ratio*pondArea/Area)), tstRM,ts_type::AET);//nevypari se celkovy denni vypar ale jen cast, dokud odteka MRF
+        set_varValue((get_dta(tstRM,ts_type::SOIS)+(PBEI*help_ratio*pondArea/Area)), tstRM,ts_type::SOIS);//nezasakne se celkovy denni vsak ale jen cast, dokud odteka MRF
+        pondActualVolume=pondActualVolume-(WSET*help_ratio/1000*pondArea)-(PBEI*help_ratio/1000*pondArea); //odectu vypareny a zasakly objem od zasoby
+        set_varValue((pondActualVolume/Area*1000), tstRM,ts_type::TOTR); // co zbylo jde vse do TOTR
         pondActualVolume=0;
-        set_varValue((pondActualVolume/Area), tstRM,ts_type::TOTR); // nevim jak rozlisit, kolik se odpari a kolik odtece a kolik pujde do sois... nejak pres pomer??
-        set_varValue((get_dta(tstRM,ts_type::AET)+(PSEV*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::SOIS)+PBEI), tstRM,ts_type::SOIS);
       }
     }
 
@@ -2417,35 +2449,37 @@ void single_HMunit::ponds(pond_type _pondtype) {
 
   case pond_type::pondGWGros: {
     numberSel inflow = (get_dta(tstRM,ts_type::TOTR))/1000*Area; // objem vody [m3] pritekle za den
-    numberSel outflow = (PSEV/1000*pondArea)+(MZP*60*60*24)+(PBEI/1000*pondArea); // objem vody odtelké nebo vypařené
+    numberSel outflow = (WSET/1000*pondArea)+(MRF*60*60*24)+(PBEI/1000*pondArea); // objem vody odtelké nebo vypařené
     numberSel bill = inflow-outflow;
 
     if (bill>0){//když je pritok vyssi, tak se plni
       numberSel spaceToFill = pondMaxVolume-pondActualVolume; //obem ktery lze vyuzit
       if (bill>(spaceToFill)){
         pondActualVolume = pondMaxVolume;
-        set_varValue((((bill-spaceToFill)+(MZP*60*60*24))/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(PSEV*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::GROS)+PBEI), tstRM,ts_type::GROS);
+        set_varValue((((bill-spaceToFill)+(MRF*60*60*24))/Area*1000), tstRM,ts_type::TOTR);
+        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
+        set_varValue((get_dta(tstRM,ts_type::GROS)+(PBEI*pondArea/Area)), tstRM,ts_type::GROS);
       }else{
         pondActualVolume=pondActualVolume+bill;
-        set_varValue(((MZP*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(PSEV*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::GROS)+PBEI), tstRM,ts_type::GROS);
+        set_varValue(((MRF*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
+        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
+        set_varValue((get_dta(tstRM,ts_type::GROS)+(PBEI*pondArea/Area)), tstRM,ts_type::GROS);
       }
     }
 
     if (bill<0){//když je pritok menší, tak se prazdni
-      if (pondActualVolume>bill){
-        pondActualVolume = pondActualVolume-bill;
-        set_varValue(((MZP*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(PSEV*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::GROS)+PBEI), tstRM,ts_type::GROS);
+      if (pondActualVolume>abs(bill)){
+        pondActualVolume = pondActualVolume-abs(bill);
+        set_varValue(((MRF*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
+        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
+        set_varValue((get_dta(tstRM,ts_type::GROS)+(PBEI*pondArea/Area)), tstRM,ts_type::GROS);
       }else{
+        numberSel help_ratio = pondActualVolume/(MRF*60*60*24);
+        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*help_ratio*pondArea/Area)), tstRM,ts_type::AET);//nevypari se celkovy denni vypar ale jen cast, dokud odteka MRF
+        set_varValue((get_dta(tstRM,ts_type::GROS)+(PBEI*help_ratio*pondArea/Area)), tstRM,ts_type::GROS);//nezasakne se celkovy denni vsak ale jen cast, dokud odteka MRF
+        pondActualVolume=pondActualVolume-(WSET*help_ratio/1000*pondArea)-(PBEI*help_ratio/1000*pondArea); //odectu vypareny a zasakly objem od zasoby
+        set_varValue((pondActualVolume/Area*1000), tstRM,ts_type::TOTR); // co zbylo jde vse do TOTR
         pondActualVolume=0;
-        set_varValue((pondActualVolume/Area), tstRM,ts_type::TOTR); // nevim jak rozlisit, kolik se odpari a kolik odtece a kolik pujde do sois... nejak pres pomer??
-        set_varValue((get_dta(tstRM,ts_type::AET)+(PSEV*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::GROS)+PBEI), tstRM,ts_type::GROS);
       }
     }
     break;

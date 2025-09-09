@@ -51,8 +51,6 @@
        {"SurfaceAll", surface_STORtype::SurfaceAll},
        {"SurfacePRTL", surface_STORtype::SurfacePRTL},
        {"Wetland", surface_STORtype::Wetland},
-       {"Pond", surface_STORtype::Pond},
-       {"DryReservoir", surface_STORtype::DryReservoir},
      };
 
      std::vector<unsigned> indexHru;
@@ -78,12 +76,6 @@
          break;
        case surface_STORtype::Wetland:
          surfaceStorTypesToLoad.push_back(std::make_pair(indexHru[id], surface_STORtype::Wetland));
-         break;
-       case surface_STORtype::Pond:
-         surfaceStorTypesToLoad.push_back(std::make_pair(indexHru[id], surface_STORtype::Pond));
-         break;
-       case surface_STORtype::DryReservoir:
-         surfaceStorTypesToLoad.push_back(std::make_pair(indexHru[id], surface_STORtype::DryReservoir));
          break;
        }
      }
