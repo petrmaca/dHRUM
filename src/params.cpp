@@ -1244,7 +1244,7 @@ std::vector<std::string> params::par_HRUtype_to_string(std::list<par_HRUtype> pa
       par_vec.push_back("KF_NONLIN");
       break;
     case par_HRUtype::C:
-      par_vec.push_back("B_SOI");
+      par_vec.push_back("C");
       break;
     case par_HRUtype::INFR_MAX:
       par_vec.push_back("INFR_MAX");
