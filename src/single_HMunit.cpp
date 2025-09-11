@@ -356,10 +356,6 @@ void single_HMunit::surface_retention(surface_STORtype _surf_STORtype) {
 
     numberSel RetOut = 0.0, EvapSR = 0.0;
     //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
-    RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
-    // std::cout << RetOut << "  retout " << tstRM <<std::endl;
-    prev_SurS = prev_SurS - RetOut;
-
     // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
     EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
 
@@ -376,7 +372,6 @@ void single_HMunit::surface_retention(surface_STORtype _surf_STORtype) {
     EvapSR = help_EvapSR;
 
     prev_SurS = prev_SurS - EvapSR;
-    set_varValue(prev_SurS, tstRM, ts_type::SURS);
 
     if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
       prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
@@ -386,6 +381,11 @@ void single_HMunit::surface_retention(surface_STORtype _surf_STORtype) {
         (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT) + (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) *get_dta(tstRM, ts_type::PREC));
       }
 
+    RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
+      // std::cout << RetOut << "  retout " << tstRM <<std::endl;
+    prev_SurS = prev_SurS - RetOut;
+
+    set_varValue(prev_SurS, tstRM, ts_type::SURS);
     set_varValue(EvapSR, tstRM, ts_type::ETSW);
     set_varValue(RetOut,tstRM,ts_type::PREF);
 
