@@ -2374,6 +2374,122 @@ void single_HMunit::ponds(pond_type _pondtype) {
 
   case pond_type::pondBasic: {
 
+
+    // POND1
+    // Heaven pond
+    // PonS = PonS + PoiN;
+    //
+    // Etpond  = min(etpondzemepvztahu, PondS)
+    //
+    // PonS = PonS - Etpond0;
+    //
+    // if(POnS > PondMax) {
+    //   overlfow do totru
+    //   PonS = POnxMax
+    //   }
+
+
+    // POND2
+    // Pond with outlet
+    // PoutOverflow, PoutRegular, Etpond =0
+    // PonS = PonS + PoiN;
+    // if(POnS > PondMax) {
+    //   PoutOverflow = PonS -PondMax;
+    //   PonS = POnxMax;
+    // }
+    //
+    // Etpond  = min(etpondzemepvztahu, PondS)
+    // PonS = PonS - Etpond;
+    //
+    // PoutRegular = min ((neco + MRF), PonS);
+    // PonS = PonS - Pout;
+    //
+    // Pout =PoutOverflow + PoutRegular;
+    //
+    // setVarValue PonS,Etpond,Pout,//Pout jde Totru
+    //
+
+
+
+    // POND3
+    // Pond with outlet and gw out
+    // PoutOverflow, PoutRegular, Etpond =0
+    // PonS = PonS + PoiN;
+    // if(POnS > PondMax) {
+    //   PoutOverflow = PonS -PondMax;
+    //   PonS = POnxMax;
+    // }
+    //
+    // Etpond  = min(etpondzemepvztahu, PondS)
+    // PonS = PonS - Etpond;
+    //
+    // PoutRegular = min ((neco + MRF), PonS);
+    // PonS = PonS - Pout;
+    //
+    // Pout =PoutOverflow + PoutRegular;
+    //
+    // PoutToGW = min ((necoToGW), PonS);
+    // PonS = PonS - PoutToGW;
+    //
+    //
+    //     setVarValue PonS,Etpond,Pout,PoutToGW//Pout jde Totru
+
+    // POND4
+    // Pond with input form GW a output zpet do GW
+    //
+    // PoutOverflow, PoutRegular, Etpond =0
+    //
+    //
+    // PoinGW ={
+    //   jinak pro sigle GW reset_current_error()
+    //   jinak pro multiple GW res
+    //   pritok z GW mimo Basflow a nutne prepocitat rozumne]
+    //   dobre je to dat pres min(odhad toku z GW, GroS)
+    // };
+    // // update Gros
+    // if(1 nadrz){
+    //   GroS =GroS - PoinGW
+    // } else{
+    //   if(par Res2){
+    //     UPDATE Gros1 Gros2
+    //
+    //   }
+    //   if(2serial res){
+    //     updated gros2
+    //   }
+    // }
+    //
+    // PonS = PonS + PoiN + PoinGW;
+    //
+    // if(POnS > PondMax) {
+    //   PoutOverflow = PonS -PondMax;
+    //   PonS = POnxMax;
+    // }
+    //
+    // Etpond  = min(etpondzemepvztahu, PondS)
+    // PonS = PonS - Etpond;
+    //
+    // PoutRegular = min ((neco + MRF), PonS);
+    // PonS = PonS - Pout;
+    //
+    // Pout =PoutOverflow + PoutRegular;
+    //
+    // PoutToGW = min ((necoToGW), PonS);
+    // PonS = PonS - PoutToGW;
+    //
+    //
+    // setVarValue PonS,Etpond,Pout,PoutToGW,PoinGW a dalsi dat pozor na GroS//Pout jde Totru
+
+    // POND5 variance POND3 na pudu SOIL out
+
+    // POND6 variace pond 4 na pudu Sopil pout SOilin
+
+    // POND7  SoilIN pouz GW out
+    // POND8  GWin Soilin GWout
+    // POND9  Soilout GWout
+    // POND10 GWin Soilin Soilout
+    // pond11
+
     numberSel inflow = (get_dta(tstRM,ts_type::TOTR))/1000*Area; // objem vody [m3] pritekle za den
     numberSel outflow = (WSET/1000*pondArea)+(MRF*60*60*24); // objem vody odtelké nebo vypařené
     numberSel bill = inflow-outflow;
