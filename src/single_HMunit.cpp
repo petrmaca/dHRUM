@@ -2490,6 +2490,28 @@ void single_HMunit::ponds(pond_type _pondtype) {
     // POND10 GWin Soilin Soilout
     // pond11
 
+    super pond
+    PoiN = PoiS + PoiG + TOTR
+
+    PonS = PonS + PoiN
+
+    Overflow = max(PonS - PonsMax,0)
+
+    PonS = PonS - overflow
+
+    Etpond  = min(etpondzemepvztahu, PondS)
+    PonS = PonS - Etpond;
+
+    PoutRegular = min ((neco + MRF), PonS);
+    PonS = PonS - PoutRegular;
+
+    PoutToGW = min ((necoToGW), PonS);
+    PonS = PonS - PoutToGW;
+
+    PoutToSoil = min ((necoToSoil), PonS);
+    PonS = PonS - PoutToSoil;
+
+
     numberSel inflow = (get_dta(tstRM,ts_type::TOTR))/1000*Area; // objem vody [m3] pritekle za den
     numberSel outflow = (WSET/1000*pondArea)+(MRF*60*60*24); // objem vody odtelké nebo vypařené
     numberSel bill = inflow-outflow;
