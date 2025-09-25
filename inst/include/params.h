@@ -84,10 +84,10 @@ class params {
   std::list<par_HRUtype> L_PLATEAU = { par_HRUtype::C, par_HRUtype::INFR_MAX, par_HRUtype::RF, par_HRUtype::WP, par_HRUtype::SMAX};
   std::list<par_HRUtype> L_PDM2 = { par_HRUtype::B_SOIL, par_HRUtype::C_MAX };
   //fast_response
-  std::list<par_HRUtype> L_SerialCascadeLinRes = { par_HRUtype::KF, par_HRUtype::ADIV };
-  std::list<par_HRUtype> L_SerialLinResGWGros = { par_HRUtype::KF, par_HRUtype::ADIV,par_HRUtype::RBEI };
-  std::list<par_HRUtype> L_SerialLinResSoilSois = { par_HRUtype::KF, par_HRUtype::ADIV,par_HRUtype::RBAI };
-  std::list<par_HRUtype> L_SerialLinResGWGrosSoilSois = { par_HRUtype::KF, par_HRUtype::ADIV,par_HRUtype::RBEI, par_HRUtype::RBAI };
+  std::list<par_HRUtype> L_SerialCascadeLinRes = { par_HRUtype::KFR, par_HRUtype::ADIV };
+  std::list<par_HRUtype> L_SerialLinResGWGros = { par_HRUtype::KFR, par_HRUtype::ADIV,par_HRUtype::RBEI };
+  std::list<par_HRUtype> L_SerialLinResSoilSois = { par_HRUtype::KFR, par_HRUtype::ADIV,par_HRUtype::RBAI };
+  std::list<par_HRUtype> L_SerialLinResGWGrosSoilSois = { par_HRUtype::KFR, par_HRUtype::ADIV,par_HRUtype::RBEI, par_HRUtype::RBAI };
   //other
   std::list<par_HRUtype> L_interception_snow = { par_HRUtype::TETR };
   std::list<par_HRUtype> L_snow_melt = { par_HRUtype::DDFA, par_HRUtype::TMEL };

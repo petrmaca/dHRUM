@@ -1188,7 +1188,7 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
     // std::cout << " help_nmbr before" << help_nmbFR << std::endl;
     for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
       help_State = get_stateFastres(ifrb);
-      helpFastOut = get_par(par_HRUtype::KF) * help_State;
+      helpFastOut = get_par(par_HRUtype::KFR) * help_State;
     // help_State = help_State - helpFastOut;
       if(ifrb == 0) {
         help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC)- helpFastOut;
@@ -1209,7 +1209,7 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
     // std::cout << " help_nmbr before" << help_nmbFR << std::endl;
     for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
       help_State = get_stateFastres(ifrb);
-      helpFastOut = get_par(par_HRUtype::KF) * help_State;
+      helpFastOut = get_par(par_HRUtype::KFR) * help_State;
       // help_State = help_State - helpFastOut;
       if(ifrb == 0) {
         help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC)- helpFastOut;
@@ -1238,7 +1238,7 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
     // std::cout << " help_nmbr before" << help_nmbFR << std::endl;
     for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
       help_State = get_stateFastres(ifrb);
-      helpFastOut = get_par(par_HRUtype::KF) * help_State;
+      helpFastOut = get_par(par_HRUtype::KFR) * help_State;
       // help_State = help_State - helpFastOut;
       if(ifrb == 0) {
         help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC)- helpFastOut;
@@ -1265,7 +1265,7 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
     // std::cout << " help_nmbr before" << help_nmbFR << std::endl;
     for(ifrb=0; ifrb<help_nmbFR; ifrb++) {
       help_State = get_stateFastres(ifrb);
-      helpFastOut = get_par(par_HRUtype::KF) * help_State;
+      helpFastOut = get_par(par_HRUtype::KFR) * help_State;
       // help_State = help_State - helpFastOut;
       if(ifrb == 0) {
         help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC)- helpFastOut;
@@ -2578,18 +2578,17 @@ void single_HMunit::ponds(pond_type _pondtype) {
     // PoutToSoil = min ((necoToSoil), PonS);
     // PonS = PonS - PoutToSoil;
     //
-<<<<<<< HEAD
-=======
+
 
     // oveflow jde do totru a pout jde do totru
     //
     // save vars
 
 
-    numberSel inflow = (get_dta(tstRM,ts_type::TOTR))/1000*Area; // objem vody [m3] pritekle za den
-    numberSel outflow = (WSET/1000*pondArea)+(MRF*60*60*24); // objem vody odtelké nebo vypařené
-    numberSel bill = inflow-outflow;
->>>>>>> fa26aebb6295cae5ac828266905df89e63efed93
+    //numberSel inflow = (get_dta(tstRM,ts_type::TOTR))/1000*Area; // objem vody [m3] pritekle za den
+    //numberSel outflow = (WSET/1000*pondArea)+(MRF*60*60*24); // objem vody odtelké nebo vypařené
+    //numberSel bill = inflow-outflow;
+
 
     // oveflow jde do totru a pout jde do totru
     //
