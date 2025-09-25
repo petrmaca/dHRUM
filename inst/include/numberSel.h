@@ -15,11 +15,11 @@ using numberDta = unsigned;
 using hdata = std::valarray<numberSel>;
 using caldata = std::valarray<unsigned>;
 
-enum class ts_type {PREC,SNOW,AET,PET,TEMP,MELT,TROF,STEF,CANF,CANS,STES,EVAC,EVAS,EVBS,INTS,SOIS,GROS,SURS,TOTR,BASF,DIRR,PERC,PREF,ETSW};
+enum class ts_type {PREC,SNOW,AET,PET,TEMP,MELT,TROF,STEF,CANF,CANS,STES,EVAC,EVAS,EVBS,INTS,SOIS,GROS,SURS,TOTR,BASF,DIRR,PERC,PREF,ETSW,PONS};
 const ts_type all_ts[]{ts_type::PREC,ts_type::SNOW,ts_type::AET,ts_type::PET,ts_type::TEMP,ts_type::MELT,ts_type::TROF,ts_type::STEF,ts_type::CANF, \
                                    ts_type::CANS,ts_type::STES,ts_type::EVAC,ts_type::EVAS,ts_type::EVBS,ts_type::INTS,ts_type::SOIS,ts_type::GROS, \
-                                   ts_type::SURS,ts_type::TOTR,ts_type::BASF,ts_type::DIRR,ts_type::PERC,ts_type::PREF,ts_type::ETSW};
-const unsigned numTSvars = 24;
+                                   ts_type::SURS,ts_type::TOTR,ts_type::BASF,ts_type::DIRR,ts_type::PERC,ts_type::PREF,ts_type::ETSW,ts_type::PONS};
+const unsigned numTSvars = 25;
 enum class init_Stype {SOIL, GROUNDWAT, FASTRES, SURFRET, CANS, STES, SNOS,GROS1,GROS2};
 enum class pet_Type {OUDIN, HAMON, THORNTHWAITE, BLANEYCRIDDLE, JENSENHAISE, MCGUINNESSBORDNE};
 
@@ -74,9 +74,9 @@ enum class fast_Response {SerialCascadeLinRes, SerialLinResGWGros,SerialLinResSo
 const fast_Response all_FastResponses[] {fast_Response::SerialCascadeLinRes, fast_Response::SerialLinResGWGros, fast_Response::SerialLinResSoilSois, fast_Response::SerialLinResGWGrosSoilSois};
 const std::vector<std::string> all_FastResponsesNames {"SerialCascadeLinRes", "SerialLinResGWGros","SerialLinResSoilSois", "SerialLinResGWGrosSoilSois"};
 
-enum class pond_type {noPond,pondBasic, pondGWGros, pondSoilSois};
-const pond_type all_ponds[] {pond_type::noPond,pond_type::pondBasic, pond_type::pondGWGros,pond_type::pondSoilSois};
-const std::vector<std::string> all_pondNames {"noPond","pondBasic","pondGWGros", "pondSoilSois"};
+//enum class pond_type {noPond,Pond};
+//const pond_type all_ponds[] {pond_type::noPond,pond_type::Pond};
+//const std::vector<std::string> all_pondNames {"noPond","Pond"};
 
 
 

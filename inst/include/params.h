@@ -61,6 +61,7 @@ class params {
   //srfs_STORAGE
   std::list<par_HRUtype> L_SurfaceAll = { par_HRUtype::CDIV, par_HRUtype::SDIV, par_HRUtype::TETR, par_HRUtype::RETCAP };
   std::list<par_HRUtype> L_SurfacePRTL = {  };
+  std::list<par_HRUtype> L_Wetland = {  };
   //intrc_STORAGE
   std::list<par_HRUtype> L_Rutter_Gash = { par_HRUtype::CDIV, par_HRUtype::SDIV, par_HRUtype::CAN_ST, par_HRUtype::STEM_ST,par_HRUtype::CSDIV };
   //gs_STORAGE

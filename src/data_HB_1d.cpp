@@ -34,6 +34,7 @@ data_HB_1d::data_HB_1d(): numTS(0),
   Perc(1,1),
   Pref(1,1),
   Etsw(1,1),
+  PonS(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -160,6 +161,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Perc(1,1),
   Pref(1,1),
   Etsw(1,1),
+  PonS(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -205,6 +207,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Perc = other.Perc;//!< Percolation
   Pref = other.Pref;//!< Effective Precipitation
   Etsw = other.Etsw;//!< Evaporation from surface retention
+  PonS = other.PonS;//!< Pond storage
   init_SoiS = other.init_SoiS;//!< Initial value of soil storage
   init_GroS = other.init_GroS;//!< Initial value of groundwater storage
   init_CanS = other.init_SteS;//!< Initial value of Canopy Interception storage
@@ -256,6 +259,7 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     Perc = rhs.Perc;//!< Percolation
     Pref = rhs.Pref;//!< Effective Precipitation
     Etsw = rhs.Etsw;//!< Evaporation from surface retention
+    PonS = rhs.PonS;//!< Pond storage
     init_SoiS = rhs.init_SoiS;//!< Initial value of soil storage
     init_GroS = rhs.init_GroS;//!< Initial value of groundwater storage
     init_CanS = rhs.init_SteS;//!< Initial value of Canopy Interception storage
@@ -370,7 +374,11 @@ void data_HB_1d::s_data(const hdata& dta,const ts_type& _tsType, bool updateNumT
     break;
   case ts_type::ETSW:
     Etsw = dta;
-    //    std::cout << "New Peef --> loaded\n";
+    //    std::cout << "New ETSW --> loaded\n";
+    break;
+  case ts_type::PONS:
+    PonS = dta;
+    //    std::cout << "New PONS --> loaded\n";
     break;
   }
 //    //PRE.insert(PRE.begin(), data);
@@ -460,6 +468,9 @@ void data_HB_1d::s_varVal(const numberSel& dta, const unsigned& tst,const ts_typ
   case ts_type::ETSW:
     Etsw[tst] = dta;
     break;
+  case ts_type::PONS:
+    PonS[tst] = dta;
+    break;
 }
   return ;
 
@@ -518,6 +529,8 @@ numberSel data_HB_1d::g_dta(const unsigned& tst,const ts_type& _tsType) {
     return Pref[tst];
   case ts_type::ETSW:
     return Etsw[tst];
+  case ts_type::PONS:
+    return PonS[tst];
   }
 
   return 0;
@@ -1124,6 +1137,8 @@ hdata data_HB_1d::get_HbTsData(const ts_type& _tsType) {
     return Pref;
   case ts_type::ETSW:
     return Etsw;
+  case ts_type::PONS:
+    return PonS;
   }
 
   hdata helpV(-9999,1);
@@ -1226,6 +1241,9 @@ void data_HB_1d::setOneTstoZero(const ts_type& _tsType) {
     break;
   case ts_type::ETSW:
     Etsw = 0.0;
+    break;
+  case ts_type::PONS:
+    PonS = 0.0;
     break;
   }
 

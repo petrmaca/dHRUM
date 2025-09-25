@@ -1574,10 +1574,8 @@ void single_HMunit::run_HB() {
     fast_response(fast_RESPONSE);
     slow_response(gs_STORAGE);
     helprm = (get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR));
-
-
-
     set_varValue(helprm ,tstRM,ts_type::TOTR);
+    ponds(pond);
     upadate_actualET();
 
     //    std::cout <<(get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR)) << " "<< get_dta(tstRM,ts_type::BASF) << " "<< get_dta(tstRM,ts_type::DIRR)<< "\n";
@@ -1643,6 +1641,8 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   //!< Fast runoff response
   set_data(dta,ts_type::DIRR);
   set_data(dta,ts_type::TOTR);
+  //!< Pond storage
+  set_data(dta,ts_type::PONS);
   // std::cout << " tor ok\n";
 
   // get_numdta();
@@ -2280,6 +2280,10 @@ void single_HMunit::print_surface_STORtype() {
   case surface_STORtype::SurfacePRTL:
     std::cout << "The surface_STORtype is a SurfacePRTL." << std::endl;
     break;
+
+  case surface_STORtype::Wetland:
+    std::cout << "The surface_STORtype is a Wetland." << std::endl;
+    break;
   }
 }
 
@@ -2308,20 +2312,14 @@ void single_HMunit::print_fastresponseType() {
 
 void single_HMunit::print_pondType(){
   switch(pond) {
+    case pond_type::noPond:
+      std::cout << "You are not using the pond.." << std::endl;
+      break;
 
-  case pond_type::pondBasic:
-    std::cout << "The fast_Response is a pondBasic." << std::endl;
-    break;
-
-  case pond_type::pondGWGros:
-    std::cout << "The fast_Response is a pondGWGros." << std::endl;
-    break;
-
-  case pond_type::pondSoilSois:
-    std::cout << "The fast_Response is a pondSoilSois." << std::endl;
-    break;
-
-  }
+    case pond_type::Pond:
+      std::cout << "You apply a pond." << std::endl;
+      break;
+    }
 }
 
 
@@ -2355,24 +2353,92 @@ void single_HMunit::current_params() {
 
 void single_HMunit::ponds(pond_type _pondtype) {
 
-  numberSel WSET = 2; //Water surface evapotranspiration [mm/den] (ČSN 75241(str41) prumer je cca 750 mm/rok) ale meni se to hodně v zavislosti na rocnim obdobi v lete až 5 mm/den
-  numberSel PBEI = 0.1; //pond bed infiltration [mm/den] //for ponds ideally 0, but for wetlands?
-
-  numberSel pondMaxVolume = 50;//!< The maximum pond volume [m3]
-  numberSel MRF = 0.01;//!< Minimum residual flow (MZP) [m3/s]
-  numberSel pondArea = 100; //!< The area of the pond [m2]
-
-  numberSel pondActualVolume = 40;//!< The current pond volume [m3] list promennych
-
-
   switch(_pondtype) {
 
-  case pond_type::noPond: { //do nothing, noPond is also the initial/default condition
-    break;
-  }
+    case pond_type::noPond: { //do nothing, noPond is also the initial/default condition
+      //std::cout<<"noPond selected"<<std::endl;
+      break;
+    }
 
 
-  case pond_type::pondBasic: {
+    case pond_type::Pond: {
+
+      //must be implemented in data_HB_1d.cpp
+      numberSel EtpO=0.0; // water surface evaporation
+      numberSel PoiS=0.0; // soil percolation input pond
+      numberSel PoiG=0.0; // groundwater percolation input pond
+      numberSel RouT=0.0; // regular outflow without MRF
+
+      // needed from USER
+      numberSel pondArea = 40500; //!< The area of the pond [m2]
+      numberSel PonsMax = 45000;//!< The maximum pond volume [m3]
+      numberSel MRF = 0.039;//!< Minimum residual flow (MZP) [m3/s]
+      numberSel extraIN = 0; // [m3/day] - pokud budu chtit prevod od jinud
+      numberSel PoutExtra=0.0;// [m3/day] - pokud budu chtit odběr, ale kdy ho zapocitat?
+
+      // local variables
+      numberSel PoiN=0.0; // pond inputs
+      numberSel OflW=0.0; // overflow
+      numberSel Etpond=0.0; // overflow
+      numberSel PoutRegular=0.0;
+
+      numberSel PoutToGW=0.0;
+      numberSel PoutToSoil=0.0;
+      numberSel PonS=0.0; // local variable
+      std::cout<<"-----------------------------------------------------------------------"<<std::endl;
+      // choosing a method for defining a variable
+      EtpO = pond_ET(ETpond_type::ETpond1); //[mm/day]
+      PoiS = pond_SOISperc(PondSOISPerc_type::noPondSOISPerc); // [m/s]
+      PoiG = pond_GWperc(PondGWPerc_type::noPondGWPerc); // [m/s]
+      RouT = pond_regular_out(PondRouT_type::PondRouT3); // [m3/s]
+      PoiN = (PoiS*Area*60*60*24)+(PoiG*Area*60*60*24)+(get_dta(tstRM,ts_type::TOTR))/1000*Area+extraIN; //inputs converted to m3/day
+      std::cout<<"TOTR zacatek je teed:   "<< get_dta(tstRM,ts_type::TOTR)  << " TOTR m3 "<< (get_dta(tstRM,ts_type::TOTR))/1000*Area <<std::endl;
+      std::cout<<"PoiN  je teed:   "<<PoiN<<std::endl;
+      PonS = get_dta(tstRM,ts_type::PONS)+PoiN;
+      //std::cout<<"ten PonS + PoiN  je teed:   "<<PonS<<std::endl;
+      OflW = std::max((PonS - PonsMax),0.0);
+      //std::cout<<"ten PonS - PonsMax  je teed:   "<<PonS - PonsMax<<std::endl;
+      PonS = PonS - OflW;
+      //std::cout<<"OflW  je teed:   "<<OflW<<std::endl;
+      //std::cout<<"ten PonS - OflW  je teed:   "<<PonS<<std::endl;
+
+      Etpond  = std::min(EtpO/1000*pondArea, PonS);
+      PonS = PonS - Etpond;
+      std::cout<<"ten Etpond  je teed:   "<<Etpond<<std::endl;
+
+      //sem dat extra odber?
+
+      //PoutExtra = std::min (PoutExtra, PonS);
+      //PonS = PonS - PoutExtra;
+
+
+      PoutRegular = std::min ((RouT + MRF)*60*60*24, PonS);
+      std::cout<<"RouT  je teed:   "<<RouT*60*60*24<<std::endl;
+      std::cout<<"MRF je teed:   "<<MRF*60*60*24<<std::endl;
+      std::cout<<"PoutRegular:   "<<PoutRegular<<std::endl;
+      PonS = PonS - PoutRegular;
+      std::cout<<"PonS - PoutRegular  je teed:   "<<PonS<<std::endl;
+
+      //prusaky
+      PoutToGW = std::min ((PoiG*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, měla by se měnit plocha a mělo by to být závislé na hloubce
+      PonS = PonS - PoutToGW;
+
+      PoutToSoil = std::min ((PoiS*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, mělo by se vsakovat jen po obvodu? ale do jaké hloubky?
+      PonS = PonS - PoutToSoil;
+
+
+      std::cout<<"ten OflW na konci je teed:   "<<(OflW)/Area*1000<<std::endl;
+      std::cout<<"ten OflW m3:   "<<OflW<<std::endl;
+      std::cout<<"ten TOTR na konci je teed:   "<<(PoutRegular+OflW)/Area*1000<<std::endl;
+      std::cout<<"ten PonS na konci je teed:   "<<PonS<<std::endl;
+      std::cout<<"Area je teed:   "<<Area<<std::endl;
+
+
+      set_varValue(((PoutRegular+OflW)/Area*1000), tstRM,ts_type::TOTR);
+      set_varValue(PonS, tstRM,ts_type::PONS);
+      set_varValue((get_dta(tstRM,ts_type::AET)+(Etpond*pondArea/Area)), tstRM,ts_type::AET);
+
+
 
 
     // POND1
@@ -2434,6 +2500,7 @@ void single_HMunit::ponds(pond_type _pondtype) {
     //
     //     setVarValue PonS,Etpond,Pout,PoutToGW//Pout jde Totru
 
+
     // POND4
     // Pond with input form GW a output zpet do GW
     //
@@ -2490,119 +2557,157 @@ void single_HMunit::ponds(pond_type _pondtype) {
     // POND10 GWin Soilin Soilout
     // pond11
 
-    numberSel inflow = (get_dta(tstRM,ts_type::TOTR))/1000*Area; // objem vody [m3] pritekle za den
-    numberSel outflow = (WSET/1000*pondArea)+(MRF*60*60*24); // objem vody odtelké nebo vypařené
-    numberSel bill = inflow-outflow;
+    // super pond
+    // PoiN = PoiS + PoiG + TOTR
+    //
+    // PonS = PonS + PoiN
+    //
+    // Overflow = max(PonS - PonsMax,0)
+    //
+    // PonS = PonS - overflow
+    //
+    // Etpond  = min(etpondzemepvztahu, PondS)
+    // PonS = PonS - Etpond;
+    //
+    // PoutRegular = min ((neco + MRF), PonS);
+    // PonS = PonS - PoutRegular;
+    //
+    // PoutToGW = min ((necoToGW), PonS);
+    // PonS = PonS - PoutToGW;
+    //
+    // PoutToSoil = min ((necoToSoil), PonS);
+    // PonS = PonS - PoutToSoil;
+    //
 
-    if (bill>0){//když je pritok vyssi, tak se plni
-      numberSel spaceToFill = pondMaxVolume-pondActualVolume; //obem ktery lze vyuzit
-      if (bill>(spaceToFill)){
-        pondActualVolume = pondMaxVolume;
-        set_varValue((((bill-spaceToFill)+(MRF*60*60*24))/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
-      }else{
-        pondActualVolume=pondActualVolume+bill;
-        set_varValue(((MRF*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
-      }
-    }
+    // oveflow jde do totru a pout jde do totru
+    //
+    // save vars
 
-    if (bill<0){//když je pritok menší, tak se prazdni
-      if (pondActualVolume>abs(bill)){
-        pondActualVolume = pondActualVolume-abs(bill);
-        set_varValue(((MRF*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
-      }else{
-        numberSel help_ratio = pondActualVolume/(MRF*60*60*24);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*help_ratio*pondArea/Area)), tstRM,ts_type::AET);//nevypari se celkovy denni vypar ale jen cast, dokud odteka MRF
-        pondActualVolume=pondActualVolume-(WSET*help_ratio/1000*pondArea); //odectu vypareny objem od zasoby
-        set_varValue((pondActualVolume/Area*1000), tstRM,ts_type::TOTR); // nevim jak rozlisit, kolik se odpari a kolik odtece... nejak pres pomer??
-        pondActualVolume=0;
-      }
-    }
 
     break;
-  }
-
-  case pond_type::pondSoilSois: {
-    numberSel inflow = (get_dta(tstRM,ts_type::TOTR))/1000*Area; // objem vody [m3] pritekle za den
-    numberSel outflow = (WSET/1000*pondArea)+(MRF*60*60*24)+(PBEI/1000*pondArea); // objem vody odtelké nebo vypařené
-    numberSel bill = inflow-outflow;
-
-    if (bill>0){//když je pritok vyssi, tak se plni
-      numberSel spaceToFill = pondMaxVolume-pondActualVolume; //obem ktery lze vyuzit
-      if (bill>(spaceToFill)){
-        pondActualVolume = pondMaxVolume;
-        set_varValue((((bill-spaceToFill)+(MRF*60*60*24))/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::SOIS)+(PBEI*pondArea/Area)), tstRM,ts_type::SOIS);
-      }else{
-        pondActualVolume=pondActualVolume+bill;
-        set_varValue(((MRF*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::SOIS)+(PBEI*pondArea/Area)), tstRM,ts_type::SOIS);
-      }
     }
 
-    if (bill<0){//když je pritok menší, tak se prazdni
-      if (pondActualVolume>abs(bill)){
-        pondActualVolume = pondActualVolume-abs(bill);
-        set_varValue(((MRF*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::SOIS)+(PBEI*pondArea/Area)), tstRM,ts_type::SOIS);
-      }else{
-        numberSel help_ratio = pondActualVolume/(MRF*60*60*24);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*help_ratio*pondArea/Area)), tstRM,ts_type::AET);//nevypari se celkovy denni vypar ale jen cast, dokud odteka MRF
-        set_varValue((get_dta(tstRM,ts_type::SOIS)+(PBEI*help_ratio*pondArea/Area)), tstRM,ts_type::SOIS);//nezasakne se celkovy denni vsak ale jen cast, dokud odteka MRF
-        pondActualVolume=pondActualVolume-(WSET*help_ratio/1000*pondArea)-(PBEI*help_ratio/1000*pondArea); //odectu vypareny a zasakly objem od zasoby
-        set_varValue((pondActualVolume/Area*1000), tstRM,ts_type::TOTR); // co zbylo jde vse do TOTR
-        pondActualVolume=0;
-      }
-    }
-
-    break;
-  }
-
-  case pond_type::pondGWGros: {
-    numberSel inflow = (get_dta(tstRM,ts_type::TOTR))/1000*Area; // objem vody [m3] pritekle za den
-    numberSel outflow = (WSET/1000*pondArea)+(MRF*60*60*24)+(PBEI/1000*pondArea); // objem vody odtelké nebo vypařené
-    numberSel bill = inflow-outflow;
-
-    if (bill>0){//když je pritok vyssi, tak se plni
-      numberSel spaceToFill = pondMaxVolume-pondActualVolume; //obem ktery lze vyuzit
-      if (bill>(spaceToFill)){
-        pondActualVolume = pondMaxVolume;
-        set_varValue((((bill-spaceToFill)+(MRF*60*60*24))/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::GROS)+(PBEI*pondArea/Area)), tstRM,ts_type::GROS);
-      }else{
-        pondActualVolume=pondActualVolume+bill;
-        set_varValue(((MRF*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::GROS)+(PBEI*pondArea/Area)), tstRM,ts_type::GROS);
-      }
-    }
-
-    if (bill<0){//když je pritok menší, tak se prazdni
-      if (pondActualVolume>abs(bill)){
-        pondActualVolume = pondActualVolume-abs(bill);
-        set_varValue(((MRF*60*60*24)/Area*1000), tstRM,ts_type::TOTR);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*pondArea/Area)), tstRM,ts_type::AET);
-        set_varValue((get_dta(tstRM,ts_type::GROS)+(PBEI*pondArea/Area)), tstRM,ts_type::GROS);
-      }else{
-        numberSel help_ratio = pondActualVolume/(MRF*60*60*24);
-        set_varValue((get_dta(tstRM,ts_type::AET)+(WSET*help_ratio*pondArea/Area)), tstRM,ts_type::AET);//nevypari se celkovy denni vypar ale jen cast, dokud odteka MRF
-        set_varValue((get_dta(tstRM,ts_type::GROS)+(PBEI*help_ratio*pondArea/Area)), tstRM,ts_type::GROS);//nezasakne se celkovy denni vsak ale jen cast, dokud odteka MRF
-        pondActualVolume=pondActualVolume-(WSET*help_ratio/1000*pondArea)-(PBEI*help_ratio/1000*pondArea); //odectu vypareny a zasakly objem od zasoby
-        set_varValue((pondActualVolume/Area*1000), tstRM,ts_type::TOTR); // co zbylo jde vse do TOTR
-        pondActualVolume=0;
-      }
-    }
-    break;
-  }
 
   }
 
 
   return ;
+}
+
+numberSel single_HMunit::pond_ET(ETpond_type _etpond_type) {
+  numberSel Etpond = 0.0;
+
+  switch(_etpond_type) {
+    case ETpond_type::ETpond1: {
+      //BERAN, A., KAŠPÁREK, L., VIZINA, A. a ŠUHÁJKOVÁ, P. Ztráta vody výparem z volné vodní hladiny. Vodohospodářské technicko-ekonomické informace, 2019, roč. 61, č. 4, str. 12–18. ISSN 0322-8916.
+      Etpond = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+      //std::cout<<"ETpond1"<<std::endl;
+      break;
+    }
+
+    case ETpond_type::ETpond2: {
+      //Water surface evapotranspiration [mm/den] (ČSN 75241(str41) prumer je cca 750 mm/rok) ale meni se to hodně v zavislosti na rocnim obdobi v lete až 5 mm/den
+      Etpond = 2; //here is only a constant, need another equation
+      //std::cout<<"ETpond2"<<std::endl;
+      break;
+    }
+  }
+
+  return Etpond;
+}
+
+numberSel single_HMunit::pond_SOISperc(PondSOISPerc_type _soispond_type) {
+  numberSel PoiS = 0.0;
+
+  switch(_soispond_type) {
+    case PondSOISPerc_type::noPondSOISPerc: {
+      PoiS = 0.0;
+      //std::cout<<"noPondSOISPerc"<<std::endl;
+      break;
+    }
+    case PondSOISPerc_type::PondSOISPerc1: {
+      PoiS = 0.0001; // k [m/s] - coarse sand / gravel
+      //std::cout<<"SOISPerc - coarse sand / gravel"<<std::endl;
+      break;
+    }
+    case PondSOISPerc_type::PondSOISPerc2: {
+      PoiS = 0.000001; // k [m/s] - sandy loam
+      //std::cout<<"SOISPerc - sandy loam"<<std::endl;
+      break;
+    }
+   case PondSOISPerc_type::PondSOISPerc3: {
+      PoiS = 0.000000001; // k [m/s] - clay
+      //std::cout<<"SOISPerc - clay"<<std::endl;
+      break;
+    }
+  }
+
+  return PoiS;
+}
+
+numberSel single_HMunit::pond_GWperc(PondGWPerc_type _gwpond_type) {
+  numberSel PoiG = 0.0;
+
+  switch(_gwpond_type) {
+    case PondGWPerc_type::noPondGWPerc: {
+      PoiG =  0.0;
+      //std::cout<<"noGWPerc"<<std::endl;
+      break;
+    }
+    case PondGWPerc_type::PondGWPerc1: {
+      PoiG =  0.0001; // k [m/s] - coarse sand / gravel
+      //std::cout<<"GWPerc - coarse sand / gravel"<<std::endl;
+      break;
+    }
+    case PondGWPerc_type::PondGWPerc2: {
+      PoiG = 0.000001; // k [m/s] - sandy loam
+      //std::cout<<"GWPerc - sandy loam"<<std::endl;
+      break;
+    }
+    case PondGWPerc_type::PondGWPerc3: {
+      PoiG = 0.000000001; // k [m/s] - clay
+      //std::cout<<"GWPerc - clay"<<std::endl;
+      break;
+    }
+  }
+
+  return PoiG;
+}
+
+numberSel single_HMunit::pond_regular_out(PondRouT_type _RouT_type) {
+  numberSel RouT = 0.0; //pond regulat outflow
+
+  switch(_RouT_type) {
+    case PondRouT_type::noPondRouT: {
+      RouT = 0.0;
+      //std::cout<<"noPondRouT"<<std::endl;
+      break;
+    }
+    case PondRouT_type::PondRouT1: {
+      //monk with boards - Basin
+      numberSel h = 0.1; // [m]
+      numberSel b = 0.8; // [m]
+      numberSel m = 0.385; //
+      RouT= m*b*pow(2*9.81,0.5)*pow(h,3/2);
+      //std::cout<<"PondRouT1"<<std::endl;
+      break;
+    }
+    case PondRouT_type::PondRouT2: {
+      //pipe - Free outlet through a small hole in the wall
+      numberSel mi = 0.8; //hodnota soucinitele
+      numberSel d = 0.125; // [m] prumer trubky
+      numberSel h = 1; // [m] meni se
+      RouT = mi*(3.14*(d*d)/4)*pow((2*h),0.5);
+      //std::cout<<"PondRouT2"<<std::endl;
+      break;
+    }
+    case PondRouT_type::PondRouT3: {
+      //constant
+      RouT = 0.0005; //[m3/s]
+      //std::cout<<"PondRouT3"<<std::endl;
+      break;
+    }
+  }
+
+  return RouT;
 }

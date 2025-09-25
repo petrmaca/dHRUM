@@ -56,9 +56,7 @@
 
      std::map<std::string, pond_type> s_mapStringToPondtype_HRUtype = {
        {"noPond", pond_type::noPond},
-       {"pondBasic", pond_type::pondBasic},
-       {"pondSoilSois", pond_type::pondSoilSois},
-       {"pondGWGros", pond_type::pondGWGros}
+       {"Pond", pond_type::Pond}
 
      };
 
@@ -80,14 +78,8 @@
         case pond_type::noPond:
          PondTypesToLoad.push_back(std::make_pair(indexHru[id], pond_type::noPond));
          break;
-       case pond_type::pondBasic:
-         PondTypesToLoad.push_back(std::make_pair(indexHru[id], pond_type::pondBasic));
-         break;
-       case pond_type::pondSoilSois:
-         PondTypesToLoad.push_back(std::make_pair(indexHru[id], pond_type::pondSoilSois));
-         break;
-       case pond_type::pondGWGros:
-         PondTypesToLoad.push_back(std::make_pair(indexHru[id], pond_type::pondGWGros));
+       case pond_type::Pond:
+         PondTypesToLoad.push_back(std::make_pair(indexHru[id], pond_type::Pond));
          break;
        }
      }

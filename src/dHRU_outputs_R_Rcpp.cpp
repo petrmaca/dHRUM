@@ -54,7 +54,7 @@ Rcpp::List getOutput(Rcpp::XPtr<dHRUM> dHRUM_ptr){
                               "MELT","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \
                               "SOIS","GROS","SURS","TOTR","BASF",\
-                              "DIRR","PERC","PREF", "ETSW"});
+                              "DIRR","PERC","PREF", "ETSW","PONS"});
 
   return Rcpp::List::create(
     Rcpp::Named("outDta") = outDta,
@@ -170,7 +170,7 @@ Rcpp::List getOutputDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
                               "MELT","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \
                               "SOIS","GROS","SURS","TOTR","BASF",\
-                              "DIRR","PERC","PREF", "ETSW"});
+                              "DIRR","PERC","PREF", "ETSW","PONS"});
 
   return Rcpp::List::create(
     Rcpp::Named("outDta") = outDta,
@@ -234,7 +234,7 @@ Rcpp::List dHRUMrun(Rcpp::XPtr<dHRUM> dHRUM_ptr){
                               "MELT","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \
                               "SOIS","GROS","SURS","TOTR","BASF", \
-                              "DIRR","PERC","PREF", "ETWS"});
+                              "DIRR","PERC","PREF", "ETWS","PONS"});
   return Rcpp::List::create(
     Rcpp::Named("outDta") = outDta,
     Rcpp::Named("VarsNams") = VarsNams
@@ -316,7 +316,7 @@ Rcpp::List dHRUMrunDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
                               "MELT","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \
                               "SOIS","GROS","SURS","TOTR","BASF",\
-                              "DIRR","PERC","PREF", "ETWS","HruIds"});
+                              "DIRR","PERC","PREF", "ETWS","PONS","HruIds"});
 
   return Rcpp::List::create(
     Rcpp::Named("outDta") = outDta,

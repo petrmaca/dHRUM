@@ -943,6 +943,10 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     full_list.merge(L_SurfacePRTL);
     std::cout << "WARNING!! No parametr set for surface_STORtype::SurfacePRTL" << std::endl;
     break;
+  case surface_STORtype::Wetland:
+    full_list.merge(L_Wetland);
+    std::cout << "WARNING!! No parametr set for surface_STORtype::Wetland" << std::endl;
+    break;
   }
 
   switch(intrc_STORAGE) {

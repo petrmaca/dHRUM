@@ -126,6 +126,7 @@ class data_HB_1d {
   hdata Pref;//!< Effective Precipitation
 
   hdata Etsw;//!< Evaporation from surface water retention
+  hdata PonS;//!< Pond storage
 
   numberSel init_SoiS;//!< Initial value of soil storage
   numberSel init_GroS;//!< Initial value of groundwater storage
@@ -133,7 +134,6 @@ class data_HB_1d {
   numberSel init_SteS;//!< Initial value of Stem Interception storage
   numberSel init_SnoS;//!< Initial variable of Snow storage
   numberSel init_SurS;//!< Initial value of Surface retention storage
-
 
   numberSel init_GroS1;//!< Initial value of groundwater storage for LIN_2SE and LIN_2PA
   numberSel init_GroS2;//!< Initial value of groundwater storage for LIN_2SE and LIN_2PA

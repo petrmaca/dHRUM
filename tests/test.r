@@ -8,8 +8,10 @@ probwet =0.9
 meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 temp=rnorm(numdata,20,3)
-nHrus <- 15000
-Areas <- runif(nHrus,min = 1,max  = 10)
+#nHrus <- 15000
+nHrus <- 1
+#Areas <- runif(nHrus,min = 1,max  = 10) #[m2]
+Areas <- runif(nHrus,min = 38780000,max  = 38780050)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus,64)
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
@@ -18,7 +20,7 @@ setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",t
 setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfaceAll",times= length(Areas)),hruIds=IdsHrus)
 #setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
 
-#setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("noPond",times= length(Areas)),hruIds=IdsHrus)
+setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
 
 setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.2,
@@ -35,6 +37,8 @@ calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 # outDt <- getOutputDist(dHRUM_ptr = dhrus)
 # dd=as.data.table(outDt$outDta)
 outDta <- dHRUMrun(dHRUM_ptr = dhrus)
+
+
 outDF <- data.frame(outDta$outDta)
 names(outDF) <-c(outDta$VarsNams)
 outDF = as.data.table(outDF)
@@ -45,6 +49,7 @@ outDF$EVBS
 outDF$EVAS
 outDF$EVAC
 outDF$ETWS
+tail(outDF$TOTR)
 
 max(outDF$AET - outDF$PET)
 # )
@@ -53,3 +58,4 @@ plot(outDF$SOIS, type ="l")
 abline(h=smax,col="red")
 plot(outDF$SURS, type ="l")
 plot(outDF$DIRR, type ="l")
+plot(outDF$PONS, type ="l")

@@ -514,6 +514,17 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
         // pars[30] = par_dta;
         // std::cout << "New WP --> loaded\n";
         break;
+      case par_HRUtype::RBAI:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::RBAI));
+        // pars[31] = par_dta;
+        // std::cout << "New RBAI --> loaded\n";
+        break;
+      case par_HRUtype::RBEI:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::RBEI));
+        // pars[32] = par_dta;
+        // std::cout << "New RBEI --> loaded\n";
+        break;
+
       }
     }
 
