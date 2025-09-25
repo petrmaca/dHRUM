@@ -2578,6 +2578,18 @@ void single_HMunit::ponds(pond_type _pondtype) {
     // PoutToSoil = min ((necoToSoil), PonS);
     // PonS = PonS - PoutToSoil;
     //
+<<<<<<< HEAD
+=======
+
+    // oveflow jde do totru a pout jde do totru
+    //
+    // save vars
+
+
+    numberSel inflow = (get_dta(tstRM,ts_type::TOTR))/1000*Area; // objem vody [m3] pritekle za den
+    numberSel outflow = (WSET/1000*pondArea)+(MRF*60*60*24); // objem vody odtelké nebo vypařené
+    numberSel bill = inflow-outflow;
+>>>>>>> fa26aebb6295cae5ac828266905df89e63efed93
 
     // oveflow jde do totru a pout jde do totru
     //
