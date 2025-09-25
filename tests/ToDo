@@ -1,2 +1,16 @@
 11/9/2025
 Martin Hermanovsky --> ET demand nahradi PET pridat varinatu pro volbu reprezentace PET
+
+25/9/25
+VD - vlastní třída - reservoir
+Reservoir - vlastní objekt reprezentující časové řady stavů a toků (a odběrů),
+Toky reprezentují vstupy a výstupy a odběry
+Převody mezi nádržema jsou výstupy a vstupy mezi nádržema
+Rezervoát bude mít vlastní reservoirSel.h
+- dispečerský graf
+- batymetrie
+- měrné křivky na bezpečnostní přeliv
+- typy transformace povodňové vlny
+výstupy jsou: odtok z nádrže, výpar z nádrže, odběr, průsak (SOIS, GROS), průsaky hrází,
+- vodní elektrárna
+
