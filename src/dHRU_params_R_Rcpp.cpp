@@ -77,7 +77,8 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       {"RF", par_HRUtype::RF},
       {"WP", par_HRUtype::WP},
       {"RBAI", par_HRUtype::RBAI},
-      {"RBEI", par_HRUtype::RBEI}
+      {"RBEI", par_HRUtype::RBEI},
+      {"KFR", par_HRUtype::KFR}
 
     };
 

@@ -1053,19 +1053,22 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
   full_list.merge(L_interception_snow);
   full_list.merge(L_snow_melt);
 
-  //full_list.sort();
+  full_list.sort();
   full_list.unique();
 
+
   std::list<par_HRUtype>Current_parameter_list(full_list);
+
  Current_parameter_string=par_HRUtype_to_string(Current_parameter_list);
+
 
   for (auto itr : Current_parameter_list) {
     Current_parameter_val.push_back(g_par(itr));
     Current_upparameter_val.push_back(g_par_up(itr));
     Current_lowparameter_val.push_back(g_par_low(itr));
   }
-  //print_par_list(Current_parameter_list);
-  //std::cout<<"velikost v params: "<<Current_parameter_string.size()<<std::endl;
+ // print_par_list(Current_parameter_list);
+ // std::cout<<"velikost v params: "<<Current_parameter_string.size()<<std::endl;
 }
 
 void params::print_par_list(std::list<par_HRUtype> par_list){
@@ -1108,7 +1111,7 @@ void params::print_par_list(std::list<par_HRUtype> par_list){
       std::cout <<std::left << std::setw(spacer)<< "CSDIV:"<< "\t\t";
       break;
     case par_HRUtype::TETR:
-      std::cout <<std::left << std::setw(spacer)<< "TATR:"<< "\t\t";
+      std::cout <<std::left << std::setw(spacer)<< "TETR:"<< "\t\t";
       break;
     case par_HRUtype::DDFA:
       std::cout <<std::left << std::setw(spacer)<< "DDFA:"<< "\t\t";
