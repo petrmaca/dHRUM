@@ -19,12 +19,12 @@ const std::vector<std::string> allETpondTypeNames {"ETpond1, ETpond2"};
 //soil percolation variants
 enum class PondSOISPerc_type {noPondSOISPerc, PondSOISPerc1, PondSOISPerc2, PondSOISPerc3};
 const PondSOISPerc_type all_PondSOISPerc[]{ PondSOISPerc_type::noPondSOISPerc,PondSOISPerc_type::PondSOISPerc1,PondSOISPerc_type::PondSOISPerc2,PondSOISPerc_type::PondSOISPerc3};
-const std::vector<std::string> allSOISPercPondTypeNames {"noPondSOISPerc","PondSOISPerc1", "PondSOISPerc2", "PondSOISPerc3"};
+const std::vector<std::string> allPondSOISPondTypeNames {"noPondSOISPerc","PondSOISPerc1", "PondSOISPerc2", "PondSOISPerc3"};
 
 //groundwater percolation variants
 enum class PondGWPerc_type {noPondGWPerc,PondGWPerc1, PondGWPerc2,PondGWPerc3};
-const PondGWPerc_type all_GWPercPond[]{ PondGWPerc_type::noPondGWPerc,PondGWPerc_type::PondGWPerc1,PondGWPerc_type::PondGWPerc2,PondGWPerc_type::PondGWPerc3};
-const std::vector<std::string> allGWPercPondTypeNames {"noPondGWPerc","PondGWPerc1", "PondGWPerc2","PondGWPerc3"};
+const PondGWPerc_type all_PondGWPerc[]{ PondGWPerc_type::noPondGWPerc,PondGWPerc_type::PondGWPerc1,PondGWPerc_type::PondGWPerc2,PondGWPerc_type::PondGWPerc3};
+const std::vector<std::string> allPondGWPercTypeNames {"noPondGWPerc","PondGWPerc1", "PondGWPerc2","PondGWPerc3"};
 
 //regular out variants
 enum class PondRouT_type {noPondRouT,PondRouT1, PondRouT2,PondRouT3};
