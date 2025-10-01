@@ -9,7 +9,7 @@ meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 temp=rnorm(numdata,20,3)
 #nHrus <- 15000
-nHrus <- 1
+nHrus <- 10
 #Areas <- runif(nHrus,min = 1,max  = 10) #[m2]
 Areas <- runif(nHrus,min = 38780000,max  = 38780050)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
@@ -36,8 +36,9 @@ calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 # gatherHBdata(dHRUM_ptr = dhrus)
 # outDt <- getOutputDist(dHRUM_ptr = dhrus)
 # dd=as.data.table(outDt$outDta)
+#for(i in 1:100){
 outDta <- dHRUMrun(dHRUM_ptr = dhrus)
-
+#}
 
 outDF <- data.frame(outDta$outDta)
 names(outDF) <-c(outDta$VarsNams)

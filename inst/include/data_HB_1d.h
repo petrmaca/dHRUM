@@ -125,8 +125,12 @@ class data_HB_1d {
   hdata Perc;//!< Percolation
   hdata Pref;//!< Effective Precipitation
 
-  hdata Etsw;//!< Evaporation from surface water retention
-  hdata PonS;//!< Pond storage
+  hdata Etsw;//!< Evaporation from surface retention
+  hdata PonS;//!< Pond storage [m3]
+
+  hdata EtpO;//!< Evaporation from pond surface [mm/day]
+  hdata PoiS; //!<  soil percolation input pond
+  hdata PoiG; //!<  groundwater percolation input pond
 
   numberSel init_SoiS;//!< Initial value of soil storage
   numberSel init_GroS;//!< Initial value of groundwater storage

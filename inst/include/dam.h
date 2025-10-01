@@ -30,7 +30,7 @@ public:
 protected:
 
 private:
-  data_dam_1d hyd_dta;//!< The data of all time series of hydrological variables
+  dta_dam_1d hyd_dta;//!< The data of all time series of hydrological variables
 
   numberSel prev_damStor;//!< The helper variable for updating reservoir storage
   numberSel damArea;//!< The area of reservoir unit in m2

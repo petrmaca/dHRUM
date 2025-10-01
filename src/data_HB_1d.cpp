@@ -35,6 +35,9 @@ data_HB_1d::data_HB_1d(): numTS(0),
   Pref(1,1),
   Etsw(1,1),
   PonS(1,1),
+  EtpO(1,1),
+  PoiS(1,1),
+  PoiG(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -162,6 +165,9 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Pref(1,1),
   Etsw(1,1),
   PonS(1,1),
+  EtpO(1,1),
+  PoiS(1,1),
+  PoiG(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -207,7 +213,10 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Perc = other.Perc;//!< Percolation
   Pref = other.Pref;//!< Effective Precipitation
   Etsw = other.Etsw;//!< Evaporation from surface retention
+  EtpO = other.EtpO;//!< Evaporation from pond surface [mm/day]
   PonS = other.PonS;//!< Pond storage
+  PoiS = other.PoiS;//!< Percolation between the pond and the soil
+  PoiG = other.PoiG;//!< Percolation between the pond and the groundwater
   init_SoiS = other.init_SoiS;//!< Initial value of soil storage
   init_GroS = other.init_GroS;//!< Initial value of groundwater storage
   init_CanS = other.init_SteS;//!< Initial value of Canopy Interception storage
@@ -259,7 +268,10 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     Perc = rhs.Perc;//!< Percolation
     Pref = rhs.Pref;//!< Effective Precipitation
     Etsw = rhs.Etsw;//!< Evaporation from surface retention
+    EtpO = rhs.EtpO;//!< Evaporation from pond surface [mm/day]
     PonS = rhs.PonS;//!< Pond storage
+    PoiS = rhs.PoiS;//!< Percolation between the pond and the soil
+    PoiG = rhs.PoiG;//!< Percolation between the pond and the groundwater
     init_SoiS = rhs.init_SoiS;//!< Initial value of soil storage
     init_GroS = rhs.init_GroS;//!< Initial value of groundwater storage
     init_CanS = rhs.init_SteS;//!< Initial value of Canopy Interception storage
@@ -380,6 +392,18 @@ void data_HB_1d::s_data(const hdata& dta,const ts_type& _tsType, bool updateNumT
     PonS = dta;
     //    std::cout << "New PONS --> loaded\n";
     break;
+  case ts_type::ETPO:
+    EtpO = dta;
+    //    std::cout << "New ETPO --> loaded\n";
+    break;
+  case ts_type::POIS:
+    PoiS = dta;
+    //    std::cout << "New POIS--> loaded\n";
+    break;
+  case ts_type::POIG:
+    PoiG = dta;
+    //    std::cout << "New POIG --> loaded\n";
+    break;
   }
 //    //PRE.insert(PRE.begin(), data);
 //    if(!Erase) {
@@ -471,6 +495,16 @@ void data_HB_1d::s_varVal(const numberSel& dta, const unsigned& tst,const ts_typ
   case ts_type::PONS:
     PonS[tst] = dta;
     break;
+  case ts_type::ETPO:
+    EtpO[tst] = dta;
+    break;
+  case ts_type::POIS:
+    PoiS[tst] = dta;
+    break;
+  case ts_type::POIG:
+    PoiG[tst] = dta;
+    break;
+
 }
   return ;
 
@@ -531,6 +565,12 @@ numberSel data_HB_1d::g_dta(const unsigned& tst,const ts_type& _tsType) {
     return Etsw[tst];
   case ts_type::PONS:
     return PonS[tst];
+   case ts_type::ETPO:
+    return EtpO[tst];
+  case ts_type::POIS:
+    return PoiS[tst];
+  case ts_type::POIG:
+    return PoiG[tst];
   }
 
   return 0;
@@ -1139,6 +1179,12 @@ hdata data_HB_1d::get_HbTsData(const ts_type& _tsType) {
     return Etsw;
   case ts_type::PONS:
     return PonS;
+  case ts_type::ETPO:
+    return EtpO;
+  case ts_type::POIS:
+    return PoiS;
+  case ts_type::POIG:
+    return PoiG;
   }
 
   hdata helpV(-9999,1);
@@ -1244,6 +1290,15 @@ void data_HB_1d::setOneTstoZero(const ts_type& _tsType) {
     break;
   case ts_type::PONS:
     PonS = 0.0;
+    break;
+  case ts_type::ETPO:
+    EtpO = 0.0;
+    break;
+  case ts_type::POIS:
+    PoiS = 0.0;
+    break;
+  case ts_type::POIG:
+    PoiG = 0.0;
     break;
   }
 

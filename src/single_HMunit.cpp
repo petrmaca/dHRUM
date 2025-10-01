@@ -1643,6 +1643,9 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   set_data(dta,ts_type::TOTR);
   //!< Pond storage
   set_data(dta,ts_type::PONS);
+  set_data(dta,ts_type::ETPO);
+  set_data(dta,ts_type::POIS);
+  set_data(dta,ts_type::POIG);
   // std::cout << " tor ok\n";
 
   // get_numdta();
@@ -2362,7 +2365,7 @@ void single_HMunit::ponds(pond_type _pondtype) {
 
 
     case pond_type::Pond: {
-
+      //std::cout<<"jsem v pondu"<<std::endl;
       //must be implemented in data_HB_1d.cpp
       numberSel EtpO=0.0; // water surface evaporation
       numberSel PoiS=0.0; // soil percolation input pond
@@ -2373,8 +2376,9 @@ void single_HMunit::ponds(pond_type _pondtype) {
       numberSel pondArea = 40500; //!< The area of the pond [m2]
       numberSel PonsMax = 45000;//!< The maximum pond volume [m3]
       numberSel MRF = 0.039;//!< Minimum residual flow (MZP) [m3/s]
+
       numberSel extraIN = 0; // [m3/day] - pokud budu chtit prevod od jinud
-      numberSel PoutExtra=0.0;// [m3/day] - pokud budu chtit odběr, ale kdy ho zapocitat?
+      //numberSel PoutExtra=0.0;// [m3/day] - pokud budu chtit odběr, ale kdy ho zapocitat?
 
       // local variables
       numberSel PoiN=0.0; // pond inputs
@@ -2385,15 +2389,16 @@ void single_HMunit::ponds(pond_type _pondtype) {
       numberSel PoutToGW=0.0;
       numberSel PoutToSoil=0.0;
       numberSel PonS=0.0; // local variable
-      std::cout<<"-----------------------------------------------------------------------"<<std::endl;
+      //std::cout<<"-----------------------------------------------------------------------"<<std::endl;
+      //std::cout<<"casovy krok   "<<tstRM<<std::endl;
       // choosing a method for defining a variable
       EtpO = pond_ET(ETpond_type::ETpond1); //[mm/day]
       PoiS = pond_SOISperc(PondSOISPerc_type::noPondSOISPerc); // [m/s]
       PoiG = pond_GWperc(PondGWPerc_type::noPondGWPerc); // [m/s]
       RouT = pond_regular_out(PondRouT_type::PondRouT3); // [m3/s]
       PoiN = (PoiS*Area*60*60*24)+(PoiG*Area*60*60*24)+(get_dta(tstRM,ts_type::TOTR))/1000*Area+extraIN; //inputs converted to m3/day
-      std::cout<<"TOTR zacatek je teed:   "<< get_dta(tstRM,ts_type::TOTR)  << " TOTR m3 "<< (get_dta(tstRM,ts_type::TOTR))/1000*Area <<std::endl;
-      std::cout<<"PoiN  je teed:   "<<PoiN<<std::endl;
+      //std::cout<<"TOTR zacatek je teed:   "<< get_dta(tstRM,ts_type::TOTR)  << " TOTR m3 "<< (get_dta(tstRM,ts_type::TOTR))/1000*Area <<std::endl;
+      //std::cout<<"PoiN  je teed:   "<<PoiN<<std::endl;
       PonS = get_dta(tstRM,ts_type::PONS)+PoiN;
       //std::cout<<"ten PonS + PoiN  je teed:   "<<PonS<<std::endl;
       OflW = std::max((PonS - PonsMax),0.0);
@@ -2402,9 +2407,10 @@ void single_HMunit::ponds(pond_type _pondtype) {
       //std::cout<<"OflW  je teed:   "<<OflW<<std::endl;
       //std::cout<<"ten PonS - OflW  je teed:   "<<PonS<<std::endl;
 
+
       Etpond  = std::min(EtpO/1000*pondArea, PonS);
       PonS = PonS - Etpond;
-      std::cout<<"ten Etpond  je teed:   "<<Etpond<<std::endl;
+      //std::cout<<"ten Etpond  je teed:   "<<Etpond<<std::endl;
 
       //sem dat extra odber?
 
@@ -2413,27 +2419,28 @@ void single_HMunit::ponds(pond_type _pondtype) {
 
 
       PoutRegular = std::min ((RouT + MRF)*60*60*24, PonS);
-      std::cout<<"RouT  je teed:   "<<RouT*60*60*24<<std::endl;
-      std::cout<<"MRF je teed:   "<<MRF*60*60*24<<std::endl;
-      std::cout<<"PoutRegular:   "<<PoutRegular<<std::endl;
+      //std::cout<<"RouT  je teed:   "<<RouT*60*60*24<<std::endl;
+      //std::cout<<"MRF je teed:   "<<MRF*60*60*24<<std::endl;
+      //std::cout<<"PoutRegular:   "<<PoutRegular<<std::endl;
       PonS = PonS - PoutRegular;
-      std::cout<<"PonS - PoutRegular  je teed:   "<<PonS<<std::endl;
+      //std::cout<<"PonS - PoutRegular  je teed:   "<<PonS<<std::endl;
 
       //prusaky
-      PoutToGW = std::min ((PoiG*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, měla by se měnit plocha a mělo by to být závislé na hloubce
-      PonS = PonS - PoutToGW;
+      //PoutToGW = std::min ((PoiG*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, měla by se měnit plocha a mělo by to být závislé na hloubce
+      //PonS = PonS - PoutToGW;
 
-      PoutToSoil = std::min ((PoiS*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, mělo by se vsakovat jen po obvodu? ale do jaké hloubky?
-      PonS = PonS - PoutToSoil;
-
-
-      std::cout<<"ten OflW na konci je teed:   "<<(OflW)/Area*1000<<std::endl;
-      std::cout<<"ten OflW m3:   "<<OflW<<std::endl;
-      std::cout<<"ten TOTR na konci je teed:   "<<(PoutRegular+OflW)/Area*1000<<std::endl;
-      std::cout<<"ten PonS na konci je teed:   "<<PonS<<std::endl;
-      std::cout<<"Area je teed:   "<<Area<<std::endl;
+      //PoutToSoil = std::min ((PoiS*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, mělo by se vsakovat jen po obvodu? ale do jaké hloubky?
+      //PonS = PonS - PoutToSoil;
 
 
+      //std::cout<<"ten OflW na konci je teed:   "<<(OflW)/Area*1000<<std::endl;
+      //std::cout<<"ten OflW m3:   "<<OflW<<std::endl;
+      //std::cout<<"ten TOTR na konci je teed:   "<<(PoutRegular+OflW)/Area*1000<<std::endl;
+      //std::cout<<"ten PonS na konci je teed:   "<<PonS<<std::endl;
+      //std::cout<<"Area je teed:   "<<Area<<std::endl;
+
+      //std::cout<<"vypisuju:   "<<std::endl;
+      //set_varValue(EtpO, tstRM,ts_type::ETPO);
       set_varValue(((PoutRegular+OflW)/Area*1000), tstRM,ts_type::TOTR);
       set_varValue(PonS, tstRM,ts_type::PONS);
       set_varValue((get_dta(tstRM,ts_type::AET)+(Etpond*pondArea/Area)), tstRM,ts_type::AET);

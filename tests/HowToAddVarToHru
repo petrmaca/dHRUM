@@ -1,0 +1,13 @@
+1)NumberSel - ts_type - lines 18, 19, 25 NEW_TS_TYPE
+2)data_HB_1d - add variable as new hdata to private
+3)constructor data_HB_1d adding variables list initialize, copy constuctor , assignment operator
+4)data_HB_1d::s_data modify switch
+5)data_HB_1d::s_varVal modify switch
+6)data_HB_1d::g_dta modify switch
+7)data_HB_1d::get_HbTsData modify switch
+8)data_HB_1d::setOneTstoZero modify switch
+9)single_HMunit::init_inputs add set_data(dta,ts_type::NEW_TS_TYPE);
+10)Rcpp::List getOutput(Rcpp::XPtr<dHRUM> dHRUM_ptr) return object dHRU_outputs_R_Rcpp.cpp
+11)Rcpp::List getOutputDist(Rcpp::XPtr<dHRUM> dHRUM_ptr) return object dHRU_outputs_R_Rcpp.cpp
+12)Rcpp::List dHRUMrun(Rcpp::XPtr<dHRUM> dHRUM_ptr) return object dHRU_outputs_R_Rcpp.cpp
+13)Rcpp::List dHRUMrunDist(Rcpp::XPtr<dHRUM> dHRUM_ptr) return object dHRU_outputs_R_Rcpp.cpp
