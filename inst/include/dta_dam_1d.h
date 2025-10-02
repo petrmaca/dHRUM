@@ -1,5 +1,5 @@
-#ifndef DATA_DAM_1D_H
-#define DATA_DAM_1D_H
+#ifndef DTA_DAM_1D_H
+#define DTA_DAM_1D_H
 
 #include <fstream>
 #include <iostream>
@@ -15,15 +15,16 @@
 #include <vector>
 #include <utility>
 
+#include "damSel.h"
 #include "numberSel.h"
 
-class data_dam_1d {
+class dta_dam_1d {
 public:
-  data_dam_1d();
-  data_dam_1d(unsigned _ndata);
-  virtual ~data_dam_1d();
-  data_dam_1d(const data_dam_1d& other);
-  data_dam_1d& operator=(const data_dam_1d& rhs);
+  dta_dam_1d();
+  dta_dam_1d(unsigned _ndata);
+  virtual ~dta_dam_1d();
+  dta_dam_1d(const dta_dam_1d& other);
+  dta_dam_1d& operator=(const dta_dam_1d& rhs);
 
 
   numberSel get_daysInMonth(const unsigned& tstMonth, const unsigned& year);
@@ -33,6 +34,14 @@ public:
   // void p_calender();
   void s_initDate(const unsigned& Year, const unsigned& Month,const unsigned& Day,const unsigned& initNumTS);
 
+  void s_initStates(const hdata& initfastRes, const numberSel& init_State,const init_dStype& _Stype);
+  numberSel g_initState(const init_dStype& _Stype);
+
+  void s_varVal(const numberSel& dta, const unsigned& tst,const dam_ts& _tsType);
+  void s_data(const hdata& dta,const dam_ts& _tsType, bool updateNumTS);
+  numberSel g_dta(const unsigned& tst,const dam_ts& _tsType);
+  hdata get_HbTsData(const dam_ts& _tsType);
+  void setOneTstoZero(const dam_ts& _tsType);
 
 protected:
 
@@ -47,30 +56,25 @@ private:
   caldata init_month;
   caldata init_day;
 
-  //flows
-  hdata InfL;//!< Inflow from water channels
+  //inflows
   hdata Prec;//!< Precipitation on water surface
-  hdata Sois;//!< Soil percolation [m/s]
-  hdata Gros;//!< Groundwater percolation [m/s]
-  hdata OufL;//!< Total outflow
-  hdata EtdM;//!< Evaporation from water surface [mm/day]
-  hdata OflW;//!< overflow [m3/day]
-
-  //extra flows
-  hdata OulT;//!< Water outlet (transfer between dam and other dam or industry) [m3/day]
+  hdata InfL;//!< Inflow from water channels
   hdata InlT;//!< Water inlet (transfer between two dams)[m3/day]
+
+  //outflows
+  hdata EtdM;//!< Evaporation from water surface [mm/day]
+  hdata OufL;//!< Total outflow
+  hdata OflW;//!< overflow [m3/day]
+  hdata OulT;//!< Water outlet (transfer between dam and other dam or industry) [m3/day]
+
+  //reversible flows
+  hdata DaiS;//!< Soil percolation [m/s]
+  hdata DaiG;//!< Groundwater percolation [m/s]
 
   //Storage
   hdata DamS;//!< Dam storage[m3]
-
-  //constants
-  numberSel damMax;//!< Minimum volume of the dam [m3]
-  numberSel MRF; //!< Minimum Residual Flow [m3/s]
-  numberSel damArea; //!< Area of the dam in [m2]
-  numberSel damLeak; //!< Area of the dam in [m3/s  per 1 m of dam length]
-
   numberSel init_DamS;//!< Initial value of dam storage
 
 };
 
-#endif // DATA_DAM_1D_H
+#endif // DTA_DAM_1D_H

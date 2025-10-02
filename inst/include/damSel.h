@@ -6,6 +6,16 @@
 #include <string>
 #include <map>
 
+
+const unsigned damTSvars = 10;
+enum class dam_ts {PREC,DAMS,INFL,DAIS,DAIG,OUFL,ETDM,OFLW,OULT,INLT};
+const dam_ts all_dts[]{dam_ts::PREC,dam_ts::DAMS,dam_ts::INFL,dam_ts::DAIS,dam_ts::DAIG,\
+                       dam_ts::OUFL,dam_ts::ETDM,dam_ts::OFLW,dam_ts::OULT,dam_ts::INLT};
+
+enum class init_dStype {DAMS};
+
+
+
 //water surface evaporation variants
 enum class ETdam_type {ETdam1, ETdam2};
 const ETdam_type all_ETdam[]{ ETdam_type::ETdam1,ETdam_type::ETdam2};
