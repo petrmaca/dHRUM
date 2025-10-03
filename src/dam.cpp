@@ -10,6 +10,7 @@ hyd_dta(),
 prev_DamS(0.0),
 damMax(0.0),
 MRF(0.0),
+ConstRouT(0.0),
 damArea(0.0),
 damLeng(0.0),
 damBank(0.0),
@@ -44,6 +45,7 @@ hyd_dta(),
 prev_DamS(0.0),
 damMax(0.0),
 MRF(0.0),
+ConstRouT(0.0),
 damArea(0.0),
 damLeng(0.0),
 damBank(0.0),
@@ -57,6 +59,7 @@ damRout_TYPE{}
   prev_DamS= other.prev_DamS;
   damMax= other.damMax;
   MRF= other.MRF;
+  ConstRouT= other.ConstRouT;
   damArea= other.damArea;
   damLeng= other.damLeng;
   damBank= other.damBank;
@@ -84,6 +87,7 @@ dam& dam::operator=(const dam& rhs) {
     prev_DamS= rhs.prev_DamS;
     damMax= rhs.damMax;
     MRF= rhs.MRF;
+    ConstRouT= rhs.ConstRouT;
     damArea= rhs.damArea;
     damLeng= rhs.damLeng;
     damBank= rhs.damBank;
@@ -182,7 +186,7 @@ numberSel dam::dam_ET(ETdam_type _etdam_type) {
   return Etdam;
 }
 
-numberSel dam::Dam_SOISperc(DamSOISPerc_type _soisDam_type) {
+numberSel dam::dam_SOISperc(DamSOISPerc_type _soisDam_type) {
   numberSel PoiS = 0.0;
 
   switch(_soisDam_type) {
@@ -211,7 +215,7 @@ numberSel dam::Dam_SOISperc(DamSOISPerc_type _soisDam_type) {
   return PoiS;
 }
 
-numberSel dam::Dam_GWperc(DamGWPerc_type _gwDam_type) {
+numberSel dam::dam_GWperc(DamGWPerc_type _gwDam_type) {
   numberSel PoiG = 0.0;
 
   switch(_gwDam_type) {
@@ -240,7 +244,7 @@ numberSel dam::Dam_GWperc(DamGWPerc_type _gwDam_type) {
   return PoiG;
 }
 
-numberSel dam::pond_regular_out(DamRouT_type _RouT_type) {
+numberSel dam::dam_regular_out(DamRouT_type _RouT_type) {
   numberSel RouT = 0.0; //pond regulat outflow
 
   switch(_RouT_type) {
@@ -269,7 +273,7 @@ numberSel dam::pond_regular_out(DamRouT_type _RouT_type) {
   }
   case DamRouT_type::DamRouT3: {
     //constant
-    RouT = 0.0005; //[m3/s]
+    RouT = ConstRouT; //[m3/s]
     //std::cout<<"PondRouT3"<<std::endl;
     break;
   }
@@ -288,3 +292,71 @@ numberSel dam::pond_regular_out(DamRouT_type _RouT_type) {
 numberSel dam::get_dta(const unsigned& tst, const dam_ts& _tsType) {
   return hyd_dta.g_dta(tst, _tsType);
 }
+void dam::set_varValue(const numberSel& dta,const unsigned& tst,const dam_ts& _tsType) {
+  hyd_dta.s_varVal(dta, tst, _tsType);
+  return ;
+}
+
+void dam::runDam(numberSel damArea,numberSel damMax,numberSel damBank,numberSel MRF,\
+                 DamRouT_type _RouT_type,DamGWPerc_type _gwDam_type,DamSOISPerc_type _soisDam_type,ETdam_type _etdam_type) {
+
+    //std::cout<<"jsem v pondu"<<std::endl;
+
+        // needed from USER
+    //numberSel damArea = 40500; //!< The area of the dam [m2]
+    //numberSel damMax = 45000;//!< The maximum dam volume [m3]
+    //numberSel damBank = 850;//!< Length of the dam body[m] - for dam body leakage
+    //numberSel MRF = 0.039;//!< Minimum residual flow (MZP) [m3/s]
+
+    //local variables
+    numberSel Etdm=0.0; // water surface evaporation [mm/day]
+    numberSel RouT=0.0; // regular outflow without MRF [m3/s]
+    numberSel DamS=0.0; // dam storage [m3]
+    numberSel DaiS=0.0; // soil percolation input/output [m/s]
+    numberSel DaiG=0.0; // groundwater percolation input/output [m/s]
+    numberSel OflW=0.0; // overflow [m3/day]
+
+    numberSel PoiN=0.0; // pond inputs
+
+    // required dam_ts
+    // Prec;//!< Precipitation on water surface [mm/day]
+    // Temp;//!< Temperature for Evapuration equations[deg]
+    // InfL;//!< Inflow from water channels[m3/day]
+    // InlT;//!< Water inlet (inlet to the dam - water supply)[m3/day]
+    // OulT;//!< Water outlet (outlet to the dam - water supply) [m3/day]
+
+
+    // choosing a method for defining a variable
+    Etdm = dam_ET(_etdam_type); //[mm/day]
+    DaiS = dam_SOISperc(_soisDam_type); // [m/s]
+    DaiG = dam_GWperc(_gwDam_type); // [m/s]
+    RouT = dam_regular_out(_RouT_type); // [m3/s]
+
+//inputs
+    PoiN = get_dta(tstRM,dam_ts::INFL)+get_dta(tstRM,dam_ts::INLT)+(get_dta(tstRM,dam_ts::PREC)*damArea/1000); //inputs converted to m3/day
+//leaks in
+    //PoiN =PoiN+(DaiS*damBank*60*60*24);// leak through the banks??
+    //PoiN =PoiN+(DaiG*damArea*60*60*24);// leak through the bottom??
+
+    DamS = get_dta(tstRM,dam_ts::DAMS)+PoiN;
+//overflow
+    OflW = std::max((DamS - damMax),0.0);
+    DamS = DamS - OflW;
+//evaporation
+    DamS = DamS - (std::min(Etdm/1000*damArea, DamS));
+//outlet
+    DamS = DamS - (std::min (get_dta(tstRM,dam_ts::OULT), DamS));
+//outflow
+    DamS  = DamS  - (std::min ((RouT + MRF)*60*60*24, DamS));
+//leaks out
+    //DamS = DamS - (std::min ((DaiG*damArea*60*60*24), DamS));// leak through the banks??
+    //DamS = DamS - (std::min ((DaiS*damBank*60*60*24), DamS));// leak through the bottom??
+
+    set_varValue(Etdm, tstRM,dam_ts::ETDM);
+    set_varValue(OflW, tstRM,dam_ts::OFLW);
+    set_varValue((RouT +MRF), tstRM,dam_ts::OUFL);
+    //set_varValue(DaiS, tstRM,dam_ts::DAIS);
+    //set_varValue(DaiG, tstRM,dam_ts::DAIG);
+    set_varValue(DamS, tstRM,dam_ts::DAMS);
+}
+

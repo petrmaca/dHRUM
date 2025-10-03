@@ -31,11 +31,14 @@ public:
   void init_inputs(numberSel val, unsigned numDTA);
   void set_data(const hdata& dta,const dam_ts& _tsType);
   numberSel get_dta(const unsigned& tst, const dam_ts& _tsType);
+  void set_varValue(const numberSel& dta,const unsigned& tst,const dam_ts& _tsType);
 
-  numberSel pond_regular_out(DamRouT_type _RouT_type);
-  numberSel Dam_GWperc(DamGWPerc_type _gwDam_type);
-  numberSel Dam_SOISperc(DamSOISPerc_type _soisDam_type);
+  numberSel dam_regular_out(DamRouT_type _RouT_type);
+  numberSel dam_GWperc(DamGWPerc_type _gwDam_type);
+  numberSel dam_SOISperc(DamSOISPerc_type _soisDam_type);
   numberSel dam_ET(ETdam_type _etdam_type) ;
+  void runDam(numberSel damArea,numberSel damMax,numberSel damBank,numberSel MRF,\
+              DamRouT_type _RouT_type,DamGWPerc_type _gwDam_type,DamSOISPerc_type _soisDam_type,ETdam_type _etdam_type);
 
 protected:
 
@@ -50,6 +53,7 @@ private:
   numberSel damArea; //!< Area of the dam in [m2] - for groundwater communication, WS evaporation,...
   numberSel damLeng; //!< Length of the dam body[m] - for dam body leakage
   numberSel damBank; //!< Length of the dam bank[m] - for Soil communication
+  numberSel ConstRouT; //!< constant value of regular outflow
 
   ETdam_type damEt_TYPE;//!< Type of evaporation
   DamSOISPerc_type damSperc_TYPE;//!< Type of soil percolation

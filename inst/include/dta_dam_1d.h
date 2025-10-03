@@ -60,13 +60,13 @@ private:
   //inflows
   hdata Prec;//!< Precipitation on water surface
   hdata InfL;//!< Inflow from water channels
-  hdata InlT;//!< Water inlet (transfer between two dams)[m3/day]
+  hdata InlT;//!< Water inlet (inlet to the dam - water supply)[m3/day]
 
   //outflows
   hdata EtdM;//!< Evaporation from water surface [mm/day]
   hdata OufL;//!< Total outflow
   hdata OflW;//!< overflow [m3/day]
-  hdata OulT;//!< Water outlet (transfer between dam and other dam or industry) [m3/day]
+  hdata OulT;//!< Water outlet (outlet to the dam - water supply) [m3/day
 
   //reversible flows
   hdata DaiS;//!< Soil percolation [m/s]
