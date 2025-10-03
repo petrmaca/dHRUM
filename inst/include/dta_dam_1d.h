@@ -56,6 +56,7 @@ private:
   caldata init_month;
   caldata init_day;
 
+  hdata Temp;//!< Temperature for Evapuration equations
   //inflows
   hdata Prec;//!< Precipitation on water surface
   hdata InfL;//!< Inflow from water channels

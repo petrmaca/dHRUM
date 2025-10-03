@@ -7,10 +7,11 @@
 #include <map>
 
 
-const unsigned damTSvars = 10;
-enum class dam_ts {PREC,DAMS,INFL,DAIS,DAIG,OUFL,ETDM,OFLW,OULT,INLT};
-const dam_ts all_dts[]{dam_ts::PREC,dam_ts::DAMS,dam_ts::INFL,dam_ts::DAIS,dam_ts::DAIG,\
-                       dam_ts::OUFL,dam_ts::ETDM,dam_ts::OFLW,dam_ts::OULT,dam_ts::INLT};
+const unsigned damTSvars = 11;
+enum class dam_ts {PREC,TEMP,DAMS,INFL,DAIS,DAIG,OUFL,ETDM,OFLW,OULT,INLT};
+const dam_ts all_dts[]{dam_ts::PREC,dam_ts::TEMP,dam_ts::DAMS,dam_ts::INFL,dam_ts::DAIS,\
+                       dam_ts::DAIG,dam_ts::OUFL,dam_ts::ETDM,dam_ts::OFLW,dam_ts::OULT,\
+                       dam_ts::INLT};
 
 enum class init_dStype {DAMS};
 

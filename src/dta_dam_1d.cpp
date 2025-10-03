@@ -13,6 +13,7 @@ dta_dam_1d::dta_dam_1d(): numTS(0),
   OufL(1,1),
   OflW(1,1),
   Prec(1,1),
+  Temp(1,1),
   DaiS(1,1),
   DaiG(1,1),
   OulT(1,1),
@@ -40,6 +41,7 @@ InfL(1,1),
 OufL(1,1),
 OflW(1,1),
 Prec(1,1),
+Temp(1,1),
 DaiS(1,1),
 DaiG(1,1),
 EtdM(1,1),
@@ -59,6 +61,7 @@ init_DamS(0.0){
   OufL= other.OufL;
   OflW= other.OflW;
   Prec= other.Prec;
+  Temp= other.Temp;
   DaiS= other.DaiS;
   DaiG= other.DaiG;
   EtdM= other.EtdM;
@@ -85,6 +88,7 @@ dta_dam_1d& dta_dam_1d::operator=(const dta_dam_1d& rhs) {
     OufL= rhs.OufL;
     OflW= rhs.OflW;
     Prec= rhs.Prec;
+    Temp= rhs.Temp;
     DaiS= rhs.DaiS;
     DaiG= rhs.DaiG;
     EtdM= rhs.EtdM;
@@ -122,6 +126,9 @@ void dta_dam_1d::s_varVal(const numberSel& dta, const unsigned& tst,const dam_ts
   switch (_tsType) {
   case dam_ts::PREC:
     Prec[tst] = dta;
+    break;
+  case dam_ts::TEMP:
+    Temp[tst] = dta;
     break;
   case dam_ts::DAMS:
     DamS[tst] = dta;
@@ -164,6 +171,10 @@ void dta_dam_1d::s_data(const hdata& dta,const dam_ts& _tsType, bool updateNumTS
   case dam_ts::PREC:
     Prec = dta;
     //    std::cout << "New precipitation --> loaded\n";
+    break;
+  case dam_ts::TEMP:
+    Temp = dta;
+    //    std::cout << "New temperature --> loaded\n";
     break;
   case dam_ts::DAMS:
     DamS = dta;
@@ -209,6 +220,8 @@ numberSel dta_dam_1d::g_dta(const unsigned& tst,const dam_ts& _tsType) {
   switch (_tsType) {
   case dam_ts::PREC:
     return Prec[tst];
+  case dam_ts::TEMP:
+    return Temp[tst];
   case dam_ts::DAMS:
     return DamS[tst];
   case dam_ts::INFL:
@@ -237,6 +250,8 @@ hdata dta_dam_1d::get_HbTsData(const dam_ts& _tsType) {
   switch (_tsType) {
   case dam_ts::PREC:
     return Prec;
+  case dam_ts::TEMP:
+    return Temp;
   case dam_ts::DAMS:
     return DamS;
   case dam_ts::INFL:
@@ -266,6 +281,9 @@ void dta_dam_1d::setOneTstoZero(const dam_ts& _tsType) {
   switch (_tsType) {
   case dam_ts::PREC:
     Prec = 0.0;
+    break;
+  case dam_ts::TEMP:
+    Temp = 0.0;
     break;
   case dam_ts::DAMS:
     DamS = 0.0;

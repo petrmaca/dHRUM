@@ -30,7 +30,12 @@ public:
   void set_ZeroinitStates(const unsigned& numres);
   void init_inputs(numberSel val, unsigned numDTA);
   void set_data(const hdata& dta,const dam_ts& _tsType);
+  numberSel get_dta(const unsigned& tst, const dam_ts& _tsType);
 
+  numberSel pond_regular_out(DamRouT_type _RouT_type);
+  numberSel Dam_GWperc(DamGWPerc_type _gwDam_type);
+  numberSel Dam_SOISperc(DamSOISPerc_type _soisDam_type);
+  numberSel dam_ET(ETdam_type _etdam_type) ;
 
 protected:
 
@@ -50,7 +55,6 @@ private:
   DamSOISPerc_type damSperc_TYPE;//!< Type of soil percolation
   DamGWPerc_type damGperc_TYPE;//!< Type of groundwater percolation
   DamRouT_type damRout_TYPE;//!< Type of regular outflow
-
 
 
 };
