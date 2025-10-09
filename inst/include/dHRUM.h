@@ -64,6 +64,7 @@ class dHRUM {
   void initSurfaceStypeToAlldHrus(std::vector<std::pair<unsigned,surface_STORtype>>& surface_STORtype);
   void initFastResponsesToAlldHrus(std::vector<std::pair<unsigned,fast_Response>>& fast_RESPONSESTypes);
   void initPondToAlldHrus(std::vector<std::pair<unsigned,pond_type>>& pondTypes);
+  void initPondToOneHRU(unsigned hruId,std::vector<std::pair<std::string,numberSel>>& Vars,std::vector<std::pair<std::string,std::string>>& Types);
 
   numberSel getTsDta(const ts_type& _tsType, const unsigned& HruIndex, const unsigned& tst);
 

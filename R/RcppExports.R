@@ -103,12 +103,15 @@ setPondToAlldHrus <- function(dHRUM_ptr, PondTypes, hruIds) {
 #' prec=c(1,2,3)
 #' temp=c(1,2,3)
 #' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
-#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
+#' DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
-#' setPondToOnedHru(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),0)
-setPondsToOnedHru <- function(dHRUM_ptr, singleHruId, ValNames, ValVals, TypeNames, TypeVals) {
-    invisible(.Call(`_dHRUM_setPondsToOnedHru`, dHRUM_ptr, singleHruId, ValNames, ValVals, TypeNames, TypeVals))
+#' pondDF1 = data.frame( pondArea = 40500, PonsMax= 45000, MRF= 0.039)
+#' pondDF2 = data.frame( ET = "ETpond1", in_SOISperc= "noPondSOISPerc", in_GWperc= "noPondGWPerc", out_SOISperc= "noPondSOISPerc", out_GWperc= "noPondGWPerc",regular_out="PondRouT3" )
+#' HruPondID = 1
+#' setPondToOnedHru(dHRUM_ptr = dhrus,HruPondID,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
+setPondToOnedHru <- function(dHRUM_ptr, singleHruId, ValNames, ValVals, TypeNames, TypeVals) {
+    invisible(.Call(`_dHRUM_setPondToOnedHru`, dHRUM_ptr, singleHruId, ValNames, ValVals, TypeNames, TypeVals))
 }
 
 #' Sets the types of surface retention models types to dHRU model for all single HRUs.

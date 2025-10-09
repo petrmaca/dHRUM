@@ -26,7 +26,8 @@ setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),h
 pondDF1 = data.frame( pondArea = 40500, PonsMax= 45000, MRF= 0.039)
 pondDF2 = data.frame( ET = "ETpond1", in_SOISperc= "noPondSOISPerc", in_GWperc= "noPondGWPerc",
                       out_SOISperc= "noPondSOISPerc", out_GWperc= "noPondGWPerc",regular_out="PondRouT3" )
-setPondsToOnedHru(dHRUM_ptr = dhrus,"ID1",as.numeric(pondDF1),names(pondDF1),as.character(pondDF2),names(pondDF2))
+setPondToOnedHru(dHRUM_ptr = dhrus,1,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
+
 
 setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.2,

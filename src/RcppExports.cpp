@@ -43,9 +43,9 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// setPondsToOnedHru
-void setPondsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, unsigned singleHruId, Rcpp::CharacterVector ValNames, Rcpp::NumericVector ValVals, Rcpp::CharacterVector TypeNames, Rcpp::CharacterVector TypeVals);
-RcppExport SEXP _dHRUM_setPondsToOnedHru(SEXP dHRUM_ptrSEXP, SEXP singleHruIdSEXP, SEXP ValNamesSEXP, SEXP ValValsSEXP, SEXP TypeNamesSEXP, SEXP TypeValsSEXP) {
+// setPondToOnedHru
+void setPondToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, unsigned singleHruId, Rcpp::CharacterVector ValNames, Rcpp::NumericVector ValVals, Rcpp::CharacterVector TypeNames, Rcpp::CharacterVector TypeVals);
+RcppExport SEXP _dHRUM_setPondToOnedHru(SEXP dHRUM_ptrSEXP, SEXP singleHruIdSEXP, SEXP ValNamesSEXP, SEXP ValValsSEXP, SEXP TypeNamesSEXP, SEXP TypeValsSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
@@ -54,7 +54,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ValVals(ValValsSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type TypeNames(TypeNamesSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type TypeVals(TypeValsSEXP);
-    setPondsToOnedHru(dHRUM_ptr, singleHruId, ValNames, ValVals, TypeNames, TypeVals);
+    setPondToOnedHru(dHRUM_ptr, singleHruId, ValNames, ValVals, TypeNames, TypeVals);
     return R_NilValue;
 END_RCPP
 }
@@ -326,7 +326,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_calcHBInAlldHrus", (DL_FUNC) &_dHRUM_calcHBInAlldHrus, 1},
     {"_dHRUM_gatherHBdata", (DL_FUNC) &_dHRUM_gatherHBdata, 1},
     {"_dHRUM_setPondToAlldHrus", (DL_FUNC) &_dHRUM_setPondToAlldHrus, 3},
-    {"_dHRUM_setPondsToOnedHru", (DL_FUNC) &_dHRUM_setPondsToOnedHru, 6},
+    {"_dHRUM_setPondToOnedHru", (DL_FUNC) &_dHRUM_setPondToOnedHru, 6},
     {"_dHRUM_setFastResponsesToAlldHrus", (DL_FUNC) &_dHRUM_setFastResponsesToAlldHrus, 3},
     {"_dHRUM_setGWtypeToAlldHrus", (DL_FUNC) &_dHRUM_setGWtypeToAlldHrus, 3},
     {"_dHRUM_setPTInputsToAlldHrusFromFile", (DL_FUNC) &_dHRUM_setPTInputsToAlldHrusFromFile, 2},

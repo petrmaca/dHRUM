@@ -2732,3 +2732,14 @@ numberSel single_HMunit::pond_regular_out(PondRouT_type _RouT_type) {
 
   return RouT;
 }
+
+void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberSel>>& Vars,std::vector<std::pair<std::string,std::string>>& Types) {
+  std::cout<<"Vars[0].first:  "<<Vars[0].first<<std::endl;
+  std::cout<<"Vars[1].first:  "<<Vars[1].first<<std::endl;
+  std::cout<<"Vars[2].first:  "<<Vars[2].first<<std::endl;
+
+
+
+
+
+}

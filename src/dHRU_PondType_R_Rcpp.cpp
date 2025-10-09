@@ -112,13 +112,16 @@
 //' prec=c(1,2,3)
 //' temp=c(1,2,3)
 //' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
-//'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
+//' DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
 //' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 //' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
-//' setPondToOnedHru(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),0)
+//' pondDF1 = data.frame( pondArea = 40500, PonsMax= 45000, MRF= 0.039)
+//' pondDF2 = data.frame( ET = "ETpond1", in_SOISperc= "noPondSOISPerc", in_GWperc= "noPondGWPerc", out_SOISperc= "noPondSOISPerc", out_GWperc= "noPondGWPerc",regular_out="PondRouT3" )
+//' HruPondID = 1
+//' setPondToOnedHru(dHRUM_ptr = dhrus,HruPondID,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
 // [[Rcpp::export]]
+void setPondToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId, Rcpp::CharacterVector ValNames,Rcpp::NumericVector ValVals,Rcpp::CharacterVector TypeNames,Rcpp::CharacterVector TypeVals) {
 
-void setPondsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId, Rcpp::CharacterVector ValNames,Rcpp::NumericVector ValVals,Rcpp::CharacterVector TypeNames,Rcpp::CharacterVector TypeVals) {
 
    unsigned numValNames = ValNames.size();
    unsigned numValVals = ValVals.size();
@@ -131,7 +134,7 @@ void setPondsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId, Rcpp::C
    std::vector<std::string> allTypeNames {"ET","in_SOISperc","in_GWperc",\
                                          "out_SOISperc","out_GWperc","regular_out"};
 
-   if(numValVals!=3){
+    if((numValVals+numTypeVals)!=9){
      Rcpp::Rcout << "The number of set pond inputs is: " << (numValVals+numTypeVals) <<"\n";
      Rcpp::stop("\n but  required number of pond inputs is: 9.\n");
    } else  {
@@ -151,7 +154,7 @@ void setPondsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId, Rcpp::C
      for(unsigned it=0; it<numTypeNames;it++ ){
        PondTypes.push_back(std::make_pair(typevals[it],typenames[it]));
      }
-   }
+
 
      unsigned dHRUdim = 0;
      dHRUdim = dHRUM_ptr.get()->getdHRUdim();
@@ -159,6 +162,7 @@ void setPondsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId, Rcpp::C
        Rcpp::stop("The wrong ID or number of single HRU.\n");
      }
 
-     //dHRUM_ptr.get()->setParamsToOneHru(ParsToLoad,singleHruId);
+     dHRUM_ptr.get()->initPondToOneHRU(singleHruId,PondDefs,PondTypes);
+   }
    return  ;
  }
