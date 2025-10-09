@@ -20,6 +20,9 @@ single_HMunit::single_HMunit(): tstRM(0),
   ifrb(0),
   Area(0),
   IdHru(),
+  pondArea(0),
+  PonsMax(0),
+  MRF(0),
   gs_STORAGE{},
   soil_STORAGE{},
   intrc_STORAGE{},
@@ -89,6 +92,9 @@ help_nmbFR(0),
 ifrb(0),
 Area(0),
 IdHru(),
+pondArea(0),
+PonsMax(0),
+MRF(0),
 gs_STORAGE{},
 soil_STORAGE{},
 intrc_STORAGE{},
@@ -113,6 +119,9 @@ pond{}
   ifrb = other.ifrb;//!< For loop counter
   Area = other.Area;//!< The area of HM unit in m2
   IdHru = other.IdHru;
+  pondArea = other.pondArea;//!< The area of the pond [m2]
+  PonsMax = other.PonsMax;//!< The maximum pond volume [m3]
+  MRF = other.MRF; //!< Minimum residual flow (MZP) [m3/s]
   gs_STORAGE = other.gs_STORAGE;
   soil_STORAGE = other.soil_STORAGE;
   intrc_STORAGE = other.intrc_STORAGE;
@@ -151,6 +160,9 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     ifrb = rhs.ifrb;//!< For loop counter
     Area = rhs.Area;//!< The area of HM unit in m2
     IdHru = rhs.IdHru;//!< The ID of HRU
+    pondArea = rhs.pondArea;//!< The area of the pond [m2]
+    PonsMax = rhs.PonsMax;//!< The maximum pond volume [m3]
+    MRF = rhs.MRF; //!< Minimum residual flow (MZP) [m3/s]
     gs_STORAGE = rhs.gs_STORAGE;//!< The type of groundwater storage
     soil_STORAGE = rhs.soil_STORAGE;
     intrc_STORAGE = rhs.intrc_STORAGE;
@@ -2372,13 +2384,10 @@ void single_HMunit::ponds(pond_type _pondtype) {
       numberSel PoiG=0.0; // groundwater percolation input pond
       numberSel RouT=0.0; // regular outflow without MRF
 
-      // needed from USER
-      numberSel pondArea = 40500; //!< The area of the pond [m2]
-      numberSel PonsMax = 45000;//!< The maximum pond volume [m3]
-      numberSel MRF = 0.039;//!< Minimum residual flow (MZP) [m3/s]
-
-      numberSel extraIN = 0; // [m3/day] - pokud budu chtit prevod od jinud
-      //numberSel PoutExtra=0.0;// [m3/day] - pokud budu chtit odběr, ale kdy ho zapocitat?
+      //part of singleHru
+      //numberSel pondArea = 40500; //!< The area of the pond [m2]
+      //numberSel PonsMax = 45000;//!< The maximum pond volume [m3]
+      //numberSel MRF = 0.039;//!< Minimum residual flow (MZP) [m3/s]
 
       // local variables
       numberSel PoiN=0.0; // pond inputs
@@ -2396,7 +2405,7 @@ void single_HMunit::ponds(pond_type _pondtype) {
       PoiS = pond_SOISperc(PondSOISPerc_type::noPondSOISPerc); // [m/s]
       PoiG = pond_GWperc(PondGWPerc_type::noPondGWPerc); // [m/s]
       RouT = pond_regular_out(PondRouT_type::PondRouT3); // [m3/s]
-      PoiN = (PoiS*Area*60*60*24)+(PoiG*Area*60*60*24)+(get_dta(tstRM,ts_type::TOTR))/1000*Area+extraIN; //inputs converted to m3/day
+      PoiN = (PoiS*Area*60*60*24)+(PoiG*Area*60*60*24)+(get_dta(tstRM,ts_type::TOTR))/1000*Area; //inputs converted to m3/day
       //std::cout<<"TOTR zacatek je teed:   "<< get_dta(tstRM,ts_type::TOTR)  << " TOTR m3 "<< (get_dta(tstRM,ts_type::TOTR))/1000*Area <<std::endl;
       //std::cout<<"PoiN  je teed:   "<<PoiN<<std::endl;
       PonS = get_dta(tstRM,ts_type::PONS)+PoiN;
@@ -2410,20 +2419,14 @@ void single_HMunit::ponds(pond_type _pondtype) {
 
       Etpond  = std::min(EtpO/1000*pondArea, PonS);
       PonS = PonS - Etpond;
-      //std::cout<<"ten Etpond  je teed:   "<<Etpond<<std::endl;
 
       //sem dat extra odber?
-
       //PoutExtra = std::min (PoutExtra, PonS);
       //PonS = PonS - PoutExtra;
 
 
       PoutRegular = std::min ((RouT + MRF)*60*60*24, PonS);
-      //std::cout<<"RouT  je teed:   "<<RouT*60*60*24<<std::endl;
-      //std::cout<<"MRF je teed:   "<<MRF*60*60*24<<std::endl;
-      //std::cout<<"PoutRegular:   "<<PoutRegular<<std::endl;
       PonS = PonS - PoutRegular;
-      //std::cout<<"PonS - PoutRegular  je teed:   "<<PonS<<std::endl;
 
       //prusaky
       //PoutToGW = std::min ((PoiG*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, měla by se měnit plocha a mělo by to být závislé na hloubce

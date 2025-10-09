@@ -59,7 +59,7 @@ gatherHBdata <- function(dHRUM_ptr) {
 
 #' Sets the types of pond model types to dHRU model for all single HRUs.
 #'
-#' Setting of params to dHRUM.
+#' Setting of pond to dHRUM.
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
 #' @param PondTypes vector of values of parameters
@@ -79,8 +79,36 @@ gatherHBdata <- function(dHRUM_ptr) {
 #' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
 #'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
+#' setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
 setPondToAlldHrus <- function(dHRUM_ptr, PondTypes, hruIds) {
     invisible(.Call(`_dHRUM_setPondToAlldHrus`, dHRUM_ptr, PondTypes, hruIds))
+}
+
+#' Sets the types of pond to dHRU model for one single HRU.
+#'
+#' Setting of pond to one particular single HRU for dHRU.
+#'
+#' @param dHRUM_ptr pointer to dHRU instance
+#' @param ParsVec vector of values of parameters
+#' @param ParsNames a charater vector of parameter names
+#' @param singleHruId the numerical single HRU ID
+#' @export
+#' @examples
+#' nHrus <- 200
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
+#' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+#' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+#' setPondToOnedHru(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),0)
+setPondsToOnedHru <- function(dHRUM_ptr, singleHruId, ValNames, ValVals, TypeNames, TypeVals) {
+    invisible(.Call(`_dHRUM_setPondsToOnedHru`, dHRUM_ptr, singleHruId, ValNames, ValVals, TypeNames, TypeVals))
 }
 
 #' Sets the types of surface retention models types to dHRU model for all single HRUs.

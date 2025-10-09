@@ -9,7 +9,7 @@ meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 temp=rnorm(numdata,20,3)
 #nHrus <- 15000
-nHrus <- 10
+nHrus <- 1
 #Areas <- runif(nHrus,min = 1,max  = 10) #[m2]
 Areas <- runif(nHrus,min = 38780000,max  = 38780050)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
@@ -21,6 +21,12 @@ setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfaceAll"
 setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
 
 setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
+
+
+pondDF1 = data.frame( pondArea = 40500, PonsMax= 45000, MRF= 0.039)
+pondDF2 = data.frame( ET = "ETpond1", in_SOISperc= "noPondSOISPerc", in_GWperc= "noPondGWPerc",
+                      out_SOISperc= "noPondSOISPerc", out_GWperc= "noPondGWPerc",regular_out="PondRouT3" )
+setPondsToOnedHru(dHRUM_ptr = dhrus,"ID1",as.numeric(pondDF1),names(pondDF1),as.character(pondDF2),names(pondDF2))
 
 setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.2,
@@ -36,9 +42,9 @@ calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 # gatherHBdata(dHRUM_ptr = dhrus)
 # outDt <- getOutputDist(dHRUM_ptr = dhrus)
 # dd=as.data.table(outDt$outDta)
-#for(i in 1:100){
+
 outDta <- dHRUMrun(dHRUM_ptr = dhrus)
-#}
+
 
 outDF <- data.frame(outDta$outDta)
 names(outDF) <-c(outDta$VarsNams)

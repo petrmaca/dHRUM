@@ -157,6 +157,10 @@ private:
   numberSel Area;//!< The area of HM unit in m2
   std::string IdHru;
 
+  numberSel pondArea;  //!< The area of the pond [m2]
+  numberSel PonsMax; //!< The maximum pond volume [m3]
+  numberSel MRF; //!< Minimum residual flow (MZP) [m3/s]
+
   gs_STORtype gs_STORAGE;//!< Type of groundwater storage
   soil_STORtype soil_STORAGE;//!< Type of soil storage
   interception_STORtype intrc_STORAGE;//!< type of iterception storage
