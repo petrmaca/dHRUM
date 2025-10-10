@@ -2733,13 +2733,60 @@ numberSel single_HMunit::pond_regular_out(PondRouT_type _RouT_type) {
   return RouT;
 }
 
-void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberSel>>& Vars,std::vector<std::pair<std::string,std::string>>& Types) {
-  std::cout<<"Vars[0].first:  "<<Vars[0].first<<std::endl;
-  std::cout<<"Vars[1].first:  "<<Vars[1].first<<std::endl;
-  std::cout<<"Vars[2].first:  "<<Vars[2].first<<std::endl;
+void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberSel>>& PondDefs,std::vector<std::pair<std::string,std::string>>& PondBeh) {
+
+  std::map<std::string, PInp> PondMap = {
+   {"PondArea", PInp::Area},
+   {"PonsMax", PInp::Max},
+   {"MRF", PInp::MRF},
+   {"Pond_ET", PInp::ET},
+   {"Pond_inSOIS", PInp::inSOIS},
+   {"Pond_inGW", PInp::inGW},
+   {"Pond_outSOIS", PInp::outSOIS},
+   {"Pond_outGW", PInp::outGW},
+   {"Pond_outReg", PInp::outReg}
+   };
 
 
+  std::vector<std::string> Names {"pondArea","PonsMax","MRF","ET","inSOIS","inGW",\
+                                         "outSOIS","outGW","outReg"};
 
+  for(unsigned id=0;id<PondDefs.size();id++){
+    switch(PondMap[PondDefs[id].first]) {
+    case PInp::Area:
+      std::cout << PondDefs[id].first<< "  " << PondDefs[id].second << "\n";
+      break;
+    case PInp::Max:
+      std::cout << PondDefs[id].first<< "  " << PondDefs[id].second << "\n";
+      break;
+    case PInp::MRF:
+      std::cout << PondDefs[id].first<< "  " << PondDefs[id].second << "\n";
+      break;
+    }
+  }
+
+  for(unsigned id=0;id<PondBeh.size();id++){
+    switch(PondMap[PondBeh[id].first]) {
+    case PInp::ET:
+      std::cout << PondBeh[id].second << "\n";
+      break;
+    case PInp::inSOIS:
+      std::cout << PondBeh[id].second << "\n";
+      break;
+    case PInp::inGW:
+      std::cout << PondBeh[id].second << "\n";
+      break;
+    case PInp::outSOIS:
+      std::cout << PondBeh [id].second<< "\n";
+      break;
+    case PInp::outGW:
+      std::cout << PondBeh[id].second << "\n";
+      break;
+    case PInp::outReg:
+      std::cout << PondBeh[id].second << "\n";
+      break;
+    }
+  }
 
 
 }

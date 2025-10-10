@@ -711,7 +711,7 @@ void dHRUM::initPondToAlldHrus(std::vector<std::pair<unsigned,pond_type>>& pondT
   return ;
 }
 
-void dHRUM::initPondToOneHRU(unsigned hruId,std::vector<std::pair<std::string,numberSel>>& Vars,std::vector<std::pair<std::string,std::string>>& Types){
-  dHruVec[hruId].set_pond_variables(Vars,Types);
+void dHRUM::initPondToOneHRU(unsigned hruId,std::vector<std::pair<std::string,numberSel>>& PondDefs,std::vector<std::pair<std::string,std::string>>& PondBeh){
+  dHruVec[hruId].set_pond_variables(PondDefs,PondBeh);
   return ;
 }

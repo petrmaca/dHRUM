@@ -23,9 +23,9 @@ setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascad
 setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
 
 
-pondDF1 = data.frame( pondArea = 40500, PonsMax= 45000, MRF= 0.039)
-pondDF2 = data.frame( ET = "ETpond1", in_SOISperc= "noPondSOISPerc", in_GWperc= "noPondGWPerc",
-                      out_SOISperc= "noPondSOISPerc", out_GWperc= "noPondGWPerc",regular_out="PondRouT3" )
+pondDF1 = data.frame( PondArea = 40500, PonSMax= 45000, MRF= 0.039)
+pondDF2 = data.frame( Pond_ET = "ETpond1", Pond_inSOIS= "noPondSOISPerc", Pond_inGW = "noPondGWPerc",
+                      Pond_outSOIS= "noPondSOISPerc", Pond_outGW= "noPondGWPerc",Pond_outReg="PondRouT3" )
 setPondToOnedHru(dHRUM_ptr = dhrus,1,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
 
 

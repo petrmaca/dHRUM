@@ -124,7 +124,7 @@ class single_HMunit {
   void ponds(pond_type _pondtype);
   void set_pond_type(pond_type _pondtype);
   pond_type get_pondtype();
-  void set_pond_variables(std::vector<std::pair<std::string,numberSel>>& Vars,std::vector<std::pair<std::string,std::string>>& Types);
+  void set_pond_variables(std::vector<std::pair<std::string,numberSel>>& PondDefs,std::vector<std::pair<std::string,std::string>>& PondBeh);
 
   //pond switches
   numberSel pond_ET(ETpond_type _etpond_type);

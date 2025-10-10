@@ -130,10 +130,6 @@ void setPondToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId, Rcpp::Ch
    unsigned numPars1Hru;
    numPars1Hru = dHRUM_ptr.get()->get_singleHRUnumPars(singleHruId);
 
-   std::vector<std::string> allVarNames {"pondArea","PonsMax","MRF"};
-   std::vector<std::string> allTypeNames {"ET","in_SOISperc","in_GWperc",\
-                                         "out_SOISperc","out_GWperc","regular_out"};
-
     if((numValVals+numTypeVals)!=9){
      Rcpp::Rcout << "The number of set pond inputs is: " << (numValVals+numTypeVals) <<"\n";
      Rcpp::stop("\n but  required number of pond inputs is: 9.\n");
@@ -142,7 +138,7 @@ void setPondToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId, Rcpp::Ch
      std::vector<numberSel> valvals = Rcpp::as<std::vector<numberSel>>(ValVals);
      std::vector<std::string>  valnames = Rcpp::as<std::vector<std::string> >(ValNames);
 
-     std::vector<std::pair<std::string,numberSel>> PondDefs;
+     std::vector<std::pair<std::string,numberSel>> PondDefs;//pond definitions
      for(unsigned it=0; it<numValNames;it++ ){
        PondDefs.push_back(std::make_pair(valnames[it],valvals[it]));
      }
@@ -150,9 +146,9 @@ void setPondToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId, Rcpp::Ch
      std::vector<std::string> typevals = Rcpp::as<std::vector<std::string>>(TypeVals);
      std::vector<std::string> typenames = Rcpp::as<std::vector<std::string> >(TypeNames);
 
-     std::vector<std::pair<std::string,std::string>> PondTypes;
+     std::vector<std::pair<std::string,std::string>> PondBeh;//pond behavior
      for(unsigned it=0; it<numTypeNames;it++ ){
-       PondTypes.push_back(std::make_pair(typevals[it],typenames[it]));
+       PondBeh.push_back(std::make_pair(typevals[it],typenames[it]));
      }
 
 
@@ -162,7 +158,7 @@ void setPondToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId, Rcpp::Ch
        Rcpp::stop("The wrong ID or number of single HRU.\n");
      }
 
-     dHRUM_ptr.get()->initPondToOneHRU(singleHruId,PondDefs,PondTypes);
+     dHRUM_ptr.get()->initPondToOneHRU(singleHruId,PondDefs,PondBeh);
    }
    return  ;
  }
