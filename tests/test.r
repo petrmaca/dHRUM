@@ -24,7 +24,7 @@ setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),h
 
 
 pondDF1 = data.frame( PondArea = 40500, PonSMax= 45000, MRF= 0.039)
-pondDF2 = data.frame( Pond_ET = "ETpond1", Pond_inSOIS= "noPondSOISPerc", Pond_inGW = "noPondGWPerc",
+pondDF2 = data.frame( Pond_ET = "ETpond1", Pond_inSOIS= "PondSOISPerc2", Pond_inGW = "PondGWPerc1",
                       Pond_outSOIS= "noPondSOISPerc", Pond_outGW= "noPondGWPerc",Pond_outReg="PondRouT3" )
 setPondToOnedHru(dHRUM_ptr = dhrus,1,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
 

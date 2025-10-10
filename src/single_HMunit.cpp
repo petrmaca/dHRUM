@@ -2747,10 +2747,6 @@ void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberS
    {"Pond_outReg", PInp::outReg}
    };
 
-
-  std::vector<std::string> Names {"pondArea","PonsMax","MRF","ET","inSOIS","inGW",\
-                                         "outSOIS","outGW","outReg"};
-
   for(unsigned id=0;id<PondDefs.size();id++){
     switch(PondMap[PondDefs[id].first]) {
     case PInp::Area:
@@ -2765,28 +2761,135 @@ void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberS
     }
   }
 
+  std::map<std::string, ETpond_type> PondET = {
+      {"ETpond1", ETpond_type::ETpond1},
+      {"ETpond2", ETpond_type::ETpond2}
+  };
+
+  std::map<std::string, PondSOISPerc_type> PondSois = {
+    {"noPondSOISPerc", PondSOISPerc_type::noPondSOISPerc},
+    {"PondSOISPerc1", PondSOISPerc_type::PondSOISPerc1},
+    {"PondSOISPerc2", PondSOISPerc_type::PondSOISPerc2},
+    {"PondSOISPerc3", PondSOISPerc_type::PondSOISPerc3}
+  };
+
+  std::map<std::string, PondGWPerc_type> PondGW = {
+    {"noPondGWPerc", PondGWPerc_type::noPondGWPerc},
+    {"PondGWPerc1", PondGWPerc_type::PondGWPerc1},
+    {"PondGWPerc2", PondGWPerc_type::PondGWPerc2},
+    {"PondGWPerc3", PondGWPerc_type::PondGWPerc3}
+  };
+
+  std::map<std::string, PondRouT_type> PondregOut = {
+    {"noPondRouT", PondRouT_type::noPondRouT},
+    {"PondRouT1", PondRouT_type::PondRouT1},
+    {"PondRouT2", PondRouT_type::PondRouT2},
+    {"PondRouT3", PondRouT_type::PondRouT3}
+  };
+
   for(unsigned id=0;id<PondBeh.size();id++){
     switch(PondMap[PondBeh[id].first]) {
-    case PInp::ET:
-      std::cout << PondBeh[id].second << "\n";
-      break;
-    case PInp::inSOIS:
-      std::cout << PondBeh[id].second << "\n";
-      break;
-    case PInp::inGW:
-      std::cout << PondBeh[id].second << "\n";
-      break;
-    case PInp::outSOIS:
-      std::cout << PondBeh [id].second<< "\n";
-      break;
-    case PInp::outGW:
-      std::cout << PondBeh[id].second << "\n";
-      break;
-    case PInp::outReg:
-      std::cout << PondBeh[id].second << "\n";
-      break;
-    }
-  }
 
+    case PInp::ET:{
+      switch(PondET[PondBeh[id].second]) {
+        case ETpond_type::ETpond1:
+          std::cout <<PondBeh[id].first <<  ":  ETpond1  " << "\n";
+        break;
+        case ETpond_type::ETpond2:
+          std::cout <<PondBeh[id].first <<  ":  ETpond2  " << "\n";
+        break;
+      }
+      break;
+      }
 
+    case PInp::inSOIS:{
+      switch(PondSois[PondBeh[id].second]) {
+      case PondSOISPerc_type::noPondSOISPerc:
+        std::cout <<PondBeh[id].first <<  ":  noPondSOISPerc  " << "\n";
+        break;
+      case PondSOISPerc_type::PondSOISPerc1:
+        std::cout <<PondBeh[id].first <<  ":  PondSOISPerc1  " << "\n";
+        break;
+      case PondSOISPerc_type::PondSOISPerc2:
+        std::cout <<PondBeh[id].first <<  ":  PondSOISPerc2  " << "\n";
+        break;
+      case PondSOISPerc_type::PondSOISPerc3:
+        std::cout <<PondBeh[id].first <<  ":  PondSOISPerc3  " << "\n";
+        break;
+      }
+      break;
+      }
+
+    case PInp::inGW:{
+      switch(PondGW[PondBeh[id].second]) {
+      case PondGWPerc_type::noPondGWPerc:
+        std::cout <<PondBeh[id].first <<  ":  noPondGWPerc  " << "\n";
+        break;
+      case PondGWPerc_type::PondGWPerc1:
+        std::cout <<PondBeh[id].first <<  ":  PondGWPerc1  "  << "\n";
+        break;
+      case PondGWPerc_type::PondGWPerc2:
+        std::cout <<PondBeh[id].first <<  ":  PondGWPerc2  "  << "\n";
+        break;
+      case PondGWPerc_type::PondGWPerc3:
+        std::cout <<PondBeh[id].first <<  ":  PondGWPerc3  "  << "\n";
+        break;
+      }
+      break;
+      }
+
+    case PInp::outSOIS:{
+      switch(PondSois[PondBeh[id].second]) {
+        std::cout <<PondBeh[id].first <<  ":  noPondSOISPerc  " << "\n";
+        break;
+      case PondSOISPerc_type::PondSOISPerc1:
+        std::cout <<PondBeh[id].first <<  ":  PondSOISPerc1  " << "\n";
+        break;
+      case PondSOISPerc_type::PondSOISPerc2:
+        std::cout <<PondBeh[id].first <<  ":  PondSOISPerc2  " << "\n";
+        break;
+      case PondSOISPerc_type::PondSOISPerc3:
+        std::cout <<PondBeh[id].first <<  ":  PondSOISPerc3  " << "\n";
+        break;
+        }
+      break;
+      }
+    case PInp::outGW:{
+      switch(PondGW[PondBeh[id].second]) {
+      case PondGWPerc_type::noPondGWPerc:
+        std::cout <<PondBeh[id].first <<  ":  noPondGWPerc  " << "\n";
+        break;
+      case PondGWPerc_type::PondGWPerc1:
+        std::cout <<PondBeh[id].first <<  ":PondGWPerc1  "  << "\n";
+        break;
+      case PondGWPerc_type::PondGWPerc2:
+        std::cout <<PondBeh[id].first <<  ":PondGWPerc2  "  << "\n";
+        break;
+      case PondGWPerc_type::PondGWPerc3:
+        std::cout <<PondBeh[id].first <<  ":PondGWPerc3  "  << "\n";
+        break;
+      }
+      break;
+      }
+    case PInp::outReg:{
+      switch(PondregOut[PondBeh[id].second]) {
+      case PondRouT_type::noPondRouT:
+        std::cout <<PondBeh[id].first <<  ":  noPondRouT  " << "\n";
+        break;
+      case PondRouT_type::PondRouT1:
+        std::cout <<PondBeh[id].first <<  ":  PondRouT1  "  << "\n";
+        break;
+      case PondRouT_type::PondRouT2:
+        std::cout <<PondBeh[id].first <<  ":  PondRouT2  "  << "\n";
+        break;
+      case PondRouT_type::PondRouT3:
+        std::cout <<PondBeh[id].first <<  ":  PondRouT3  "  << "\n";
+        break;
+      }//end of PondregOut switch
+      break;
+      }//case PInp::outReg
+    }//switch PondMap
+  }//end of for cycle
 }
+
+

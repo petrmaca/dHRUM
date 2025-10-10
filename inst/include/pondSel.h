@@ -14,7 +14,7 @@ const std::vector<std::string> all_pondNames {"noPond","Pond"};
 //water surface evaporation variants
 enum class ETpond_type {ETpond1, ETpond2};
 const ETpond_type all_ETpond[]{ ETpond_type::ETpond1,ETpond_type::ETpond2};
-const std::vector<std::string> allETpondTypeNames {"ETpond1, ETpond2"};
+const std::vector<std::string> allETpondTypeNames {"ETpond1", "ETpond2"};
 
 //soil percolation variants
 enum class PondSOISPerc_type {noPondSOISPerc, PondSOISPerc1, PondSOISPerc2, PondSOISPerc3};
