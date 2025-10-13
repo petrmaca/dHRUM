@@ -2435,15 +2435,7 @@ void single_HMunit::ponds(pond_type _pondtype) {
       PouS = pond_SOISperc(pondSOISPERCout); // outflow [m/s]
       PouG = pond_GWperc(pondGWPERCout); // outflow [m/s]
       RouT = pond_regular_out(PondROUT); // [m3/s]
-      PoiN = (PoiS*Area*60*60*24)+(PoiG*Area*60*60*24)+(get_dta(tstRM,ts_type::TOTR))/1000*Area; //inputs converted to m3/day
-
-
-      //std::cout<<"--------------------------------------------------------------------------"<<std::endl;
-      //std::cout<<"TOTR zacatek je teed:   "<< get_dta(tstRM,ts_type::TOTR)  << " TOTR m3 "<< (get_dta(tstRM,ts_type::TOTR))/1000*Area <<std::endl;
-      //std::cout<<"PoiN  je teed:   "<<PoiN<<std::endl;
-
-
-
+      PoiN = (PoiS*pondArea*60*60*24)+(PoiG*pondArea*60*60*24)+(get_dta(tstRM,ts_type::TOTR))/1000*Area; //inputs converted to m3/day
 
       PonS = get_dta(tstRM,ts_type::PONS)+PoiN;
       //std::cout<<"ten PonS + PoiN  je teed:   "<<PonS<<std::endl;
@@ -2463,10 +2455,10 @@ void single_HMunit::ponds(pond_type _pondtype) {
       PonS = PonS - PoutRegular;
 
       //prusaky
-      PoutToGW = std::min ((PouG*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, měla by se měnit plocha a mělo by to být závislé na hloubce
+      PoutToGW = std::min ((PouG*pondArea*60*60*24), PonS); // prusak celou plochou, to je ale blbě, měla by se měnit plocha a mělo by to být závislé na hloubce
       PonS = PonS - PoutToGW;
 
-      PoutToSoil = std::min ((PouS*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, mělo by se vsakovat jen po obvodu? ale do jaké hloubky?
+      PoutToSoil = std::min ((PouS*pondArea*60*60*24), PonS); // prusak celou plochou, to je ale blbě, mělo by se vsakovat jen po obvodu? ale do jaké hloubky?
       PonS = PonS - PoutToSoil;
 
       //zapis promennych
@@ -2675,12 +2667,12 @@ numberSel single_HMunit::pond_SOISperc(PondSOISPerc_type _soispond_type) {
       break;
     }
     case PondSOISPerc_type::PondSOISPerc1: {
-      PoiS = 0.0001; // k [m/s] - coarse sand / gravel
+      PoiS = 0.000001; // k [m/s] - coarse sand / gravel
       //std::cout<<"SOISPerc - coarse sand / gravel"<<std::endl;
       break;
     }
     case PondSOISPerc_type::PondSOISPerc2: {
-      PoiS = 0.000001; // k [m/s] - sandy loam
+      PoiS = 0.0000001; // k [m/s] - sandy loam
       //std::cout<<"SOISPerc - sandy loam"<<std::endl;
       break;
     }
@@ -2704,12 +2696,12 @@ numberSel single_HMunit::pond_GWperc(PondGWPerc_type _gwpond_type) {
       break;
     }
     case PondGWPerc_type::PondGWPerc1: {
-      PoiG =  0.0001; // k [m/s] - coarse sand / gravel
+      PoiG =  0.0000001; // k [m/s] - coarse sand / gravel
       //std::cout<<"GWPerc - coarse sand / gravel"<<std::endl;
       break;
     }
     case PondGWPerc_type::PondGWPerc2: {
-      PoiG = 0.000001; // k [m/s] - sandy loam
+      PoiG = 0.00000001; // k [m/s] - sandy loam
       //std::cout<<"GWPerc - sandy loam"<<std::endl;
       break;
     }
