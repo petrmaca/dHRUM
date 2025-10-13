@@ -169,6 +169,10 @@ private:
   surface_STORtype srfs_STORAGE;//!< the type of surface retentions storage
   fast_Response fast_RESPONSE;//!< the type of fast response
   pond_type pond;//!< the type of pond (water reservoir)
+  ETpond_type ET_POND;//!< Type of evaporation from pond surface
+  PondSOISPerc_type pondSOISPERC;//!< Type of percolation from pond to soil or vice versa
+  PondGWPerc_type  pondGWPerc;//!< Type of percolation from pond to groundwater or vice versa
+  PondRouT_type  PondROUT ;//!< Pond outlet method
 
 
 
