@@ -159,9 +159,7 @@ private:
   numberSel Area;//!< The area of HM unit in m2
   std::string IdHru;
 
-  numberSel pondArea;  //!< The area of the pond [m2]
-  numberSel PonsMax; //!< The maximum pond volume [m3]
-  numberSel MRF; //!< Minimum residual flow (MZP) [m3/s]
+
 
   gs_STORtype gs_STORAGE;//!< Type of groundwater storage
   soil_STORtype soil_STORAGE;//!< Type of soil storage
@@ -170,12 +168,16 @@ private:
   fast_Response fast_RESPONSE;//!< the type of fast response
   pond_type pond;//!< the type of pond (water reservoir)
   ETpond_type ET_POND;//!< Type of evaporation from pond surface
-  PondSOISPerc_type pondSOISPERC;//!< Type of percolation from pond to soil or vice versa
-  PondGWPerc_type  pondGWPerc;//!< Type of percolation from pond to groundwater or vice versa
+  PondSOISPerc_type pondSOISPERCin;//!< Type of percolation from   soil to pond
+  PondSOISPerc_type pondSOISPERCout;//!< Type of percolation from pond to soil
+  PondGWPerc_type  pondGWPERCin;//!< Type of percolation from   groundwater to pond
+  PondGWPerc_type  pondGWPERCout;//!< Type of percolation from pond to groundwater
   PondRouT_type  PondROUT ;//!< Pond outlet method
 
 
-
+  numberSel pondArea;  //!< The area of the pond [m2]
+  numberSel PonsMax; //!< The maximum pond volume [m3]
+  numberSel MRF; //!< Minimum residual flow (MZP) [m3/s]
 
 
 

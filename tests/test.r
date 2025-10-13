@@ -20,14 +20,12 @@ setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",t
 setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfaceAll",times= length(Areas)),hruIds=IdsHrus)
 setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
 
-setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
+#setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
+pondDF1 = data.frame( PondArea = 40500, PonsMax= 45000, MRF= 0.039)
+pondDF2 = data.frame( Pond_ET = "ETpond1", Pond_inSOIS= "noPondSOISPerc", Pond_inGW = "noPondGWPerc",
+                      Pond_outSOIS= "noPondSOISPerc", Pond_outGW= "PondGWPerc3",Pond_outReg="PondRouT1" )
 
-
-pondDF1 = data.frame( PondArea = 40500, PonSMax= 45000, MRF= 0.039)
-pondDF2 = data.frame( Pond_ET = "ETpond1", Pond_inSOIS= "PondSOISPerc2", Pond_inGW = "PondGWPerc1",
-                      Pond_outSOIS= "noPondSOISPerc", Pond_outGW= "noPondGWPerc",Pond_outReg="PondRouT3" )
-setPondToOnedHru(dHRUM_ptr = dhrus,1,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
-
+setPondToOnedHru(dHRUM_ptr = dhrus,0,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
 
 setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.2,
@@ -50,15 +48,16 @@ outDta <- dHRUMrun(dHRUM_ptr = dhrus)
 outDF <- data.frame(outDta$outDta)
 names(outDF) <-c(outDta$VarsNams)
 outDF = as.data.table(outDF)
-outDF$SOIS
-outDF$AET
-outDF$PET
-outDF$EVBS
-outDF$EVAS
-outDF$EVAC
-outDF$ETWS
-outDF$PONS
-tail(outDF$TOTR)
+#outDF$SOIS
+#outDF$AET
+#outDF$PET
+#outDF$EVBS
+#outDF$EVAS
+#outDF$EVAC
+#outDF$ETWS
+#outDF$PONS
+#tail(outDF$TOTR)
+
 
 max(outDF$AET - outDF$PET)
 # )

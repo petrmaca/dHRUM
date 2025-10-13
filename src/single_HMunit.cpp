@@ -30,8 +30,10 @@ single_HMunit::single_HMunit(): tstRM(0),
   fast_RESPONSE{},
   pond{},
   ET_POND{},
-  pondSOISPERC{},
-  pondGWPerc{},
+  pondSOISPERCin{},
+  pondSOISPERCout{},
+  pondGWPERCin{},
+  pondGWPERCout{},
   PondROUT{}
   {
 
@@ -58,8 +60,10 @@ single_HMunit::single_HMunit(): tstRM(0),
   fast_RESPONSE = fast_Response::SerialCascadeLinRes;
   pond = pond_type::noPond;
   ET_POND = ETpond_type::ETpond1;
-  pondSOISPERC = PondSOISPerc_type::noPondSOISPerc;
-  pondGWPerc = PondGWPerc_type::noPondGWPerc;
+  pondSOISPERCin = PondSOISPerc_type::noPondSOISPerc;
+  pondSOISPERCout = PondSOISPerc_type::noPondSOISPerc;
+  pondGWPERCin = PondGWPerc_type::noPondGWPerc;
+  pondGWPERCout = PondGWPerc_type::noPondGWPerc;
   PondROUT = PondRouT_type::noPondRouT;
   et_demand = 0.0;
 
@@ -110,8 +114,10 @@ srfs_STORAGE{},
 fast_RESPONSE{},
 pond{},
 ET_POND{},
-pondSOISPERC{},
-pondGWPerc{},
+pondSOISPERCin{},
+pondSOISPERCout{},
+pondGWPERCin{},
+pondGWPERCout{},
 PondROUT{}
 {
 
@@ -141,8 +147,10 @@ PondROUT{}
   fast_RESPONSE = other.fast_RESPONSE;
   pond = other.pond;
   ET_POND = other.ET_POND;
-  pondSOISPERC = other.pondSOISPERC;
-  pondGWPerc = other.pondGWPerc;
+  pondSOISPERCin = other.pondSOISPERCin;
+  pondSOISPERCout = other.pondSOISPERCout;
+  pondGWPERCin = other.pondGWPERCin;
+  pondGWPERCout = other.pondGWPERCout;
   PondROUT = other.PondROUT;
 
 }
@@ -186,8 +194,10 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     fast_RESPONSE = rhs.fast_RESPONSE;
     pond = rhs.pond;
     ET_POND = rhs.ET_POND;
-    pondSOISPERC = rhs.pondSOISPERC;
-    pondGWPerc = rhs.pondGWPerc;
+    pondSOISPERCin = rhs.pondSOISPERCin;
+    pondSOISPERCout = rhs.pondSOISPERCout;
+    pondGWPERCin = rhs.pondGWPERCin;
+    pondGWPERCout = rhs.pondGWPERCout;
     PondROUT = rhs.PondROUT;
 
   } // handle self assignment
@@ -2397,11 +2407,11 @@ void single_HMunit::ponds(pond_type _pondtype) {
 
 
     case pond_type::Pond: {
-      //std::cout<<"jsem v pondu"<<std::endl;
-      //must be implemented in data_HB_1d.cpp
       numberSel EtpO=0.0; // water surface evaporation
       numberSel PoiS=0.0; // soil percolation input pond
       numberSel PoiG=0.0; // groundwater percolation input pond
+      numberSel PouS=0.0; // soil percolation output
+      numberSel PouG=0.0; // groundwater percolation output
       numberSel RouT=0.0; // regular outflow without MRF
 
       //part of singleHru
@@ -2418,24 +2428,28 @@ void single_HMunit::ponds(pond_type _pondtype) {
       numberSel PoutToGW=0.0;
       numberSel PoutToSoil=0.0;
       numberSel PonS=0.0; // local variable
-      //std::cout<<"-----------------------------------------------------------------------"<<std::endl;
-      //std::cout<<"casovy krok   "<<tstRM<<std::endl;
-      // choosing a method for defining a variable
-      EtpO = pond_ET(ETpond_type::ETpond1); //[mm/day]
-      PoiS = pond_SOISperc(PondSOISPerc_type::noPondSOISPerc); // [m/s]
-      PoiG = pond_GWperc(PondGWPerc_type::noPondGWPerc); // [m/s]
-      RouT = pond_regular_out(PondRouT_type::PondRouT3); // [m3/s]
+
+      EtpO = pond_ET(ET_POND); //[mm/day]
+      PoiS = pond_SOISperc(pondSOISPERCin); // inflow [m/s]
+      PoiG = pond_GWperc(pondGWPERCin); // inflow [m/s]
+      PouS = pond_SOISperc(pondSOISPERCout); // outflow [m/s]
+      PouG = pond_GWperc(pondGWPERCout); // outflow [m/s]
+      RouT = pond_regular_out(PondROUT); // [m3/s]
       PoiN = (PoiS*Area*60*60*24)+(PoiG*Area*60*60*24)+(get_dta(tstRM,ts_type::TOTR))/1000*Area; //inputs converted to m3/day
+
+
+      //std::cout<<"--------------------------------------------------------------------------"<<std::endl;
       //std::cout<<"TOTR zacatek je teed:   "<< get_dta(tstRM,ts_type::TOTR)  << " TOTR m3 "<< (get_dta(tstRM,ts_type::TOTR))/1000*Area <<std::endl;
       //std::cout<<"PoiN  je teed:   "<<PoiN<<std::endl;
+
+
+
+
       PonS = get_dta(tstRM,ts_type::PONS)+PoiN;
       //std::cout<<"ten PonS + PoiN  je teed:   "<<PonS<<std::endl;
       OflW = std::max((PonS - PonsMax),0.0);
       //std::cout<<"ten PonS - PonsMax  je teed:   "<<PonS - PonsMax<<std::endl;
       PonS = PonS - OflW;
-      //std::cout<<"OflW  je teed:   "<<OflW<<std::endl;
-      //std::cout<<"ten PonS - OflW  je teed:   "<<PonS<<std::endl;
-
 
       Etpond  = std::min(EtpO/1000*pondArea, PonS);
       PonS = PonS - Etpond;
@@ -2449,21 +2463,15 @@ void single_HMunit::ponds(pond_type _pondtype) {
       PonS = PonS - PoutRegular;
 
       //prusaky
-      //PoutToGW = std::min ((PoiG*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, měla by se měnit plocha a mělo by to být závislé na hloubce
-      //PonS = PonS - PoutToGW;
+      PoutToGW = std::min ((PouG*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, měla by se měnit plocha a mělo by to být závislé na hloubce
+      PonS = PonS - PoutToGW;
 
-      //PoutToSoil = std::min ((PoiS*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, mělo by se vsakovat jen po obvodu? ale do jaké hloubky?
-      //PonS = PonS - PoutToSoil;
+      PoutToSoil = std::min ((PouS*Area*60*60*24), PonS); // prusak celou plochou, to je ale blbě, mělo by se vsakovat jen po obvodu? ale do jaké hloubky?
+      PonS = PonS - PoutToSoil;
 
-
-      //std::cout<<"ten OflW na konci je teed:   "<<(OflW)/Area*1000<<std::endl;
-      //std::cout<<"ten OflW m3:   "<<OflW<<std::endl;
-      //std::cout<<"ten TOTR na konci je teed:   "<<(PoutRegular+OflW)/Area*1000<<std::endl;
-      //std::cout<<"ten PonS na konci je teed:   "<<PonS<<std::endl;
-      //std::cout<<"Area je teed:   "<<Area<<std::endl;
-
-      //std::cout<<"vypisuju:   "<<std::endl;
-      //set_varValue(EtpO, tstRM,ts_type::ETPO);
+      //zapis promennych
+      //POIS, POIG - taky ukladat?
+      set_varValue(EtpO, tstRM,ts_type::ETPO);
       set_varValue(((PoutRegular+OflW)/Area*1000), tstRM,ts_type::TOTR);
       set_varValue(PonS, tstRM,ts_type::PONS);
       set_varValue((get_dta(tstRM,ts_type::AET)+(Etpond*pondArea/Area)), tstRM,ts_type::AET);
@@ -2754,7 +2762,9 @@ numberSel single_HMunit::pond_regular_out(PondRouT_type _RouT_type) {
 }
 
 void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberSel>>& PondDefs,std::vector<std::pair<std::string,std::string>>& PondBeh) {
+  set_pond_type(pond_type::Pond);
 
+  std::cout << "In set pondvariable" << "\n";
   std::map<std::string, PInp> PondMap = {
    {"PondArea", PInp::Area},
    {"PonsMax", PInp::Max},
@@ -2771,15 +2781,15 @@ void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberS
     switch(PondMap[PondDefs[id].first]) {
     case PInp::Area:
       std::cout << PondDefs[id].first<< "  " << PondDefs[id].second << "\n";
-      pondArea=PondDefs[id].second;
+      pondArea = PondDefs[id].second;
       break;
     case PInp::Max:
       std::cout << PondDefs[id].first<< "  " << PondDefs[id].second << "\n";
-      PonsMax=PondDefs[id].second;
+      PonsMax = PondDefs[id].second;
       break;
     case PInp::MRF:
       std::cout << PondDefs[id].first<< "  " << PondDefs[id].second << "\n";
-      MRF=PondDefs[id].second;
+      MRF = PondDefs[id].second;
       break;
     }
   }
@@ -2812,7 +2822,6 @@ void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberS
 
   for(unsigned id=0;id<PondBeh.size();id++){
     switch(PondMap[PondBeh[id].first]) {
-
     case PInp::ET:{
       switch(PondET[PondBeh[id].second]) {
         case ETpond_type::ETpond1:
@@ -2831,19 +2840,19 @@ void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberS
       switch(PondSois[PondBeh[id].second]) {
       case PondSOISPerc_type::noPondSOISPerc:
         std::cout <<PondBeh[id].first <<  ":  noPondSOISPerc  " << "\n";
-        pondSOISPERC = PondSOISPerc_type::noPondSOISPerc;
+        pondSOISPERCin = PondSOISPerc_type::noPondSOISPerc;
         break;
       case PondSOISPerc_type::PondSOISPerc1:
         std::cout <<PondBeh[id].first <<  ":  PondSOISPerc1  " << "\n";
-        pondSOISPERC = PondSOISPerc_type::PondSOISPerc1;
+        pondSOISPERCin = PondSOISPerc_type::PondSOISPerc1;
         break;
       case PondSOISPerc_type::PondSOISPerc2:
         std::cout <<PondBeh[id].first <<  ":  PondSOISPerc2  " << "\n";
-        pondSOISPERC = PondSOISPerc_type::PondSOISPerc2;
+        pondSOISPERCin = PondSOISPerc_type::PondSOISPerc2;
         break;
       case PondSOISPerc_type::PondSOISPerc3:
         std::cout <<PondBeh[id].first <<  ":  PondSOISPerc3  " << "\n";
-        pondSOISPERC = PondSOISPerc_type::PondSOISPerc3;
+        pondSOISPERCin = PondSOISPerc_type::PondSOISPerc3;
         break;
       }
       break;
@@ -2853,19 +2862,19 @@ void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberS
       switch(PondGW[PondBeh[id].second]) {
       case PondGWPerc_type::noPondGWPerc:
         std::cout <<PondBeh[id].first <<  ":  noPondGWPerc  " << "\n";
-        pondGWPerc = PondGWPerc_type::noPondGWPerc;
+        pondGWPERCin = PondGWPerc_type::noPondGWPerc;
         break;
       case PondGWPerc_type::PondGWPerc1:
         std::cout <<PondBeh[id].first <<  ":  PondGWPerc1  "  << "\n";
-        pondGWPerc = PondGWPerc_type::PondGWPerc1;
+        pondGWPERCin = PondGWPerc_type::PondGWPerc1;
         break;
       case PondGWPerc_type::PondGWPerc2:
         std::cout <<PondBeh[id].first <<  ":  PondGWPerc2  "  << "\n";
-        pondGWPerc = PondGWPerc_type::PondGWPerc2;
+        pondGWPERCin = PondGWPerc_type::PondGWPerc2;
         break;
       case PondGWPerc_type::PondGWPerc3:
         std::cout <<PondBeh[id].first <<  ":  PondGWPerc3  "  << "\n";
-        pondGWPerc = PondGWPerc_type::PondGWPerc3;
+        pondGWPERCin = PondGWPerc_type::PondGWPerc3;
         break;
       }
       break;
@@ -2873,16 +2882,21 @@ void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberS
 
     case PInp::outSOIS:{
       switch(PondSois[PondBeh[id].second]) {
+      case PondSOISPerc_type::noPondSOISPerc:
         std::cout <<PondBeh[id].first <<  ":  noPondSOISPerc  " << "\n";
+        pondSOISPERCout = PondSOISPerc_type::noPondSOISPerc;
         break;
       case PondSOISPerc_type::PondSOISPerc1:
         std::cout <<PondBeh[id].first <<  ":  PondSOISPerc1  " << "\n";
+        pondSOISPERCout =PondSOISPerc_type::PondSOISPerc1;
         break;
       case PondSOISPerc_type::PondSOISPerc2:
         std::cout <<PondBeh[id].first <<  ":  PondSOISPerc2  " << "\n";
+        pondSOISPERCout =PondSOISPerc_type::PondSOISPerc2;
         break;
       case PondSOISPerc_type::PondSOISPerc3:
         std::cout <<PondBeh[id].first <<  ":  PondSOISPerc3  " << "\n";
+        pondSOISPERCout =PondSOISPerc_type::PondSOISPerc3;
         break;
         }
       break;
@@ -2891,15 +2905,19 @@ void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberS
       switch(PondGW[PondBeh[id].second]) {
       case PondGWPerc_type::noPondGWPerc:
         std::cout <<PondBeh[id].first <<  ":  noPondGWPerc  " << "\n";
+        pondGWPERCout = PondGWPerc_type::noPondGWPerc;
         break;
       case PondGWPerc_type::PondGWPerc1:
         std::cout <<PondBeh[id].first <<  ":PondGWPerc1  "  << "\n";
+        pondGWPERCout = PondGWPerc_type::PondGWPerc1;
         break;
       case PondGWPerc_type::PondGWPerc2:
         std::cout <<PondBeh[id].first <<  ":PondGWPerc2  "  << "\n";
+        pondGWPERCout = PondGWPerc_type::PondGWPerc2;
         break;
       case PondGWPerc_type::PondGWPerc3:
         std::cout <<PondBeh[id].first <<  ":PondGWPerc3  "  << "\n";
+        pondGWPERCout = PondGWPerc_type::PondGWPerc3;
         break;
       }
       break;
