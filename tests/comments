@@ -1,0 +1,16 @@
+14_10_2025
+1)
+zkouším používat pond v singleHru. Ale zdá se mi, že se to nějak divně chová. Mám nastaveno,
+že maximální objem v nádrži (PonsMax) je 45000 m3, ale když zadám MRF nebo dodatečný odtok (RouT),
+tak mi Objem nádrže nikdy nevystoupá na těch 45000. Je to asi tím, že v denní bilanci nejdříve vyřeším
+přetok (OwfL, co jde přes bezpečák). Tím pádem se mi PonS na začátku nastaví nejvýše na PonsMax
+a pak odečtu ty stálé toky (MRF,RouT,PouS,PouG). Na konci dne tedy nemůžu dostat nikdy maximální
+naplnění nádrže (PonsMax).
+
+Je toto Chování správné?
+
+2)
+Při zadávaní parametrů nádrže a chování nádrže je to náchylné na chybu v zasávaném stringu.
+Když např., když místo "PondSOISPerc1" pro definici, že nedochází k průsaku do půdy napíšu
+"pondSOISPerc1", nebo jinou odchylku, tak mi to hned nerozpozná proměnnou a nechá jí přiřazenou
+defoultní hodnotu ("noPondSOISPerc")
