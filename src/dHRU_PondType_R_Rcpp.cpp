@@ -130,9 +130,9 @@ void setPondToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId, Rcpp::Ch
    unsigned numPars1Hru;
    numPars1Hru = dHRUM_ptr.get()->get_singleHRUnumPars(singleHruId);
 
-    if((numValVals+numTypeVals)!=9){
+    if((numValVals+numTypeVals)!=10){
      Rcpp::Rcout << "The number of set pond inputs is: " << (numValVals+numTypeVals) <<"\n";
-     Rcpp::stop("\n but  required number of pond inputs is: 9.\n");
+     Rcpp::stop("\n but  required number of pond inputs is: 10.\n");
    } else  {
 
      std::vector<numberSel> valvals = Rcpp::as<std::vector<numberSel>>(ValVals);

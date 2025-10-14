@@ -178,6 +178,7 @@ private:
   numberSel pondArea;  //!< The area of the pond [m2]
   numberSel PonsMax; //!< The maximum pond volume [m3]
   numberSel MRF; //!< Minimum residual flow (MZP) [m3/s]
+  numberSel Coflw; //!< Constant user defined regular outflow (RouT) from pond [m3/s]
 
 
 

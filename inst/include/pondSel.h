@@ -32,9 +32,9 @@ const PondRouT_type all_PondRouT[]{ PondRouT_type::noPondRouT,PondRouT_type::Pon
 const std::vector<std::string> allPondRouTNames {"noPondRouT","PondRouT1", "PondRouT2","PondRouT3"};
 
 //inputs needed from user
-enum class PInp{Area,Max,MRF,ET,inSOIS,inGW,outSOIS,outGW,outReg};
-const PInp all_pond[]{PInp::Area,PInp::Max,PInp::MRF,PInp::ET,PInp::inSOIS,PInp::inGW,PInp::outSOIS,PInp::outGW,PInp::outReg};
-const std::vector<std::string> allPondNames {"Area","Max","MRF","ET","inSOIS","inGW","outSOIS","outGW","outReg"};
+enum class PInp{Area,Max,MRF,CoflW,ET,inSOIS,inGW,outSOIS,outGW,outReg};
+const PInp all_pond[]{PInp::Area,PInp::Max,PInp::MRF,PInp::CoflW,PInp::ET,PInp::inSOIS,PInp::inGW,PInp::outSOIS,PInp::outGW,PInp::outReg};
+const std::vector<std::string> allPondNames {"Area","Max","MRF","CoflW","ET","inSOIS","inGW","outSOIS","outGW","outReg"};
 
 
 #endif // PONDSEL_H_INCLUDED
