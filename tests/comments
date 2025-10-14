@@ -14,3 +14,6 @@ Při zadávaní parametrů nádrže a chování nádrže je to náchylné na chy
 Když např., když místo "PondSOISPerc1" pro definici, že nedochází k průsaku do půdy napíšu
 "pondSOISPerc1", nebo jinou odchylku, tak mi to hned nerozpozná proměnnou a nechá jí přiřazenou
 defoultní hodnotu ("noPondSOISPerc")
+
+řešit to fcí na hlídání stringů? nebo udělat check funkci, která vypíše aktuální nastavení před spuštěním
+a checkovat si to bude user?
