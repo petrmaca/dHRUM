@@ -2465,6 +2465,12 @@ void single_HMunit::ponds(pond_type _pondtype) {
       PoutToSoil = std::min ((PouS*pondArea*60*60*24), PonS); // prusak celou plochou, to je ale blbě, mělo by se vsakovat jen po obvodu? ale do jaké hloubky?
       PonS = PonS - PoutToSoil;
 
+      //zpetny navrat pretoku? to co jsem na zacatku urcil jako pretok zkusim vratit do nadrze, abych ji naplnil.
+      PonS=PonS+OwfL;
+      OwfL = std::max(((PonS) - PonsMax),0.0);
+      //std::cout<<"ten PonS - PonsMax  je teed:   "<<PonS - PonsMax<<std::endl;
+      PonS = PonS - OwfL;
+
       //zapis promennych
       //POIS, POIG - taky ukladat?
       set_varValue(EtpO, tstRM,ts_type::ETPO);
