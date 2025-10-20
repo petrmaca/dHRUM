@@ -40,6 +40,9 @@ public:
   void runDam(numberSel damArea,numberSel damMax,numberSel damBank,numberSel MRF,\
               DamRouT_type _RouT_type,DamGWPerc_type _gwDam_type,DamSOISPerc_type _soisDam_type,ETdam_type _etdam_type);
 
+  numberSel volToDepth();
+  numberSel volToArea();
+
 protected:
 
 private:

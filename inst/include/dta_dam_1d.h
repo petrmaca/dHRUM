@@ -66,7 +66,8 @@ private:
   hdata EtdM;//!< Evaporation from water surface [mm/day]
   hdata OufL;//!< Total outflow
   hdata OflW;//!< overflow [m3/day]
-  hdata OulT;//!< Water outlet (outlet to the dam - water supply) [m3/day
+  hdata OulT;//!< Water outlet (outlet to the dam - water supply) [m3/day]
+
 
   //reversible flows
   hdata DaiS;//!< Soil percolation [m/s]

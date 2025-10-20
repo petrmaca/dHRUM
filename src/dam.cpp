@@ -336,21 +336,21 @@ void dam::runDam(numberSel damArea,numberSel damMax,numberSel damBank,numberSel 
     PoiN = get_dta(tstRM,dam_ts::INFL)+get_dta(tstRM,dam_ts::INLT)+(get_dta(tstRM,dam_ts::PREC)*damArea/1000); //inputs converted to m3/day
 //leaks in
     //PoiN =PoiN+(DaiS*damBank*60*60*24);// leak through the banks??
-    //PoiN =PoiN+(DaiG*damArea*60*60*24);// leak through the bottom??
+    PoiN =PoiN+(DaiG*volToArea()*60*60*24);// leak through the bottom??
 
     DamS = get_dta(tstRM,dam_ts::DAMS)+PoiN;
 //overflow
     OflW = std::max((DamS - damMax),0.0);
     DamS = DamS - OflW;
 //evaporation
-    DamS = DamS - (std::min(Etdm/1000*damArea, DamS));
+    DamS = DamS - (std::min(Etdm/1000*volToArea(), DamS));
 //outlet
     DamS = DamS - (std::min (get_dta(tstRM,dam_ts::OULT), DamS));
 //outflow
     DamS  = DamS  - (std::min ((RouT + MRF)*60*60*24, DamS));
 //leaks out
-    //DamS = DamS - (std::min ((DaiG*damArea*60*60*24), DamS));// leak through the banks??
-    //DamS = DamS - (std::min ((DaiS*damBank*60*60*24), DamS));// leak through the bottom??
+    //DamS = DamS - (std::min ((DaiG*volToArea()*60*60*24), DamS));// leak through the bottom??
+    //DamS = DamS - (std::min ((DaiS*damBank*60*60*24), DamS));// leak through the banks??
 
     set_varValue(Etdm, tstRM,dam_ts::ETDM);
     set_varValue(OflW, tstRM,dam_ts::OFLW);
@@ -360,3 +360,19 @@ void dam::runDam(numberSel damArea,numberSel damMax,numberSel damBank,numberSel 
     set_varValue(DamS, tstRM,dam_ts::DAMS);
 }
 
+
+numberSel dam::volToDepth(){
+  numberSel depth =0;
+  //odhadne hloubku m
+  depth=0.02*std::pow(get_dta(tstRM, dam_ts::DAMS),0.3974);//tuto funkci jsem si vymyslel fitována je na max hodnoty VD Nechranice (Max h = 46 m)
+
+  return depth;
+}
+
+numberSel dam::volToArea(){
+  numberSel area =0;
+  //odhadne plochu Ha
+  area=0.7*std::pow(get_dta(tstRM, dam_ts::DAMS),0.3879);//tuto funkci jsem si vymyslel fitována je na max hodnoty VD Nechranice (Max ha = 1338 ha)
+
+  return area*10000;
+}

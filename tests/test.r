@@ -3,7 +3,7 @@
 # {
 library(dHRUM)
 library(data.table)
-numdata =36500
+numdata =365
 probwet =0.9
 meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
@@ -21,9 +21,9 @@ setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfaceAll"
 setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
 
 #setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
-pondDF1 = data.frame( PondArea = 40500, PonsMax= 45000, MRF= 0.039, Coflw=0.0001)
+pondDF1 = data.frame( PondArea = 40500, PonsMax= 45000, MRF= 0.039, Coflw=0.3)
 pondDF2 = data.frame( Pond_ET = "ETpond1", Pond_inSOIS= "noPondSOISPerc", Pond_inGW = "noPondGWPerc",
-                      Pond_outSOIS= "noPondSOISPerc", Pond_outGW= "PondGWPerc1",Pond_outReg="noPondRouT" )
+                      Pond_outSOIS= "noPondSOISPerc", Pond_outGW= "PondGWPerc1",Pond_outReg="PondRouT3" )
 setPondToOnedHru(dHRUM_ptr = dhrus,0,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
 
 setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
@@ -65,5 +65,12 @@ plot(outDF$SOIS, type ="l")
 abline(h=smax,col="red")
 plot(outDF$SURS, type ="l")
 plot(outDF$DIRR, type ="l")
-plot(outDF$PONS, type ="l")
 plot(outDF$TOTR, type ="l")
+
+
+plot(outDF$PONS, type ="l",ylim=c(0,60000),main = "Reakce zásoby na srážku",xlab="den")
+lines(60000-(outDF$PERC*500), type ="l",col="RED")
+legend("bottomright", legend = c("PERC*500 ", "PONS"),
+       text.width = strwidth("1,000,000"),
+       lty = c(1,1), xjust = 1, yjust = 1,col=c("red","black"),
+       title = "Line Types")
