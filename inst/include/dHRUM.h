@@ -85,6 +85,9 @@ class dHRUM {
 protected:
 
 private:
+  unsigned num_threads;//!< the number of threads
+  caldata NumFastRes;//!< The number of fastre reservoirs in serie
+
   std::vector<single_HMunit> dHruVec;//!< vector of single HRU objects
   std::vector<std::string> dHruVecId;//!< vector of string HRU ids
   numberDta dimHM;//!< Number of single HRU objects
@@ -92,8 +95,6 @@ private:
   hdata Areas;//!< Arrays of Areas of all single HRUs
   numberDta numTs;//!< Number of time intervals
   caldata numParsAllHRus;//< Vector with Numbers of params
-
-  unsigned num_threads;
 
   data_HB_1d basinDta;//!< The HB data on all basin
   std::vector<gs_STORtype> gs_STORtypes;//!< The vector on groundwater storage types
@@ -103,7 +104,7 @@ private:
   std::vector<fast_Response> fast_RESPONSESTypes;//!< The vector on fast responses types in HRus
   std::vector<pond_type> pondTypes;//!< The vector on fast responses types in HRus
 
-  caldata NumFastRes;//!< The number of fastre reservoirs in serie
+
 };
 
 #endif // DHRUM_H

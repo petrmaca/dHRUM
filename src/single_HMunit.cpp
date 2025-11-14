@@ -35,7 +35,8 @@ single_HMunit::single_HMunit(): tstRM(0),
   pondSOISPERCout{},
   pondGWPERCin{},
   pondGWPERCout{},
-  PondROUT{}
+  PondROUT{},
+  Current_par_names()
   {
 
   set_nmbFastres(1);
@@ -120,7 +121,8 @@ pondSOISPERCin{},
 pondSOISPERCout{},
 pondGWPERCin{},
 pondGWPERCout{},
-PondROUT{}
+PondROUT{},
+Current_par_names()
 {
 
   tstRM = other.tstRM;//!< The counter for main loop in run model
@@ -155,6 +157,8 @@ PondROUT{}
   pondGWPERCin = other.pondGWPERCin;
   pondGWPERCout = other.pondGWPERCout;
   PondROUT = other.PondROUT;
+
+  Current_par_names = other.Current_par_names;
 
 }
 
@@ -203,6 +207,8 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     pondGWPERCin = rhs.pondGWPERCin;
     pondGWPERCout = rhs.pondGWPERCout;
     PondROUT = rhs.PondROUT;
+
+    Current_par_names = rhs.Current_par_names;
 
   } // handle self assignment
   //assignment operator
@@ -1792,6 +1798,7 @@ void single_HMunit::set_paramsToSim(std::vector<std::pair<numberSel,par_HRUtype>
   par_HRU.s_parLoadToCalib(parsToLoad);
   //    std::cout << std::endl << "Params after loadings:" << std::endl;
   //    par_HRU.p_param();
+  current_params();
 
   return;
 
@@ -2389,8 +2396,11 @@ void single_HMunit::current_params() {
 
   par_HRU.current_param(gs_STORAGE,soil_STORAGE,intrc_STORAGE,srfs_STORAGE,fast_RESPONSE );
 
-  //std::cout<<"velikost single unit: "<<par_HRU.Current_parameter_string.size()<<std::endl;
+  std::cout<<"velikost vectoru s names params: "<<par_HRU.Current_parameter_string.size()<<std::endl;
   Current_par_names=par_HRU.Current_parameter_string;
+
+  std::cout<<"velikost vectoru s names params: "<<par_HRU.Current_parameter_string.size()<<std::endl;
+
   Current_par_val=par_HRU.Current_parameter_val;
   Current_uppar_val=par_HRU.Current_upparameter_val;
   Current_lowpar_val=par_HRU.Current_lowparameter_val;

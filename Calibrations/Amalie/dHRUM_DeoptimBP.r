@@ -6,22 +6,59 @@ Areas <- 4.7*1000*1000
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 
+
+setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_RES",times= length(Areas)),hruIds=IdsHrus)
+setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
+setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfaceAll",times= length(Areas)),hruIds=IdsHrus)
+setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
+setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
+
 filname2 = "../dHRUM/Calibrations/Amalie/indata/BP_1960_01_01.txt"
 
 setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 
-ParDF = data.frame( B_SOIL = 1, C_MAX = 100, B_EVAP = 1,  KS = 0.01, KF = 0.03, ADIV = 0.01, CDIV = 0.3,
-SDIV = 0.3, CAN_ST = .5, STEM_ST = .2, CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
-RETCAP = 2,CMIN =10)
+ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.2,
+                    SDIV = 0.1, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
+                    RETCAP = 10, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
+                    KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =25,L=0.1, B_EXP = 0.3, KFR = 0.03)
 
-ParDFup = data.frame( B_SOIL = 1, C_MAX = 200, B_EVAP = 2,  KS = 0.8, KF = 0.08, ADIV = 0.99, CDIV = 0.3,
-                      SDIV = 0.3, CAN_ST = 0.5, STEM_ST = .1, CSDIV = 0.8, TETR = 0.5, DDFA = 5, TMEL = 0.0,
-                      RETCAP = 6 ,CMIN =5)
 
-ParDFlow = data.frame( B_SOIL = 1, C_MAX = 21, B_EVAP = 1,  KS = 0.001, KF = 0.005, ADIV = 0.71, CDIV = 0.05,
-                       SDIV = 0.01, CAN_ST = 0.02, STEM_ST = 0.01, CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -1.0,
-                       RETCAP = 2 ,CMIN =1)
+# ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+                    # SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
+myPars=getCurdHRUpars(dHRUM_ptr = dhrus,0)
+
+ups =names(ParDF)
+
+myPars
+
+ups1 =  myPars$Cur_names
+
+setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(myPars[[2]]),ParsNames =ups1)
+myPars=getCurdHRUpars(dHRUM_ptr = dhrus,0)
+
+# ups =names(ParDF)
+
+myPars
+
+# getCurdHRUpars(dHRUM_ptr = dhrus,0)
+# ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+#                     SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+#
+# setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
+
+# ParDF = data.frame( B_SOIL = 1, C_MAX = 100, B_EVAP = 1,  KS = 0.01, KF = 0.03, ADIV = 0.01, CDIV = 0.3,
+# SDIV = 0.3, CAN_ST = .5, STEM_ST = .2, CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
+# RETCAP = 2,CMIN =10)
+#
+# ParDFup = data.frame( B_SOIL = 1, C_MAX = 200, B_EVAP = 2,  KS = 0.8, KF = 0.08, ADIV = 0.99, CDIV = 0.3,
+#                       SDIV = 0.3, CAN_ST = 0.5, STEM_ST = .1, CSDIV = 0.8, TETR = 0.5, DDFA = 5, TMEL = 0.0,
+#                       RETCAP = 6 ,CMIN =5)
+#
+# ParDFlow = data.frame( B_SOIL = 1, C_MAX = 21, B_EVAP = 1,  KS = 0.001, KF = 0.005, ADIV = 0.71, CDIV = 0.05,
+#                        SDIV = 0.01, CAN_ST = 0.02, STEM_ST = 0.01, CSDIV = 0.01, TETR = -1, DDFA = 0.08, TMEL = -1.0,
+#                        RETCAP = 2 ,CMIN =1)
 ParBest = ParDF
   # set_Params_TodHru(dHRU_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),TRUE,0)
   # # for( i in 1:1000){
@@ -44,8 +81,8 @@ RmBP = QmBP * (3600*24) / A #CHMU ZHU mm/day
 # simRM=as.numeric(quantile(dF$TOTR,probs=(1-p_OBS)))
 
 sse = function(myPar){
-  # myPar =ParDF[1,]
-  setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(myPar),names(ParDF))
+   # myPar =ParDF[1,]
+  setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(myPars[[2]]),names(myPars[[1]]))
   # # for( i in 1:1000){
   calcHBInAlldHrus(dHRUM_ptr = dhrus)
   gatherHBdata(dHRUM_ptr = dhrus)
@@ -74,7 +111,7 @@ decntr<-DEoptim.control(VTR = 0, strategy = 2, bs = FALSE, NP = 200,
 n_ens=1
 parsBPmatrix=matrix(0,nrow=n_ens, ncol=ncol(ParBest))
 for(i in 1:n_ens){
-  u=DEoptim( lower=as.numeric(ParDFlow[1,]), upper=as.numeric(ParDFup[1,]), fn=sse, control = decntr)
+  u=DEoptim( lower=as.numeric(myPars[[4]]), upper=as.numeric(myPars[[3]]), fn=sse, control = decntr)
   u$optim$bestmem
   ParBest[1,] = as.numeric(u$optim$bestmem)
   parsBPmatrix[i,] = as.numeric(u$optim$bestmem)
@@ -88,7 +125,7 @@ BP_df=cbind(BP_df,ID=rep("BP",times=n_ens))
 
 # load("./Calibrations/Amalie/outdata/par_dHRUM_lumped_PET_HAMON_50_1_BP.rda")
 BP_df
-!
+
 
 A=4.7*1000*1000## plocha BP
 Par_dHRUm_BP_lumped= list(

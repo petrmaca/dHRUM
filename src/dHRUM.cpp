@@ -1,6 +1,8 @@
 #include "dHRUM.h"
 
-dHRUM::dHRUM(): dHruVec(),
+dHRUM::dHRUM(): num_threads(0),
+  NumFastRes(0),
+  dHruVec(),
   dHruVecId(),
   dimHM(0),
   basinArea(0),
@@ -13,9 +15,8 @@ dHRUM::dHRUM(): dHruVec(),
   interception_STORtypes(),
   surf_STORtypes(),
   fast_RESPONSESTypes(),
-  pondTypes(),
-  NumFastRes(0),
-  num_threads(0){
+  pondTypes()
+  {
   //ctor
   num_threads = 1;
 }
@@ -24,7 +25,9 @@ dHRUM::~dHRUM() {
   //dtor
 }
 
-dHRUM::dHRUM(const dHRUM& other): dHruVec(),
+dHRUM::dHRUM(const dHRUM& other): num_threads(0),
+  NumFastRes(0),
+  dHruVec(),
   dHruVecId(),
   dimHM(0),
   basinArea(0),
@@ -36,9 +39,8 @@ dHRUM::dHRUM(const dHRUM& other): dHruVec(),
   sw_STORtypes(),
   interception_STORtypes(),
   surf_STORtypes(),
-  fast_RESPONSESTypes(),
-  NumFastRes(0),
-  num_threads(0){
+  fast_RESPONSESTypes()
+  {
 
   dHruVec = other.dHruVec;
   dHruVecId = other.dHruVecId;
@@ -697,6 +699,7 @@ std::vector<double> dHRUM::get_lowparam_vec(unsigned hruId) {
 }
 
 std::vector<std::string> dHRUM::get_param_names(unsigned hruId) {
+  dHruVec[hruId].current_params();
   std::vector<std::string> names=dHruVec[hruId].Current_par_names;
   return names;
 }

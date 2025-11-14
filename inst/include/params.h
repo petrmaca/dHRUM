@@ -35,14 +35,14 @@ class params {
 
   unsigned g_numPars();//!< Get the number of parameters
   void current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP);
-  std::vector<std::string>par_HRUtype_to_string(std::list<par_HRUtype> par_list);
+  std::vector<std::string> par_HRUtype_to_string(std::list<par_HRUtype> par_list);
   void print_par_list(std::list<par_HRUtype> par_list);
 
-  std::list<par_HRUtype>Current_parameter_list;
-  std::vector<std::string>Current_parameter_string;
-  std::vector<double>Current_parameter_val;
-  std::vector<double>Current_upparameter_val;
-  std::vector<double>Current_lowparameter_val;
+  std::list<par_HRUtype> Current_parameter_list;
+  std::vector<std::string> Current_parameter_string;
+  std::vector<double> Current_parameter_val;
+  std::vector<double> Current_upparameter_val;
+  std::vector<double> Current_lowparameter_val;
 
 
  protected:
@@ -91,6 +91,8 @@ class params {
   //other
   std::list<par_HRUtype> L_interception_snow = { par_HRUtype::TETR };
   std::list<par_HRUtype> L_snow_melt = { par_HRUtype::DDFA, par_HRUtype::TMEL };
+
+
 };
 
 #endif // PARAMS_H

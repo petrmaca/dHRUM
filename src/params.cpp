@@ -4,7 +4,9 @@ params::params(): numPars(0),
   pars(1,1),
   up_pars(1,1),
   low_pars(1,1),
-  numFastRes(1) {
+  numFastRes(1),
+  Current_parameter_string()
+  {
   //ctor
 //    b_soil = 2.0;
 //    c_max = 100.0;
@@ -147,13 +149,16 @@ params::params(const params& other): numPars(0),
   pars(1,1),
   up_pars(1,1),
   low_pars(1,1),
-  numFastRes(1)  {
+  numFastRes(1),
+  Current_parameter_string() {
 
   numPars = other.numPars;
   pars = other.pars;
   up_pars = other.up_pars;
   low_pars = other.low_pars;
   numFastRes = other.numFastRes;
+  Current_parameter_string = other.Current_parameter_string;
+
 
 }
 
@@ -166,6 +171,7 @@ params& params::operator=(const params& rhs) {
     up_pars = rhs.up_pars;
     low_pars = rhs.low_pars;
     numFastRes = rhs.numFastRes;
+    Current_parameter_string = rhs.Current_parameter_string;
   }
 
   return *this;

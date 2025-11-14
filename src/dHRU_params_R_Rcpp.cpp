@@ -33,7 +33,15 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
     Rcpp::Rcout << "The number of values of params is " << numParsVals <<"\n";
     Rcpp::stop("\n Those values are different or higher or smaller then required number of dHRU Par Values =22.\n");
   } else {
+
     std::vector<std::string>  parNameStr = Rcpp::as<std::vector<std::string> >(ParsNames);
+
+    std::cout << "Pars names prints \n";
+    for(unsigned i=0;i<numParsNames;i++){
+      std::cout << parNameStr[i] << std::endl;
+    }
+    std::cout << "\n";
+
     // std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF","ADIV","CDIV", \
     //                               "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR",         \
     //                               "DDFA","TMEL","RETCAP"};
@@ -261,13 +269,15 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
         break;
       }
     }
+
+    ///neuplna funkce getRequiredParamsForHru(id)?????
     unsigned dimHRU = dHRUM_ptr.get()->getdHRUdim();
     for(unsigned id=0;id<dimHRU;id++){
       std::vector<std::string> requiredParams = dHRUM_ptr.get()->getRequiredParamsForHru(id);
       for(unsigned i=0;i<requiredParams.size();i++){
         if ( std::find(ParsNames.begin(), ParsNames.end(), requiredParams[i]) == ParsNames.end()) {
-          Rcpp::Rcout << "\nSomething wrong on item " << (i+1) << "\n";
-          Rcpp::stop("\n Required parameter missing.\n");
+          Rcpp::Rcout << "\nSomething wrong in Pars setting on item " << (i+1) << "\n";
+          Rcpp::stop("\n Required parameter is missing.\n");
         }
       }
     }
@@ -318,7 +328,7 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
 //                                          "DDFA","TMEL","RETCAP"};
     for(unsigned it=0; it<numParsNames;it++ ){
       if ( std::find(allParNames.begin(), allParNames.end(), parNameStr[it]) == allParNames.end()) {
-        Rcpp::Rcout << "\nSomething wrong on item " << (it+1) << "\n";
+        Rcpp::Rcout << "\nSomething wrong on for Params item " << (it+1) << "\n";
         Rcpp::stop("\n Wrong names of Par Values.\n");
       }
     }
