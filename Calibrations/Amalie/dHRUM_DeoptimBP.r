@@ -29,6 +29,7 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.0
 setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
 myPars=getCurdHRUpars(dHRUM_ptr = dhrus,0)
 
+
 ups =names(ParDF)
 
 myPars

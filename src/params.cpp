@@ -961,6 +961,8 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
 
   std::list<par_HRUtype> full_list;
 
+  std::cout<<"full list size v params BEGINING: "<<full_list.size()<<std::endl;
+
   switch(srfs_STORAGE) {
   case surface_STORtype::SurfaceAll:
     full_list.merge(L_SurfaceAll);
@@ -974,6 +976,9 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     std::cout << "WARNING!! No parametr set for surface_STORtype::Wetland" << std::endl;
     break;
   }
+
+  std::cout<<"L_LIN_RES size v params BEGINING: "<<L_LIN_RES.size()<<std::endl;
+
 
   switch(intrc_STORAGE) {
   case interception_STORtype::Rutter_Gash:
@@ -1056,11 +1061,15 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     break;
   }
 
+
+
   full_list.merge(L_interception_snow);
   full_list.merge(L_snow_melt);
 
   full_list.sort();
   full_list.unique();
+
+  std::cout<<"full list size v params AFTER: "<<full_list.size()<<std::endl;
 
 
   std::list<par_HRUtype>Current_parameter_list(full_list);
@@ -1073,8 +1082,8 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     Current_upparameter_val.push_back(g_par_up(itr));
     Current_lowparameter_val.push_back(g_par_low(itr));
   }
- // print_par_list(Current_parameter_list);
- // std::cout<<"velikost v params: "<<Current_parameter_string.size()<<std::endl;
+  print_par_list(Current_parameter_list);
+  std::cout<<"velikost v params: "<<Current_parameter_string.size()<<std::endl;
 }
 
 void params::print_par_list(std::list<par_HRUtype> par_list){

@@ -1796,8 +1796,8 @@ void single_HMunit::set_paramsToSim(std::vector<std::pair<numberSel,par_HRUtype>
   //    std::cout << std::endl << "Params before loadings:" << std::endl;
   //    par_HRU.p_param();
   par_HRU.s_parLoadToCalib(parsToLoad);
-  //    std::cout << std::endl << "Params after loadings:" << std::endl;
-  //    par_HRU.p_param();
+      std::cout << std::endl << "Params after loadings:" << std::endl;
+      par_HRU.p_param();
   current_params();
 
   return;
