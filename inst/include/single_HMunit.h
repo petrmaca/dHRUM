@@ -116,7 +116,7 @@ class single_HMunit {
 
 
   void current_params();
-  std::vector<std::string>Current_par_names;
+
   std::vector<double>Current_par_val;
   std::vector<double>Current_uppar_val;
   std::vector<double>Current_lowpar_val;
@@ -181,6 +181,7 @@ private:
   numberSel Coflw; //!< Constant user defined regular outflow (RouT) from pond [m3/s]
 
 
+  std::vector<std::string>Current_par_names;
 
 
 };

@@ -138,6 +138,11 @@ params::params(): numPars(0),
   low_pars[33] = 0.0;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
   low_pars[34] = 0.0;//!< KFR runnoff koeficient from fast response
 
+
+  Current_parameter_string.size();
+  //setting of defaulst current params lists up cur low names
+
+
 //  std::cout << "Params are initialized." << std::endl;
 }
 
@@ -1072,7 +1077,7 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
   std::cout<<"full list size v params AFTER: "<<full_list.size()<<std::endl;
 
 
-  std::list<par_HRUtype>Current_parameter_list(full_list);
+  std::list<par_HRUtype> Current_parameter_list(full_list);
 
  Current_parameter_string=par_HRUtype_to_string(Current_parameter_list);
 
@@ -1326,4 +1331,11 @@ void params::PDM_boundary_update(){
    low_pars[1] = 10.001; //!< C_MAX
    up_pars[22] = 10.0;    //!< CMIN
    low_pars[22] = 0.0;  //!< CMIN
+}
+
+
+unsigned params::g_sizeVecNamesPars(){
+
+  return Current_parameter_string.size();
+
 }

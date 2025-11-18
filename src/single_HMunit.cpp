@@ -69,6 +69,8 @@ single_HMunit::single_HMunit(): tstRM(0),
   PondROUT = PondRouT_type::noPondRouT;
   et_demand = 0.0;
 
+  Current_par_names.size();
+
 }
 
 /** \brief destructor of single pdm unit
@@ -1798,7 +1800,7 @@ void single_HMunit::set_paramsToSim(std::vector<std::pair<numberSel,par_HRUtype>
   par_HRU.s_parLoadToCalib(parsToLoad);
       std::cout << std::endl << "Params after loadings:" << std::endl;
       par_HRU.p_param();
-  current_params();
+      current_params();
 
   return;
 
@@ -2396,14 +2398,21 @@ void single_HMunit::current_params() {
 
   par_HRU.current_param(gs_STORAGE,soil_STORAGE,intrc_STORAGE,srfs_STORAGE,fast_RESPONSE );
 
-  std::cout<<"velikost vectoru s names params: "<<par_HRU.Current_parameter_string.size()<<std::endl;
-  Current_par_names=par_HRU.Current_parameter_string;
+  // std::cout<<"velikost vectoru s names params: "<<par_HRU.Current_parameter_string.size()<<std::endl;
+  // Current_par_names=par_HRU.Current_parameter_string;
 
-  std::cout<<"velikost vectoru s names params: "<<par_HRU.Current_parameter_string.size()<<std::endl;
+  std::cout<<"velikost vectoru s names params: "<<par_HRU.g_sizeVecNamesPars()<<std::endl;
+  // Current_par_names=par_HRU.Current_parameter_string;
+  // g_sizeVecNamesPars()
+
+  // std::cout<<"velikost vectoru s names params: "<<par_HRU.Current_parameter_string.size()<<std::endl;
+  std::cout<<"velikost vectoru s names params: "<<par_HRU.g_sizeVecNamesPars()<<std::endl;
+
 
   Current_par_val=par_HRU.Current_parameter_val;
   Current_uppar_val=par_HRU.Current_upparameter_val;
   Current_lowpar_val=par_HRU.Current_lowparameter_val;
+
 }
 
 /** \brief Update all pond types

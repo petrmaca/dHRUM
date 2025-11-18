@@ -39,10 +39,12 @@ class params {
   void print_par_list(std::list<par_HRUtype> par_list);
 
   std::list<par_HRUtype> Current_parameter_list;
-  std::vector<std::string> Current_parameter_string;
+  // std::vector<std::string> Current_parameter_string;
   std::vector<double> Current_parameter_val;
   std::vector<double> Current_upparameter_val;
   std::vector<double> Current_lowparameter_val;
+
+  unsigned g_sizeVecNamesPars();
 
 
  protected:
@@ -54,6 +56,8 @@ class params {
   pdata up_pars;//!< The upper bounds of parameters
   pdata low_pars;//!< The lower bound of parameters
   unsigned numFastRes;//!< The number of fast runoff reservoirs, states are implemented in data_HB_1d class
+
+  std::vector<std::string> Current_parameter_string;//!< The vector of param names
 
 
 
