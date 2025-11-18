@@ -6,9 +6,11 @@
 #include <vector>
 #include <utility> // pair
 #include <string> //string
+#include <list>
 
 #include "numberSel.h"
-#include <list>
+#include "parStructSels.h"
+
 
 class params {
  public:

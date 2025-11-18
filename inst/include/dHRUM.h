@@ -13,6 +13,8 @@
 // #include <cmath>
 
 #include "numberSel.h"
+#include "parStructSels.h"
+
 //#include "pondSel.h"
 #include "single_HMunit.h"
 

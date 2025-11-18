@@ -6,6 +6,8 @@
 #include <string>
 #include <map>
 
+#include "parStructSels.h"
+
 // Type for numbers selector
 
 using numberSel = double;

@@ -15,9 +15,11 @@
 #include <utility>
 
 #include "numberSel.h"
+#include "params.h"
+#include "parStructSels.h"
 #include "pondSel.h"
 #include "data_HB_1d.h"
-#include "params.h"
+
 
 
 class single_HMunit {
