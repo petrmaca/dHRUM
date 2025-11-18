@@ -39,8 +39,9 @@ params::params(): numPars(0),
   pars[20] = 1;//!< THR Threshold coefficient for threshold-controlled linear storage [0,inf]
   pars[21] = 0.5;//!< ALPHA Divider for two parallel linear reservoirs
   pars[22] = 0;//!< Cmin for pdmsoil reservoir [0,inf]
-  numberSel helpSmax;
+  numberSel helpSmax = 0;
   helpSmax = (pars[0] * pars[22] +pars[1]) / (pars[0]+1);
+  pars[3] = helpSmax;
   pars[23] = 10;//!< FC Field capacity [mm] [0,inf)
   pars[24] = 0.5;//!< Forest fraction [0,1]
   pars[25] = 0.5;//!< KF2 Storage coefficient of runoff response reservoirs [0,1]
@@ -79,7 +80,7 @@ params::params(): numPars(0),
   up_pars[22] = 200;//!< CIMN lower limit of c in soils pdm reservoir
 
 
-  numberSel helpSmaxPDMUp;
+  numberSel helpSmaxPDMUp = 0;
   helpSmaxPDMUp = (up_pars[0]*up_pars[22] + up_pars[1]) / (up_pars[0]+1);
   pars[3] = helpSmaxPDMUp;
 
@@ -121,7 +122,7 @@ params::params(): numPars(0),
   low_pars[21] = 0.0;//!< ALPHA Divider for two parallel linear reservoirs
   low_pars[22] = 0;//!< CMIN lower limit of c in soils pdm reservoir
 
-  numberSel helpSmaxPDMLow;
+  numberSel helpSmaxPDMLow = 0;
   helpSmaxPDMLow = (low_pars[0] *low_pars[22] +low_pars[1]) / (low_pars[0]+1);
   low_pars[3] = helpSmaxPDMLow;
 

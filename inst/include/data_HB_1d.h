@@ -16,6 +16,7 @@
 #include <utility>
 
 #include "numberSel.h"
+#include "parStructSels.h"
 
 class data_HB_1d {
  public:

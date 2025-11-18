@@ -127,8 +127,9 @@ void setPondToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId, Rcpp::Ch
    unsigned numValVals = ValVals.size();
    unsigned numTypeNames = TypeNames.size();
    unsigned numTypeVals = TypeVals.size();
-   unsigned numPars1Hru;
-   numPars1Hru = dHRUM_ptr.get()->get_singleHRUnumPars(singleHruId);
+ //  unsigned numPars1Hru = 0;
+
+//   numPars1Hru = dHRUM_ptr.get()->get_singleHRUnumPars(singleHruId);
 
     if((numValVals+numTypeVals)!=10){
      Rcpp::Rcout << "The number of set pond inputs is: " << (numValVals+numTypeVals) <<"\n";
