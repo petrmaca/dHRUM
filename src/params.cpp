@@ -971,14 +971,14 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
 
   switch(srfs_STORAGE) {
   case surface_STORtype::SurfaceAll:
-    full_list.merge(L_SurfaceAll);
+    full_list.insert(full_list.end(),L_SurfaceAll.begin(),L_SurfaceAll.end());
     break;
   case surface_STORtype::SurfacePRTL:
-    full_list.merge(L_SurfacePRTL);
+    full_list.insert(full_list.end(),L_SurfacePRTL.begin(),L_SurfacePRTL.end());
     std::cout << "WARNING!! No parametr set for surface_STORtype::SurfacePRTL" << std::endl;
     break;
   case surface_STORtype::Wetland:
-    full_list.merge(L_Wetland);
+    full_list.insert(full_list.end(),L_Wetland.begin(),L_Wetland.end() );
     std::cout << "WARNING!! No parametr set for surface_STORtype::Wetland" << std::endl;
     break;
   }
@@ -988,92 +988,92 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
 
   switch(intrc_STORAGE) {
   case interception_STORtype::Rutter_Gash:
-    full_list.merge(L_Rutter_Gash);
+    full_list.insert(full_list.end(),L_Rutter_Gash.begin(), L_Rutter_Gash.end());
     break;
   }
 
   switch(gs_STORAGE) {
   case gs_STORtype::LIN_RES:
-    full_list.merge(L_LIN_RES);
+    full_list.insert(full_list.end(),L_LIN_RES.begin(),L_LIN_RES.end() );
     break;
   case gs_STORtype::LINL_RES:
-    full_list.merge(L_LINL_RES);
+    full_list.insert(full_list.end(),L_LINL_RES.begin(),L_LINL_RES.end());
     break;
   case gs_STORtype::LINBY_RES:
-    full_list.merge(L_LINBY_RES);
+    full_list.insert(full_list.end(),L_LINBY_RES.begin(),L_LINBY_RES.end() );
     break;
   case gs_STORtype::POW_RES:
-    full_list.merge(L_POW_RES);
+    full_list.insert(full_list.end(),L_POW_RES.begin(),L_POW_RES.end() );
     break;
   case gs_STORtype::EXP_RES:
-    full_list.merge(L_EXP_RES);
+    full_list.insert(full_list.end(),L_EXP_RES.begin(),L_EXP_RES.end() );
     break;
   case gs_STORtype::LIN_2SE:
-    full_list.merge(L_LIN_2SE);
+    full_list.insert(full_list.end(),L_LIN_2SE.begin(),L_LIN_2SE.end() );
     break;
   case gs_STORtype::LIN_2PA:
-    full_list.merge(L_LIN_2PA);
+    full_list.insert(full_list.end(),L_LIN_2PA.begin(),L_LIN_2PA.end() );
     break;
   case gs_STORtype::FLEX_RES:
-    full_list.merge(L_FLEX_RES);
+    full_list.insert(full_list.end(),L_FLEX_RES.begin(),L_FLEX_RES.end() );
     break;
   case gs_STORtype::EXP_LOG:
-    full_list.merge(L_EXP_LOG);
+    full_list.insert(full_list.end(),L_EXP_LOG.begin(),L_EXP_LOG.end() );
     break;
   }
 
   switch(soil_STORAGE) {
    case soil_STORtype::PDM:
-    full_list.merge(L_PDM);
+    full_list.insert(full_list.end(),L_PDM.begin(),L_PDM.end() );
     break;
   case soil_STORtype::COLLIE_V2:
-    full_list.merge(L_COLLIE_V2);
+    full_list.insert(full_list.end(),L_COLLIE_V2.begin(),L_COLLIE_V2.end() );
     break;
   case soil_STORtype::NEW_ZEALAND:
-    full_list.merge(L_NEW_ZEALAND);
+    full_list.insert(full_list.end(),L_NEW_ZEALAND.begin(),L_NEW_ZEALAND.end() );
     break;
   case soil_STORtype::GR4J:
-    full_list.merge(L_GR4J);
+    full_list.insert(full_list.end(),L_GR4J.begin(),L_GR4J.end() );
     break;
   case soil_STORtype::SBROOK_V1:
-    full_list.merge(L_SBROOK_V1);
+    full_list.insert(full_list.end(),L_SBROOK_V1.begin(),L_SBROOK_V1.end() );
     break;
   case soil_STORtype::HILLSLOPE:
-    full_list.merge(L_HILLSLOPE);
+    full_list.insert(full_list.end(),L_HILLSLOPE.begin(),L_HILLSLOPE.end() );
     break;
   case soil_STORtype::PLATEAU:
-    full_list.merge(L_PLATEAU);
+    full_list.insert(full_list.end(),L_PLATEAU.begin(),L_PLATEAU.end() );
     break;
   case soil_STORtype::PDM2:
-    full_list.merge(L_PDM2);
+    full_list.insert(full_list.end(),L_PDM2.begin(),L_PDM2.end() );
     break;
   }
 
   switch(fast_RESP) {
   case fast_Response::SerialCascadeLinRes:
-    full_list.merge(L_SerialCascadeLinRes);
+    full_list.insert(full_list.end(),L_SerialCascadeLinRes.begin(),L_SerialCascadeLinRes.end() );
     break;
 
   case fast_Response::SerialLinResGWGros:
-    full_list.merge(L_SerialLinResGWGros);
+    full_list.insert(full_list.end(),L_SerialLinResGWGros.begin(),L_SerialLinResGWGros.end() );
     break;
 
   case fast_Response::SerialLinResSoilSois:
-    full_list.merge(L_SerialLinResSoilSois);
+    full_list.insert(full_list.end(),L_SerialLinResSoilSois.begin(),L_SerialLinResSoilSois.end());
     break;
 
   case fast_Response::SerialLinResGWGrosSoilSois:
-    full_list.merge(L_SerialLinResGWGrosSoilSois);
+    full_list.insert(full_list.end(),L_SerialLinResGWGrosSoilSois.begin(),L_SerialLinResGWGrosSoilSois.end() );
     break;
   }
 
 
 
-  full_list.merge(L_interception_snow);
-  full_list.merge(L_snow_melt);
+  full_list.insert(full_list.end(),L_interception_snow.begin(),L_interception_snow.end() );
+  full_list.insert(full_list.end(),L_snow_melt.begin(),L_snow_melt.end());
 
-  full_list.sort();
-  full_list.unique();
+  // full_list.sort();
+  // full_list.unique();
 
   std::cout<<"full list size v params AFTER: "<<full_list.size()<<std::endl;
 

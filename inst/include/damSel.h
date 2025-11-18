@@ -15,8 +15,6 @@ const dam_ts all_dts[]{dam_ts::PREC,dam_ts::TEMP,dam_ts::DAMS,dam_ts::INFL,dam_t
 
 enum class init_dStype {DAMS};
 
-
-
 //water surface evaporation variants
 enum class ETdam_type {ETdam1, ETdam2};
 const ETdam_type all_ETdam[]{ ETdam_type::ETdam1,ETdam_type::ETdam2};
