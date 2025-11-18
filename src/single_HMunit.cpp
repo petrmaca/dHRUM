@@ -2975,3 +2975,9 @@ void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberS
 }
 
 
+
+void single_HMunit::s_current_parsNames(){
+
+  par_HRU.g_sizeVecNamesPars();
+
+}
