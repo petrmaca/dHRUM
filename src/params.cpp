@@ -1100,6 +1100,10 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
   Current_parameter_string=par_HRUtype_to_string(Current_parameter_list);
 
 
+  Current_parameter_val.clear();
+  Current_upparameter_val.clear();
+  Current_lowparameter_val.clear();
+
   for (auto itr : Current_parameter_list) {
     Current_parameter_val.push_back(g_par(itr));
     Current_upparameter_val.push_back(g_par_up(itr));
