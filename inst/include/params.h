@@ -53,7 +53,6 @@ class params {
   std::vector<double>  get_CurUpParVals();
   std::vector<double>  get_CurLowParVals();
 
-
  protected:
 
  private:
