@@ -6,7 +6,10 @@ params::params(): numPars(0),
   low_pars(1,1),
   numFastRes(1),
   Current_parameter_string(),
-  Current_parameter_list()
+  Current_parameter_list(),
+  Current_parameter_val(),
+  Current_upparameter_val(),
+  Current_lowparameter_val()
   {
   //ctor
 //    b_soil = 2.0;
@@ -143,6 +146,9 @@ params::params(): numPars(0),
 
   Current_parameter_string.size();
   Current_parameter_list.size();
+  Current_parameter_val.size();
+  Current_upparameter_val.size();
+  Current_lowparameter_val.size();
   //setting of defaulst current params lists up cur low names
 
 
@@ -158,7 +164,10 @@ params::params(const params& other): numPars(0),
   up_pars(1,1),
   low_pars(1,1),
   numFastRes(1),
-  Current_parameter_string() {
+  Current_parameter_string(),
+  Current_parameter_val(),
+  Current_upparameter_val(),
+  Current_lowparameter_val() {
 
   numPars = other.numPars;
   pars = other.pars;
@@ -166,6 +175,9 @@ params::params(const params& other): numPars(0),
   low_pars = other.low_pars;
   numFastRes = other.numFastRes;
   Current_parameter_string = other.Current_parameter_string;
+  Current_parameter_val = other.Current_parameter_val;
+  Current_upparameter_val = other.Current_upparameter_val;
+  Current_lowparameter_val = other.Current_lowparameter_val;
 
 
 }
@@ -180,6 +192,9 @@ params& params::operator=(const params& rhs) {
     low_pars = rhs.low_pars;
     numFastRes = rhs.numFastRes;
     Current_parameter_string = rhs.Current_parameter_string;
+    Current_parameter_val = rhs.Current_parameter_val;
+    Current_upparameter_val = rhs.Current_upparameter_val;
+    Current_lowparameter_val = rhs.Current_lowparameter_val;
   }
 
   return *this;
@@ -1349,3 +1364,27 @@ std::vector<std::string> params::get_CurParNames(){
   return Current_parameter_string;//maybe VecParNamesSnglHS
 
 }
+
+std::vector<double> params::get_CurParVals(){
+
+  return Current_parameter_val;
+
+}
+
+std::vector<double> params::get_CurUpParVals(){
+
+  return Current_upparameter_val;
+
+}
+
+std::vector<double> params::get_CurLowParVals(){
+
+  return Current_lowparameter_val;
+
+}
+
+
+
+
+
+

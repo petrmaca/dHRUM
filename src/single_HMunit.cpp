@@ -2409,9 +2409,9 @@ void single_HMunit::current_params() {
   std::cout<<"velikost vectoru s names params: "<<par_HRU.g_sizeVecNamesPars()<<std::endl;
 
 
-  Current_par_val=par_HRU.Current_parameter_val;
-  Current_uppar_val=par_HRU.Current_upparameter_val;
-  Current_lowpar_val=par_HRU.Current_lowparameter_val;
+  // Current_par_val=par_HRU.g_CurParVal;
+  // Current_uppar_val=par_HRU.g_CurUpParVal;
+  // Current_lowpar_val=par_HRU.g_CurLowParVal;
 
 }
 
@@ -3008,7 +3008,27 @@ void single_HMunit::s_current_parsNames(){
 std::vector<std::string>  single_HMunit::get_Current_par_names(){
 
   std::vector<std::string> nameS = par_HRU.get_CurParNames();
+  return nameS;
 
+}
+
+std::vector<double>  single_HMunit::get_Current_par_values(){
+
+  std::vector<double> nameS = par_HRU.get_CurParVals();
+  return nameS;
+
+}
+
+std::vector<double>  single_HMunit::get_Current_par_up_values(){
+
+  std::vector<double> nameS = par_HRU.get_CurUpParVals();
+  return nameS;
+
+}
+
+std::vector<double>  single_HMunit::get_Current_par_low_values(){
+
+  std::vector<double> nameS = par_HRU.get_CurLowParVals();
   return nameS;
 
 }

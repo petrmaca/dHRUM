@@ -136,6 +136,11 @@ class single_HMunit {
   numberSel pond_regular_out(PondRouT_type _RouT_type);
 
   std::vector<std::string>  get_Current_par_names();
+  std::vector<double>  get_Current_par_values();
+  std::vector<double>  get_Current_par_up_values();
+  std::vector<double>  get_Current_par_low_values();
+
+
 
 
 protected:
@@ -176,6 +181,7 @@ private:
   PondGWPerc_type  pondGWPERCin;//!< Type of percolation from   groundwater to pond
   PondGWPerc_type  pondGWPERCout;//!< Type of percolation from pond to groundwater
   PondRouT_type  PondROUT ;//!< Pond outlet method
+
   std::vector<std::string>Current_par_names;
 
 

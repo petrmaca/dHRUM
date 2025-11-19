@@ -684,17 +684,20 @@ void dHRUM::Current_Params(unsigned hruId){
 }
 
 std::vector<double> dHRUM::get_param_vec(unsigned hruId) {
-  std::vector<double> curr_par=dHruVec[hruId].Current_par_val;
+  dHruVec[hruId].current_params();
+  std::vector<double> curr_par=dHruVec[hruId].get_Current_par_values();
   return curr_par;
 }
 
 std::vector<double> dHRUM::get_upparam_vec(unsigned hruId) {
-    std::vector<double> up_par=dHruVec[hruId].Current_uppar_val;
+  dHruVec[hruId].current_params();
+  std::vector<double> up_par=dHruVec[hruId].get_Current_par_up_values();
   return up_par;
 }
 
 std::vector<double> dHRUM::get_lowparam_vec(unsigned hruId) {
-  std::vector<double> low_par=dHruVec[hruId].Current_lowpar_val;
+  dHruVec[hruId].current_params();
+  std::vector<double> low_par=dHruVec[hruId].get_Current_par_low_values();
   return low_par;
 }
 

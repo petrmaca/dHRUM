@@ -42,13 +42,16 @@ class params {
 
 
   // std::vector<std::string> Current_parameter_string;
-  std::vector<double> Current_parameter_val;
-  std::vector<double> Current_upparameter_val;
-  std::vector<double> Current_lowparameter_val;
+  //std::vector<double> Current_parameter_val;
+  //std::vector<double> Current_upparameter_val;
+  //std::vector<double> Current_lowparameter_val;
 
   unsigned g_sizeVecNamesPars();
 
   std::vector<std::string>  get_CurParNames();
+  std::vector<double>  get_CurParVals();
+  std::vector<double>  get_CurUpParVals();
+  std::vector<double>  get_CurLowParVals();
 
 
  protected:
@@ -63,6 +66,13 @@ class params {
 
   std::vector<std::string> Current_parameter_string;//!< The vector of param names
   std::list<par_HRUtype> Current_parameter_list;
+  std::vector<double> Current_parameter_val;
+  std::vector<double> Current_upparameter_val;
+  std::vector<double> Current_lowparameter_val;
+
+
+
+
 /*
   //srfs_STORAGE
   std::list<par_HRUtype> L_SurfaceAll = { par_HRUtype::CDIV, par_HRUtype::SDIV, par_HRUtype::TETR, par_HRUtype::RETCAP };
