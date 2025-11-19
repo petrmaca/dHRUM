@@ -27,10 +27,11 @@ damRout_TYPE{}
 
   damMax = 0.0;//!< Minimum volume of the dam [m3]
   MRF = 0.0; //!< Minimum Residual Flow [m3/s]
+  ConstRouT = 0.0;
   damArea = 0.0; //!< Area of the dam in [m2] - for groundwater communication, WS evaporation,...
   damLeng = 0.0; //!< Length of the dam body[m] - for dam body leakage
   damBank = 0.0; //!< Length of the dam bank[m] - for Soil communication
-  ConstRouT = 0.0;
+
 
 }
 
@@ -360,14 +361,14 @@ void dam::runDam(numberSel damArea,numberSel damMax,numberSel damBank,numberSel 
 //outflow
     DamS  = DamS  - (std::min ((RouT + MRF)*60*60*24, DamS));
 //leaks out
-    //DamS = DamS - (std::min ((DaiG*volToArea()*60*60*24), DamS));// leak through the bottom??
-    //DamS = DamS - (std::min ((DaiS*damBank*60*60*24), DamS));// leak through the banks??
+    DamS = DamS - (std::min ((DaiG*volToArea()*60*60*24), DamS));// leak through the bottom??
+    DamS = DamS - (std::min ((DaiS*damBank*60*60*24), DamS));// leak through the banks??
 
     set_varValue(Etdm, tstRM,dam_ts::ETDM);
     set_varValue(OflW, tstRM,dam_ts::OFLW);
     set_varValue((RouT +MRF), tstRM,dam_ts::OUFL);
-    //set_varValue(DaiS, tstRM,dam_ts::DAIS);
-    //set_varValue(DaiG, tstRM,dam_ts::DAIG);
+    set_varValue(DaiS, tstRM,dam_ts::DAIS);
+    set_varValue(DaiG, tstRM,dam_ts::DAIG);
     set_varValue(DamS, tstRM,dam_ts::DAMS);
 }
 

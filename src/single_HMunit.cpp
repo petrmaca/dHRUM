@@ -2818,6 +2818,18 @@ void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberS
       //std::cout << PondDefs[id].first<< "  " << PondDefs[id].second << "\n";
       Coflw = PondDefs[id].second;
       break;
+    case PInp::ET:
+      break;
+    case PInp::inSOIS:
+      break;
+    case PInp::inGW:
+      break;
+    case PInp::outSOIS:
+      break;
+    case PInp::outGW:
+      break;
+    case PInp::outReg:
+      break;
     }
   }
 
@@ -2847,8 +2859,18 @@ void single_HMunit::set_pond_variables(std::vector<std::pair<std::string,numberS
     {"PondRouT3", PondRouT_type::PondRouT3}
   };
 
+
+
   for(unsigned id=0;id<PondBeh.size();id++){
     switch(PondMap[PondBeh[id].first]) {
+    case PInp::Area:
+      break;
+    case PInp::Max:
+      break;
+    case PInp::MRF:
+      break;
+    case PInp::CoflW:
+      break;
     case PInp::ET:{
       switch(PondET[PondBeh[id].second]) {
         case ETpond_type::ETpond1:

@@ -150,19 +150,17 @@ private:
   numberSel prevSteS;//!<  The helper variable for Stem interception storage
   numberSel prevSnoS;//!<  The helper variable for Snow storage
   numberSel prev_SurS;//!< The helper variable for updating surface storage
-
   numberSel prev_GroS1;//!< The helper variable for updating groundwater storage for LIN_2SE and LIN_2PA
   numberSel prev_GroS2;//!< The helper variable for updating groundwater storage for LIN_2SE and LIN_2PA
-
   numberSel et_demand;//!< The helper on ET demand
-
   numberDta help_nmbFR;//!< The helper for number of fast reservoirs
   numberDta ifrb;//!< For loop counter
-
   numberSel Area;//!< The area of HM unit in m2
   std::string IdHru;
-
-
+  numberSel pondArea;  //!< The area of the pond [m2]
+  numberSel PonsMax; //!< The maximum pond volume [m3]
+  numberSel MRF; //!< Minimum residual flow (MZP) [m3/s]
+  numberSel Coflw; //!< Constant user defined regular outflow (RouT) from pond [m3/s]
 
   gs_STORtype gs_STORAGE;//!< Type of groundwater storage
   soil_STORtype soil_STORAGE;//!< Type of soil storage
@@ -176,14 +174,6 @@ private:
   PondGWPerc_type  pondGWPERCin;//!< Type of percolation from   groundwater to pond
   PondGWPerc_type  pondGWPERCout;//!< Type of percolation from pond to groundwater
   PondRouT_type  PondROUT ;//!< Pond outlet method
-
-
-  numberSel pondArea;  //!< The area of the pond [m2]
-  numberSel PonsMax; //!< The maximum pond volume [m3]
-  numberSel MRF; //!< Minimum residual flow (MZP) [m3/s]
-  numberSel Coflw; //!< Constant user defined regular outflow (RouT) from pond [m3/s]
-
-
   std::vector<std::string>Current_par_names;
 
 

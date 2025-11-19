@@ -44,9 +44,9 @@ Prec(1,1),
 Temp(1,1),
 DaiS(1,1),
 DaiG(1,1),
-EtdM(1,1),
 OulT(1,1),
 InlT (1,1),
+EtdM(1,1),
 DamS(1,1),
 init_DamS(0.0){
   numTS = other.numTS;
@@ -91,7 +91,6 @@ dta_dam_1d& dta_dam_1d::operator=(const dta_dam_1d& rhs) {
     Temp= rhs.Temp;
     DaiS= rhs.DaiS;
     DaiG= rhs.DaiG;
-    EtdM= rhs.EtdM;
     OulT= rhs.OulT;
     InlT= rhs.InlT;
     EtdM= rhs.EtdM;

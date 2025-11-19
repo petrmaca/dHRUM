@@ -56,24 +56,16 @@ private:
   caldata init_month;
   caldata init_day;
 
-  hdata Temp;//!< Temperature for Evapuration equations
-  //inflows
-  hdata Prec;//!< Precipitation on water surface
   hdata InfL;//!< Inflow from water channels
-  hdata InlT;//!< Water inlet (inlet to the dam - water supply)[m3/day]
-
-  //outflows
-  hdata EtdM;//!< Evaporation from water surface [mm/day]
   hdata OufL;//!< Total outflow
   hdata OflW;//!< overflow [m3/day]
-  hdata OulT;//!< Water outlet (outlet to the dam - water supply) [m3/day]
-
-
-  //reversible flows
+  hdata Prec;//!< Precipitation on water surface
+  hdata Temp;//!< Temperature for Evaporation equations
   hdata DaiS;//!< Soil percolation [m/s]
   hdata DaiG;//!< Groundwater percolation [m/s]
-
-  //Storage
+  hdata OulT;//!< Water outlet (outlet to the dam - water supply) [m3/day]
+  hdata InlT;//!< Water inlet (inlet to the dam - water supply)[m3/day]
+  hdata EtdM;//!< Evaporation from water surface [mm/day]
   hdata DamS;//!< Dam storage[m3]
   numberSel init_DamS;//!< Initial value of dam storage
 

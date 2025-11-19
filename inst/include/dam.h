@@ -53,10 +53,11 @@ private:
 
   numberSel damMax;//!< Minimum volume of the dam [m3]
   numberSel MRF; //!< Minimum Residual Flow [m3/s]
+  numberSel ConstRouT; //!< constant value of regular outflow
   numberSel damArea; //!< Area of the dam in [m2] - for groundwater communication, WS evaporation,...
   numberSel damLeng; //!< Length of the dam body[m] - for dam body leakage
   numberSel damBank; //!< Length of the dam bank[m] - for Soil communication
-  numberSel ConstRouT; //!< constant value of regular outflow
+
 
   ETdam_type damEt_TYPE;//!< Type of evaporation
   DamSOISPerc_type damSperc_TYPE;//!< Type of soil percolation
