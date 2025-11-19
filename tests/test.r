@@ -38,6 +38,7 @@ setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 current_parameters<-getCurdHRUpars(dHRUM_ptr = dhrus,0)
 
 current_parameters$Cur_par
+current_parameters$Cur_names
 
 calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 # calcHBInAlldHrus(dHRUM_ptr = dhrus)
