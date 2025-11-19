@@ -2981,3 +2981,12 @@ void single_HMunit::s_current_parsNames(){
   par_HRU.g_sizeVecNamesPars();
 
 }
+
+
+std::vector<std::string>  single_HMunit::get_Current_par_names(){
+
+  std::vector<std::string> nameS = par_HRU.get_CurParNames();
+
+  return nameS;
+
+}

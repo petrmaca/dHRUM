@@ -135,6 +135,8 @@ class single_HMunit {
   numberSel pond_GWperc(PondGWPerc_type _gwpond_type);
   numberSel pond_regular_out(PondRouT_type _RouT_type);
 
+  std::vector<std::string>  get_Current_par_names();
+
 
 protected:
 
