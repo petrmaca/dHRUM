@@ -21,6 +21,17 @@ damRout_TYPE{}
 {
   prev_DamS = get_initState(init_dStype::DAMS);
   tstRM = 0;
+
+
+  // numberSel prev_DamS;//!< The helper variable for updating reservoir storage
+
+  damMax = 0.0;//!< Minimum volume of the dam [m3]
+  MRF = 0.0; //!< Minimum Residual Flow [m3/s]
+  damArea = 0.0; //!< Area of the dam in [m2] - for groundwater communication, WS evaporation,...
+  damLeng = 0.0; //!< Length of the dam body[m] - for dam body leakage
+  damBank = 0.0; //!< Length of the dam bank[m] - for Soil communication
+  ConstRouT = 0.0;
+
 }
 
 /** \brief destructor of dam

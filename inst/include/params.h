@@ -60,10 +60,7 @@ class params {
   unsigned numFastRes;//!< The number of fast runoff reservoirs, states are implemented in data_HB_1d class
 
   std::vector<std::string> Current_parameter_string;//!< The vector of param names
-
-
-
-
+/*
   //srfs_STORAGE
   std::list<par_HRUtype> L_SurfaceAll = { par_HRUtype::CDIV, par_HRUtype::SDIV, par_HRUtype::TETR, par_HRUtype::RETCAP };
   std::list<par_HRUtype> L_SurfacePRTL = {  };
@@ -97,8 +94,7 @@ class params {
   //other
   std::list<par_HRUtype> L_interception_snow = { par_HRUtype::TETR };
   std::list<par_HRUtype> L_snow_melt = { par_HRUtype::DDFA, par_HRUtype::TMEL };
-
-
+*/
 };
 
 #endif // PARAMS_H

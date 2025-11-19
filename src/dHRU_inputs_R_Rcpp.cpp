@@ -197,7 +197,7 @@ void setPTInputsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame DataDF)
   // std::cout << ndat;
   ndat = nDatInOneHru * nHrusDF;
 
-  if(ndat != DataDF.nrows()){
+  if(ndat != ((unsigned) DataDF.nrows())){
     Rcpp::stop("\n Different and non constant number of ts data in data.framne for Hrus.\n");
   }
   // Rcpp::Rcout << "The number of all ts data: " << ndat << "\n";

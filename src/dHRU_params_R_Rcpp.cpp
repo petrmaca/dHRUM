@@ -41,10 +41,12 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       std::cout << parNameStr[i] << std::endl;
     }
     std::cout << "\n";
-
+/*
     // std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF","ADIV","CDIV", \
     //                               "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR",         \
     //                               "DDFA","TMEL","RETCAP"};
+
+ */
     for(unsigned it=0; it<numParsNames;it++ ){
       if ( std::find(allParNames.begin(), allParNames.end(), parNameStr[it]) == allParNames.end()) {
         Rcpp::Rcout << "\nSomething wrong on item " << (it+1) << "\n";
@@ -112,6 +114,9 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::B_EVAP));
         // pars[2] = par_dta;
         // std::cout << "New b_evap --> loaded\n";
+        break;
+      case par_HRUtype::SMAXpdm:
+
         break;
       case par_HRUtype::SMAX:
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::SMAX));
@@ -323,10 +328,13 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
     Rcpp::stop("\n and  is diferent then required number of dHRU Par Values.\n");
   } else {
     std::vector<std::string>  parNameStr = Rcpp::as<std::vector<std::string> >(ParsNames);
+
+/*
 //   std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF","ADIV","CDIV", \
 //                                          "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR", \
 //                                          "DDFA","TMEL","RETCAP"};
-    for(unsigned it=0; it<numParsNames;it++ ){
+*/
+     for(unsigned it=0; it<numParsNames;it++ ){
       if ( std::find(allParNames.begin(), allParNames.end(), parNameStr[it]) == allParNames.end()) {
         Rcpp::Rcout << "\nSomething wrong on for Params item " << (it+1) << "\n";
         Rcpp::stop("\n Wrong names of Par Values.\n");
@@ -389,6 +397,10 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
         // pars[2] = par_dta;
         // std::cout << "New b_evap --> loaded\n";
         break;
+      case par_HRUtype::SMAXpdm:
+
+        break;
+
       case par_HRUtype::SMAX:
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::SMAX));
         // pars[3] = par_dta;

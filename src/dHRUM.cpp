@@ -589,7 +589,7 @@ void dHRUM::set_numPars() {
 
 void dHRUM::print_Pars() {
 
-  for(unsigned it; it <dimHM;it++){
+  for(unsigned it=0; it <dimHM;it++){
     dHruVec[it].print_Pars();
   }
 
@@ -701,6 +701,8 @@ std::vector<double> dHRUM::get_lowparam_vec(unsigned hruId) {
 std::vector<std::string> dHRUM::get_param_names(unsigned hruId) {
   dHruVec[hruId].current_params();
 //  std::vector<std::string> names=dHruVec[hruId].Current_par_names;
+  std::vector<std::string> names;
+
   return names;
 }
 
