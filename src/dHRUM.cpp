@@ -699,9 +699,10 @@ std::vector<double> dHRUM::get_lowparam_vec(unsigned hruId) {
 }
 
 std::vector<std::string> dHRUM::get_param_names(unsigned hruId) {
+
   dHruVec[hruId].current_params();
-//  std::vector<std::string> names=dHruVec[hruId].Current_par_names;
-  std::vector<std::string> names;
+  std::vector<std::string> names=dHruVec[hruId].get_Current_par_names();
+
 
   return names;
 }

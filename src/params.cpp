@@ -5,7 +5,8 @@ params::params(): numPars(0),
   up_pars(1,1),
   low_pars(1,1),
   numFastRes(1),
-  Current_parameter_string()
+  Current_parameter_string(),
+  Current_parameter_list()
   {
   //ctor
 //    b_soil = 2.0;
@@ -141,6 +142,7 @@ params::params(): numPars(0),
 
 
   Current_parameter_string.size();
+  Current_parameter_list.size();
   //setting of defaulst current params lists up cur low names
 
 
@@ -1072,15 +1074,15 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
   full_list.insert(full_list.end(),L_interception_snow.begin(),L_interception_snow.end() );
   full_list.insert(full_list.end(),L_snow_melt.begin(),L_snow_melt.end());
 
-  // full_list.sort();
-  // full_list.unique();
+  full_list.sort();
+  full_list.unique();
 
   std::cout<<"full list size v params AFTER: "<<full_list.size()<<std::endl;
 
 
   std::list<par_HRUtype> Current_parameter_list(full_list);
 
- Current_parameter_string=par_HRUtype_to_string(Current_parameter_list);
+  Current_parameter_string=par_HRUtype_to_string(Current_parameter_list);
 
 
   for (auto itr : Current_parameter_list) {
@@ -1338,5 +1340,12 @@ void params::PDM_boundary_update(){
 unsigned params::g_sizeVecNamesPars(){
 
   return Current_parameter_string.size();
+
+}
+
+
+std::vector<std::string> params::get_CurParNames(){
+
+  return Current_parameter_string;//maybe VecParNamesSnglHS
 
 }
