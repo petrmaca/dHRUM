@@ -65,10 +65,10 @@ class params {
 
   std::vector<std::string> Current_parameter_string;//!< The vector of param names
   std::list<par_HRUtype> Current_parameter_list;//!<
-  std::vector<double> Current_parameter_val;
-  std::vector<double> Current_upparameter_val;
-  std::vector<double> Current_lowparameter_val;
-
+  std::vector<double> Current_parameter_val;//!< The vector of current parameter values
+  std::vector<double> Current_upparameter_val;//!< vector of upper limit values for current parameters
+  std::vector<double> Current_lowparameter_val;//!< vector of lower limit values for current parameters
+  vector<pair<std::string,std::string>> revenue;
 };
 
 #endif // PARAMS_H

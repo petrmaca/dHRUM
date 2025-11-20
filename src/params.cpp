@@ -1357,34 +1357,24 @@ void params::PDM_boundary_update(){
 
 
 unsigned params::g_sizeVecNamesPars(){
-
   return Current_parameter_string.size();
-
 }
 
 
 std::vector<std::string> params::get_CurParNames(){
-
   return Current_parameter_string;//maybe VecParNamesSnglHS
-
 }
 
 std::vector<double> params::get_CurParVals(){
-
   return Current_parameter_val;
-
 }
 
 std::vector<double> params::get_CurUpParVals(){
-
   return Current_upparameter_val;
-
 }
 
 std::vector<double> params::get_CurLowParVals(){
-
   return Current_lowparameter_val;
-
 }
 
 
