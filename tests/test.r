@@ -9,7 +9,7 @@ meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 temp=rnorm(numdata,20,3)
 #nHrus <- 15000
-nHrus <- 1
+nHrus <- 10
 #Areas <- runif(nHrus,min = 1,max  = 10) #[m2]
 Areas <- runif(nHrus,min = 38780000,max  = 38780050)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
@@ -25,6 +25,8 @@ pondDF1 = data.frame( PondArea = 40500, PonsMax= 45000, MRF= 0.039, Coflw=0.3)
 pondDF2 = data.frame( Pond_ET = "ETpond1", Pond_inSOIS= "noPondSOISPerc", Pond_inGW = "noPondGWPerc",
                       Pond_outSOIS= "noPondSOISPerc", Pond_outGW= "PondGWPerc1",Pond_outReg="PondRouT3" )
 setPondToOnedHru(dHRUM_ptr = dhrus,0,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
+setPondToOnedHru(dHRUM_ptr = dhrus,5,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
+
 
 setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.2,
@@ -36,6 +38,9 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.0
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 
 current_parameters<-getCurdHRUpars(dHRUM_ptr = dhrus,0)
+
+getCurSHRUconfig(dHRUM_ptr = dhrus,0)
+getAllHRUconfigs(dHRUM_ptr = dhrus,IdsHrus)
 
 current_parameters$Cur_par
 current_parameters$Cur_names

@@ -82,6 +82,9 @@ class dHRUM {
   std::vector<double> get_lowparam_vec(unsigned hruId);
   std::vector<std::string> get_param_names(unsigned hruId);
   void Current_Params(unsigned hruId);
+  std::vector<std::pair<std::string,std::string>> get_sHMu_Config(unsigned hruId);
+
+
 
 
 protected:

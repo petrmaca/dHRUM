@@ -36,7 +36,8 @@ single_HMunit::single_HMunit(): tstRM(0),
   pondGWPERCin{},
   pondGWPERCout{},
   PondROUT{},
-  Current_par_names()
+  Current_par_names(),
+  Current_sHMu_configuration()
   {
 
   set_nmbFastres(1);
@@ -70,6 +71,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   et_demand = 0.0;
 
   Current_par_names.size();
+  Current_sHMu_configuration.size();
 
 }
 
@@ -124,7 +126,8 @@ pondSOISPERCout{},
 pondGWPERCin{},
 pondGWPERCout{},
 PondROUT{},
-Current_par_names()
+Current_par_names(),
+Current_sHMu_configuration()
 {
 
   tstRM = other.tstRM;//!< The counter for main loop in run model
@@ -161,6 +164,7 @@ Current_par_names()
   PondROUT = other.PondROUT;
 
   Current_par_names = other.Current_par_names;
+  Current_sHMu_configuration = other.Current_sHMu_configuration;
 
 }
 
@@ -211,6 +215,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     PondROUT = rhs.PondROUT;
 
     Current_par_names = rhs.Current_par_names;
+    Current_sHMu_configuration = rhs.Current_sHMu_configuration;
 
   } // handle self assignment
   //assignment operator
@@ -3030,5 +3035,122 @@ std::vector<double>  single_HMunit::get_Current_par_low_values(){
 
   std::vector<double> nameS = par_HRU.get_CurLowParVals();
   return nameS;
+
+}
+
+std::vector<std::pair<std::string,std::string>> single_HMunit::get_sHMuConfig(){
+  current_configuration();
+  return Current_sHMu_configuration;
+}
+
+
+//void single_HMunit::current_configuration(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP ) {
+void single_HMunit::current_configuration() {
+
+  Current_sHMu_configuration.clear();
+
+  switch(srfs_STORAGE) {
+  case surface_STORtype::SurfaceAll:
+    Current_sHMu_configuration.push_back(std::make_pair("surface_STORtype","SurfaceAll"));
+    break;
+  case surface_STORtype::SurfacePRTL:
+    Current_sHMu_configuration.push_back(std::make_pair("surface_STORtype","SurfacePRT"));
+    break;
+  case surface_STORtype::Wetland:
+    Current_sHMu_configuration.push_back(std::make_pair("surface_STORtype","Wetland"));
+    break;
+  }
+
+
+  switch(intrc_STORAGE) {
+  case interception_STORtype::Rutter_Gash:
+    Current_sHMu_configuration.push_back(std::make_pair("interception_STORtype","Rutter_Gash"));
+    break;
+  }
+
+  switch(gs_STORAGE) {
+  case gs_STORtype::LIN_RES:
+    Current_sHMu_configuration.push_back(std::make_pair("gs_STORtype","LIN_RES"));
+    break;
+  case gs_STORtype::LINL_RES:
+    Current_sHMu_configuration.push_back(std::make_pair("gs_STORtype","LINL_RES"));
+    break;
+  case gs_STORtype::LINBY_RES:
+    Current_sHMu_configuration.push_back(std::make_pair("gs_STORtype","LINBY_RES"));
+    break;
+  case gs_STORtype::POW_RES:
+    Current_sHMu_configuration.push_back(std::make_pair("gs_STORtype","POW_RES"));
+    break;
+  case gs_STORtype::EXP_RES:
+    Current_sHMu_configuration.push_back(std::make_pair("gs_STORtype","EXP_RES"));
+    break;
+  case gs_STORtype::LIN_2SE:
+    Current_sHMu_configuration.push_back(std::make_pair("gs_STORtype","LIN_2SE"));
+    break;
+  case gs_STORtype::LIN_2PA:
+    Current_sHMu_configuration.push_back(std::make_pair("gs_STORtype","LIN_2PA"));
+    break;
+  case gs_STORtype::FLEX_RES:
+  Current_sHMu_configuration.push_back(std::make_pair("gs_STORtype","FLEX_RES"));
+    break;
+  case gs_STORtype::EXP_LOG:
+    Current_sHMu_configuration.push_back(std::make_pair("gs_STORtype","EXP_LOG"));
+    break;
+  }
+
+  switch(soil_STORAGE) {
+  case soil_STORtype::PDM:
+    Current_sHMu_configuration.push_back(std::make_pair("soil_STORtype","PDM"));
+    break;
+  case soil_STORtype::COLLIE_V2:
+    Current_sHMu_configuration.push_back(std::make_pair("soil_STORtype","COLLIE_V2"));
+    break;
+  case soil_STORtype::NEW_ZEALAND:
+    Current_sHMu_configuration.push_back(std::make_pair("soil_STORtype","NEW_ZEALAND"));
+    break;
+  case soil_STORtype::GR4J:
+    Current_sHMu_configuration.push_back(std::make_pair("soil_STORtype","GR4J"));
+    break;
+  case soil_STORtype::SBROOK_V1:
+    Current_sHMu_configuration.push_back(std::make_pair("soil_STORtype","SBROOK_V1"));
+    break;
+  case soil_STORtype::HILLSLOPE:
+    Current_sHMu_configuration.push_back(std::make_pair("soil_STORtype","HILLSLOPE"));
+    break;
+  case soil_STORtype::PLATEAU:
+    Current_sHMu_configuration.push_back(std::make_pair("soil_STORtype","PLATEAU"));
+    break;
+  case soil_STORtype::PDM2:
+    Current_sHMu_configuration.push_back(std::make_pair("soil_STORtype","PDM2"));
+    break;
+  }
+
+  switch(fast_RESPONSE) {
+  case fast_Response::SerialCascadeLinRes:
+    Current_sHMu_configuration.push_back(std::make_pair("fast_Response","SerialCascadeLinRes"));
+    break;
+  case fast_Response::SerialLinResGWGros:
+    Current_sHMu_configuration.push_back(std::make_pair("fast_Response","SerialLinResGWGros"));
+    break;
+  case fast_Response::SerialLinResSoilSois:
+    Current_sHMu_configuration.push_back(std::make_pair("fast_Response","SerialLinResSoilSois"));
+    break;
+  case fast_Response::SerialLinResGWGrosSoilSois:
+    Current_sHMu_configuration.push_back(std::make_pair("fast_Response","SerialLinResGWGrosSoilSois"));
+    break;
+  }
+
+  switch(pond) {
+  case pond_type::noPond:
+    Current_sHMu_configuration.push_back(std::make_pair("pond","NoPond"));
+    break;
+  case pond_type::Pond:
+    Current_sHMu_configuration.push_back(std::make_pair("pond","Pond"));
+    break;
+  }
+
+
+
+
 
 }

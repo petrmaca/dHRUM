@@ -686,4 +686,107 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
      Rcpp::Named("Low_bound") = low_par);
  }
 
+//' Getting the current singeHMunit configuration.
+//'
+//' shows the list of configuration for selected HRU
+//'
+//' @param dHRUM_ptr pointer to dHRUM instance
+//' @param singleHruId a Id of particular Hru
+//' @export
+//' @examples
+//' nHrus <- 1
+//' Areas <- runif(nHrus,min = 1,max  = 10)
+//' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+//' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
+//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+//' prec=c(1,2,3)
+//' temp=c(1,2,3)
+//' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+//'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
+//' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+//'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+//' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
+//' getCurSHRUconfig(dHRUM_ptr = dhrus,0)
+// [[Rcpp::export]]
+Rcpp::DataFrame getCurSHRUconfig(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId) {
 
+   Rcpp::StringVector names;
+   Rcpp::StringVector values;
+
+   std::vector<std::pair<std::string,std::string>> sHruConfig;
+   sHruConfig=dHRUM_ptr.get()->get_sHMu_Config(singleHruId);
+
+   for ( auto it = sHruConfig.begin(); it != sHruConfig.end(); it++ )
+   {
+     names.push_back(it->first);
+     values.push_back(it->second);
+   }
+
+
+  std::string ID = std::to_string(singleHruId);//indexing from zero
+  std::string text = "ID";
+  std::string textID = text+ID;
+  Rcpp::DataFrame df = Rcpp::DataFrame::create( Rcpp::Named("V1") = names,
+                                             Rcpp::Named(textID) = values);
+
+   return df;
+}
+
+
+//' Getting the singeHMunit configurations.
+//'
+//' shows the list of configurations for all HRUs
+//'
+//' @param dHRUM_ptr pointer to dHRUM instance
+//' @param hruIds ids on Hrus
+//' @export
+//' @examples
+//' nHrus <- 10
+//' Areas <- runif(nHrus,min = 1,max  = 10)
+//' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+//' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
+//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+//' prec=c(1,2,3)
+//' temp=c(1,2,3)
+//' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+//'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
+//' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+//'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+//' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
+//' getAllHRUconfigs(dHRUM_ptr = dhrus,IdsHrus)
+// [[Rcpp::export]]
+Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr,Rcpp::CharacterVector hruIds) {
+
+   Rcpp::StringVector names;
+   std::vector<std::pair<std::string,std::string>> sHruConfig;
+
+   sHruConfig=dHRUM_ptr.get()->get_sHMu_Config(0);
+   for ( auto it = sHruConfig.begin(); it != sHruConfig.end(); it++ )
+   {     names.push_back(it->first);
+   }
+
+   Rcpp::DataFrame df=Rcpp::DataFrame::create( Rcpp::Named("V1") = names);
+
+   for ( int i = 0; i< hruIds.length(); i++ )
+   {
+     sHruConfig=dHRUM_ptr.get()->get_sHMu_Config(i);
+     Rcpp::StringVector values;
+
+     for ( auto it = sHruConfig.begin(); it != sHruConfig.end(); it++ )
+     {
+       values.push_back(it->second);
+     }
+
+     std::string ID = std::to_string(i);//indexing from zero
+     std::string text = "ID";
+     std::string textID = text+ID;
+
+
+     df.push_back(values,textID);}
+
+
+
+   return df;
+ }

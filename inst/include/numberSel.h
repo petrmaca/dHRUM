@@ -22,7 +22,7 @@ const ts_type all_ts[]{ts_type::PREC,ts_type::SNOW,ts_type::AET,ts_type::PET,ts_
                                    ts_type::CANS,ts_type::STES,ts_type::EVAC,ts_type::EVAS,ts_type::EVBS,ts_type::INTS,ts_type::SOIS,ts_type::GROS, \
                                    ts_type::SURS,ts_type::TOTR,ts_type::BASF,ts_type::DIRR,ts_type::PERC,ts_type::PREF,ts_type::ETSW,ts_type::PONS,\
                                    ts_type::ETPO,ts_type::POIS,ts_type::POIG};
-//ts_type::ETPO,ts_type::POIS,ts_type::POIG
+
 
 const unsigned numTSvars = 28;
 enum class init_Stype {SOIL, GROUNDWAT, FASTRES, SURFRET, CANS, STES, SNOS,GROS1,GROS2};

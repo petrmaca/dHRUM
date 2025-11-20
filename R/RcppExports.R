@@ -545,6 +545,58 @@ getCurdHRUpars <- function(dHRUM_ptr, singleHruId) {
     .Call(`_dHRUM_getCurdHRUpars`, dHRUM_ptr, singleHruId)
 }
 
+#' Getting the current singeHMunit configuration.
+#'
+#' shows the list of configuration for selected HRU
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @param singleHruId a Id of particular Hru
+#' @export
+#' @examples
+#' nHrus <- 1
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
+#' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+#'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+#' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
+#' getCurSHRUconfig(dHRUM_ptr = dhrus,0)
+getCurSHRUconfig <- function(dHRUM_ptr, singleHruId) {
+    .Call(`_dHRUM_getCurSHRUconfig`, dHRUM_ptr, singleHruId)
+}
+
+#' Getting the singeHMunit configurations.
+#'
+#' shows the list of configurations for all HRUs
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @param hruIds ids on Hrus
+#' @export
+#' @examples
+#' nHrus <- 10
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+#'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
+#' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+#'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+#' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
+#' getAllHRUconfigs(dHRUM_ptr = dhrus,IdsHrus)
+getAllHRUconfigs <- function(dHRUM_ptr, hruIds) {
+    .Call(`_dHRUM_getAllHRUconfigs`, dHRUM_ptr, hruIds)
+}
+
 #' Calculates the values of Potential evapotranspiration on all singleHrus taking constant latitude
 #'
 #' Setting of Pet method is done by \code{PetTypeStr}, methods implemented are:

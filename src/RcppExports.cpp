@@ -260,6 +260,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// getCurSHRUconfig
+Rcpp::DataFrame getCurSHRUconfig(Rcpp::XPtr<dHRUM> dHRUM_ptr, unsigned singleHruId);
+RcppExport SEXP _dHRUM_getCurSHRUconfig(SEXP dHRUM_ptrSEXP, SEXP singleHruIdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< unsigned >::type singleHruId(singleHruIdSEXP);
+    rcpp_result_gen = Rcpp::wrap(getCurSHRUconfig(dHRUM_ptr, singleHruId));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getAllHRUconfigs
+Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector hruIds);
+RcppExport SEXP _dHRUM_getAllHRUconfigs(SEXP dHRUM_ptrSEXP, SEXP hruIdsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type hruIds(hruIdsSEXP);
+    rcpp_result_gen = Rcpp::wrap(getAllHRUconfigs(dHRUM_ptr, hruIds));
+    return rcpp_result_gen;
+END_RCPP
+}
 // calcPetToAllHrus
 void calcPetToAllHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, numberSel Latitude, std::string PetTypeStr);
 RcppExport SEXP _dHRUM_calcPetToAllHrus(SEXP dHRUM_ptrSEXP, SEXP LatitudeSEXP, SEXP PetTypeStrSEXP) {
@@ -344,6 +368,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_setParamsToOnedHru", (DL_FUNC) &_dHRUM_setParamsToOnedHru, 4},
     {"_dHRUM_setParsToDistdHRUM", (DL_FUNC) &_dHRUM_setParsToDistdHRUM, 3},
     {"_dHRUM_getCurdHRUpars", (DL_FUNC) &_dHRUM_getCurdHRUpars, 2},
+    {"_dHRUM_getCurSHRUconfig", (DL_FUNC) &_dHRUM_getCurSHRUconfig, 2},
+    {"_dHRUM_getAllHRUconfigs", (DL_FUNC) &_dHRUM_getAllHRUconfigs, 2},
     {"_dHRUM_calcPetToAllHrus", (DL_FUNC) &_dHRUM_calcPetToAllHrus, 3},
     {"_dHRUM_calcPetToAllHrusDist", (DL_FUNC) &_dHRUM_calcPetToAllHrusDist, 4},
     {"_dHRUM_setNumFastResAlldHrus", (DL_FUNC) &_dHRUM_setNumFastResAlldHrus, 3},

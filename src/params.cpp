@@ -167,7 +167,8 @@ params::params(const params& other): numPars(0),
   Current_parameter_string(),
   Current_parameter_val(),
   Current_upparameter_val(),
-  Current_lowparameter_val() {
+  Current_lowparameter_val()
+  {
 
   numPars = other.numPars;
   pars = other.pars;
@@ -178,8 +179,6 @@ params::params(const params& other): numPars(0),
   Current_parameter_val = other.Current_parameter_val;
   Current_upparameter_val = other.Current_upparameter_val;
   Current_lowparameter_val = other.Current_lowparameter_val;
-
-
 }
 
 params& params::operator=(const params& rhs) {
@@ -983,7 +982,6 @@ numberSel params::g_par_up(const par_HRUtype& _parType) {
 void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP ) {
 
   std::list<par_HRUtype> full_list;
-
   std::cout<<"full list size v params BEGINING: "<<full_list.size()<<std::endl;
 
   switch(srfs_STORAGE) {
@@ -1083,8 +1081,6 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     full_list.insert(full_list.end(),L_SerialLinResGWGrosSoilSois.begin(),L_SerialLinResGWGrosSoilSois.end() );
     break;
   }
-
-
 
   full_list.insert(full_list.end(),L_interception_snow.begin(),L_interception_snow.end() );
   full_list.insert(full_list.end(),L_snow_melt.begin(),L_snow_melt.end());
@@ -1376,8 +1372,6 @@ std::vector<double> params::get_CurUpParVals(){
 std::vector<double> params::get_CurLowParVals(){
   return Current_lowparameter_val;
 }
-
-
 
 
 

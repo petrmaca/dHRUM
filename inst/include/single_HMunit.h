@@ -140,6 +140,10 @@ class single_HMunit {
   std::vector<double>  get_Current_par_up_values();
   std::vector<double>  get_Current_par_low_values();
 
+  std::vector<std::pair<std::string,std::string>> get_sHMuConfig();
+  //void current_configuration(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP );
+  void current_configuration();
+
 
 
 
@@ -176,13 +180,15 @@ private:
   fast_Response fast_RESPONSE;//!< the type of fast response
   pond_type pond;//!< the type of pond (water reservoir)
   ETpond_type ET_POND;//!< Type of evaporation from pond surface
-  PondSOISPerc_type pondSOISPERCin;//!< Type of percolation from   soil to pond
+  PondSOISPerc_type pondSOISPERCin;//!< Type of percolation from soil to pond
   PondSOISPerc_type pondSOISPERCout;//!< Type of percolation from pond to soil
   PondGWPerc_type  pondGWPERCin;//!< Type of percolation from   groundwater to pond
   PondGWPerc_type  pondGWPERCout;//!< Type of percolation from pond to groundwater
   PondRouT_type  PondROUT ;//!< Pond outlet method
 
   std::vector<std::string>Current_par_names;
+  std::vector<std::pair<std::string,std::string>> Current_sHMu_configuration;//!< vector of pairs with single HMunit configuration
+
 
 
 };

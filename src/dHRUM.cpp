@@ -702,11 +702,8 @@ std::vector<double> dHRUM::get_lowparam_vec(unsigned hruId) {
 }
 
 std::vector<std::string> dHRUM::get_param_names(unsigned hruId) {
-
   dHruVec[hruId].current_params();
   std::vector<std::string> names=dHruVec[hruId].get_Current_par_names();
-
-
   return names;
 }
 
@@ -724,3 +721,12 @@ void dHRUM::initPondToOneHRU(unsigned hruId,std::vector<std::pair<std::string,nu
   dHruVec[hruId].set_pond_variables(PondDefs,PondBeh);
   return ;
 }
+
+
+std::vector<std::pair<std::string,std::string>> dHRUM::get_sHMu_Config(unsigned hruId){
+  return dHruVec[hruId].get_sHMuConfig();
+}
+
+
+
+

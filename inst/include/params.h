@@ -56,7 +56,6 @@ class params {
  protected:
 
  private:
-  //!< The parameters for single HMunit
   unsigned numPars;//!<  The number of model parameters
   pdata pars;//!< The values of parameters on given HRU
   pdata up_pars;//!< The upper bounds of parameters
@@ -64,11 +63,10 @@ class params {
   unsigned numFastRes;//!< The number of fast runoff reservoirs, states are implemented in data_HB_1d class
 
   std::vector<std::string> Current_parameter_string;//!< The vector of param names
-  std::list<par_HRUtype> Current_parameter_list;//!<
+  std::list<par_HRUtype> Current_parameter_list;//!< The list of par_HRUtypes
   std::vector<double> Current_parameter_val;//!< The vector of current parameter values
   std::vector<double> Current_upparameter_val;//!< vector of upper limit values for current parameters
   std::vector<double> Current_lowparameter_val;//!< vector of lower limit values for current parameters
-
 };
 
 #endif // PARAMS_H
