@@ -767,7 +767,7 @@ Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr,Rcpp::CharacterVect
    {     names.push_back(it->first);
    }
 
-   Rcpp::DataFrame df=Rcpp::DataFrame::create( Rcpp::Named("V1") = names);
+   Rcpp::DataFrame df=Rcpp::DataFrame::create( Rcpp::Named("Structure") = names);
 
    for ( int i = 0; i< hruIds.length(); i++ )
    {
@@ -779,11 +779,7 @@ Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr,Rcpp::CharacterVect
        values.push_back(it->second);
      }
 
-     std::string ID = std::to_string(i);//indexing from zero
-     std::string text = "ID";
-     std::string textID = text+ID;
-
-
+     std::string textID = dHRUM_ptr.get()->getSingleHruId(i);
      df.push_back(values,textID);}
 
 
