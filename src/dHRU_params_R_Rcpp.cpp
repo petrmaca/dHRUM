@@ -645,7 +645,7 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
 
 //' Getting the current singeHMunit parameters.
 //'
-//' shows the list of parameters for selected HRU
+//' shows the DataFrame of parameters for selected HRU
 //'
 //' @param dHRUM_ptr pointer to dHRUM instance
 //' @param singleHruId a Id of particular Hru
@@ -666,7 +666,7 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
 //' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
 //' getCurdHRUpars(dHRUM_ptr = dhrus,0)
 // [[Rcpp::export]]
- Rcpp::List getCurdHRUpars(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId) {
+ Rcpp::DataFrame getCurdHRUpars(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId) {
 
 
    Rcpp::NumericVector cur_par;
@@ -679,11 +679,68 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
    low_par = dHRUM_ptr.get()->get_lowparam_vec(singleHruId);
    par_names = dHRUM_ptr.get()->get_param_names(singleHruId);
 
-   return Rcpp::List::create(
+   return Rcpp::DataFrame::create(
      Rcpp::Named("Cur_names") = par_names,
      Rcpp::Named("Cur_par") = cur_par,
      Rcpp::Named("Up_bound") = up_par,
      Rcpp::Named("Low_bound") = low_par);
+ }
+
+//' Getting the all HM units parameters.
+ //'
+ //' shows the list of parameters for all HRUs
+ //'
+ //' @param dHRUM_ptr pointer to dHRUM instance
+ //' @export
+ //' @examples
+ //' nHrus <- 1
+ //' Areas <- runif(nHrus,min = 1,max  = 10)
+ //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+ //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+ //' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
+ //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+ //' prec=c(1,2,3)
+ //' temp=c(1,2,3)
+ //' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+ //'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
+ //' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+ //'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+ //' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
+ //' getAllHRUpars(dHRUM_ptr = dhrus)
+ // [[Rcpp::export]]
+ Rcpp::List getAllHRUpars(Rcpp::XPtr<dHRUM> dHRUM_ptr) {
+
+   Rcpp::DataFrame df;
+   Rcpp::List alldfs;
+
+   int HRUnum = dHRUM_ptr.get()-> getdHRUdim(); //pocet hru
+   Rcpp::NumericVector cur_par;
+   Rcpp::NumericVector up_par;
+   Rcpp::NumericVector low_par;
+   Rcpp::StringVector par_names;
+   Rcpp::StringVector HRU_name;
+
+   for ( int HruId = 0; HruId< HRUnum; HruId++ )
+   {
+     dHRUM_ptr.get()->Current_Params(HruId);
+     cur_par = dHRUM_ptr.get()->get_param_vec(HruId);
+     up_par = dHRUM_ptr.get()->get_upparam_vec(HruId);
+     low_par = dHRUM_ptr.get()->get_lowparam_vec(HruId);
+     par_names = dHRUM_ptr.get()->get_param_names(HruId);
+     std::string textID = dHRUM_ptr.get()->getSingleHruId(HruId);
+     HRU_name=textID;
+
+     df=Rcpp::DataFrame::create(
+       Rcpp::Named("Cur_names") = par_names,
+       Rcpp::Named("Cur_par") = cur_par,
+       Rcpp::Named("Up_bound") = up_par,
+       Rcpp::Named("Low_bound") = low_par,
+       Rcpp::Named("sHRU_ID") = HRU_name);
+
+     alldfs.insert( HruId, df );
+   }
+
+   return alldfs;
  }
 
 //' Getting the current singeHMunit configuration.
@@ -720,7 +777,6 @@ Rcpp::DataFrame getCurSHRUconfig(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruI
    if(singleHruId>(HRUnum-1)){
      std::cout<<"Wrong sHRU value!! Currently exist "<< HRUnum<<" sHRUs! Indexing starts from 0" <<std::endl;
    }else {
-
      std::vector<std::pair<std::string,std::string>> sHruConfig;
      sHruConfig=dHRUM_ptr.get()->get_sHMu_Config(singleHruId);
 
@@ -730,23 +786,20 @@ Rcpp::DataFrame getCurSHRUconfig(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruI
        values.push_back(it->second);
      }
 
-
      std::string textID = dHRUM_ptr.get()->getSingleHruId(singleHruId);
      df = Rcpp::DataFrame::create( Rcpp::Named("V1") = names,
-                                                   Rcpp::Named(textID) = values);
-
+                                Rcpp::Named(textID) = values);
    }
 
    return df;
 }
 
 
-//' Getting the singeHMunit configurations.
+//' Getting configurations of all HRUs.
 //'
-//' shows the list of configurations for all HRUs
+//' shows the data frame of all HRUs configurations
 //'
 //' @param dHRUM_ptr pointer to dHRUM instance
-//' @param hruIds ids on Hrus
 //' @export
 //' @examples
 //' nHrus <- 10
@@ -765,21 +818,15 @@ Rcpp::DataFrame getCurSHRUconfig(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruI
 //' getAllHRUconfigs(dHRUM_ptr = dhrus,IdsHrus)
 // [[Rcpp::export]]
 Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr) {
-//Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr,Rcpp::CharacterVector hruIds) {
 
    Rcpp::StringVector names;
    std::vector<std::pair<std::string,std::string>> sHruConfig;
 
-   auto HRUnum = dHRUM_ptr.get()-> getdHRUdim(); //pocet hru
-
-   //if(HRUnum!=hruIds.length()){
-   //  std::cout<<"hruza, des, bes, bouchne to, utecte"<<std::endl;
-   //}
+   int HRUnum = dHRUM_ptr.get()-> getdHRUdim(); //pocet hru
 
    sHruConfig=dHRUM_ptr.get()->get_sHMu_Config(0);
    for ( auto it = sHruConfig.begin(); it != sHruConfig.end(); it++ )
-   {     names.push_back(it->first);
-   }
+   {     names.push_back(it->first);  }
 
    Rcpp::DataFrame df=Rcpp::DataFrame::create( Rcpp::Named("Structure") = names);
 
@@ -787,16 +834,13 @@ Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr) {
    {
      sHruConfig=dHRUM_ptr.get()->get_sHMu_Config(i);
      Rcpp::StringVector values;
-
      for ( auto it = sHruConfig.begin(); it != sHruConfig.end(); it++ )
      {
        values.push_back(it->second);
      }
-
      std::string textID = dHRUM_ptr.get()->getSingleHruId(i);
-     df.push_back(values,textID);}
-
-
+     df.push_back(values,textID);
+    }
 
    return df;
  }

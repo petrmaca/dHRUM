@@ -433,6 +433,9 @@ dHRUMrunDist <- function(dHRUM_ptr) {
     .Call(`_dHRUM_dHRUMrunDist`, dHRUM_ptr)
 }
 
+#' Getting the all HM units parameters.
+NULL
+
 #' Sets the similar values of params to dHRU model for all single HRUs.
 #'
 #' Setting of params to dHRUM.
@@ -521,7 +524,7 @@ setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
 
 #' Getting the current singeHMunit parameters.
 #'
-#' shows the list of parameters for selected HRU
+#' shows the DataFrame of parameters for selected HRU
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
 #' @param singleHruId a Id of particular Hru
@@ -543,6 +546,10 @@ setParsToDistdHRUM <- function(dHRUM_ptr, ParsDF, PrintPars) {
 #' getCurdHRUpars(dHRUM_ptr = dhrus,0)
 getCurdHRUpars <- function(dHRUM_ptr, singleHruId) {
     .Call(`_dHRUM_getCurdHRUpars`, dHRUM_ptr, singleHruId)
+}
+
+getAllHRUpars <- function(dHRUM_ptr) {
+    .Call(`_dHRUM_getAllHRUpars`, dHRUM_ptr)
 }
 
 #' Getting the current singeHMunit configuration.
@@ -571,12 +578,11 @@ getCurSHRUconfig <- function(dHRUM_ptr, singleHruId) {
     .Call(`_dHRUM_getCurSHRUconfig`, dHRUM_ptr, singleHruId)
 }
 
-#' Getting the singeHMunit configurations.
+#' Getting configurations of all HRUs.
 #'
-#' shows the list of configurations for all HRUs
+#' shows the data frame of all HRUs configurations
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
-#' @param hruIds ids on Hrus
 #' @export
 #' @examples
 #' nHrus <- 10

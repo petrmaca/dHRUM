@@ -33,14 +33,14 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.0
                     SDIV = 0.1, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
                     RETCAP = 10, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
                     KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =25,L=0.1, B_EXP = 0.3, KFR = 0.03)
-
-
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 
-current_parameters<-getCurdHRUpars(dHRUM_ptr = dhrus,0)
 
-getCurSHRUconfig(dHRUM_ptr = dhrus,5)
-getAllHRUconfigs(dHRUM_ptr = dhrus)
+#getCurdHRUpars(dHRUM_ptr = dhrus,0)
+#getAllHRUpars(dHRUM_ptr = dhrus)
+
+#getCurSHRUconfig(dHRUM_ptr = dhrus,0)
+#getAllHRUconfigs(dHRUM_ptr = dhrus)
 
 current_parameters$Cur_par
 current_parameters$Cur_names

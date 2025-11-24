@@ -249,7 +249,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // getCurdHRUpars
-Rcpp::List getCurdHRUpars(Rcpp::XPtr<dHRUM> dHRUM_ptr, unsigned singleHruId);
+Rcpp::DataFrame getCurdHRUpars(Rcpp::XPtr<dHRUM> dHRUM_ptr, unsigned singleHruId);
 RcppExport SEXP _dHRUM_getCurdHRUpars(SEXP dHRUM_ptrSEXP, SEXP singleHruIdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -257,6 +257,17 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
     Rcpp::traits::input_parameter< unsigned >::type singleHruId(singleHruIdSEXP);
     rcpp_result_gen = Rcpp::wrap(getCurdHRUpars(dHRUM_ptr, singleHruId));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getAllHRUpars
+Rcpp::List getAllHRUpars(Rcpp::XPtr<dHRUM> dHRUM_ptr);
+RcppExport SEXP _dHRUM_getAllHRUpars(SEXP dHRUM_ptrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    rcpp_result_gen = Rcpp::wrap(getAllHRUpars(dHRUM_ptr));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -367,6 +378,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_setParamsToOnedHru", (DL_FUNC) &_dHRUM_setParamsToOnedHru, 4},
     {"_dHRUM_setParsToDistdHRUM", (DL_FUNC) &_dHRUM_setParsToDistdHRUM, 3},
     {"_dHRUM_getCurdHRUpars", (DL_FUNC) &_dHRUM_getCurdHRUpars, 2},
+    {"_dHRUM_getAllHRUpars", (DL_FUNC) &_dHRUM_getAllHRUpars, 1},
     {"_dHRUM_getCurSHRUconfig", (DL_FUNC) &_dHRUM_getCurSHRUconfig, 2},
     {"_dHRUM_getAllHRUconfigs", (DL_FUNC) &_dHRUM_getAllHRUconfigs, 1},
     {"_dHRUM_calcPetToAllHrus", (DL_FUNC) &_dHRUM_calcPetToAllHrus, 3},
