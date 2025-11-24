@@ -593,8 +593,8 @@ getCurSHRUconfig <- function(dHRUM_ptr, singleHruId) {
 #'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 #' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
 #' getAllHRUconfigs(dHRUM_ptr = dhrus,IdsHrus)
-getAllHRUconfigs <- function(dHRUM_ptr, hruIds) {
-    .Call(`_dHRUM_getAllHRUconfigs`, dHRUM_ptr, hruIds)
+getAllHRUconfigs <- function(dHRUM_ptr) {
+    .Call(`_dHRUM_getAllHRUconfigs`, dHRUM_ptr)
 }
 
 #' Calculates the values of Potential evapotranspiration on all singleHrus taking constant latitude

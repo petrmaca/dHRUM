@@ -713,22 +713,29 @@ Rcpp::DataFrame getCurSHRUconfig(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruI
 
    Rcpp::StringVector names;
    Rcpp::StringVector values;
+   Rcpp::DataFrame df;
 
-   std::vector<std::pair<std::string,std::string>> sHruConfig;
-   sHruConfig=dHRUM_ptr.get()->get_sHMu_Config(singleHruId);
+   auto HRUnum = dHRUM_ptr.get()-> getdHRUdim(); //pocet hru
 
-   for ( auto it = sHruConfig.begin(); it != sHruConfig.end(); it++ )
-   {
-     names.push_back(it->first);
-     values.push_back(it->second);
+   if(singleHruId>(HRUnum-1)){
+     std::cout<<"Wrong sHRU value!! Currently exist "<< HRUnum<<" sHRUs! Indexing starts from 0" <<std::endl;
+   }else {
+
+     std::vector<std::pair<std::string,std::string>> sHruConfig;
+     sHruConfig=dHRUM_ptr.get()->get_sHMu_Config(singleHruId);
+
+     for ( auto it = sHruConfig.begin(); it != sHruConfig.end(); it++ )
+     {
+       names.push_back(it->first);
+       values.push_back(it->second);
+     }
+
+
+     std::string textID = dHRUM_ptr.get()->getSingleHruId(singleHruId);
+     df = Rcpp::DataFrame::create( Rcpp::Named("V1") = names,
+                                                   Rcpp::Named(textID) = values);
+
    }
-
-
-  std::string ID = std::to_string(singleHruId);//indexing from zero
-  std::string text = "ID";
-  std::string textID = text+ID;
-  Rcpp::DataFrame df = Rcpp::DataFrame::create( Rcpp::Named("V1") = names,
-                                             Rcpp::Named(textID) = values);
 
    return df;
 }
@@ -757,10 +764,17 @@ Rcpp::DataFrame getCurSHRUconfig(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruI
 //' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
 //' getAllHRUconfigs(dHRUM_ptr = dhrus,IdsHrus)
 // [[Rcpp::export]]
-Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr,Rcpp::CharacterVector hruIds) {
+Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr) {
+//Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr,Rcpp::CharacterVector hruIds) {
 
    Rcpp::StringVector names;
    std::vector<std::pair<std::string,std::string>> sHruConfig;
+
+   auto HRUnum = dHRUM_ptr.get()-> getdHRUdim(); //pocet hru
+
+   //if(HRUnum!=hruIds.length()){
+   //  std::cout<<"hruza, des, bes, bouchne to, utecte"<<std::endl;
+   //}
 
    sHruConfig=dHRUM_ptr.get()->get_sHMu_Config(0);
    for ( auto it = sHruConfig.begin(); it != sHruConfig.end(); it++ )
@@ -769,7 +783,7 @@ Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr,Rcpp::CharacterVect
 
    Rcpp::DataFrame df=Rcpp::DataFrame::create( Rcpp::Named("Structure") = names);
 
-   for ( int i = 0; i< hruIds.length(); i++ )
+   for ( int i = 0; i< HRUnum; i++ )
    {
      sHruConfig=dHRUM_ptr.get()->get_sHMu_Config(i);
      Rcpp::StringVector values;

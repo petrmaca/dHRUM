@@ -39,8 +39,8 @@ setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 
 current_parameters<-getCurdHRUpars(dHRUM_ptr = dhrus,0)
 
-getCurSHRUconfig(dHRUM_ptr = dhrus,0)
-getAllHRUconfigs(dHRUM_ptr = dhrus,IdsHrus)
+getCurSHRUconfig(dHRUM_ptr = dhrus,5)
+getAllHRUconfigs(dHRUM_ptr = dhrus)
 
 current_parameters$Cur_par
 current_parameters$Cur_names
