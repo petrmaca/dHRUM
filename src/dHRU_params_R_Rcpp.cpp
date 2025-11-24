@@ -668,16 +668,21 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
 // [[Rcpp::export]]
  Rcpp::DataFrame getCurdHRUpars(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruId) {
 
-
    Rcpp::NumericVector cur_par;
    Rcpp::NumericVector up_par;
    Rcpp::NumericVector low_par;
    Rcpp::StringVector par_names;
-   dHRUM_ptr.get()->Current_Params(singleHruId);
-   cur_par = dHRUM_ptr.get()->get_param_vec(singleHruId);
-   up_par = dHRUM_ptr.get()->get_upparam_vec(singleHruId);
-   low_par = dHRUM_ptr.get()->get_lowparam_vec(singleHruId);
-   par_names = dHRUM_ptr.get()->get_param_names(singleHruId);
+   auto HRUnum = dHRUM_ptr.get()-> getdHRUdim(); //pocet hru
+
+   if(singleHruId>(HRUnum-1)){
+     std::cout<<"Wrong sHRU value!! Currently exist "<< HRUnum<<" sHRUs! Indexing starts from 0" <<std::endl;
+   }else {
+     dHRUM_ptr.get()->Current_Params(singleHruId);
+     cur_par = dHRUM_ptr.get()->get_param_vec(singleHruId);
+     up_par = dHRUM_ptr.get()->get_upparam_vec(singleHruId);
+     low_par = dHRUM_ptr.get()->get_lowparam_vec(singleHruId);
+     par_names = dHRUM_ptr.get()->get_param_names(singleHruId);
+   }
 
    return Rcpp::DataFrame::create(
      Rcpp::Named("Cur_names") = par_names,
