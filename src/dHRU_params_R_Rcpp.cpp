@@ -693,7 +693,7 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
 
 //' Getting the all HM units parameters.
  //'
- //' shows the list of parameters for all HRUs
+ //' shows the list of data frames of parameters for all HRUs
  //'
  //' @param dHRUM_ptr pointer to dHRUM instance
  //' @export
@@ -732,8 +732,7 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
      up_par = dHRUM_ptr.get()->get_upparam_vec(HruId);
      low_par = dHRUM_ptr.get()->get_lowparam_vec(HruId);
      par_names = dHRUM_ptr.get()->get_param_names(HruId);
-     std::string textID = dHRUM_ptr.get()->getSingleHruId(HruId);
-     HRU_name=textID;
+     std::string HRU_name = dHRUM_ptr.get()->getSingleHruId(HruId);
 
      df=Rcpp::DataFrame::create(
        Rcpp::Named("Cur_names") = par_names,
@@ -750,7 +749,7 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
 
 //' Getting the current singeHMunit configuration.
 //'
-//' shows the list of configuration for selected HRU
+//' shows the data frame of configuration for selected HRU
 //'
 //' @param dHRUM_ptr pointer to dHRUM instance
 //' @param singleHruId a Id of particular Hru
@@ -802,7 +801,7 @@ Rcpp::DataFrame getCurSHRUconfig(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruI
 
 //' Getting configurations of all HRUs.
 //'
-//' shows the data frame of all HRUs configurations
+//' shows list of data frames of all HRUs configurations
 //'
 //' @param dHRUM_ptr pointer to dHRUM instance
 //' @export
@@ -822,30 +821,33 @@ Rcpp::DataFrame getCurSHRUconfig(Rcpp::XPtr<dHRUM> dHRUM_ptr,unsigned singleHruI
 //' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
 //' getAllHRUconfigs(dHRUM_ptr = dhrus,IdsHrus)
 // [[Rcpp::export]]
-Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr) {
+Rcpp::List getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr) {
 
-   Rcpp::StringVector names;
    std::vector<std::pair<std::string,std::string>> sHruConfig;
-
    int HRUnum = dHRUM_ptr.get()-> getdHRUdim(); //pocet hru
 
-   sHruConfig=dHRUM_ptr.get()->get_sHMu_Config(0);
-   for ( auto it = sHruConfig.begin(); it != sHruConfig.end(); it++ )
-   {     names.push_back(it->first);  }
-
-   Rcpp::DataFrame df=Rcpp::DataFrame::create( Rcpp::Named("Structure") = names);
+   Rcpp::DataFrame df;
+   Rcpp::List alldfs;
 
    for ( int i = 0; i< HRUnum; i++ )
    {
      sHruConfig=dHRUM_ptr.get()->get_sHMu_Config(i);
      Rcpp::StringVector values;
+     Rcpp::StringVector names;
      for ( auto it = sHruConfig.begin(); it != sHruConfig.end(); it++ )
      {
+       names.push_back(it->first);
        values.push_back(it->second);
      }
      std::string textID = dHRUM_ptr.get()->getSingleHruId(i);
-     df.push_back(values,textID);
+
+     df=Rcpp::DataFrame::create(
+       Rcpp::Named("Name") = names,
+       Rcpp::Named("Value") = values,
+       Rcpp::Named("sHRU_ID") = textID);
+
+     alldfs.insert( i, df );
     }
 
-   return df;
+   return alldfs;
  }

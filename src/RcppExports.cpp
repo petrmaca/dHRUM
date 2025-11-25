@@ -284,7 +284,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // getAllHRUconfigs
-Rcpp::DataFrame getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr);
+Rcpp::List getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr);
 RcppExport SEXP _dHRUM_getAllHRUconfigs(SEXP dHRUM_ptrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

@@ -24,7 +24,7 @@ setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascad
 pondDF1 = data.frame( PondArea = 40500, PonsMax= 45000, MRF= 0.039, Coflw=0.3)
 pondDF2 = data.frame( Pond_ET = "ETpond1", Pond_inSOIS= "noPondSOISPerc", Pond_inGW = "noPondGWPerc",
                       Pond_outSOIS= "noPondSOISPerc", Pond_outGW= "PondGWPerc1",Pond_outReg="PondRouT3" )
-setPondToOnedHru(dHRUM_ptr = dhrus,0,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
+setPondToOnedHru(dHRUM_ptr = dhrus,1,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
 setPondToOnedHru(dHRUM_ptr = dhrus,5,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
 
 
@@ -39,7 +39,7 @@ setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 getCurdHRUpars(dHRUM_ptr = dhrus,9)
 getAllHRUpars(dHRUM_ptr = dhrus)
 
-getCurSHRUconfig(dHRUM_ptr = dhrus,0)
+getCurSHRUconfig(dHRUM_ptr = dhrus,1)
 getAllHRUconfigs(dHRUM_ptr = dhrus)
 ########################## return functions for current parameters and settings - end ###############################################
 

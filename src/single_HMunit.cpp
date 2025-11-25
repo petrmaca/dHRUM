@@ -3146,6 +3146,13 @@ void single_HMunit::current_configuration() {
     break;
   case pond_type::Pond:
     Current_sHMu_configuration.push_back(std::make_pair("pond","Pond"));
+
+    Current_sHMu_configuration.push_back(std::make_pair("pond_ET","coming soon"));
+    Current_sHMu_configuration.push_back(std::make_pair("pond_SoisPercIn","coming soon"));
+    Current_sHMu_configuration.push_back(std::make_pair("pond_SoisPercOut","coming soon"));
+    Current_sHMu_configuration.push_back(std::make_pair("pond_GWPercIn","coming soon"));
+    Current_sHMu_configuration.push_back(std::make_pair("pond_GWPercOut","coming soon"));
+    Current_sHMu_configuration.push_back(std::make_pair("pond_Rout","coming soon"));
     break;
   }
 

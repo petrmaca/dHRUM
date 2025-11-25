@@ -554,7 +554,7 @@ getAllHRUpars <- function(dHRUM_ptr) {
 
 #' Getting the current singeHMunit configuration.
 #'
-#' shows the list of configuration for selected HRU
+#' shows the data frame of configuration for selected HRU
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
 #' @param singleHruId a Id of particular Hru
@@ -580,7 +580,7 @@ getCurSHRUconfig <- function(dHRUM_ptr, singleHruId) {
 
 #' Getting configurations of all HRUs.
 #'
-#' shows the data frame of all HRUs configurations
+#' shows list of data frames of all HRUs configurations
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
 #' @export
