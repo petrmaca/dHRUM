@@ -472,6 +472,13 @@ void dHRUM::set_numTS() {
 
 }
 
+
+/** \brief Initialization of the main basin data
+ *
+ *  takes the data from the first single HM unit and assignes
+ *  them to the vasinDTA object
+ *
+ */
 void dHRUM::initdHRUbasinDTA() {
 
   set_numTS();
