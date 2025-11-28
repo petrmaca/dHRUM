@@ -2149,9 +2149,9 @@ numberSel single_HMunit::update_ETDEMAND(const numberSel& ET, bool ET_demand){
 void single_HMunit::set_soilStorType(soil_STORtype _soil_STORtype) {
 
   soil_STORAGE = _soil_STORtype;
-  if(_soil_STORtype==soil_STORtype::PDM){
+  /*if(_soil_STORtype==soil_STORtype::PDM){
     par_HRU.PDM_boundary_update();
-  }
+  }*/
   //print_soilStorType();
 
   return ;

@@ -1,3 +1,5 @@
+useDynLib(dHRUM, .registration = TRUE)
 exportPattern("^[[:alpha:]]+")
 importFrom(Rcpp, evalCpp)
-useDynLib(dHRUM, .registration = TRUE)
+
+

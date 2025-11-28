@@ -1344,7 +1344,7 @@ std::vector<std::string> params::par_HRUtype_to_string(std::list<par_HRUtype> pa
 }
 
 void params::PDM_boundary_update(){
-  std::cout<<""<<std::endl;
+  // std::cout<<""<<std::endl;
    up_pars[1] = 1000.0;   //!< C_MAX
    low_pars[1] = 10.001; //!< C_MAX
    up_pars[22] = 10.0;    //!< CMIN
