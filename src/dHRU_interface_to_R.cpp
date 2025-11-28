@@ -10,7 +10,7 @@
 //' @param dimdHru a single \code{numberDta} number of single Hrus.
 //' @param vecAreas a \code{numeric vector} of size \code{dimHru} of Areas for all single HRUs on dHRU.
 //' @param hrusIDs a \code{character vector} of size \code{dimHru} of Id's for all single HRUs on dHRU.
-//' @param nthreads the number of r dHRUM instance
+//' @param nthreads the number of threads used for running a distrubted model based on dHRUM instance
 //' @return dHRUM_ptr pointer to dHru instance.
 //' @export
 //' @examples
@@ -21,7 +21,7 @@
 //' dhrumLM <- initdHruModel(nHrus,Areas,IdsHrus,1)
 //'
 //'
-//' # The distributed hydrological model
+//' # The distributed hydrological model 10 HRUS
 //' nHrus <-10
 //' Areas <- runif(nHrus,min = 1,max  = 10, )
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
