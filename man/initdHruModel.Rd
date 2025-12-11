@@ -24,8 +24,16 @@ initializes a dimension of dHRUM controled by the number of single Hru, areas of
 and ID's of all single Hrus.
 }
 \examples{
-nHrus <- 200
-Areas <- runif(nHrus,min = 1,max  = 10)
+# The lumped hydrological model
+nHrus <- 1
+Areas <- 1
+IdsHrus <- "My Catchment"
+dhrumLM <- initdHruModel(nHrus,Areas,IdsHrus,1)
+
+
+# The distributed hydrological model
+nHrus <-10
+Areas <- runif(nHrus,min = 1,max  = 10, )
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus,1)
 }

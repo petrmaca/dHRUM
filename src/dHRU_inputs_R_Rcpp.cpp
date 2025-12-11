@@ -15,7 +15,7 @@
 //' nHrus <- 200
 //' Areas <- runif(nHrus,min = 1,max  = 10)
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
-//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus,5)
 //' filname2 = "../Calibrations/Amalie/indata/BP_1960_01_01.txt"
 //' setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
@@ -104,7 +104,7 @@ void setPTInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Prec
 //' nHrus <- 2
 //' Areas <- runif(nHrus,min = 1,max  = 10)
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
-//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus,2)
 //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
 //' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 //' prec=c(1,2,3)
@@ -164,6 +164,7 @@ void setPTDateInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector 
 //'
 //' Setting the different vector of Precipitation and temperature to all single HRU.
 //' Setting the calender using the first date fo period using the first date of period
+//' The ordering og Ids must be constant for all input data uploads
 //'
 //' @param dHRUM_ptr pointer to dHRUM instance
 //' @param DataDF dataframe with DTM, Precipitation, Temperature, and HRU Ids
@@ -172,7 +173,7 @@ void setPTDateInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector 
 //' nHrus <- 2
 //' Areas <- runif(nHrus,min = 1,max  = 10)
 //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
-//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus,2)
 //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
 //' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 // [[Rcpp::export]]

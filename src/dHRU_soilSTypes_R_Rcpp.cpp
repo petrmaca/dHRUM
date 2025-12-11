@@ -68,7 +68,6 @@ void setSoilStorTypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVecto
           indexHru[i] = j;
         }
       }
-      // std::cout << indexHru[i];
     }
     std::vector<std::pair<unsigned,soil_STORtype>> soilTypesToLoad;
 
@@ -106,4 +105,3 @@ void setSoilStorTypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVecto
 
   return;
 }
-
