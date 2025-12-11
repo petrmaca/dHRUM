@@ -166,7 +166,7 @@ setGWtypeToAlldHrus <- function(dHRUM_ptr, gwTypes, hruIds) {
 #' nHrus <- 200
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
-#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus,5)
 #' filname2 = "../Calibrations/Amalie/indata/BP_1960_01_01.txt"
 #' setPTInputsToAlldHrusFromFile(dHRUM_ptr = dhrus, filname2)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
@@ -213,7 +213,7 @@ setPTInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, inDate) {
 #' nHrus <- 2
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
-#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus,2)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
 #' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 #' prec=c(1,2,3)
@@ -228,6 +228,7 @@ setPTDateInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, DateVec) {
 #'
 #' Setting the different vector of Precipitation and temperature to all single HRU.
 #' Setting the calender using the first date fo period using the first date of period
+#' The ordering og Ids must be constant for all input data uploads
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
 #' @param DataDF dataframe with DTM, Precipitation, Temperature, and HRU Ids
@@ -236,7 +237,7 @@ setPTDateInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, DateVec) {
 #' nHrus <- 2
 #' Areas <- runif(nHrus,min = 1,max  = 10)
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
-#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus,2)
 #' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
 #' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 setPTInputsToDistdHRUM <- function(dHRUM_ptr, DataDF) {
@@ -271,7 +272,7 @@ setInterceptiontypeToAlldHrus <- function(dHRUM_ptr, intcptnTypes, hruIds) {
 #' @param dimdHru a single \code{numberDta} number of single Hrus.
 #' @param vecAreas a \code{numeric vector} of size \code{dimHru} of Areas for all single HRUs on dHRU.
 #' @param hrusIDs a \code{character vector} of size \code{dimHru} of Id's for all single HRUs on dHRU.
-#' @param nthreads the number of r dHRUM instance
+#' @param nthreads the number of threads used for running a distrubted model based on dHRUM instance
 #' @return dHRUM_ptr pointer to dHru instance.
 #' @export
 #' @examples
@@ -282,7 +283,7 @@ setInterceptiontypeToAlldHrus <- function(dHRUM_ptr, intcptnTypes, hruIds) {
 #' dhrumLM <- initdHruModel(nHrus,Areas,IdsHrus,1)
 #'
 #'
-#' # The distributed hydrological model
+#' # The distributed hydrological model 10 HRUS
 #' nHrus <-10
 #' Areas <- runif(nHrus,min = 1,max  = 10, )
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))

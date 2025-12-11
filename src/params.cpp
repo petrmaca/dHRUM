@@ -1091,7 +1091,7 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
   //std::cout<<"full list size v params AFTER: "<<full_list.size()<<std::endl;
 
 
-  //std::list<par_HRUtype> Current_parameter_list(full_list);
+  std::list<par_HRUtype> Current_parameter_list(full_list);
 
   Current_parameter_string=par_HRUtype_to_string(Current_parameter_list);
 
@@ -1105,7 +1105,7 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     Current_upparameter_val.push_back(g_par_up(itr));
     Current_lowparameter_val.push_back(g_par_low(itr));
   }
-  print_par_list(Current_parameter_list);
+  //print_par_list(Current_parameter_list);
   //std::cout<<"velikost v params: "<<Current_parameter_string.size()<<std::endl;
 }
 
