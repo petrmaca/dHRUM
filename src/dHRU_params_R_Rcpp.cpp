@@ -36,12 +36,12 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
 
     std::vector<std::string>  parNameStr = Rcpp::as<std::vector<std::string> >(ParsNames);
 
-    std::cout << "Pars names prints \n";
+/*    std::cout << "Pars names prints \n";
     for(unsigned i=0;i<numParsNames;i++){
       std::cout << parNameStr[i] << std::endl;
     }
     std::cout << "\n";
-/*
+
     // std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP","KS","KF","ADIV","CDIV", \
     //                               "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR",         \
     //                               "DDFA","TMEL","RETCAP"};

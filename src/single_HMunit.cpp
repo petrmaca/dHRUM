@@ -1803,8 +1803,8 @@ void single_HMunit::set_paramsToSim(std::vector<std::pair<numberSel,par_HRUtype>
   //    std::cout << std::endl << "Params before loadings:" << std::endl;
   //    par_HRU.p_param();
   par_HRU.s_parLoadToCalib(parsToLoad);
-      std::cout << std::endl << "Params after loadings:" << std::endl;
-      par_HRU.p_param();
+      //std::cout << std::endl << "Params after loadings:" << std::endl;
+      //par_HRU.p_param();
       current_params();
 
   return;
@@ -2406,12 +2406,12 @@ void single_HMunit::current_params() {
   // std::cout<<"velikost vectoru s names params: "<<par_HRU.Current_parameter_string.size()<<std::endl;
   // Current_par_names=par_HRU.Current_parameter_string;
 
-  std::cout<<"velikost vectoru s names params: "<<par_HRU.g_sizeVecNamesPars()<<std::endl;
+  //std::cout<<"velikost vectoru s names params: "<<par_HRU.g_sizeVecNamesPars()<<std::endl;
   // Current_par_names=par_HRU.Current_parameter_string;
   // g_sizeVecNamesPars()
 
   // std::cout<<"velikost vectoru s names params: "<<par_HRU.Current_parameter_string.size()<<std::endl;
-  std::cout<<"velikost vectoru s names params: "<<par_HRU.g_sizeVecNamesPars()<<std::endl;
+  //std::cout<<"velikost vectoru s names params: "<<par_HRU.g_sizeVecNamesPars()<<std::endl;
 
 
   // Current_par_val=par_HRU.g_CurParVal;

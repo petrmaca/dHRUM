@@ -982,7 +982,7 @@ numberSel params::g_par_up(const par_HRUtype& _parType) {
 void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP ) {
 
   std::list<par_HRUtype> full_list;
-  std::cout<<"full list size v params BEGINING: "<<full_list.size()<<std::endl;
+  //std::cout<<"full list size v params BEGINING: "<<full_list.size()<<std::endl;
 
   switch(srfs_STORAGE) {
   case surface_STORtype::SurfaceAll:
@@ -998,7 +998,7 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     break;
   }
 
-  std::cout<<"L_LIN_RES size v params BEGINING: "<<L_LIN_RES.size()<<std::endl;
+  //std::cout<<"L_LIN_RES size v params BEGINING: "<<L_LIN_RES.size()<<std::endl;
 
 
   switch(intrc_STORAGE) {
@@ -1088,10 +1088,10 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
   full_list.sort();
   full_list.unique();
 
-  std::cout<<"full list size v params AFTER: "<<full_list.size()<<std::endl;
+  //std::cout<<"full list size v params AFTER: "<<full_list.size()<<std::endl;
 
 
-  std::list<par_HRUtype> Current_parameter_list(full_list);
+  //std::list<par_HRUtype> Current_parameter_list(full_list);
 
   Current_parameter_string=par_HRUtype_to_string(Current_parameter_list);
 
@@ -1106,11 +1106,11 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     Current_lowparameter_val.push_back(g_par_low(itr));
   }
   print_par_list(Current_parameter_list);
-  std::cout<<"velikost v params: "<<Current_parameter_string.size()<<std::endl;
+  //std::cout<<"velikost v params: "<<Current_parameter_string.size()<<std::endl;
 }
 
 void params::print_par_list(std::list<par_HRUtype> par_list){
-  std::cout << "Param.name\t\tVal\tUp\tLow"<<std::endl;
+  //std::cout << "Param.name\t\tVal\tUp\tLow"<<std::endl;
   int counter=0;
   int spacer=15;
   for (auto itr : par_list) {
