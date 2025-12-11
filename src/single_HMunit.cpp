@@ -1726,7 +1726,7 @@ void single_HMunit::load_data_PT(const hdata& prec_input, const hdata& temp_inpu
   unsigned helpnumDTA;
 
   helpnumDTA = prec_input.size();
-
+/*
   // std::cout << "ups size " << prec_input.size() << "\n";
 
   // if(helpnumDTA != temp_input.size()) {
@@ -1737,7 +1737,7 @@ void single_HMunit::load_data_PT(const hdata& prec_input, const hdata& temp_inpu
   // }
   //  numberSel val = -99999.9;
   //  numberSel val = 0;
-  // std::cout << "\n init inputs 1\n";
+  // std::cout << "\n init inputs 1\n";*/
   init_inputs(val, helpnumDTA);
   // std::cout << "\n init inputs 2\n";
   set_data_prec_temp(prec_input,temp_input);

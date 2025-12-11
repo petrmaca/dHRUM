@@ -13,7 +13,7 @@ initdHruModel(dimdHru, vecAreas, hrusIDs, nthreads = 1L)
 
 \item{hrusIDs}{a \code{character vector} of size \code{dimHru} of Id's for all single HRUs on dHRU.}
 
-\item{nthreads}{the number of r dHRUM instance}
+\item{nthreads}{the number of threads used for running a distrubted model based on dHRUM instance}
 }
 \value{
 dHRUM_ptr pointer to dHru instance.
@@ -31,7 +31,7 @@ IdsHrus <- "My Catchment"
 dhrumLM <- initdHruModel(nHrus,Areas,IdsHrus,1)
 
 
-# The distributed hydrological model
+# The distributed hydrological model 10 HRUS
 nHrus <-10
 Areas <- runif(nHrus,min = 1,max  = 10, )
 IdsHrus <- paste0("ID",seq(1:length(Areas)))

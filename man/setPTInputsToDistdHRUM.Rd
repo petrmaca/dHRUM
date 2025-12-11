@@ -14,12 +14,13 @@ setPTInputsToDistdHRUM(dHRUM_ptr, DataDF)
 \description{
 Setting the different vector of Precipitation and temperature to all single HRU.
 Setting the calender using the first date fo period using the first date of period
+The ordering og Ids must be constant for all input data uploads
 }
 \examples{
 nHrus <- 2
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
-dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+dhrus <- initdHruModel(nHrus,Areas,IdsHrus,2)
 setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
 setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 }

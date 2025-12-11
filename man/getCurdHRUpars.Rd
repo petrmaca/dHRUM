@@ -12,7 +12,7 @@ getCurdHRUpars(dHRUM_ptr, singleHruId)
 \item{singleHruId}{a Id of particular Hru}
 }
 \description{
-shows the list of parameters for selected HRU
+shows the DataFrame of parameters for selected HRU
 }
 \examples{
 nHrus <- 1

@@ -2,17 +2,15 @@
 % Please edit documentation in R/RcppExports.R
 \name{getAllHRUconfigs}
 \alias{getAllHRUconfigs}
-\title{Getting the singeHMunit configurations.}
+\title{Getting configurations of all HRUs.}
 \usage{
-getAllHRUconfigs(dHRUM_ptr, hruIds)
+getAllHRUconfigs(dHRUM_ptr)
 }
 \arguments{
 \item{dHRUM_ptr}{pointer to dHRUM instance}
-
-\item{hruIds}{ids on Hrus}
 }
 \description{
-shows the list of configurations for all HRUs
+shows list of data frames of all HRUs configurations
 }
 \examples{
 nHrus <- 10

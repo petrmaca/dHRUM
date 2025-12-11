@@ -12,7 +12,7 @@ getCurSHRUconfig(dHRUM_ptr, singleHruId)
 \item{singleHruId}{a Id of particular Hru}
 }
 \description{
-shows the list of configuration for selected HRU
+shows the data frame of configuration for selected HRU
 }
 \examples{
 nHrus <- 1

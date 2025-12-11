@@ -23,7 +23,7 @@ to all single HRUs of dHRU. Loading the Date vector  from vector like variable.
 nHrus <- 2
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
-dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+dhrus <- initdHruModel(nHrus,Areas,IdsHrus,2)
 setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
 setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 prec=c(1,2,3)
