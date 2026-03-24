@@ -137,7 +137,7 @@ class data_HB_1d {
   numberSel init_GroS;//!< Initial value of groundwater storage
   numberSel init_CanS;//!< Initial value of Canopy Interception storage
   numberSel init_SteS;//!< Initial value of Stem Interception storage
-  numberSel init?Intr;//!< Initial value of Interception storage
+  numberSel init_Intr;//!< Initial value of Interception storage
   numberSel init_SnoS;//!< Initial variable of Snow storage
   numberSel init_SurS;//!< Initial value of Surface retention storage
 

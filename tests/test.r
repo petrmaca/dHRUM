@@ -11,7 +11,7 @@ temp=rnorm(numdata,20,3)
 # plot(prec, type="l")
 # plot(temp, type="l")
 #nHrus <- 15000
-nHrus <- 1000
+nHrus <- 1
 #Areas <- runif(nHrus,min = 1,max  = 10) #[m2]
 Areas <- runif(nHrus,min = 38780000,max  = 38780050)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))

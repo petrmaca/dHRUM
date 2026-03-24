@@ -351,6 +351,7 @@ void single_HMunit::set_ZeroinitStates(const unsigned& numres) {
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::SURFRET);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::CANS);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::STES);
+  hyd_dta.s_initStates(help_data,zeroState,init_Stype::INTERCEP);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::FASTRES);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::SNOS);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::SURFRET);
@@ -1438,6 +1439,8 @@ void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
   break ;
   }
   case interception_STORtype::van_Dijk:{
+
+
 
   break;
   }
