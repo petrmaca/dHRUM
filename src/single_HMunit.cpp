@@ -1365,7 +1365,7 @@ void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
   //
   switch(_intrc_STORAGE) {
 
-  case interception_STORtype::Rutter_Gash:
+  case interception_STORtype::Rutter_Gash:{
 
   numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
 
@@ -1431,13 +1431,15 @@ void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
   set_varValue(EvapStem, tstRM, ts_type::EVAS);
 
   Througf = (OverflowCan + CanOut) * get_par(par_HRUtype::CSDIV) + StemOut + OverflowStem;
-
   set_varValue(Througf, tstRM, ts_type::TROF);
-
   set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
 
-
   break ;
+  }
+  case interception_STORtype::van_Dijk:{
+
+  break;
+  }
   }
 
   return ;
@@ -1455,7 +1457,7 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
 
   switch(_intrc_STORAGE) {
 
-  case interception_STORtype::Rutter_Gash:
+  case interception_STORtype::Rutter_Gash:{
   //  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
   numberSel OverflowCan = 0.0, OverflowStem= 0.0, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
 
@@ -1529,6 +1531,13 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
 
   //   std::cout <<  " prevCanS " << prevCanS << " EvapCanop " << EvapCanop << "\n";
   break;
+  }
+  case interception_STORtype::van_Dijk:{
+
+    break;
+  }
+
+
   }
 
   return ;

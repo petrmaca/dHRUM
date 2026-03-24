@@ -321,7 +321,6 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
 //' SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
 //' setParamsToOnedHru(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF),0)
 // [[Rcpp::export]]
-
 void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec, Rcpp::CharacterVector ParsNames, unsigned singleHruId) {
   unsigned numParsNames = ParsNames.size();
   unsigned numParsVals = ParsVec.size();
@@ -370,6 +369,7 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
       {"KS2", par_HRUtype::KS2},
       {"THR", par_HRUtype::THR},
       {"ALPHA", par_HRUtype::ALPHA},
+      {"CMIN", par_HRUtype::CMIN},
       {"FC", par_HRUtype::FC},
       {"FOREST_FRACT", par_HRUtype::FOREST_FRACT},
       {"KF2", par_HRUtype::KF2},
@@ -378,7 +378,11 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
       {"INFR_MAX", par_HRUtype::INFR_MAX},
       {"RF", par_HRUtype::RF},
       {"WP", par_HRUtype::WP},
+      {"RBAI", par_HRUtype::RBAI},
+      {"RBEI", par_HRUtype::RBEI},
+      {"KFR", par_HRUtype::KFR},
       {"INTstMax", par_HRUtype::INTstMax}
+
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -703,27 +707,27 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
  }
 
 //' Getting the all HM units parameters.
- //'
- //' shows the list of data frames of parameters for all HRUs
- //'
- //' @param dHRUM_ptr pointer to dHRUM instance
- //' @export
- //' @examples
- //' nHrus <- 1
- //' Areas <- runif(nHrus,min = 1,max  = 10)
- //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
- //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
- //' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
- //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
- //' prec=c(1,2,3)
- //' temp=c(1,2,3)
- //' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
- //'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
- //' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
- //'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
- //' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
- //' getAllHRUpars(dHRUM_ptr = dhrus)
- // [[Rcpp::export]]
+//'
+//' shows the list of data frames of parameters for all HRUs
+//'
+//' @param dHRUM_ptr pointer to dHRUM instance
+//' @export
+//' @examples
+//' nHrus <- 1
+//' Areas <- runif(nHrus,min = 1,max  = 10)
+//' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+//' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+//' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
+//' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+//' prec=c(1,2,3)
+//' temp=c(1,2,3)
+//' setPTDateInputsToAlldHrus(dhrus, Prec = prec, Temp = temp,
+//'   DateVec = as.Date(c("1990/01/30","1990/01/31","1990/02/01")))
+//' ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2,  KS = 0.1, KF = 0.2, ADIV = 0.3, CDIV = 0.03,
+//'  SDIV = 0.03, CAN_ST = 2, STEM_ST = 2, CSDIV = 0.3, TETR = 5, DDFA = 0.5, TMEL = 0, RETCAP = 10 )
+//' setParamsToAlldHrus(dHRUM_ptr = dhrus,ParsVec = as.numeric(ParDF[1,]),ParsNames =names(ParDF))
+//' getAllHRUpars(dHRUM_ptr = dhrus)
+// [[Rcpp::export]]
  Rcpp::List getAllHRUpars(Rcpp::XPtr<dHRUM> dHRUM_ptr) {
 
    Rcpp::DataFrame df;
