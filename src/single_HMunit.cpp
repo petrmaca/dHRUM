@@ -1420,7 +1420,8 @@ void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
   StemOut = std::min((prevCanS) / get_par(par_HRUtype::CAN_ST) * EvapStem, prevSteS);
   prevSteS = prevSteS - StemOut;
   set_varValue(prevSteS, tstRM, ts_type::STES);
-
+//CanOut + OverflowCan is the total output from canopy storage
+//this is divided into the input to stem storage and remaining part goes to throufall
   prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_par(par_HRUtype::SDIV) *get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan);
 
   set_varValue((CanOut + OverflowCan), tstRM, ts_type::CANF);

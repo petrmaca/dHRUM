@@ -2,7 +2,7 @@
 #include "dHRUM.h"
 //' Sets the types of interception models types to dHRU model for all single HRUs.
 //'
-//' Setting the interception type to dHRUM to all HRUs. Possibe types: \code{Rutter_Gash}
+//' Setting the interception type to dHRUM to all HRUs. Possibe types: \code{Rutter_Gash,van_Dijk}
 //'
 //'
 //' @param dHRUM_ptr pointer to dHRUM instance
@@ -44,7 +44,8 @@ void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterV
      }
    }
      std::map<std::string, interception_STORtype> s_mapStringToINTCPtype_HRUtype = {
-       {"Rutter_Gash", interception_STORtype::Rutter_Gash}
+       {"Rutter_Gash", interception_STORtype::Rutter_Gash},
+       {"van_Dijk", interception_STORtype::van_Dijk}
      };
     std::vector<unsigned> indexHru;
     indexHru.resize(hruIds.size());
@@ -64,6 +65,9 @@ void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterV
          case interception_STORtype::Rutter_Gash:
            intcptnTypesToLoad.push_back(std::make_pair(indexHru[id], interception_STORtype::Rutter_Gash));
            break;
+       case interception_STORtype::van_Dijk:
+         intcptnTypesToLoad.push_back(std::make_pair(indexHru[id], interception_STORtype::van_Dijk));
+         break;
          }
        }
     dHRUM_ptr.get()->initIntrcptnStypeToAlldHrus(intcptnTypesToLoad);

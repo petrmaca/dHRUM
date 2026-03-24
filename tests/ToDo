@@ -1,5 +1,5 @@
 11/9/2025
-Martin Hermanovsky --> ET demand nahradi PET pridat varinatu pro volbu reprezentace PET
+Martin Hermanovsky --> ET demand nahradi PET pridat variantu pro volbu reprezentace PET
 
 25/9/25
 VD - vlastní třída - reservoir
@@ -14,3 +14,14 @@ Rezervoát bude mít vlastní reservoirSel.h
 výstupy jsou: odtok z nádrže, výpar z nádrže, odběr, průsak (SOIS, GROS), průsaky hrází,
 - vodní elektrárna
 
+***hotovo
+- implementace V dHRUMu
+- vectors of reservoirs
+
+24/3/2026
+- network z subpovodi
+- priprava na routing
+- udelat v modelech rybniky
+- channels/privadece
+- pumping stations ??? --> probrat s POh, udelat popis objektu
+- LULC
