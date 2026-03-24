@@ -159,10 +159,12 @@ private:
   numberSel prev_Grou;//!< The helper variable for updating groundwater storage
   numberSel prevCanS;//!<  The helper variable for Canopy interception storage
   numberSel prevSteS;//!<  The helper variable for Stem interception storage
+  numberSel prevIntS;//!<  The helper variable for Interception storage van Dijk type models
   numberSel prevSnoS;//!<  The helper variable for Snow storage
   numberSel prev_SurS;//!< The helper variable for updating surface storage
   numberSel prev_GroS1;//!< The helper variable for updating groundwater storage for LIN_2SE and LIN_2PA
   numberSel prev_GroS2;//!< The helper variable for updating groundwater storage for LIN_2SE and LIN_2PA
+
   numberSel et_demand;//!< The helper on ET demand
   numberDta help_nmbFR;//!< The helper for number of fast reservoirs
   numberDta ifrb;//!< For loop counter

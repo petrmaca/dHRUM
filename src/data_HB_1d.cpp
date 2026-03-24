@@ -42,6 +42,7 @@ data_HB_1d::data_HB_1d(): numTS(0),
   init_GroS(0.0),
   init_CanS(0.0),
   init_SteS(0.0),
+  init_Intr(0.0),
   init_SnoS(0.0),
   init_SurS(0.0),
   init_GroS1(0.0),
@@ -172,6 +173,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   init_GroS(0.0),
   init_CanS(0.0),
   init_SteS(0.0),
+  init_Intr(0.0),
   init_SnoS(0.0),
   init_SurS(0.0),
   init_GroS1(0.0),
@@ -221,6 +223,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   init_GroS = other.init_GroS;//!< Initial value of groundwater storage
   init_CanS = other.init_SteS;//!< Initial value of Canopy Interception storage
   init_SteS = other.init_SteS;//!< Initial value of Stem Interception storage
+  init_Intr = other.init_Intr;//!< Initial value of Interception storage
   init_SnoS = other.init_SnoS;//!< Initial variable of Snow storage
   init_SurS = other.init_SurS;//!< Initial value of Surface retention storage
   init_GroS1 = other.init_GroS1;
@@ -276,6 +279,7 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     init_GroS = rhs.init_GroS;//!< Initial value of groundwater storage
     init_CanS = rhs.init_SteS;//!< Initial value of Canopy Interception storage
     init_SteS = rhs.init_SteS;//!< Initial value of Stem Interception storage
+    init_Intr = rhs.init_Intr;
     init_SnoS = rhs.init_SnoS;//!< Initial variable of Snow storage
     init_SurS = rhs.init_SurS;//!< Initial value of Surface retention storage
     init_GroS1 = rhs.init_GroS1;
@@ -592,6 +596,9 @@ void data_HB_1d::s_initStates(const hdata& initfastRes, const numberSel& init_St
   case init_Stype::STES:
     init_SteS = init_State;
     break;
+  case init_Stype::INTERCEP:
+    init_Intr = init_State;
+    break;
   case init_Stype::SNOS:
     init_SnoS = init_State;
     break;
@@ -634,6 +641,9 @@ numberSel data_HB_1d::g_initState(const init_Stype& _Stype) {
     break;
   case init_Stype::STES:
     return init_SteS;
+    break;
+  case init_Stype::INTERCEP:
+    return init_Intr;
     break;
   case init_Stype::SNOS:
     return init_SnoS;

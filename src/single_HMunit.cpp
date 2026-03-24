@@ -11,6 +11,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   prev_Grou(0.0),
   prevCanS(0.0),
   prevSteS(0.0),
+  prevIntS(0.0),
   prevSnoS(0.0),
   prev_SurS(0.0),
   prev_GroS1(0.0),
@@ -49,6 +50,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   prev_Grou = get_initState(init_Stype::GROUNDWAT);
   prevCanS = get_initState(init_Stype::CANS);
   prevSteS  = get_initState(init_Stype::STES);
+  prevIntS =  get_initState(init_Stype::INTERCEP);
   prevSnoS = get_initState(init_Stype::SNOS);
   prev_SurS = get_initState(init_Stype::SURFRET);
   prev_GroS1 = get_initState(init_Stype::GROS1);
@@ -101,6 +103,7 @@ prev_Soil(0.0),
 prev_Grou(0.0),
 prevCanS(0.0),
 prevSteS(0.0),
+prevIntS(0.0),
 prevSnoS(0.0),
 prev_SurS(0.0),
 prev_GroS1(0.0),
@@ -137,6 +140,7 @@ Current_sHMu_configuration()
   prev_Grou = other.prev_Grou;//!< The helper variable for updating groundwater storage
   prevCanS = other.prevCanS;//!<  The helper variable for Canopy interception storage
   prevSteS = other.prevSteS;//!<  The helper variable for Stem interception storage
+  prevIntS = other.prevIntS;//!<  The helper variable for Interception storage van Dijk models
   prevSnoS = other.prevSnoS;//!<  The helper variable for Snow storage
   prev_SurS = other.prev_SurS;//!< The helper variable for updating surface storage
   prev_GroS1 = other.prev_GroS1;
@@ -188,6 +192,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     prev_Grou = rhs.prev_Grou;//!< The helper variable for updating groundwater storage
     prevCanS = rhs.prevCanS;//!<  The helper variable for Canopy interception storage
     prevSteS = rhs.prevSteS;//!<  The helper variable for Stem interception storage
+    prevIntS = rhs.prevIntS;//!<  The helper variable for Interception storage for van Dijk type models
     prevSnoS = rhs.prevSnoS;//!<  The helper variable for Snow storage
     prev_SurS = rhs.prev_SurS;//!< The helper variable for updating surface storage
     prev_GroS1 = rhs.prev_GroS1;
@@ -1361,8 +1366,6 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
  */
 void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
 
-
-  //
   switch(_intrc_STORAGE) {
 
   case interception_STORtype::Rutter_Gash:{
@@ -1377,8 +1380,6 @@ void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
   numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
   et_demand = update_ETDEMAND(EvapCanop, true);
   EvapCanop = help_EvapCanop;
-
-
   //
   //
   // if(EvapCanop >= et_demand) {
