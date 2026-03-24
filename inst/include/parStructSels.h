@@ -13,20 +13,22 @@ enum class pet_Type {OUDIN, HAMON, THORNTHWAITE, BLANEYCRIDDLE, JENSENHAISE, MCG
 const std::vector<std::string> allPetNames {"OUDIN", "HAMON", "THORNTHWAITE","BLANEYCRIDDLE","JENSENHAISE", "MCGUINNESSBORDNE"};
 
 using pdata = std::valarray<numberSel>;
-enum class par_HRUtype {B_SOIL, C_MAX, B_EVAP, SMAXpdm, KS, KF, ADIV, CDIV, SDIV, CAN_ST, STEM_ST, CSDIV, TETR, DDFA, TMEL, RETCAP, L, D_BYPASS, B_EXP, KS2, THR, ALPHA, CMIN, FC, FOREST_FRACT, KF2, KF_NONLIN, C, INFR_MAX, RF, WP, SMAX, RBAI, RBEI,KFR};
+enum class par_HRUtype {B_SOIL, C_MAX, B_EVAP, SMAXpdm, KS, KF, ADIV, CDIV, SDIV, CAN_ST, STEM_ST, CSDIV, TETR, DDFA, TMEL, \
+                        RETCAP, L, D_BYPASS, B_EXP, KS2, THR, ALPHA, CMIN, FC, FOREST_FRACT, KF2, KF_NONLIN, C, INFR_MAX, RF, \
+                        WP, SMAX, RBAI, RBEI,KFR,INTstMax};
 const par_HRUtype all_pars[]{par_HRUtype::B_SOIL, par_HRUtype::C_MAX, par_HRUtype::B_EVAP, par_HRUtype::SMAXpdm, par_HRUtype::KS, par_HRUtype::KF,      \
                              par_HRUtype::ADIV, par_HRUtype::CDIV, par_HRUtype::SDIV, par_HRUtype::CAN_ST, par_HRUtype::STEM_ST, par_HRUtype::CSDIV,    \
                              par_HRUtype::TETR, par_HRUtype::DDFA, par_HRUtype::TMEL, par_HRUtype::RETCAP, par_HRUtype::L, par_HRUtype::D_BYPASS,
                              par_HRUtype::B_EXP, par_HRUtype::KS2, par_HRUtype::THR, par_HRUtype::ALPHA, par_HRUtype::CMIN, \
                              par_HRUtype::FC, par_HRUtype::FOREST_FRACT, par_HRUtype::KF2, par_HRUtype::KF_NONLIN,          \
                              par_HRUtype::C, par_HRUtype::INFR_MAX, par_HRUtype::RF, par_HRUtype::WP, par_HRUtype::SMAX,    \
-                             par_HRUtype::RBAI,par_HRUtype::RBEI,par_HRUtype::KFR};
+                             par_HRUtype::RBAI,par_HRUtype::RBEI,par_HRUtype::KFR,par_HRUtype::INTstMax};
 
 const std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP", "SMAXpdm","KS","KF","ADIV","CDIV", \
                                             "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR",            \
                                             "DDFA","TMEL","RETCAP","L", "D_BYPASS", "B_EXP", "KS2", "THR",
                                             "ALPHA","CMIN","FC","FOREST_FRACT", "KF2", "KF_NONLIN", "C", \
-                                            "INFR_MAX", "RF", "WP", "SMAX", "RBAI", "RBEI", "KFR"};
+                                            "INFR_MAX", "RF", "WP", "SMAX", "RBAI", "RBEI", "KFR","INTstMax"};
 
 enum class gs_STORtype { LIN_RES, LINL_RES, LINBY_RES, POW_RES, EXP_RES, LIN_2SE, LIN_2PA, FLEX_RES,EXP_LOG};
 const gs_STORtype all_gs_STORs[]{ gs_STORtype::LIN_RES, gs_STORtype::LINL_RES, gs_STORtype::LINBY_RES,
@@ -63,6 +65,7 @@ const std::list<par_HRUtype> L_SurfacePRTL = {  };
 const std::list<par_HRUtype> L_Wetland = {  };
 //intrc_STORAGE
 const std::list<par_HRUtype> L_Rutter_Gash = { par_HRUtype::CDIV, par_HRUtype::SDIV, par_HRUtype::CAN_ST, par_HRUtype::STEM_ST,par_HRUtype::CSDIV };
+const std::list<par_HRUtype> L_Van_Dijk = { par_HRUtype::INTstMax};
 //gs_STORAGE
 const std::list<par_HRUtype> L_LIN_RES = { par_HRUtype::KS, par_HRUtype::ADIV };
 const std::list<par_HRUtype> L_LINL_RES = { par_HRUtype::KS, par_HRUtype::ADIV, par_HRUtype::L };

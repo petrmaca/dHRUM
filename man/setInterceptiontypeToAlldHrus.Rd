@@ -14,7 +14,7 @@ setInterceptiontypeToAlldHrus(dHRUM_ptr, intcptnTypes, hruIds)
 \item{hruIds}{ids on Hrus}
 }
 \description{
-Setting the interception type to dHRUM to all HRUs. Possibe types: \code{Rutter_Gash}
+Setting the interception type to dHRUM to all HRUs. Possibe types: \code{Rutter_Gash,van_Dijk}
 }
 \examples{
 nHrus <- 200

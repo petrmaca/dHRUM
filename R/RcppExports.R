@@ -246,7 +246,7 @@ setPTInputsToDistdHRUM <- function(dHRUM_ptr, DataDF) {
 
 #' Sets the types of interception models types to dHRU model for all single HRUs.
 #'
-#' Setting the interception type to dHRUM to all HRUs. Possibe types: \code{Rutter_Gash}
+#' Setting the interception type to dHRUM to all HRUs. Possibe types: \code{Rutter_Gash,van_Dijk}
 #'
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
