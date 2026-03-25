@@ -177,8 +177,8 @@ private:
 
   gs_STORtype gs_STORAGE;//!< Type of groundwater storage
   soil_STORtype soil_STORAGE;//!< Type of soil storage
-  interception_STORtype intrc_STORAGE;//!< type of iterception storage
-  surface_STORtype srfs_STORAGE;//!< the type of surface retentions storage
+  interception_STORtype intrc_STORAGE;//!< type of interception storage
+  surface_STORtype srfs_STORAGE;//!< the type of surface retention storage
   fast_Response fast_RESPONSE;//!< the type of fast response
   pond_type pond;//!< the type of pond (water reservoir)
   ETpond_type ET_POND;//!< Type of evaporation from pond surface

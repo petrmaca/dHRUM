@@ -13,6 +13,7 @@ enum class pet_Type {OUDIN, HAMON, THORNTHWAITE, BLANEYCRIDDLE, JENSENHAISE, MCG
 const std::vector<std::string> allPetNames {"OUDIN", "HAMON", "THORNTHWAITE","BLANEYCRIDDLE","JENSENHAISE", "MCGUINNESSBORDNE"};
 
 using pdata = std::valarray<numberSel>;
+
 enum class par_HRUtype {B_SOIL, C_MAX, B_EVAP, SMAXpdm, KS, KF, ADIV, CDIV, SDIV, CAN_ST, STEM_ST, CSDIV, TETR, DDFA, TMEL, \
                         RETCAP, L, D_BYPASS, B_EXP, KS2, THR, ALPHA, CMIN, FC, FOREST_FRACT, KF2, KF_NONLIN, C, INFR_MAX, RF, \
                         WP, SMAX, RBAI, RBEI,KFR,INTstMax};

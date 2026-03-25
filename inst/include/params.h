@@ -41,17 +41,17 @@ class params {
   void print_par_list(std::list<par_HRUtype> par_list);
 
 
-  // std::vector<std::string> Current_parameter_string;
+  //std::vector<std::string> Current_parameter_string;
   //std::vector<double> Current_parameter_val;
   //std::vector<double> Current_upparameter_val;
   //std::vector<double> Current_lowparameter_val;
 
   unsigned g_sizeVecNamesPars();
 
-  std::vector<std::string>  get_CurParNames();
-  std::vector<double>  get_CurParVals();
-  std::vector<double>  get_CurUpParVals();
-  std::vector<double>  get_CurLowParVals();
+  std::vector<std::string> get_CurParNames();
+  std::vector<numberSel>  get_CurParVals();
+  std::vector<numberSel>  get_CurUpParVals();
+  std::vector<numberSel>  get_CurLowParVals();
 
  protected:
 
@@ -64,9 +64,9 @@ class params {
 
   std::vector<std::string> Current_parameter_string;//!< The vector of param names
   std::list<par_HRUtype> Current_parameter_list;//!< The list of par_HRUtypes
-  std::vector<double> Current_parameter_val;//!< The vector of current parameter values
-  std::vector<double> Current_upparameter_val;//!< vector of upper limit values for current parameters
-  std::vector<double> Current_lowparameter_val;//!< vector of lower limit values for current parameters
+  std::vector<numberSel> Current_parameter_val;//!< The vector of current parameter values
+  std::vector<numberSel> Current_upparameter_val;//!< vector of upper limit values for current parameters
+  std::vector<numberSel> Current_lowparameter_val;//!< vector of lower limit values for current parameters
 };
 
 #endif // PARAMS_H

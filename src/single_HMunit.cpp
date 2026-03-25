@@ -43,20 +43,22 @@ single_HMunit::single_HMunit(): tstRM(0),
 
   set_nmbFastres(1);
   help_nmbFR = get_nmbFastRes();
-//  std::cout << "\nFast runoff response has " << help_nmbFR << " reservoirs." << std::endl;
+  std::cout << "\nFast runoff response has " << help_nmbFR << " reservoirs." << std::endl;
   set_ZeroinitStates(help_nmbFR);
-//  std::cout<< "Soil init " << get_initState(init_Stype::SOIL) << std::endl;
+  std::cout<< "Soil init " << get_initState(init_Stype::SOIL) << std::endl;
   prev_Soil = get_initState(init_Stype::SOIL);
   prev_Grou = get_initState(init_Stype::GROUNDWAT);
   prevCanS = get_initState(init_Stype::CANS);
   prevSteS  = get_initState(init_Stype::STES);
+  std::cout<< " init STES " << get_initState(init_Stype::STES) << std::endl;
   prevIntS =  get_initState(init_Stype::INTERCEP);
+  std::cout<< " init STES " << get_initState(init_Stype::INTERCEP) << std::endl;
   prevSnoS = get_initState(init_Stype::SNOS);
   prev_SurS = get_initState(init_Stype::SURFRET);
   prev_GroS1 = get_initState(init_Stype::GROS1);
   prev_GroS2 = get_initState(init_Stype::GROS2);
-  p_defaultParams(false);
-//  std::cout << "INITprevDR " << prev_Grou << std::endl;
+  p_defaultParams(true);
+  std::cout << "INITprevDR " << prev_Grou << std::endl;
   tstRM = 0;
   gs_STORAGE = gs_STORtype::LIN_RES;
   soil_STORAGE = soil_STORtype::PDM;
@@ -1849,6 +1851,7 @@ void single_HMunit::set_ZeroStates() {
   prev_Grou = 0.0;
   prevCanS = 0.0;
   prevSteS = 0.0;
+  prevIntS = 0.0;
   prevSnoS = 0.0;
   prev_SurS = 0.0;
   prev_GroS1 = 0.0;
@@ -2342,6 +2345,10 @@ void single_HMunit::print_interception_STORtype() {
 
   case interception_STORtype::Rutter_Gash:
     std::cout << "The interception_STORtype is a Rutter_Gash." << std::endl;
+    break;
+
+  case interception_STORtype::van_Dijk:
+    std::cout << "The interception_STORtype is a van_Dijk." << std::endl;
     break;
   }
 }
@@ -3025,28 +3032,28 @@ void single_HMunit::s_current_parsNames(){
 
 
 std::vector<std::string>  single_HMunit::get_Current_par_names(){
-
+  // std::vector<std::string> nameS = {"ups"};
   std::vector<std::string> nameS = par_HRU.get_CurParNames();
   return nameS;
 
 }
 
 std::vector<double>  single_HMunit::get_Current_par_values(){
-
+  // std::vector<double> nameS = {1};
   std::vector<double> nameS = par_HRU.get_CurParVals();
   return nameS;
 
 }
 
 std::vector<double>  single_HMunit::get_Current_par_up_values(){
-
+  // std::vector<double> nameS = {1};
   std::vector<double> nameS = par_HRU.get_CurUpParVals();
   return nameS;
 
 }
 
 std::vector<double>  single_HMunit::get_Current_par_low_values(){
-
+  // std::vector<double> nameS = {1};
   std::vector<double> nameS = par_HRU.get_CurLowParVals();
   return nameS;
 
@@ -3079,6 +3086,9 @@ void single_HMunit::current_configuration() {
   switch(intrc_STORAGE) {
   case interception_STORtype::Rutter_Gash:
     Current_sHMu_configuration.push_back(std::make_pair("interception_STORtype","Rutter_Gash"));
+    break;
+  case interception_STORtype::van_Dijk:
+    Current_sHMu_configuration.push_back(std::make_pair("interception_STORtype","van_Dijk"));
     break;
   }
 

@@ -90,7 +90,6 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       {"RBEI", par_HRUtype::RBEI},
       {"KFR", par_HRUtype::KFR},
       {"INTstMax", par_HRUtype::INTstMax}
-
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -276,7 +275,7 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       case par_HRUtype::INTstMax:
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::INTstMax));
         // pars[32] = par_dta;
-        // std::cout << "New RBEI --> loaded\n";
+        // std::cout << "New INTstMax --> loaded\n";
         break;
       }
     }

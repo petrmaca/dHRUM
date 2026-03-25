@@ -1,25 +1,28 @@
 #include "params.h"
 
-params::params(): numPars(0),
+params::params(): numPars(1),
   pars(1,1),
   up_pars(1,1),
   low_pars(1,1),
   numFastRes(1),
-  Current_parameter_string(),
-  Current_parameter_list(),
-  Current_parameter_val(),
-  Current_upparameter_val(),
-  Current_lowparameter_val()
+  Current_parameter_string({"To be erazed"}),
+  Current_parameter_list({par_HRUtype::ADIV}),
+  Current_parameter_val({1.0}),
+  Current_upparameter_val({1.0}),
+  Current_lowparameter_val({1.0})
   {
   //ctor
 //    b_soil = 2.0;
 //    c_max = 100.0;
 //    b_evap = 1;
+  std::cout << "(double low_pars.resize(numPars,numPars))1" << std::endl;
   numPars = 35;
+  std::cout << "(double low_pars.resize(numPars,numPars)02)" << std::endl;
 
-  pars.resize(numPars,numPars);
-  up_pars.resize(numPars,numPars);
-  low_pars.resize(numPars,numPars);
+  pars.resize(numPars);
+  up_pars.resize(numPars);
+  low_pars.resize(numPars);
+
   pars[0] = 2.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   pars[1] = 10.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
   pars[2] = 1.0;//!< B_EVAP Parameter controlling soil evapotranspiration [0,infty] how ever [0.5,3],VC1
@@ -143,9 +146,9 @@ params::params(): numPars(0),
   low_pars[32] = 0.0;//!< RBAI River bank infiltration rate (infiltration to Soil storage)
   low_pars[33] = 0.0;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
   low_pars[34] = 0.0;//!< KFR runnoff koeficient from fast response
-  low_pars[35] = 0.0;;//!< van Dijk interception max storage
+  low_pars[35] = 0.0;//!< van Dijk interception max storage
 
-  Current_parameter_string.size();
+  Current_parameter_string.size();//PM why two times?
   Current_parameter_list.size();
   Current_parameter_val.size();
   Current_upparameter_val.size();
@@ -164,11 +167,11 @@ params::params(const params& other): numPars(0),
   pars(1,1),
   up_pars(1,1),
   low_pars(1,1),
-  numFastRes(1),
-  Current_parameter_string(),
-  Current_parameter_val(),
-  Current_upparameter_val(),
-  Current_lowparameter_val()
+  numFastRes(1)
+  // Current_parameter_string(),
+  // Current_parameter_val(),
+  // Current_upparameter_val(),
+  // Current_lowparameter_val()
   {
 
   numPars = other.numPars;
@@ -176,10 +179,10 @@ params::params(const params& other): numPars(0),
   up_pars = other.up_pars;
   low_pars = other.low_pars;
   numFastRes = other.numFastRes;
-  Current_parameter_string = other.Current_parameter_string;
-  Current_parameter_val = other.Current_parameter_val;
-  Current_upparameter_val = other.Current_upparameter_val;
-  Current_lowparameter_val = other.Current_lowparameter_val;
+  // Current_parameter_string = other.Current_parameter_string;
+  // Current_parameter_val = other.Current_parameter_val;
+  // Current_upparameter_val = other.Current_upparameter_val;
+  // Current_lowparameter_val = other.Current_lowparameter_val;
 }
 
 params& params::operator=(const params& rhs) {
@@ -191,10 +194,10 @@ params& params::operator=(const params& rhs) {
     up_pars = rhs.up_pars;
     low_pars = rhs.low_pars;
     numFastRes = rhs.numFastRes;
-    Current_parameter_string = rhs.Current_parameter_string;
-    Current_parameter_val = rhs.Current_parameter_val;
-    Current_upparameter_val = rhs.Current_upparameter_val;
-    Current_lowparameter_val = rhs.Current_lowparameter_val;
+    // Current_parameter_string = rhs.Current_parameter_string;
+    // Current_parameter_val = rhs.Current_parameter_val;
+    // Current_upparameter_val = rhs.Current_upparameter_val;
+    // Current_lowparameter_val = rhs.Current_lowparameter_val;
   }
 
   return *this;
@@ -738,7 +741,7 @@ void params::p_param() {
                                       "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", \
                                       "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: ", "KS2: ",    \
                                       "THR: ", "ALPHA: ","CMIN: ","FC: ","FOREST_FRACT: ", "KF2: ",               \
-                                      "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: ", "SMAX: ", "RBAI:", "RBEI:", "KFR:","INTstMax"};
+                                      "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: ", "SMAX: ", "RBAI:", "RBEI:", "KFR:","INTstMax: "};
 
   std::cout << std::endl << "Printing the values of parameters:" << std::endl << std::endl;
   for(unsigned pp=0; pp<numPars ; pp++ ) {
@@ -1113,18 +1116,18 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
 
   std::list<par_HRUtype> Current_parameter_list(full_list);
 
-  Current_parameter_string=par_HRUtype_to_string(Current_parameter_list);
-
-
-  Current_parameter_val.clear();
-  Current_upparameter_val.clear();
-  Current_lowparameter_val.clear();
-
-  for (auto itr : Current_parameter_list) {
-    Current_parameter_val.push_back(g_par(itr));
-    Current_upparameter_val.push_back(g_par_up(itr));
-    Current_lowparameter_val.push_back(g_par_low(itr));
-  }
+  // Current_parameter_string=par_HRUtype_to_string(Current_parameter_list);
+  //
+  //
+  // Current_parameter_val.clear();
+  // Current_upparameter_val.clear();
+  // Current_lowparameter_val.clear();
+  //
+  // for (auto itr : Current_parameter_list) {
+  //   Current_parameter_val.push_back(g_par(itr));
+  //   Current_upparameter_val.push_back(g_par_up(itr));
+  //   Current_lowparameter_val.push_back(g_par_low(itr));
+  // }
   //print_par_list(Current_parameter_list);
   //std::cout<<"velikost v params: "<<Current_parameter_string.size()<<std::endl;
 }
@@ -1245,9 +1248,9 @@ void params::print_par_list(std::list<par_HRUtype> par_list){
       break;
 
     }
-    std::cout << Current_parameter_val[counter] << "\t";
-    std::cout << Current_upparameter_val[counter] << "\t";
-    std::cout << Current_lowparameter_val[counter] << std::endl;
+    // std::cout << Current_parameter_val[counter] << "\t";
+    // std::cout << Current_upparameter_val[counter] << "\t";
+    // std::cout << Current_lowparameter_val[counter] << std::endl;
     counter++;
   }
 }
@@ -1388,15 +1391,15 @@ std::vector<std::string> params::get_CurParNames(){
   return Current_parameter_string;//maybe VecParNamesSnglHS
 }
 
-std::vector<double> params::get_CurParVals(){
+std::vector<numberSel> params::get_CurParVals(){
   return Current_parameter_val;
 }
 
-std::vector<double> params::get_CurUpParVals(){
+std::vector<numberSel> params::get_CurUpParVals(){
   return Current_upparameter_val;
 }
 
-std::vector<double> params::get_CurLowParVals(){
+std::vector<numberSel> params::get_CurLowParVals(){
   return Current_lowparameter_val;
 }
 
