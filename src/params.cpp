@@ -16,7 +16,7 @@ params::params(): numPars(1),
 //    c_max = 100.0;
 //    b_evap = 1;
   // std::cout << "(double low_pars.resize(numPars,numPars))1" << std::endl;
-  numPars = 36;
+  numPars = 36;//for 36 params it must equal to 36 --> not smaller i.e. 35
   // std::cout << "(double low_pars.resize(numPars,numPars)02)" << std::endl;
 
   pars.resize(numPars);

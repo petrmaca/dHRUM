@@ -43,22 +43,22 @@ single_HMunit::single_HMunit(): tstRM(0),
 
   set_nmbFastres(1);
   help_nmbFR = get_nmbFastRes();
-  std::cout << "\nFast runoff response has " << help_nmbFR << " reservoirs." << std::endl;
+  // std::cout << "\nFast runoff response has " << help_nmbFR << " reservoirs." << std::endl;
   set_ZeroinitStates(help_nmbFR);
-  std::cout<< "Soil init " << get_initState(init_Stype::SOIL) << std::endl;
+  // std::cout<< "Soil init " << get_initState(init_Stype::SOIL) << std::endl;
   prev_Soil = get_initState(init_Stype::SOIL);
   prev_Grou = get_initState(init_Stype::GROUNDWAT);
   prevCanS = get_initState(init_Stype::CANS);
   prevSteS  = get_initState(init_Stype::STES);
-  std::cout<< " init STES " << get_initState(init_Stype::STES) << std::endl;
+  // std::cout<< " init STES " << get_initState(init_Stype::STES) << std::endl;
   prevIntS =  get_initState(init_Stype::INTERCEP);
-  std::cout<< " init STES " << get_initState(init_Stype::INTERCEP) << std::endl;
+  // std::cout<< " init STES " << get_initState(init_Stype::INTERCEP) << std::endl;
   prevSnoS = get_initState(init_Stype::SNOS);
   prev_SurS = get_initState(init_Stype::SURFRET);
   prev_GroS1 = get_initState(init_Stype::GROS1);
   prev_GroS2 = get_initState(init_Stype::GROS2);
   p_defaultParams(false);
-  std::cout << "INITprevDR " << prev_Grou << std::endl;
+  // std::cout << "INITprevDR " << prev_Grou << std::endl;
   tstRM = 0;
   gs_STORAGE = gs_STORtype::LIN_RES;
   soil_STORAGE = soil_STORtype::PDM;

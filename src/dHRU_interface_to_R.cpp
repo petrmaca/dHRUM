@@ -45,9 +45,9 @@ Rcpp::XPtr<dHRUM> initdHruModel(numberDta dimdHru, Rcpp::NumericVector vecAreas,
     // params parHRU;
     // Rcpp::Rcout << "Single params is ready" << "\n";
     single_HMunit sHRU_to_VEC;
-    Rcpp::Rcout << "Single HRu is ready" << "\n";
+    // Rcpp::Rcout << "Single HRu is ready" << "\n";
     dHRUM_ptr->initHrusVec(dimdHru, sHRU_to_VEC);
-    Rcpp::Rcout << "initHrusVec  is ready" << "\n";
+    // Rcpp::Rcout << "initHrusVec  is ready" << "\n";
     std::vector<std::string> vecIDs;
     vecIDs.resize(dimdHru);
     for(unsigned id=0;id<dimdHru;id++){
@@ -56,14 +56,14 @@ Rcpp::XPtr<dHRUM> initdHruModel(numberDta dimdHru, Rcpp::NumericVector vecAreas,
     hdata vecAreasHD(1,dimdHru);
     for(unsigned aa=0;aa<dimdHru;aa++){
       vecAreasHD[aa] = (numberSel) vecAreas[aa];
-       Rcpp::Rcout << vecAreasHD[aa] << "\n";
+       // Rcpp::Rcout << vecAreasHD[aa] << "\n";
     }
     dHRUM_ptr->initHrusID(vecIDs);
     for(unsigned aa=0;aa<dimdHru;aa++){
-       Rcpp::Rcout << "Id of  single Hru on positon " << aa << " is  " << dHRUM_ptr->getSingleHruId(aa) << "\n";
+       // Rcpp::Rcout << "Id of  single Hru on positon " << aa << " is  " << dHRUM_ptr->getSingleHruId(aa) << "\n";
     }
     dHRUM_ptr->setAreasToHrus(vecAreasHD);
-     Rcpp::Rcout << "The number of threads is set to " << dHRUM_ptr->get_num_treads() << "\n";
+     // Rcpp::Rcout << "The number of threads is set to " << dHRUM_ptr->get_num_treads() << "\n";
   }
   return Rcpp::XPtr<dHRUM>(dHRUM_ptr);
 }
