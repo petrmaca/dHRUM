@@ -40,8 +40,11 @@ Rcpp::XPtr<dHRUM> initdHruModel(numberDta dimdHru, Rcpp::NumericVector vecAreas,
   } else {
     dHRUM_ptr->set_num_treads(nthreads);
     Rcpp::Rcout << "Nthreads are ready" << "\n";
-    single_HMunit sHRU_to_VEC;
-    Rcpp::Rcout << "Single HRu is ready" << "\n";
+    data_HB_1d ups;
+    Rcpp::Rcout << "Single dta is ready" << "\n";
+
+    // single_HMunit sHRU_to_VEC;
+    // Rcpp::Rcout << "Single HRu is ready" << "\n";
   //   dHRUM_ptr->initHrusVec(dimdHru, sHRU_to_VEC);
   //   std::vector<std::string> vecIDs;
   //   vecIDs.resize(dimdHru);
