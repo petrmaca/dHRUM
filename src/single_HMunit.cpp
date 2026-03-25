@@ -1557,6 +1557,23 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
   }
   case interception_STORtype::van_Dijk:{
 
+    numberSel vegSnow = 0.0, Ec = 0.0, newSnow = 0.0;
+    vegSnow = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+    prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - vegSnow;
+    Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);
+
+    numberSel help_Ec = update_ETDEMAND(Ec, false);
+    et_demand = update_ETDEMAND(Ec, true);
+    Ec = help_Ec;
+
+    prevIntS = prevIntS - Ec;
+
+    newSnow = get_dta(tstRM,ts_type::SNOW) + vegSnow;
+    set_varValue(newSnow, tstRM,ts_type::SNOW);
+    set_varValue(0.0, tstRM, ts_type::TROF);
+    set_varValue(Ec, tstRM, ts_type::EVAC);
+    set_varValue(prevIntS,tstRM, ts_type::INTS);
+
     break;
   }
 
