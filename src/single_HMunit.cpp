@@ -57,7 +57,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   prev_SurS = get_initState(init_Stype::SURFRET);
   prev_GroS1 = get_initState(init_Stype::GROS1);
   prev_GroS2 = get_initState(init_Stype::GROS2);
-  p_defaultParams(true);
+  p_defaultParams(false);
   std::cout << "INITprevDR " << prev_Grou << std::endl;
   tstRM = 0;
   gs_STORAGE = gs_STORtype::LIN_RES;

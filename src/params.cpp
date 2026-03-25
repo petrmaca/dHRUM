@@ -15,11 +15,12 @@ params::params(): numPars(1),
 //    b_soil = 2.0;
 //    c_max = 100.0;
 //    b_evap = 1;
-  std::cout << "(double low_pars.resize(numPars,numPars))1" << std::endl;
-  numPars = 35;
-  std::cout << "(double low_pars.resize(numPars,numPars)02)" << std::endl;
+  // std::cout << "(double low_pars.resize(numPars,numPars))1" << std::endl;
+  numPars = 36;
+  // std::cout << "(double low_pars.resize(numPars,numPars)02)" << std::endl;
 
   pars.resize(numPars);
+  // std::cout << pars.size() << std::endl;
   up_pars.resize(numPars);
   low_pars.resize(numPars);
 
