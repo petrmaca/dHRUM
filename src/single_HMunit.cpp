@@ -1568,7 +1568,8 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
 
     prevIntS = prevIntS - Ec;
 
-    newSnow = get_dta(tstRM,ts_type::SNOW) + vegSnow;
+    newSnow = (1-get_par(par_HRUtype::CSfrac))*get_dta(tstRM,ts_type::SNOW) + vegSnow;
+
     set_varValue(newSnow, tstRM,ts_type::SNOW);
     set_varValue(0.0, tstRM, ts_type::TROF);
     set_varValue(Ec, tstRM, ts_type::EVAC);
