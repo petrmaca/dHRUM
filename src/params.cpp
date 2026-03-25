@@ -16,7 +16,7 @@ params::params(): numPars(1),
 //    c_max = 100.0;
 //    b_evap = 1;
   // std::cout << "(double low_pars.resize(numPars,numPars))1" << std::endl;
-  numPars = 36;//for 36 params it must equal to 36 --> not smaller i.e. 35
+  numPars = 37;//for 36 params it must equal to 36 --> not smaller i.e. 35
   // std::cout << "(double low_pars.resize(numPars,numPars)02)" << std::endl;
 
   pars.resize(numPars);
@@ -63,6 +63,7 @@ params::params(): numPars(1),
   pars[33] = 0.1;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
   pars[34] = 0.5;//!< KFR runnoff koeficient from fast response
   pars[35] = 15;//!< van Dijk max interception storage [0, inft]
+  pars[36] = 0.5;//!< van Dijk canopy and stem cover fraction [0, 1]
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   up_pars[1] = 1000.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -105,6 +106,7 @@ params::params(): numPars(1),
   up_pars[33] = 1;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
   up_pars[34] = 1;//!< KFR runnoff koeficient from fast response
   up_pars[35] = 150;//!< van Dijk interception max storage
+  up_pars[36] = 0.5;//!< van Dijk canopy and stem cover fraction [0, 1]
 
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
@@ -148,6 +150,7 @@ params::params(): numPars(1),
   low_pars[33] = 0.0;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
   low_pars[34] = 0.0;//!< KFR runnoff koeficient from fast response
   low_pars[35] = 0.0;//!< van Dijk interception max storage
+  low_pars[36] = 0.5;//!< van Dijk canopy and stem cover fraction [0, 1]
 
   Current_parameter_string.size();//PM why two times?
   Current_parameter_list.size();
@@ -355,6 +358,9 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
   case par_HRUtype::INTstMax:
     pars[35] = par_dta;
     break;
+  case par_HRUtype::CSfrac:
+    pars[36] = par_dta;
+    break;
   }
 
   pars[3] = (pars[0] * pars[22] +pars[2]) / (pars[0] +1 );
@@ -516,6 +522,8 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
   case par_HRUtype::INTstMax:
     pars[35] = par_dta;
     break;
+  case par_HRUtype::CSfrac:
+    pars[36] = par_dta;
   }
   return ;
 }
@@ -640,6 +648,9 @@ numberSel params::g_par(const par_HRUtype& _parType) {
   case par_HRUtype::INTstMax:
     value = pars[35];
     break;
+  case par_HRUtype::CSfrac:
+    value = pars[36];
+    break;
 }
   return value;
 
@@ -726,6 +737,7 @@ void params::s_default() {
   pars[33] = 0.1;//!< RBEI River bed infiltration rate (infiltration to groundwater storage)
   pars[34] = 0.5;//!< KFR runnoff koeficient from fast response
   pars[35] = 15;//!< van Dijk interception max storage
+  pars[36] = 0.5;//!< van Dijk interception canopy and sten cover fraction
 
   numFastRes = 1;
 
@@ -742,7 +754,8 @@ void params::p_param() {
                                       "ADIV: ", "CDIV: ", "SDIV: ", "CAN_ST: ", "STEM_ST: ", "CSDIV: ", "TETR: ", \
                                       "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: ", "KS2: ",    \
                                       "THR: ", "ALPHA: ","CMIN: ","FC: ","FOREST_FRACT: ", "KF2: ",               \
-                                      "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: ", "SMAX: ", "RBAI:", "RBEI:", "KFR:","INTstMax: "};
+                                      "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: ", "SMAX: ", "RBAI:", "RBEI:", "KFR:","INTstMax: ", \
+                                      "CSfrac: "};
 
   std::cout << std::endl << "Printing the values of parameters:" << std::endl << std::endl;
   for(unsigned pp=0; pp<numPars ; pp++ ) {
@@ -878,6 +891,9 @@ numberSel params::g_par_low(const par_HRUtype& _parType) {
   case par_HRUtype::INTstMax:
     value =  low_pars[35];
     break;
+  case par_HRUtype::CSfrac:
+    value = low_pars[36];
+    break;
   }
   return value;
 
@@ -995,6 +1011,9 @@ numberSel params::g_par_up(const par_HRUtype& _parType) {
     break;
   case par_HRUtype::INTstMax:
     value =  up_pars[35];
+    break;
+  case par_HRUtype::CSfrac:
+    value = up_pars[36];
     break;
   }
   return value;
@@ -1247,6 +1266,9 @@ void params::print_par_list(std::list<par_HRUtype> par_list){
     case par_HRUtype::INTstMax:
       std::cout <<std::left << std::setw(spacer)<< "INTstMax:"<< "\t\t";
       break;
+    case par_HRUtype::CSfrac:
+      std::cout <<std::left << std::setw(spacer)<< "CSfrac:"<< "\t\t";
+      break;
 
     }
     // std::cout << Current_parameter_val[counter] << "\t";
@@ -1368,6 +1390,9 @@ std::vector<std::string> params::par_HRUtype_to_string(std::list<par_HRUtype> pa
       break;
     case par_HRUtype::INTstMax:
       par_vec.push_back("INTstMax");
+      break;
+    case par_HRUtype::CSfrac:
+      par_vec.push_back("CSfrac");
       break;
     }
   }

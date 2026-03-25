@@ -56,7 +56,7 @@ class params {
  protected:
 
  private:
-  unsigned numPars;//!<  The number of model parameters, this is the Numpars integer not [NumPars -1]
+  unsigned numPars;//!<  The number of model parameters, this is the Numpars not [NumPars -1]
   pdata pars;//!< The values of parameters on given HRU
   pdata up_pars;//!< The upper bounds of parameters
   pdata low_pars;//!< The lower bound of parameters

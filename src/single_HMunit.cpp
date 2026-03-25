@@ -1441,7 +1441,14 @@ void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
   break ;
   }
   case interception_STORtype::van_Dijk:{
+    numberSel Dc = 0.0, Ec =0.0;
 
+
+    if(get_par(par_HRUtype::INTstMax) > prevIntS) {
+     Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + (get_par(par_HRUtype::SDIV) + get_par(par_HRUtype::CDIV)) * get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);;
+    } else Dc =0.0;
+
+    prevIntS = prevIntS + (get_par(par_HRUtype::SDIV) + get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC) + (get_par(par_HRUtype::SDIV) + get_par(par_HRUtype::CDIV)) * get_dta(tstRM, ts_type::MELT)) - Dc -Ec;
 
 
   break;
