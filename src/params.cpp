@@ -11,12 +11,9 @@ params::params(): numPars(1),
   Current_upparameter_val({1.0}),
   Current_lowparameter_val({1.0})
   {
-  //ctor
-//    b_soil = 2.0;
-//    c_max = 100.0;
-//    b_evap = 1;
   // std::cout << "(double low_pars.resize(numPars,numPars))1" << std::endl;
-  numPars = 37;//for 36 params it must equal to 36 --> not smaller i.e. 35
+  numPars = 37;//for Nparams params it must equal to Nparams --> not smaller i.e. Nparams-1
+  //the indexing is 0,1, ... Nparams-1 th number of  params is Nparams
   // std::cout << "(double low_pars.resize(numPars,numPars)02)" << std::endl;
 
   pars.resize(numPars);
@@ -62,7 +59,7 @@ params::params(): numPars(1),
   pars[32] = 0.05;//!< RBAI River bank infiltration rate (infiltration to Soil storage)
   pars[33] = 0.1;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
   pars[34] = 0.5;//!< KFR runnoff koeficient from fast response
-  pars[35] = 15;//!< van Dijk max interception storage [0, inft]
+  pars[35] = 8;//!< van Dijk max interception storage [0, inft]
   pars[36] = 0.5;//!< van Dijk canopy and stem cover fraction [0, 1]
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
@@ -86,7 +83,7 @@ params::params(): numPars(1),
   up_pars[18] = 1;//!< B_EXP Power coefficient
   up_pars[19] = 1;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
   up_pars[20] = 100;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
-  up_pars[21] = 1;//!< ALPHA Divider for two parallel linear reservoirs
+  up_pars[21] = 10;//!< ALPHA Divider for two parallel linear reservoirs
   up_pars[22] = 200;//!< CIMN lower limit of c in soils pdm reservoir
 
   numberSel helpSmaxPDMUp = 0;
@@ -105,7 +102,7 @@ params::params(): numPars(1),
   up_pars[32] = 1;//!< RBAI River bank infiltration rate (infiltration to Soil storage)
   up_pars[33] = 1;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
   up_pars[34] = 1;//!< KFR runnoff koeficient from fast response
-  up_pars[35] = 150;//!< van Dijk interception max storage
+  up_pars[35] = 10;//!< van Dijk interception max storage
   up_pars[36] = 0.5;//!< van Dijk canopy and stem cover fraction [0, 1]
 
 // Lower bounds of parameters
@@ -158,9 +155,7 @@ params::params(): numPars(1),
   Current_upparameter_val.size();
   Current_lowparameter_val.size();
   //setting of defaulst current params lists up cur low names
-
-
-//  std::cout << "Params are initialized." << std::endl;
+  //  std::cout << "Params are initialized." << std::endl;
 }
 
 params::~params() {
@@ -171,22 +166,21 @@ params::params(const params& other): numPars(0),
   pars(1,1),
   up_pars(1,1),
   low_pars(1,1),
-  numFastRes(1)
-  // Current_parameter_string(),
-  // Current_parameter_val(),
-  // Current_upparameter_val(),
-  // Current_lowparameter_val()
+  numFastRes(1),
+  Current_parameter_string(),
+  Current_parameter_val(),
+  Current_upparameter_val(),
+  Current_lowparameter_val()
   {
-
   numPars = other.numPars;
   pars = other.pars;
   up_pars = other.up_pars;
   low_pars = other.low_pars;
   numFastRes = other.numFastRes;
-  // Current_parameter_string = other.Current_parameter_string;
-  // Current_parameter_val = other.Current_parameter_val;
-  // Current_upparameter_val = other.Current_upparameter_val;
-  // Current_lowparameter_val = other.Current_lowparameter_val;
+  Current_parameter_string = other.Current_parameter_string;
+  Current_parameter_val = other.Current_parameter_val;
+  Current_upparameter_val = other.Current_upparameter_val;
+  Current_lowparameter_val = other.Current_lowparameter_val;
 }
 
 params& params::operator=(const params& rhs) {
@@ -198,10 +192,12 @@ params& params::operator=(const params& rhs) {
     up_pars = rhs.up_pars;
     low_pars = rhs.low_pars;
     numFastRes = rhs.numFastRes;
-    // Current_parameter_string = rhs.Current_parameter_string;
-    // Current_parameter_val = rhs.Current_parameter_val;
-    // Current_upparameter_val = rhs.Current_upparameter_val;
-    // Current_lowparameter_val = rhs.Current_lowparameter_val;
+    Current_parameter_string = rhs.Current_parameter_string;
+    Current_parameter_list = rhs.Current_parameter_list;
+    Current_parameter_val = rhs.Current_parameter_val;
+    Current_upparameter_val = rhs.Current_upparameter_val;
+    Current_lowparameter_val = rhs.Current_lowparameter_val;
+
   }
 
   return *this;
