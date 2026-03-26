@@ -1441,8 +1441,8 @@ void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
   break ;
   }
   case interception_STORtype::van_Dijk:{
-    numberSel Dc = 0.0, Ec =0.0;
 
+    numberSel Dc = 0.0, Ec =0.0;
     //snow melt and precipitatn enters a leaves the interception store at the same day
     // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
     //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
@@ -1558,15 +1558,23 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
   case interception_STORtype::van_Dijk:{
 
     numberSel Dc = 0.0, Ec = 0.0, newSnow = 0.0, returnDC =0.0, Dc_update = 0.0, Dc_return = 0.0;
-    Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
 
-    if (Dc > (get_par(par_HRUtype::INTstScale)* get_par(par_HRUtype::INTstMax))){
-      Dc_update = 2*get_par(par_HRUtype::INTstMax);
-      Dc_return  = Dc-Dc_update;
-    } else {
-      Dc_update = Dc;
+    if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
+      Dc = 0.0;
       Dc_return = 0.0;
+    } else{
+      Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+
+
+      if (Dc > (get_par(par_HRUtype::INTstScale) * get_par(par_HRUtype::INTstMax))){
+        Dc_update = (get_par(par_HRUtype::INTstScale)) * get_par(par_HRUtype::INTstMax);
+        Dc_return  = Dc-Dc_update;
+        } else {
+        Dc_update = Dc;
+        Dc_return = 0.0;
+      }
     }
+
 
     prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + returnDC - Dc_update;
     Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);

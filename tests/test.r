@@ -7,7 +7,7 @@ numdata =365
 probwet =0.9
 meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
-temp=rnorm(numdata,20,3)
+temp=rnorm(numdata,15,3)
 # plot(prec, type="l")
 # plot(temp, type="l")
 #nHrus <- 15000
@@ -35,7 +35,7 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.0
                     SDIV = 0.1, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
                     RETCAP = 10, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
                     KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =25,L=0.1, B_EXP = 0.3, KFR = 0.03,
-                    INTstMax = 10,INTstScale = 4)
+                    INTstMax = 4,INTstScale = 2.5)
 
 
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
@@ -49,7 +49,7 @@ setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 
 
 
-calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"OUDIN")
+calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 # calcHBInAlldHrus(dHRUM_ptr = dhrus)
 # gatherHBdata(dHRUM_ptr = dhrus)
 # outDt <- getOutputDist(dHRUM_ptr = dhrus)
@@ -82,6 +82,9 @@ plot(outDF$DIRR, type ="l")
 plot(outDF$TOTR, type ="l")
 
 plot(outDF$INTS, type ="l")
+
+plot(outDF$TROF, type ="l")
+plot(outDF$PREC, type ="l")
 
 plot(outDF$PET, col ="red",t="l",ylim=c(0,7))
 lines(outDF$EVAC, type ="l")
