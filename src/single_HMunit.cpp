@@ -1426,7 +1426,7 @@ void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
   set_varValue(prevSteS, tstRM, ts_type::STES);
 //CanOut + OverflowCan is the total output from canopy storage
 //this is divided into the input to stem storage and remaining part goes to throufall
-  prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_par(par_HRUtype::SDIV) *get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan);
+  prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_par(par_HRUtype::SDIV) * get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan);
 
   set_varValue((CanOut + OverflowCan), tstRM, ts_type::CANF);
   set_varValue(EvapCanop, tstRM, ts_type::EVAC);
@@ -1557,9 +1557,18 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
   }
   case interception_STORtype::van_Dijk:{
 
-    numberSel vegSnow = 0.0, Ec = 0.0, newSnow = 0.0;
-    vegSnow = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
-    prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - vegSnow;
+    numberSel Dc = 0.0, Ec = 0.0, newSnow = 0.0, returnDC =0.0, Dc_update = 0.0, Dc_return = 0.0;
+    Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+
+    if (Dc > 2* get_par(par_HRUtype::INTstMax)){
+      Dc_update = 2*get_par(par_HRUtype::INTstMax);
+      Dc_return  = Dc-Dc_update;
+    } else {
+      Dc_update = Dc;
+      D_return = 0.0;
+    }
+
+    prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + returnDC - Dc_update;
     Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);
 
     numberSel help_Ec = update_ETDEMAND(Ec, false);
@@ -1569,7 +1578,6 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
     prevIntS = prevIntS - Ec;
 
     newSnow = (1-get_par(par_HRUtype::CSfrac))*get_dta(tstRM,ts_type::SNOW) + vegSnow;
-
     set_varValue(newSnow, tstRM,ts_type::SNOW);
     set_varValue(0.0, tstRM, ts_type::TROF);
     set_varValue(Ec, tstRM, ts_type::EVAC);

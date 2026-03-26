@@ -41,11 +41,11 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.0
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 
 
-#getCurdHRUpars(dHRUM_ptr = dhrus,0)
-#getAllHRUpars(dHRUM_ptr = dhrus)
+# getCurdHRUpars(dHRUM_ptr = dhrus,0)
+# getAllHRUpars(dHRUM_ptr = dhrus)
 
-#getCurSHRUconfig(dHRUM_ptr = dhrus,0)
-#getAllHRUconfigs(dHRUM_ptr = dhrus)
+# getCurSHRUconfig(dHRUM_ptr = dhrus,0)
+# getAllHRUconfigs(dHRUM_ptr = dhrus)
 
 
 
