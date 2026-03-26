@@ -1560,12 +1560,12 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
     numberSel Dc = 0.0, Ec = 0.0, newSnow = 0.0, returnDC =0.0, Dc_update = 0.0, Dc_return = 0.0;
     Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
 
-    if (Dc > 2* get_par(par_HRUtype::INTstMax)){
+    if (Dc > (get_par(par_HRUtype::INTstScale)* get_par(par_HRUtype::INTstMax))){
       Dc_update = 2*get_par(par_HRUtype::INTstMax);
       Dc_return  = Dc-Dc_update;
     } else {
       Dc_update = Dc;
-      D_return = 0.0;
+      Dc_return = 0.0;
     }
 
     prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + returnDC - Dc_update;
@@ -1577,9 +1577,9 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
 
     prevIntS = prevIntS - Ec;
 
-    newSnow = (1-get_par(par_HRUtype::CSfrac))*get_dta(tstRM,ts_type::SNOW) + vegSnow;
-    set_varValue(newSnow, tstRM,ts_type::SNOW);
-    set_varValue(0.0, tstRM, ts_type::TROF);
+    // newSnow = (1-get_par(par_HRUtype::CSfrac))*get_dta(tstRM,ts_type::SNOW) + vegSnow;
+    // set_varValue(newSnow, tstRM,ts_type::SNOW);
+    set_varValue(Dc_update, tstRM, ts_type::TROF);
     set_varValue(Ec, tstRM, ts_type::EVAC);
     set_varValue(prevIntS,tstRM, ts_type::INTS);
 

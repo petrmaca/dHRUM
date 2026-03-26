@@ -12,7 +12,7 @@ params::params(): numPars(1),
   Current_lowparameter_val({1.0})
   {
   // std::cout << "(double low_pars.resize(numPars,numPars))1" << std::endl;
-  numPars = 37;//for Nparams params it must equal to Nparams --> not smaller i.e. Nparams-1
+  numPars = 38;//for Nparams params it must equal to Nparams --> not smaller i.e. Nparams-1
   //the indexing is 0,1, ... Nparams-1 th number of  params is Nparams
   // std::cout << "(double low_pars.resize(numPars,numPars)02)" << std::endl;
 
@@ -61,6 +61,7 @@ params::params(): numPars(1),
   pars[34] = 0.5;//!< KFR runnoff koeficient from fast response
   pars[35] = 8;//!< van Dijk max interception storage [0, inft]
   pars[36] = 0.5;//!< van Dijk canopy and stem cover fraction [0, 1]
+  pars[37] = 1;//!< interception sclaing facor for winter inetrception storage
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   up_pars[1] = 1000.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -104,6 +105,7 @@ params::params(): numPars(1),
   up_pars[34] = 1;//!< KFR runnoff koeficient from fast response
   up_pars[35] = 10;//!< van Dijk interception max storage
   up_pars[36] = 0.5;//!< van Dijk canopy and stem cover fraction [0, 1]
+  up_pars[37] = 2;//!< interception sclaing facor for winter interception storage
 
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
@@ -148,6 +150,7 @@ params::params(): numPars(1),
   low_pars[34] = 0.0;//!< KFR runnoff koeficient from fast response
   low_pars[35] = 0.0;//!< van Dijk interception max storage
   low_pars[36] = 0.5;//!< van Dijk canopy and stem cover fraction [0, 1]
+  low_pars[37] = 1;//!< interception sclaing facor for winter interception storage
 
   Current_parameter_string.size();//PM why two times?
   Current_parameter_list.size();
@@ -357,6 +360,9 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
   case par_HRUtype::CSfrac:
     pars[36] = par_dta;
     break;
+  case par_HRUtype::INTstScale:
+    pars[37] = par_dta;
+    break;
   }
 
   pars[3] = (pars[0] * pars[22] +pars[2]) / (pars[0] +1 );
@@ -520,6 +526,10 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
     break;
   case par_HRUtype::CSfrac:
     pars[36] = par_dta;
+    break;
+  case par_HRUtype::INTstScale:
+    pars[37] = par_dta;
+    break;
   }
   return ;
 }
@@ -647,6 +657,10 @@ numberSel params::g_par(const par_HRUtype& _parType) {
   case par_HRUtype::CSfrac:
     value = pars[36];
     break;
+  case par_HRUtype::INTstScale:
+    value = pars[37];
+    break;
+
 }
   return value;
 
@@ -734,6 +748,7 @@ void params::s_default() {
   pars[34] = 0.5;//!< KFR runnoff koeficient from fast response
   pars[35] = 15;//!< van Dijk interception max storage
   pars[36] = 0.5;//!< van Dijk interception canopy and sten cover fraction
+  pars[37] = 1;//!< interception storage scaling factor for change in interception storage in winter
 
   numFastRes = 1;
 
@@ -751,7 +766,7 @@ void params::p_param() {
                                       "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: ", "KS2: ",    \
                                       "THR: ", "ALPHA: ","CMIN: ","FC: ","FOREST_FRACT: ", "KF2: ",               \
                                       "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: ", "SMAX: ", "RBAI:", "RBEI:", "KFR:","INTstMax: ", \
-                                      "CSfrac: "};
+                                      "CSfrac: ", "INTstScale"};
 
   std::cout << std::endl << "Printing the values of parameters:" << std::endl << std::endl;
   for(unsigned pp=0; pp<numPars ; pp++ ) {
@@ -890,6 +905,9 @@ numberSel params::g_par_low(const par_HRUtype& _parType) {
   case par_HRUtype::CSfrac:
     value = low_pars[36];
     break;
+  case par_HRUtype::INTstScale:
+    value = low_pars[37];
+    break;
   }
   return value;
 
@@ -1010,6 +1028,9 @@ numberSel params::g_par_up(const par_HRUtype& _parType) {
     break;
   case par_HRUtype::CSfrac:
     value = up_pars[36];
+    break;
+  case par_HRUtype::INTstScale:
+    value = up_pars[37];
     break;
   }
   return value;
@@ -1132,18 +1153,18 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
 
   std::list<par_HRUtype> Current_parameter_list(full_list);
 
-  // Current_parameter_string=par_HRUtype_to_string(Current_parameter_list);
-  //
-  //
-  // Current_parameter_val.clear();
-  // Current_upparameter_val.clear();
-  // Current_lowparameter_val.clear();
-  //
-  // for (auto itr : Current_parameter_list) {
-  //   Current_parameter_val.push_back(g_par(itr));
-  //   Current_upparameter_val.push_back(g_par_up(itr));
-  //   Current_lowparameter_val.push_back(g_par_low(itr));
-  // }
+  Current_parameter_string=par_HRUtype_to_string(Current_parameter_list);
+
+
+  Current_parameter_val.clear();
+  Current_upparameter_val.clear();
+  Current_lowparameter_val.clear();
+
+  for (auto itr : Current_parameter_list) {
+    Current_parameter_val.push_back(g_par(itr));
+    Current_upparameter_val.push_back(g_par_up(itr));
+    Current_lowparameter_val.push_back(g_par_low(itr));
+  }
   //print_par_list(Current_parameter_list);
   //std::cout<<"velikost v params: "<<Current_parameter_string.size()<<std::endl;
 }
@@ -1264,6 +1285,9 @@ void params::print_par_list(std::list<par_HRUtype> par_list){
       break;
     case par_HRUtype::CSfrac:
       std::cout <<std::left << std::setw(spacer)<< "CSfrac:"<< "\t\t";
+      break;
+    case par_HRUtype::INTstScale:
+      std::cout <<std::left << std::setw(spacer)<< "INTstScale:"<< "\t\t";
       break;
 
     }
@@ -1389,6 +1413,9 @@ std::vector<std::string> params::par_HRUtype_to_string(std::list<par_HRUtype> pa
       break;
     case par_HRUtype::CSfrac:
       par_vec.push_back("CSfrac");
+      break;
+    case par_HRUtype::INTstScale:
+      par_vec.push_back("INTstScale");
       break;
     }
   }

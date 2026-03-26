@@ -90,7 +90,8 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       {"RBEI", par_HRUtype::RBEI},
       {"KFR", par_HRUtype::KFR},
       {"INTstMax", par_HRUtype::INTstMax},
-      {"CSfrac", par_HRUtype::CSfrac}
+      {"CSfrac", par_HRUtype::CSfrac},
+      {"INTstScale",par_HRUtype::INTstScale}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -281,6 +282,9 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       case par_HRUtype::CSfrac:
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::CSfrac));
         break;
+      case par_HRUtype::INTstScale:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::INTstScale));
+        break;
       }
     }
 
@@ -385,7 +389,8 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
       {"RBEI", par_HRUtype::RBEI},
       {"KFR", par_HRUtype::KFR},
       {"INTstMax", par_HRUtype::INTstMax},
-      {"CSfrac", par_HRUtype::CSfrac}
+      {"CSfrac", par_HRUtype::CSfrac},
+      {"INTstScale",par_HRUtype::INTstScale}
 
     };
 
@@ -580,6 +585,9 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::CSfrac));
         // pars[32] = par_dta;
         // std::cout << "New RBEI --> loaded\n";
+        break;
+      case par_HRUtype::INTstScale:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::INTstScale));
         break;
       }
     }
