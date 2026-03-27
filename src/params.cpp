@@ -1075,7 +1075,7 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     full_list.insert(full_list.end(),L_LIN_RES.begin(),L_LIN_RES.end() );
     break;
   case gs_STORtype::LINL_RES:
-    full_list.insert(full_list.end(),L_LINL_RES.begin(),L_LINL_RES.end());
+    full_list.insert(full_list.end(),L_LINL_RES.begin(),L_LINL_RES.end() );
     break;
   case gs_STORtype::LINBY_RES:
     full_list.insert(full_list.end(),L_LINBY_RES.begin(),L_LINBY_RES.end() );
