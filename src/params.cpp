@@ -1063,7 +1063,10 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     full_list.insert(full_list.end(),L_Rutter_Gash.begin(), L_Rutter_Gash.end());
     break;
   case interception_STORtype::van_Dijk:
-    full_list.insert(full_list.end(),L_Van_Dijk.begin(), L_Van_Dijk.end());
+    full_list.insert(full_list.end(),L_van_Dijk.begin(), L_van_Dijk.end());
+    break;
+  case interception_STORtype::Eliades:
+    full_list.insert(full_list.end(),L_Eliades.begin(), L_Eliades.end());
     break;
   }
 

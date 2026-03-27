@@ -1463,7 +1463,32 @@ void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
 
   break;
   }
+  case interception_STORtype::Eliades:{
+
+    numberSel Dc = 0.0, Ec =0.0;
+    //snow melt and precipitatn enters a leaves the interception store at the same day
+    // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
+    //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
+    // } else Dc =0.0;
+    Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+    prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+    Ec = std::min((prevIntS / get_par(par_HRUtype::INTstMax)* get_dta(tstRM,ts_type::PET)),prevIntS);
+
+    numberSel help_Ec = update_ETDEMAND(Ec, false);
+    et_demand = update_ETDEMAND(Ec, true);
+    Ec = help_Ec;
+
+    prevIntS = prevIntS - Ec;
+
+    set_varValue(Dc, tstRM, ts_type::TROF);
+    set_varValue(Ec, tstRM, ts_type::EVAC);
+    set_varValue(prevIntS,tstRM, ts_type::INTS);
+
+    break;
   }
+
+  }
+
 
   return ;
 }
@@ -1578,6 +1603,44 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
 
     prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + returnDC - Dc_update;
     Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);
+
+    numberSel help_Ec = update_ETDEMAND(Ec, false);
+    et_demand = update_ETDEMAND(Ec, true);
+    Ec = help_Ec;
+
+    prevIntS = prevIntS - Ec;
+
+    // newSnow = (1-get_par(par_HRUtype::CSfrac))*get_dta(tstRM,ts_type::SNOW) + vegSnow;
+    // set_varValue(newSnow, tstRM,ts_type::SNOW);
+    set_varValue(Dc_update, tstRM, ts_type::TROF);
+    set_varValue(Ec, tstRM, ts_type::EVAC);
+    set_varValue(prevIntS,tstRM, ts_type::INTS);
+
+    break;
+  }
+  case interception_STORtype::Eliades:{
+
+    numberSel Dc = 0.0, Ec = 0.0, newSnow = 0.0, returnDC =0.0, Dc_update = 0.0, Dc_return = 0.0;
+
+    if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
+      Dc = 0.0;
+      Dc_return = 0.0;
+    } else{
+      Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+
+
+      if (Dc > (get_par(par_HRUtype::INTstScale) * get_par(par_HRUtype::INTstMax))){
+        Dc_update = (get_par(par_HRUtype::INTstScale)) * get_par(par_HRUtype::INTstMax);
+        Dc_return  = Dc-Dc_update;
+      } else {
+        Dc_update = Dc;
+        Dc_return = 0.0;
+      }
+    }
+
+
+    prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + returnDC - Dc_update;
+    Ec = std::min((prevIntS / get_par(par_HRUtype::INTstMax)* get_dta(tstRM,ts_type::PET)),prevIntS);
 
     numberSel help_Ec = update_ETDEMAND(Ec, false);
     et_demand = update_ETDEMAND(Ec, true);
@@ -3140,6 +3203,9 @@ void single_HMunit::current_configuration() {
     break;
   case interception_STORtype::van_Dijk:
     Current_sHMu_configuration.push_back(std::make_pair("interception_STORtype","van_Dijk"));
+    break;
+  case interception_STORtype::Eliades:
+    Current_sHMu_configuration.push_back(std::make_pair("interception_STORtype","Eliades"));
     break;
   }
 

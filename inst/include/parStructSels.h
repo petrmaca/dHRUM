@@ -49,9 +49,9 @@ const soil_STORtype all_soil_STORs[]{ soil_STORtype::PDM, soil_STORtype::COLLIE_
 const std::vector<std::string> allSoilStorTypeNames {"PDM", "COLLIE_V2", "NEW_ZEALAND", "GR4J", "SBROOK_V1", \
                                                      "HILLSLOPE", "PLATEAU","PDM2"};
 
-enum class interception_STORtype { Rutter_Gash, van_Dijk};
-const interception_STORtype all_Interceptions[]{ interception_STORtype::Rutter_Gash, interception_STORtype::van_Dijk};
-const std::vector<std::string> allTnterceptionStorTypeNames {"Rutter_Gash","van_Dijk"};
+enum class interception_STORtype { Rutter_Gash, van_Dijk, Eliades};
+const interception_STORtype all_Interceptions[]{ interception_STORtype::Rutter_Gash, interception_STORtype::van_Dijk, interception_STORtype::Eliades};
+const std::vector<std::string> allTnterceptionStorTypeNames {"Rutter_Gash","van_Dijk", "Eliades"};
 
 enum class surface_STORtype {SurfaceAll, SurfacePRTL, Wetland};
 const surface_STORtype all_SurfacStors[] {surface_STORtype::SurfaceAll, surface_STORtype::SurfacePRTL,surface_STORtype::Wetland};
@@ -68,7 +68,8 @@ const std::list<par_HRUtype> L_SurfacePRTL = {  };
 const std::list<par_HRUtype> L_Wetland = {  };
 //intrc_STORAGE
 const std::list<par_HRUtype> L_Rutter_Gash = { par_HRUtype::CDIV, par_HRUtype::SDIV, par_HRUtype::CAN_ST, par_HRUtype::STEM_ST,par_HRUtype::CSDIV };
-const std::list<par_HRUtype> L_Van_Dijk = { par_HRUtype::INTstMax, par_HRUtype::CSfrac, par_HRUtype::INTstScale};
+const std::list<par_HRUtype> L_van_Dijk = { par_HRUtype::INTstMax, par_HRUtype::CSfrac, par_HRUtype::INTstScale};
+const std::list<par_HRUtype> L_Eliades = { par_HRUtype::INTstMax, par_HRUtype::CSfrac, par_HRUtype::INTstScale};
 //gs_STORAGE
 const std::list<par_HRUtype> L_LIN_RES = { par_HRUtype::KS, par_HRUtype::ADIV };
 const std::list<par_HRUtype> L_LINL_RES = { par_HRUtype::KS, par_HRUtype::ADIV, par_HRUtype::L };

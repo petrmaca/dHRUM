@@ -25,3 +25,8 @@ výstupy jsou: odtok z nádrže, výpar z nádrže, odběr, průsak (SOIS, GROS)
 - channels/privadece
 - pumping stations ??? --> probrat s POh, udelat popis objektu
 - LULC
+
+26/3/2026
+-intercepce propojit INTscMax s nekalibrovanymi hodnoatami pro vegetacni pokryv
+-pridat sezoni dynamiku s LAI
+-pridat elliades cos je les reps jehlicnany a Ec je funci PET * (Cv +Pres- Dc)/INTstMax

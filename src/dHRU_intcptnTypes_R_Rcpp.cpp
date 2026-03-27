@@ -45,7 +45,8 @@ void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterV
    }
      std::map<std::string, interception_STORtype> s_mapStringToINTCPtype_HRUtype = {
        {"Rutter_Gash", interception_STORtype::Rutter_Gash},
-       {"van_Dijk", interception_STORtype::van_Dijk}
+       {"van_Dijk", interception_STORtype::van_Dijk},
+       {"Eliades", interception_STORtype::Eliades}
      };
     std::vector<unsigned> indexHru;
     indexHru.resize(hruIds.size());
@@ -67,6 +68,9 @@ void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterV
            break;
        case interception_STORtype::van_Dijk:
          intcptnTypesToLoad.push_back(std::make_pair(indexHru[id], interception_STORtype::van_Dijk));
+         break;
+       case interception_STORtype::Eliades:
+         intcptnTypesToLoad.push_back(std::make_pair(indexHru[id], interception_STORtype::Eliades));
          break;
          }
        }
