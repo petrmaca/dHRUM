@@ -7,7 +7,7 @@ numdata =365
 probwet =0.9
 meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
-temp=rnorm(numdata,1,3)
+temp=rnorm(numdata,-5,3)
 # plot(prec, type="l")
 # plot(temp, type="l")
 #nHrus <- 15000
@@ -18,7 +18,9 @@ Areas <- runif(nHrus,min = 38780000,max  = 38780050)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
+# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
 setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus)
+# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus)
 setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfaceAll",times= length(Areas)),hruIds=IdsHrus)
 setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
 setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PDM",times= length(Areas)), hruIds = IdsHrus)
@@ -31,11 +33,11 @@ setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PDM",times= length
 
 
 setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
-ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.2,
-                    SDIV = 0.1, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = 0.0,
+ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.5,
+                    SDIV = 0.2, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = -2.0,
                     RETCAP = 10, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
                     KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =25,L=0.1, B_EXP = 0.3, KFR = 0.03,
-                    INTstMax = 4,INTstScale = 2.5)
+                    INTstMax = 4,INTstScale = 1.5)
 
 
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
@@ -82,8 +84,17 @@ plot(outDF$DIRR, type ="l")
 plot(outDF$TOTR, type ="l")
 
 plot(outDF$INTS, type ="l")
+plot(outDF$TEMP, type ="l")
+plot(outDF$PREC, type ="l")
 
+plot(outDF$CANS, type ="l")
+plot(outDF$MELT, type ="l")
+plot(outDF$SNOW, type ="l")
+
+plot(outDF$CANF, type ="l")
+plot(outDF$STEF, type ="l")
 plot(outDF$TROF, type ="l")
+
 plot(outDF$PREC, type ="l")
 
 plot(outDF$PET, col ="red",t="l",ylim=c(0,7))
