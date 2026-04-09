@@ -1601,26 +1601,27 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
   }
   case interception_STORtype::van_Dijk:{
 
-    numberSel Dc = 0.0, Ec = 0.0, newSnow = 0.0, returnDC =0.0, Dc_update = 0.0, Dc_return = 0.0;
+    numberSel Dc = 0.0, Ec = 0.0;
+    // numberSel Dc = 0.0, Ec = 0.0, newSnow = 0.0, returnDC =0.0, Dc_update = 0.0, Dc_return = 0.0;
 
-    if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
-      Dc = 0.0;
-      Dc_return = 0.0;
-    } else{
-      Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+    // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
+    //   Dc = 0.0;
+    //   Dc_return = 0.0;
+    // } else{
+    //   Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+    //
+    //
+    //   if (Dc > (get_par(par_HRUtype::INTstScale) * get_par(par_HRUtype::INTstMax))){
+    //     Dc_update = (get_par(par_HRUtype::INTstScale)) * get_par(par_HRUtype::INTstMax);
+    //     Dc_return  = Dc-Dc_update;
+    //     } else {
+    //     Dc_update = Dc;
+    //     Dc_return = 0.0;
+    //   }
+    // }
+    Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
 
-
-      if (Dc > (get_par(par_HRUtype::INTstScale) * get_par(par_HRUtype::INTstMax))){
-        Dc_update = (get_par(par_HRUtype::INTstScale)) * get_par(par_HRUtype::INTstMax);
-        Dc_return  = Dc-Dc_update;
-        } else {
-        Dc_update = Dc;
-        Dc_return = 0.0;
-      }
-    }
-
-
-    prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + returnDC - Dc_update;
+    prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
     Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);
 
     numberSel help_Ec = update_ETDEMAND(Ec, false);
@@ -1631,7 +1632,7 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
 
     // newSnow = (1-get_par(par_HRUtype::CSfrac))*get_dta(tstRM,ts_type::SNOW) + vegSnow;
     // set_varValue(newSnow, tstRM,ts_type::SNOW);
-    set_varValue(Dc_update, tstRM, ts_type::TROF);
+    set_varValue(Dc, tstRM, ts_type::TROF);
     set_varValue(Ec, tstRM, ts_type::EVAC);
     set_varValue(prevIntS,tstRM, ts_type::INTS);
 
@@ -1639,37 +1640,48 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
   }
   case interception_STORtype::Eliades:{
 
-    numberSel Dc = 0.0, Ec = 0.0, newSnow = 0.0, returnDC =0.0, Dc_update = 0.0, Dc_return = 0.0;
+    numberSel Dc = 0.0, Ec = 0.0;
+    // numberSel Dc = 0.0, Ec = 0.0, newSnow = 0.0, returnDC =0.0, Dc_update = 0.0, Dc_return = 0.0;
 
-    if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
-      Dc = 0.0;
-      Dc_return = 0.0;
-    } else{
-      Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+    // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
+    //   Dc = 0.0;
+    //   Dc_return = 0.0;
+    // } else{
+    //   Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+    //
+    //
+    //   if (Dc > (get_par(par_HRUtype::INTstScale) * get_par(par_HRUtype::INTstMax))){
+    //     Dc_update = (get_par(par_HRUtype::INTstScale)) * get_par(par_HRUtype::INTstMax);
+    //     Dc_return  = Dc-Dc_update;
+    //   } else {
+    //     Dc_update = Dc;
+    //     Dc_return = 0.0;
+    //   }
+    // }
+    // std::cout <<prevIntS << std::endl;
 
+    Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+    // std::cout <<prevIntS << "\tDc " <<Dc << "\tSm " << get_par(par_HRUtype::INTstMax) << "\t inp " << get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT))<< std::endl;
+    prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+    // std::cout <<"intst afteed -dc "<< prevIntS << std::endl;
 
-      if (Dc > (get_par(par_HRUtype::INTstScale) * get_par(par_HRUtype::INTstMax))){
-        Dc_update = (get_par(par_HRUtype::INTstScale)) * get_par(par_HRUtype::INTstMax);
-        Dc_return  = Dc-Dc_update;
-      } else {
-        Dc_update = Dc;
-        Dc_return = 0.0;
-      }
-    }
-
-
-    prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + returnDC - Dc_update;
+    // prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + returnDC - Dc_update;
     Ec = std::min((prevIntS / get_par(par_HRUtype::INTstMax)* get_dta(tstRM,ts_type::PET)),prevIntS);
+    // std::cout <<prevIntS << "\tEc " <<Ec <<std::endl;
 
     numberSel help_Ec = update_ETDEMAND(Ec, false);
     et_demand = update_ETDEMAND(Ec, true);
     Ec = help_Ec;
 
+    // std::cout <<prevIntS << "\t Et demand" <<Ec <<std::endl;
     prevIntS = prevIntS - Ec;
+    // std::cout <<prevIntS << "\t" <<Ec <<std::endl;
 
     // newSnow = (1-get_par(par_HRUtype::CSfrac))*get_dta(tstRM,ts_type::SNOW) + vegSnow;
     // set_varValue(newSnow, tstRM,ts_type::SNOW);
-    set_varValue(Dc_update, tstRM, ts_type::TROF);
+    // set_varValue(Dc_update, tstRM, ts_type::TROF);
+
+    set_varValue(Dc, tstRM, ts_type::TROF);
     set_varValue(Ec, tstRM, ts_type::EVAC);
     set_varValue(prevIntS,tstRM, ts_type::INTS);
 
