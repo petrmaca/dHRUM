@@ -1804,6 +1804,10 @@ void single_HMunit::run_HB() {
     // std::string d= std::to_string(s);
     // std::cout<< d << "\n";
 
+    numberSel hlp = LAI_INTstMax(); // return the maximum interception storage capacity based on LAI
+    //std::cout<<std::to_string(hlp)<<std::endl;
+
+
 
     interception_snow();//
     // std::cout << " interception "<< et_demand << " evac " << get_dta(tstRM, ts_type::EVAC) << " evas " << get_dta(tstRM, ts_type::EVAS) <<"\n";
@@ -3376,9 +3380,14 @@ void single_HMunit::current_configuration() {
     Current_sHMu_configuration.push_back(std::make_pair("pond_Rout","coming soon"));
     break;
   }
+}
 
+numberSel single_HMunit::LAI_INTstMax() {
 
+    numberSel act_lai=0.0,hlp_INTstMax = 0.0;
 
+    hlp_INTstMax=0.461*get_dta(tstRM, ts_type::LAI); //eq (15)    https://doi.org/10.1016/0022-1694(89)90111-X
+    //hlp_INTstMax=0.935 + 0.498 *get_dta(tstRM, ts_type::LAI)-0.00575*(get_dta(tstRM, ts_type::LAI)*get_dta(tstRM, ts_type::LAI)); //von Hoyningen-Huene, J. 1981. Die Interzeption Des Niederschlags in Landwirtschaftlichen Pflanzenbeständen
 
-
+    return hlp_INTstMax;
 }

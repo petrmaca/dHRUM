@@ -147,7 +147,7 @@ class single_HMunit {
   //void current_configuration(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP );
   void current_configuration();
 
-
+  numberSel LAI_INTstMax();
 
 
 protected:
