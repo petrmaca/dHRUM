@@ -263,6 +263,19 @@ void single_HMunit::set_data_prec_temp(const hdata& _prec_dta,const hdata& _temp
   return ;
 }
 
+/** \brief loading precipitation ,temperature and LAI data only into data valarrays
+ *
+ */
+void single_HMunit::set_data_prec_temp_lai(const hdata& _prec_dta,const hdata& _temp_dta,const hdata& _lai_dta) {
+
+  hyd_dta.s_data(_prec_dta,ts_type::PREC,true);
+  hyd_dta.s_data(_temp_dta,ts_type::TEMP,false);
+  hyd_dta.s_data(_lai_dta,ts_type::LAI,false);
+
+  //  std::cout << "Well done precipitation and temperature data loaded.\n" << std::endl;
+  return ;
+}
+
 unsigned single_HMunit::get_numdta() {
 
   return hyd_dta.g_numdta();
@@ -1785,6 +1798,13 @@ void single_HMunit::run_HB() {
   for(tstRM=0; tstRM < Numdta ; tstRM++) {
     et_demand = get_dta(tstRM,ts_type::PET);
     // std::cout << " beg "<< et_demand << "\n";
+
+
+    // double s = get_dta(tstRM,ts_type::LAI);
+    // std::string d= std::to_string(s);
+    // std::cout<< d << "\n";
+
+
     interception_snow();//
     // std::cout << " interception "<< et_demand << " evac " << get_dta(tstRM, ts_type::EVAC) << " evas " << get_dta(tstRM, ts_type::EVAS) <<"\n";
     surface_retention(srfs_STORAGE);//
@@ -1866,6 +1886,7 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   set_data(dta,ts_type::ETPO);
   set_data(dta,ts_type::POIS);
   set_data(dta,ts_type::POIG);
+  set_data(dta,ts_type::LAI);
   // std::cout << " tor ok\n";
 
   // get_numdta();
@@ -1907,6 +1928,34 @@ void single_HMunit::load_data_PT(const hdata& prec_input, const hdata& temp_inpu
   // std::cout << "\n class 1\n";
 
   return ;
+
+}
+
+void single_HMunit::load_data_PTL(const hdata& prec_input, const hdata& temp_input, const hdata& lai_input, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay) {
+
+  unsigned helpnumDTA;
+
+  helpnumDTA = prec_input.size();
+  /*
+   // std::cout << "ups size " << prec_input.size() << "\n";
+
+   // if(helpnumDTA != temp_input.size()) {
+   //   std::cout << "Different number of time intervals in precipitation input " << prec_input.size() \
+   //             << " the temperature input has " << temp_input.size() << " inputs." << std::endl;
+   //   std::exit(EXIT_FAILURE);
+   //
+   // }
+   //  numberSel val = -99999.9;
+   //  numberSel val = 0;
+   // std::cout << "\n init inputs 1\n";*/
+   init_inputs(val, helpnumDTA);
+   // std::cout << "\n init inputs 2\n";
+   set_data_prec_temp_lai(prec_input,temp_input,lai_input);
+   // std::cout << "\n PT data inputs 1\n";
+   set_calender(inYear,inMonth,inDay,helpnumDTA);
+   // std::cout << "\n class 1\n";
+
+   return ;
 
 }
 

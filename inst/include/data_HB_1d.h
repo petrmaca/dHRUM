@@ -133,6 +133,8 @@ class data_HB_1d {
   hdata PoiS; //!<  soil percolation input pond
   hdata PoiG; //!<  groundwater percolation input pond
 
+  hdata Lai; //!<  Leaf area index [m2/m2]
+
   numberSel init_SoiS;//!< Initial value of soil storage
   numberSel init_GroS;//!< Initial value of groundwater storage
   numberSel init_CanS;//!< Initial value of Canopy Interception storage

@@ -130,6 +130,20 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// setPTLInputsToAlldHrus
+void setPTLInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Prec, Rcpp::NumericVector Temp, Rcpp::NumericVector Lai, Rcpp::Date inDate);
+RcppExport SEXP _dHRUM_setPTLInputsToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP PrecSEXP, SEXP TempSEXP, SEXP LaiSEXP, SEXP inDateSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type Prec(PrecSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type Temp(TempSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type Lai(LaiSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Date >::type inDate(inDateSEXP);
+    setPTLInputsToAlldHrus(dHRUM_ptr, Prec, Temp, Lai, inDate);
+    return R_NilValue;
+END_RCPP
+}
 // setInterceptiontypeToAlldHrus
 void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector intcptnTypes, Rcpp::CharacterVector hruIds);
 RcppExport SEXP _dHRUM_setInterceptiontypeToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP intcptnTypesSEXP, SEXP hruIdsSEXP) {
@@ -367,6 +381,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_setPTInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTInputsToAlldHrus, 4},
     {"_dHRUM_setPTDateInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTDateInputsToAlldHrus, 4},
     {"_dHRUM_setPTInputsToDistdHRUM", (DL_FUNC) &_dHRUM_setPTInputsToDistdHRUM, 2},
+    {"_dHRUM_setPTLInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTLInputsToAlldHrus, 5},
     {"_dHRUM_setInterceptiontypeToAlldHrus", (DL_FUNC) &_dHRUM_setInterceptiontypeToAlldHrus, 3},
     {"_dHRUM_initdHruModel", (DL_FUNC) &_dHRUM_initdHruModel, 4},
     {"_dHRUM_getOutput", (DL_FUNC) &_dHRUM_getOutput, 1},

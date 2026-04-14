@@ -32,6 +32,7 @@ class dHRUM {
   std::vector<std::string> getHRUIds();
   void setInputsToAllHrus(std::string namesFilePath);
   void loadPTDatToAllHrus(hdata Prec, hdata Temp, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay);
+  void loadPTLDatToAllHrus(hdata Prec, hdata Temp,hdata Lai, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay);
   void setInputsToOneHru(std::string namesFilePath, unsigned Id);
   void loadPTInputsToOneHru(hdata Prec, hdata Temp, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay, unsigned HruIt);
   void setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad);
