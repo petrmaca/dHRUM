@@ -175,6 +175,7 @@ private:
   numberSel prev_SurS;//!< The helper variable for updating surface storage
   numberSel prev_GroS1;//!< The helper variable for updating groundwater storage for LIN_2SE and LIN_2PA
   numberSel prev_GroS2;//!< The helper variable for updating groundwater storage for LIN_2SE and LIN_2PA
+  numberSel prev_IntSnow;//!< The helper variable for updating dual state interception model intercepted snow
 
   numberSel et_demand;//!< The helper on ET demand
   numberDta help_nmbFR;//!< The helper for number of fast reservoirs

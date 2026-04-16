@@ -16,6 +16,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   prev_SurS(0.0),
   prev_GroS1(0.0),
   prev_GroS2(0.0),
+  prev_IntSnow(0.0),
   et_demand(0.0),
   help_nmbFR(0),
   ifrb(0),
@@ -57,6 +58,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   prev_SurS = get_initState(init_Stype::SURFRET);
   prev_GroS1 = get_initState(init_Stype::GROS1);
   prev_GroS2 = get_initState(init_Stype::GROS2);
+  prev_IntSnow = get_initState(init_Stype::INTRCPSNOW);
   p_defaultParams(false);
   // std::cout << "INITprevDR " << prev_Grou << std::endl;
   tstRM = 0;
@@ -110,6 +112,7 @@ prevSnoS(0.0),
 prev_SurS(0.0),
 prev_GroS1(0.0),
 prev_GroS2(0.0),
+prev_IntSnow(0.0),
 et_demand(0.0),
 help_nmbFR(0),
 ifrb(0),
@@ -147,6 +150,7 @@ Current_sHMu_configuration()
   prev_SurS = other.prev_SurS;//!< The helper variable for updating surface storage
   prev_GroS1 = other.prev_GroS1;
   prev_GroS2 = other.prev_GroS2;
+  prev_IntSnow = other.prev_IntSnow;
   et_demand = other.et_demand;
   help_nmbFR = other.help_nmbFR;//!< The helper for number of fast reservoirs
   ifrb = other.ifrb;//!< For loop counter
@@ -199,6 +203,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     prev_SurS = rhs.prev_SurS;//!< The helper variable for updating surface storage
     prev_GroS1 = rhs.prev_GroS1;
     prev_GroS2 = rhs.prev_GroS2;
+    prev_IntSnow = rhs.prev_IntSnow;
     et_demand = rhs.et_demand;
     help_nmbFR = rhs.help_nmbFR;//!< The helper for number of fast reservoirs
     ifrb = rhs.ifrb;//!< For loop counter
@@ -372,6 +377,7 @@ void single_HMunit::set_ZeroinitStates(const unsigned& numres) {
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::SURFRET);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::GROS1);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::GROS2);
+  hyd_dta.s_initStates(help_data,zeroState,init_Stype::INTRCPSNOW);
 
   return ;
 }
@@ -1800,22 +1806,13 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
 
       if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
 
-
-
-
-
-
-       } else {
-
-         if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
-
          } else {
-           interception_Eliades_summer();
-         }
-       }
-
-
-
+             if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
+               interception_Eliades_melt();
+                } else {
+                  interception_Eliades_summer();
+                  }
+            }
       break;
       }
     }

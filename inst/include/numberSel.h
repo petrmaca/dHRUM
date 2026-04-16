@@ -25,7 +25,7 @@ const ts_type all_ts[]{ts_type::PREC,ts_type::SNOW,ts_type::AET,ts_type::PET,ts_
 
 
 const unsigned numTSvars = 29;
-enum class init_Stype {SOIL, GROUNDWAT, FASTRES, SURFRET, CANS, STES, INTERCEP,SNOS,GROS1,GROS2};
+enum class init_Stype {SOIL, GROUNDWAT, FASTRES, SURFRET, CANS, STES, INTERCEP,SNOS,GROS1,GROS2,INTRCPSNOW};
 
 enum class cal_Type {YEAR, MONTH, DAY, JDAY};
 const cal_Type all_caDT[] {cal_Type::YEAR, cal_Type::MONTH, cal_Type::DAY, cal_Type::JDAY};
