@@ -43,6 +43,7 @@ class single_HMunit {
   void interception_snow();//!< Update snow storage and interception
   void interception_NoSnow(interception_STORtype _intrc_STORAGE);//!< Update the Canopy and Stem Interception storages without snow
   void interception_WithSnow(interception_STORtype _intrc_STORAGE);//!< Update the Canopy and Stem Interception storage with snow
+  void interceptions(interception_STORtype _intrc_STORAGE);
   void surface_retention(surface_STORtype _surf_STORtype);//!< Update surface retention
   void soil_buffer(soil_STORtype _soil_STORtype);//!< Update the soil buffer states
   void fast_response(fast_Response _fast_RESPONSE);//!< The fast runoff response
