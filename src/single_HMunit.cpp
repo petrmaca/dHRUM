@@ -1809,8 +1809,6 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
 
          if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
 
-
-
          } else {
            interception_Eliades_summer();
          }
@@ -1821,6 +1819,31 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
       break;
       }
     }
+
+  return ;
+}
+
+void single_HMunit::interception_Eliades_melt(){
+
+  numberSel Dc = 0.0, Ec =0.0;
+  //snow melt and precipitatn enters a leaves the interception store at the same day
+  // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
+  //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
+  // } else Dc =0.0;
+  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+  Ec = std::min((prevIntS / get_par(par_HRUtype::INTstMax)* get_dta(tstRM,ts_type::PET)),prevIntS);
+
+  numberSel help_Ec = update_ETDEMAND(Ec, false);
+  et_demand = update_ETDEMAND(Ec, true);
+  Ec = help_Ec;
+
+  prevIntS = prevIntS - Ec;
+
+  set_varValue(Dc, tstRM, ts_type::TROF);
+  set_varValue(Ec, tstRM, ts_type::EVAC);
+  set_varValue(prevIntS,tstRM, ts_type::INTS);
+
 
   return ;
 }
