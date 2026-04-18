@@ -43,12 +43,16 @@ class single_HMunit {
   void interception_snow();//!< Update snow storage and interception
   void interception_NoSnow(interception_STORtype _intrc_STORAGE);//!< Update the Canopy and Stem Interception storages without snow
   void interception_WithSnow(interception_STORtype _intrc_STORAGE);//!< Update the Canopy and Stem Interception storage with snow
+
   void interceptions(interception_STORtype _intrc_STORAGE);
 
   void interception_Eliades_winter();
   void interception_Eliades_melt();
   void interception_Eliades_summer();
 
+  void snow();
+
+  void snow_DDF();
 
 
   void surface_retention(surface_STORtype _surf_STORtype);//!< Update surface retention

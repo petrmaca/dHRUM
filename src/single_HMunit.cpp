@@ -1805,7 +1805,7 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
     case interception_STORtype::Eliades:{
 
       if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
-
+               interception_Eliades_winter();
          } else {
              if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
                interception_Eliades_melt();
@@ -1818,6 +1818,29 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
     }
 
   return ;
+}
+
+void single_HMunit::interception_Eliades_winter(){
+  numberSel Dc = 0.0, Ec =0.0;
+  //snow melt and precipitatn enters a leaves the interception store at the same day
+  // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
+  //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
+  // } else Dc =0.0;
+  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+  Ec = std::min((prevIntS / get_par(par_HRUtype::INTstMax)* get_dta(tstRM,ts_type::PET)),prevIntS);
+
+  numberSel help_Ec = update_ETDEMAND(Ec, false);
+  et_demand = update_ETDEMAND(Ec, true);
+  Ec = help_Ec;
+
+  prevIntS = prevIntS - Ec;
+
+  set_varValue(Dc, tstRM, ts_type::TROF);
+  set_varValue(Ec, tstRM, ts_type::EVAC);
+  set_varValue(prevIntS,tstRM, ts_type::INTS);
+
+
 }
 
 void single_HMunit::interception_Eliades_melt(){
@@ -1895,12 +1918,15 @@ void single_HMunit::run_HB() {
     // std::string d= std::to_string(s);
     // std::cout<< d << "\n";
 
-    numberSel hlp = LAI_INTstMax(); // return the maximum interception storage capacity based on LAI
+    // numberSel hlp = LAI_INTstMax(); // return the maximum interception storage capacity based on LAI
     //std::cout<<std::to_string(hlp)<<std::endl;
+    interceptions(intrc_STORAGE);
 
 
 
-    interception_snow();//
+    // interception_snow();//
+
+
     // std::cout << " interception "<< et_demand << " evac " << get_dta(tstRM, ts_type::EVAC) << " evas " << get_dta(tstRM, ts_type::EVAS) <<"\n";
     surface_retention(srfs_STORAGE);//
     // std::cout << " surf ret "<< et_demand << " ewsr " << get_dta(tstRM,ts_type::ETSW) <<"\n";

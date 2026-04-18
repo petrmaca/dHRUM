@@ -61,6 +61,9 @@ enum class fast_Response {SerialCascadeLinRes, SerialLinResGWGros,SerialLinResSo
 const fast_Response all_FastResponses[] {fast_Response::SerialCascadeLinRes, fast_Response::SerialLinResGWGros, fast_Response::SerialLinResSoilSois, fast_Response::SerialLinResGWGrosSoilSois};
 const std::vector<std::string> all_FastResponsesNames {"SerialCascadeLinRes", "SerialLinResGWGros","SerialLinResSoilSois", "SerialLinResGWGrosSoilSois"};
 
+enum class snow_Model {DDF};
+const snow_Model all_SnowMods[]{ snow_Model::DDF};
+const std::vector<std::string> allSnowMdls {"DDF"};
 
 //srfs_STORAGE
 const std::list<par_HRUtype> L_SurfaceAll = { par_HRUtype::CDIV, par_HRUtype::SDIV, par_HRUtype::TETR, par_HRUtype::RETCAP };
