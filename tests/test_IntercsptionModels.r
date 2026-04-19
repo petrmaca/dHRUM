@@ -83,6 +83,8 @@ plot(outDF$MELT, type ="l")
 plot(outDF$PET, col ="red",t="l")
 lines(outDF$EVAC, type ="l")
 lines(outDF$PET, col ="red")
+lines(outDF$AET, col ="blue")
+lines(outDF$PET, col ="red")
 
 # van Dijk model
 numdata =365
