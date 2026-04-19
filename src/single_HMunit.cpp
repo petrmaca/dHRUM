@@ -1790,11 +1790,7 @@ void single_HMunit::interception_snow() {
   return ;
 }
 
-
-
 void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
-
-
 
     switch(_intrc_STORAGE) {
 
@@ -1898,6 +1894,71 @@ void single_HMunit::interception_Eliades_summer(){
   return ;
 }
 
+void single_HMunit::snowPrec(){
+
+  numberSel Snoww = 0.0;
+
+  if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
+    Snoww = get_dta(tstRM, ts_type::PREC);
+    std::cout << " snow " << Snoww << " \n";
+  } else {
+    Snoww = 0.0;
+  }
+
+  set_varValue(Snoww,tstRM,ts_type::SNOW);
+
+  return ;
+
+}
+
+
+void single_HMunit::snow_Melt(snow_Model _snow_MeltType){
+
+  switch(_snow_MeltType) {
+
+  case snow_Model::DDF:{
+
+    snow_DDF();
+
+    break;
+  }
+
+  // case snow_Model::DDF:{
+  //
+  //   snow_DDF();
+  //
+  //   break;
+  // }
+
+  }
+
+  return ;
+}
+
+void single_HMunit::snow_DDF(){
+
+  numberSel Snow_melt = 0.0, Snoww = 0.0;
+
+  Snoww = get_dta(tstRM, ts_type::SNOW);
+  if(get_dta(tstRM, ts_type::TEMP) > get_par(par_HRUtype::TMEL)) {
+    Snow_melt = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prevSnoS);
+    // if(Snow_melt <0) std::cout  <<"negative melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
+  } else Snow_melt = 0.0;
+
+  if ((prevSnoS + Snoww - Snow_melt)<0){
+    prevSnoS = 0.0;
+    Snow_melt = prevSnoS + Snoww;
+  } else prevSnoS = prevSnoS + Snoww - Snow_melt;
+
+
+  std::cout  <<" melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
+   std::cout << " prevSnoS " << prevSnoS << " MELT " << Snow_melt<< " " << std::endl;
+  // set_varValue(prevSnoS,tstRM,ts_type::SNOW);
+  set_varValue(Snow_melt,tstRM,ts_type::MELT);
+
+  return ;
+}
+
 /** \brief Updates fluxes and states in for loop for all time intervals, set zeros to internal help state and initial states
  *
  */
@@ -1917,20 +1978,22 @@ void single_HMunit::run_HB() {
   for(tstRM=0; tstRM < Numdta ; tstRM++) {
     et_demand = get_dta(tstRM,ts_type::PET);
     // std::cout << " beg "<< et_demand << "\n";
-
-
     // double s = get_dta(tstRM,ts_type::LAI);
     // std::string d= std::to_string(s);
     // std::cout<< d << "\n";
 
+    //old version dHRUM -- Ludek and Petr
     // numberSel hlp = LAI_INTstMax(); // return the maximum interception storage capacity based on LAI
     //std::cout<<std::to_string(hlp)<<std::endl;
+    // interception_snow();
+    //old version dHRUM -- Ludek and Petr
+
+    snowPrec();
+    snow_Melt(Snow_MDL);
     interceptions(intrc_STORAGE);
 
-
-
-    // interception_snow();//
-
+    // snow_Melt(snow_Model::DDF);
+    // interceptions(interception_STORtype::Eliades);
 
     // std::cout << " interception "<< et_demand << " evac " << get_dta(tstRM, ts_type::EVAC) << " evas " << get_dta(tstRM, ts_type::EVAS) <<"\n";
     surface_retention(srfs_STORAGE);//
@@ -1943,7 +2006,6 @@ void single_HMunit::run_HB() {
     set_varValue(helprm ,tstRM,ts_type::TOTR);
     ponds(pond);
     upadate_actualET();
-
     //    std::cout <<(get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR)) << " "<< get_dta(tstRM,ts_type::BASF) << " "<< get_dta(tstRM,ts_type::DIRR)<< "\n";
   }
   //  std::cout << "prev_Ground storage before zeros " << prev_Grou << std::endl;

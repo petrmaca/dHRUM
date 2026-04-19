@@ -50,8 +50,8 @@ class single_HMunit {
   void interception_Eliades_melt();
   void interception_Eliades_summer();
 
-  void snow();
-
+  void snowPrec();
+  void snow_Melt(snow_Model _snow_MeltType);
   void snow_DDF();
 
 
