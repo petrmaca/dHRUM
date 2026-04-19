@@ -1792,21 +1792,41 @@ void single_HMunit::interception_snow() {
 
 void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
 
+  numberSel Smax = 0.0;
+  Smax = LAI_INTstMax();
+  par_HRU.s_params(Smax, par_HRUtype::INTstMax);
+
+
     switch(_intrc_STORAGE) {
 
     case interception_STORtype::Rutter_Gash:{
+      if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
 
+         } else {
+                if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
 
+                } else {
+
+                   }
+                }
       break;
       }
     case interception_STORtype::van_Dijk:{
+      if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
 
+       } else {
+              if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
+
+                } else {
+
+              }
+             }
       break;
       }
     case interception_STORtype::Eliades:{
 
       if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
-               interception_Eliades_winter();
+          interception_Eliades_winter();
          } else {
              if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
                interception_Eliades_melt();
@@ -3581,7 +3601,7 @@ void single_HMunit::current_configuration() {
 
 numberSel single_HMunit::LAI_INTstMax() {
 
-    numberSel act_lai=0.0,hlp_INTstMax = 0.0;
+    numberSel hlp_INTstMax = 0.0;
 
     hlp_INTstMax=0.461*get_dta(tstRM, ts_type::LAI); //eq (15)    https://doi.org/10.1016/0022-1694(89)90111-X
     //hlp_INTstMax=0.935 + 0.498 *get_dta(tstRM, ts_type::LAI)-0.00575*(get_dta(tstRM, ts_type::LAI)*get_dta(tstRM, ts_type::LAI)); //von Hoyningen-Huene, J. 1981. Die Interzeption Des Niederschlags in Landwirtschaftlichen Pflanzenbeständen
