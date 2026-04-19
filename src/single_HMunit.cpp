@@ -38,6 +38,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   pondGWPERCin{},
   pondGWPERCout{},
   PondROUT{},
+  Snow_MDL{},
   Current_par_names(),
   Current_sHMu_configuration()
   {
@@ -74,6 +75,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   pondGWPERCin = PondGWPerc_type::noPondGWPerc;
   pondGWPERCout = PondGWPerc_type::noPondGWPerc;
   PondROUT = PondRouT_type::noPondRouT;
+  Snow_MDL = snow_Model::DDF;
   et_demand = 0.0;
 
   Current_par_names.size();
@@ -134,6 +136,7 @@ pondSOISPERCout{},
 pondGWPERCin{},
 pondGWPERCout{},
 PondROUT{},
+Snow_MDL{},
 Current_par_names(),
 Current_sHMu_configuration()
 {
@@ -172,6 +175,7 @@ Current_sHMu_configuration()
   pondGWPERCin = other.pondGWPERCin;
   pondGWPERCout = other.pondGWPERCout;
   PondROUT = other.PondROUT;
+  Snow_MDL = other.Snow_MDL;
 
   Current_par_names = other.Current_par_names;
   Current_sHMu_configuration = other.Current_sHMu_configuration;
@@ -225,6 +229,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     pondGWPERCin = rhs.pondGWPERCin;
     pondGWPERCout = rhs.pondGWPERCout;
     PondROUT = rhs.PondROUT;
+    Snow_MDL = rhs.Snow_MDL;
 
     Current_par_names = rhs.Current_par_names;
     Current_sHMu_configuration = rhs.Current_sHMu_configuration;
@@ -2611,6 +2616,19 @@ fast_Response single_HMunit::get_fastResponseType(){
   return fast_RESPONSE;
 
 }
+
+void single_HMunit::set_Snow_MDL(snow_Model _snow_Model){
+
+  Snow_MDL = _snow_Model;
+
+}
+
+snow_Model single_HMunit::get_snow_MDL(){
+
+  return Snow_MDL;
+
+}
+
 
 void single_HMunit::print_gs_STORtype() {
 

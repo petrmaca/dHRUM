@@ -172,6 +172,18 @@ void dHRUM::initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,intercept
 
 }
 
+
+void dHRUM::initSnowMelMdltypeToAlldHrus(std::vector<std::pair<unsigned,snow_Model>>& snow_MLTModels){
+
+#pragma omp parallel for num_threads(num_threads)
+  for(unsigned int i=0; i<snow_MLTModels.size(); i++) {
+    dHruVec[snow_MLTModels[i].first].set_Snow_MDL(snow_MLTModels[i].second);
+  }
+
+
+  return ;
+}
+
 void dHRUM::setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad) {
   //  #pragma omp parallel
   //  {

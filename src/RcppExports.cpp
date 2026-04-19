@@ -345,6 +345,18 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// setSnowMeltModeltypeToAlldHrus
+void setSnowMeltModeltypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector snowMeltModelTypes, Rcpp::CharacterVector hruIds);
+RcppExport SEXP _dHRUM_setSnowMeltModeltypeToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP snowMeltModelTypesSEXP, SEXP hruIdsSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type snowMeltModelTypes(snowMeltModelTypesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type hruIds(hruIdsSEXP);
+    setSnowMeltModeltypeToAlldHrus(dHRUM_ptr, snowMeltModelTypes, hruIds);
+    return R_NilValue;
+END_RCPP
+}
 // setSoilStorTypeToAlldHrus
 void setSoilStorTypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector soilTypes, Rcpp::CharacterVector hruIds);
 RcppExport SEXP _dHRUM_setSoilStorTypeToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP soilTypesSEXP, SEXP hruIdsSEXP) {
@@ -399,6 +411,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_calcPetToAllHrus", (DL_FUNC) &_dHRUM_calcPetToAllHrus, 3},
     {"_dHRUM_calcPetToAllHrusDist", (DL_FUNC) &_dHRUM_calcPetToAllHrusDist, 4},
     {"_dHRUM_setNumFastResAlldHrus", (DL_FUNC) &_dHRUM_setNumFastResAlldHrus, 3},
+    {"_dHRUM_setSnowMeltModeltypeToAlldHrus", (DL_FUNC) &_dHRUM_setSnowMeltModeltypeToAlldHrus, 3},
     {"_dHRUM_setSoilStorTypeToAlldHrus", (DL_FUNC) &_dHRUM_setSoilStorTypeToAlldHrus, 3},
     {"_dHRUM_setSurfaceStortypeToAlldHrus", (DL_FUNC) &_dHRUM_setSurfaceStortypeToAlldHrus, 3},
     {NULL, NULL, 0}

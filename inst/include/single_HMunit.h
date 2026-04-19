@@ -122,6 +122,9 @@ class single_HMunit {
   void set_fast_response(fast_Response _fast_RESPONSE);
   fast_Response get_fastResponseType();
 
+  void set_Snow_MDL(snow_Model _snow_Model);
+  snow_Model get_snow_MDL();
+
   std::vector<numberSel> water_balance(numberSel next_soil, numberSel val, std::vector<numberSel> vals);//!< Method for preserving mass balance
 
   void print_sHRU_settings();
@@ -202,7 +205,8 @@ private:
   PondSOISPerc_type pondSOISPERCout;//!< Type of percolation from pond to soil
   PondGWPerc_type  pondGWPERCin;//!< Type of percolation from   groundwater to pond
   PondGWPerc_type  pondGWPERCout;//!< Type of percolation from pond to groundwater
-  PondRouT_type  PondROUT ;//!< Pond outlet method
+  PondRouT_type  PondROUT;//!< Pond outlet method
+  snow_Model Snow_MDL;//!< Snow melt model
 
   std::vector<std::string>Current_par_names;
   std::vector<std::pair<std::string,std::string>> Current_sHMu_configuration;//!< vector of pairs with single HMunit configuration
