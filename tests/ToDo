@@ -27,6 +27,11 @@ výstupy jsou: odtok z nádrže, výpar z nádrže, odběr, průsak (SOIS, GROS)
 - LULC
 
 26/3/2026
--intercepce propojit INTscMax s nekalibrovanymi hodnoatami pro vegetacni pokryv
--pridat sezoni dynamiku s LAI
--pridat elliades cos je les reps jehlicnany a Ec je funci PET * (Cv +Pres- Dc)/INTstMax
+-intercepce propojit INTscMax s nekalibrovanymi hodnoatami pro vegetacni pokryv -done partly
+-pridat sezoni dynamiku s LAI - Done partly
+-pridat elliades cos je les reps jehlicnany a Ec je funci PET * (Cv +Pres- Dc)/INTstMax - done
+
+20/4/2026
+-zkontrolovat snih v intercepcnich modelech
+- dualni intercepcni model
+

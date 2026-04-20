@@ -46,6 +46,15 @@ class single_HMunit {
 
   void interceptions(interception_STORtype _intrc_STORAGE);
 
+  void interception_RutterGash_winter();
+  void interception_RutterGash_melt();
+  void interception_RutterGash_summer();
+
+
+  void interception_vanDijk_winter();
+  void interception_vanDijk_melt();
+  void interception_vanDijk_summer();
+
   void interception_Eliades_winter();
   void interception_Eliades_melt();
   void interception_Eliades_summer();

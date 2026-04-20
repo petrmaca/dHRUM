@@ -1796,29 +1796,32 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
   Smax = LAI_INTstMax();
   par_HRU.s_params(Smax, par_HRUtype::INTstMax);
 
+  par_HRU.s_params((Smax * 0.9), par_HRUtype::CAN_ST);
+  par_HRU.s_params((Smax * 0.1), par_HRUtype::STEM_ST);
+
 
     switch(_intrc_STORAGE) {
 
     case interception_STORtype::Rutter_Gash:{
       if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
-
+      interception_RutterGash_winter();
          } else {
                 if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
-
+                  interception_RutterGash_melt();
                 } else {
-
+                  interception_RutterGash_summer();
                    }
                 }
       break;
       }
     case interception_STORtype::van_Dijk:{
       if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
-
+        interception_vanDijk_winter();
        } else {
               if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
-
+                interception_vanDijk_melt();
                 } else {
-
+                  interception_vanDijk_summer();
               }
              }
       break;
@@ -1840,6 +1843,286 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
 
   return ;
 }
+
+void single_HMunit::interception_RutterGash_winter(){
+  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
+
+  OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
+  //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
+  prevCanS = prevCanS - OverflowCan;
+  EvapCanop = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+
+  numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
+  et_demand = update_ETDEMAND(EvapCanop, true);
+  EvapCanop = help_EvapCanop;
+  //
+  //
+  // if(EvapCanop >= et_demand) {
+  //   EvapCanop = et_demand;
+  //   et_demand = 0.0;
+  // }
+  // else {
+  //   et_demand = et_demand - EvapCanop;
+  // }
+
+  prevCanS = prevCanS - EvapCanop;
+
+  CanOut = std::min((prevCanS / get_par(par_HRUtype::CAN_ST) * EvapCanop),prevCanS);
+  prevCanS = prevCanS - CanOut;
+  set_varValue(prevCanS, tstRM, ts_type::CANS);
+
+  prevCanS =  prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_par(par_HRUtype::CDIV) *get_dta(tstRM, ts_type::MELT));
+
+  //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
+  OverflowStem = std::max((prevSteS - get_par(par_HRUtype::STEM_ST)),0.0);
+  prevSteS = prevSteS - OverflowStem;
+
+  EvapStem = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+
+  numberSel help_EvapStem = update_ETDEMAND(EvapStem, false);
+  et_demand = update_ETDEMAND(EvapStem, true);
+  EvapStem = help_EvapStem;
+
+  // if(EvapStem >= et_demand) {
+  //   EvapStem = et_demand;
+  //   et_demand = 0.0;
+  // }
+  // else {
+  //   et_demand = et_demand - EvapStem;
+  // }
+
+  prevSteS = prevSteS - EvapStem;
+
+  StemOut = std::min((prevCanS) / get_par(par_HRUtype::CAN_ST) * EvapStem, prevSteS);
+  prevSteS = prevSteS - StemOut;
+  set_varValue(prevSteS, tstRM, ts_type::STES);
+  //CanOut + OverflowCan is the total output from canopy storage
+  //this is divided into the input to stem storage and remaining part goes to throufall
+  prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_par(par_HRUtype::SDIV) * get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan);
+
+  set_varValue((CanOut + OverflowCan), tstRM, ts_type::CANF);
+  set_varValue(EvapCanop, tstRM, ts_type::EVAC);
+
+  set_varValue((StemOut + OverflowStem), tstRM, ts_type::STEF);
+  set_varValue(EvapStem, tstRM, ts_type::EVAS);
+
+  Througf = (OverflowCan + CanOut) * get_par(par_HRUtype::CSDIV) + StemOut + OverflowStem;
+  set_varValue(Througf, tstRM, ts_type::TROF);
+  set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
+
+
+  return ;
+}
+void single_HMunit::interception_RutterGash_melt(){
+
+  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
+
+  OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
+  //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
+  prevCanS = prevCanS - OverflowCan;
+  EvapCanop = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+
+  numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
+  et_demand = update_ETDEMAND(EvapCanop, true);
+  EvapCanop = help_EvapCanop;
+  //
+  //
+  // if(EvapCanop >= et_demand) {
+  //   EvapCanop = et_demand;
+  //   et_demand = 0.0;
+  // }
+  // else {
+  //   et_demand = et_demand - EvapCanop;
+  // }
+
+  prevCanS = prevCanS - EvapCanop;
+
+  CanOut = std::min((prevCanS / get_par(par_HRUtype::CAN_ST) * EvapCanop),prevCanS);
+  prevCanS = prevCanS - CanOut;
+  set_varValue(prevCanS, tstRM, ts_type::CANS);
+
+  prevCanS =  prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_par(par_HRUtype::CDIV) *get_dta(tstRM, ts_type::MELT));
+
+  //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
+  OverflowStem = std::max((prevSteS - get_par(par_HRUtype::STEM_ST)),0.0);
+  prevSteS = prevSteS - OverflowStem;
+
+  EvapStem = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+
+  numberSel help_EvapStem = update_ETDEMAND(EvapStem, false);
+  et_demand = update_ETDEMAND(EvapStem, true);
+  EvapStem = help_EvapStem;
+
+  // if(EvapStem >= et_demand) {
+  //   EvapStem = et_demand;
+  //   et_demand = 0.0;
+  // }
+  // else {
+  //   et_demand = et_demand - EvapStem;
+  // }
+
+  prevSteS = prevSteS - EvapStem;
+
+  StemOut = std::min((prevCanS) / get_par(par_HRUtype::CAN_ST) * EvapStem, prevSteS);
+  prevSteS = prevSteS - StemOut;
+  set_varValue(prevSteS, tstRM, ts_type::STES);
+  //CanOut + OverflowCan is the total output from canopy storage
+  //this is divided into the input to stem storage and remaining part goes to throufall
+  prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_par(par_HRUtype::SDIV) * get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan);
+
+  set_varValue((CanOut + OverflowCan), tstRM, ts_type::CANF);
+  set_varValue(EvapCanop, tstRM, ts_type::EVAC);
+
+  set_varValue((StemOut + OverflowStem), tstRM, ts_type::STEF);
+  set_varValue(EvapStem, tstRM, ts_type::EVAS);
+
+  Througf = (OverflowCan + CanOut) * get_par(par_HRUtype::CSDIV) + StemOut + OverflowStem;
+  set_varValue(Througf, tstRM, ts_type::TROF);
+  set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
+
+  return ;
+}
+void single_HMunit::interception_RutterGash_summer(){
+
+  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
+
+  OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
+  //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
+  prevCanS = prevCanS - OverflowCan;
+  EvapCanop = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+
+  numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
+  et_demand = update_ETDEMAND(EvapCanop, true);
+  EvapCanop = help_EvapCanop;
+  //
+  //
+  // if(EvapCanop >= et_demand) {
+  //   EvapCanop = et_demand;
+  //   et_demand = 0.0;
+  // }
+  // else {
+  //   et_demand = et_demand - EvapCanop;
+  // }
+
+  prevCanS = prevCanS - EvapCanop;
+
+  CanOut = std::min((prevCanS / get_par(par_HRUtype::CAN_ST) * EvapCanop),prevCanS);
+  prevCanS = prevCanS - CanOut;
+  set_varValue(prevCanS, tstRM, ts_type::CANS);
+
+  prevCanS =  prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_par(par_HRUtype::CDIV) *get_dta(tstRM, ts_type::MELT));
+
+  //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
+  OverflowStem = std::max((prevSteS - get_par(par_HRUtype::STEM_ST)),0.0);
+  prevSteS = prevSteS - OverflowStem;
+
+  EvapStem = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+
+  numberSel help_EvapStem = update_ETDEMAND(EvapStem, false);
+  et_demand = update_ETDEMAND(EvapStem, true);
+  EvapStem = help_EvapStem;
+
+  // if(EvapStem >= et_demand) {
+  //   EvapStem = et_demand;
+  //   et_demand = 0.0;
+  // }
+  // else {
+  //   et_demand = et_demand - EvapStem;
+  // }
+
+  prevSteS = prevSteS - EvapStem;
+
+  StemOut = std::min((prevCanS) / get_par(par_HRUtype::CAN_ST) * EvapStem, prevSteS);
+  prevSteS = prevSteS - StemOut;
+  set_varValue(prevSteS, tstRM, ts_type::STES);
+  //CanOut + OverflowCan is the total output from canopy storage
+  //this is divided into the input to stem storage and remaining part goes to throufall
+  prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_par(par_HRUtype::SDIV) * get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan);
+
+  set_varValue((CanOut + OverflowCan), tstRM, ts_type::CANF);
+  set_varValue(EvapCanop, tstRM, ts_type::EVAC);
+
+  set_varValue((StemOut + OverflowStem), tstRM, ts_type::STEF);
+  set_varValue(EvapStem, tstRM, ts_type::EVAS);
+
+  Througf = (OverflowCan + CanOut) * get_par(par_HRUtype::CSDIV) + StemOut + OverflowStem;
+  set_varValue(Througf, tstRM, ts_type::TROF);
+  set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
+
+  return ;
+}
+
+
+
+void single_HMunit::interception_vanDijk_winter(){
+  numberSel Dc = 0.0, Ec =0.0;
+  //snow melt and precipitatn enters a leaves the interception store at the same day
+  // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
+  //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
+  // } else Dc =0.0;
+  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+  Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);
+
+  numberSel help_Ec = update_ETDEMAND(Ec, false);
+  et_demand = update_ETDEMAND(Ec, true);
+  Ec = help_Ec;
+
+  prevIntS = prevIntS - Ec;
+
+  set_varValue(Dc, tstRM, ts_type::TROF);
+  set_varValue(Ec, tstRM, ts_type::EVAC);
+  set_varValue(prevIntS,tstRM, ts_type::INTS);
+
+  return ;
+}
+void single_HMunit::interception_vanDijk_melt(){
+  numberSel Dc = 0.0, Ec =0.0;
+  //snow melt and precipitatn enters a leaves the interception store at the same day
+  // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
+  //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
+  // } else Dc =0.0;
+  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+  Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);
+
+  numberSel help_Ec = update_ETDEMAND(Ec, false);
+  et_demand = update_ETDEMAND(Ec, true);
+  Ec = help_Ec;
+
+  prevIntS = prevIntS - Ec;
+
+  set_varValue(Dc, tstRM, ts_type::TROF);
+  set_varValue(Ec, tstRM, ts_type::EVAC);
+  set_varValue(prevIntS,tstRM, ts_type::INTS);
+
+  return ;
+
+}
+void single_HMunit::interception_vanDijk_summer(){
+  numberSel Dc = 0.0, Ec =0.0;
+  //snow melt and precipitatn enters a leaves the interception store at the same day
+  // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
+  //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
+  // } else Dc =0.0;
+  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+  Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);
+
+  numberSel help_Ec = update_ETDEMAND(Ec, false);
+  et_demand = update_ETDEMAND(Ec, true);
+  Ec = help_Ec;
+
+  prevIntS = prevIntS - Ec;
+
+  set_varValue(Dc, tstRM, ts_type::TROF);
+  set_varValue(Ec, tstRM, ts_type::EVAC);
+  set_varValue(prevIntS,tstRM, ts_type::INTS);
+
+  return ;
+
+}
+
 
 void single_HMunit::interception_Eliades_winter(){
   numberSel Dc = 0.0, Ec =0.0;
@@ -1914,6 +2197,8 @@ void single_HMunit::interception_Eliades_summer(){
   return ;
 }
 
+
+
 void single_HMunit::snowPrec(){
 
   numberSel Snoww = 0.0;
@@ -1969,10 +2254,8 @@ void single_HMunit::snow_DDF(){
     prevSnoS = 0.0;
     Snow_melt = prevSnoS + Snoww;
   } else prevSnoS = prevSnoS + Snoww - Snow_melt;
-
-
-  std::cout  <<" melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
-   std::cout << " prevSnoS " << prevSnoS << " MELT " << Snow_melt<< " " << std::endl;
+  // std::cout  <<" melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
+   // std::cout << " prevSnoS " << prevSnoS << " MELT " << Snow_melt<< " " << std::endl;
   // set_varValue(prevSnoS,tstRM,ts_type::SNOW);
   set_varValue(Snow_melt,tstRM,ts_type::MELT);
 

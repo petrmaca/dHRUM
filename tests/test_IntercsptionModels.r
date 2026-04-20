@@ -25,9 +25,9 @@ dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 
 
 setSnowMeltModeltypeToAlldHrus(dHRUM_ptr = dhrus,snowMeltModelTypes = rep("DDF",times= length(Areas)),hruIds=IdsHrus)
-# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
+setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus)
-setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus)
+# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus)
 
 
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
@@ -86,7 +86,7 @@ plot(outDF$PREC, type ="l")
 plot(outDF$SNOW, type ="l")
 plot(outDF$MELT, type ="l")
 
-plot(outDF$PET, col ="red",t="l")
+plot(outDF$INTS, type ="l",col="green")
 lines(outDF$EVAC, type ="l")
 lines(outDF$PET, col ="red")
 lines(outDF$AET, col ="blue")
