@@ -541,6 +541,18 @@ void dHRUM::loadPTDatToAllHrus(hdata Prec, hdata Temp, const numberSel& val,cons
   return ;
 }
 
+void dHRUM::loadPTLDatToAllHrus(hdata Prec, hdata Temp,hdata Lai, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay) {
+
+#pragma omp parallel for num_threads(num_threads)
+  for(unsigned it=0; it<dimHM; it++) {
+    dHruVec[it].load_data_PTL(Prec,Temp,Lai,val,inYear,inMonth,inDay);
+  }
+
+  initdHRUbasinDTA();
+
+  return ;
+}
+
 numberDta dHRUM::getdHRUdim() {
 
   return dimHM;

@@ -31,6 +31,7 @@ class single_HMunit {
 
   numberSel get_dta(const unsigned& tst, const ts_type& _tsType);//!< Getter data on HB of single pdm unit
   void set_data_prec_temp(const hdata& _prec_dta,const hdata& _temp_dta);//!< Setter data on HB of single pdm unit
+  void set_data_prec_temp_lai(const hdata& _prec_dta,const hdata& _temp_dta,const hdata& _lai_dta);//!< Setter data on HB of single pdm unit
   void set_data(const hdata& dta,const ts_type&_tsType);//!< Setter data on HB of single pdm unit
   void set_varValue(const numberSel& dta,const  unsigned& tst,const ts_type& _tsType);
 
@@ -68,6 +69,8 @@ class single_HMunit {
 
   void init_inputs(numberSel val, unsigned numDTA);
   void load_data_PT(const hdata& prec_input, const hdata& temp_input, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay);
+  void load_data_PTL(const hdata& prec_input, const hdata& temp_input,const hdata& lai_input, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay);
+
   void set_calender(const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay,const unsigned& initNumTS);
   void load_calData(const caldata& yyear, const caldata& mmonth, const caldata& dday);
 
@@ -144,7 +147,7 @@ class single_HMunit {
   //void current_configuration(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP );
   void current_configuration();
 
-
+  numberSel LAI_INTstMax();
 
 
 protected:

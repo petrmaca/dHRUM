@@ -229,3 +229,67 @@ void setPTInputsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame DataDF)
   return ;
 
 }
+
+//' Sets the similar Precipitation, Temperature and LAI vectors to dHRUM and init's the date using beg. of period.
+ //'
+ //' Setting the similar vector of Precipitation ,temperature and LAI to all single HRU.
+ //' Setting the calender using the first date fo period using the first date of period
+ //'
+ //' @param dHRUM_ptr pointer to dHRUM instance
+ //' @param Prec vector of values of precipitation
+ //' @param Temp vector of values of temperature
+ //' @param Lai vector of values of leaf area index
+ //' @param inDate the first date of simulation period
+ //' @export
+ //' @examples
+ //' nHrus <- 2
+ //' Areas <- runif(nHrus,min = 1,max  = 10)
+ //' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+ //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+ //' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+ //' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
+ //' prec=c(1,2,3)
+ //' temp=c(1,2,3)
+ //' lai=c(1,2,3)
+ //' setPTLInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, Lai = lai, as.Date("1990/01/30"))
+ // [[Rcpp::export]]
+ void setPTLInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Prec, Rcpp::NumericVector Temp, Rcpp::NumericVector Lai, Rcpp::Date inDate) {
+
+   unsigned Myear = 0, Mmonth = 0, Mday = 0;
+
+   Myear = (unsigned) inDate.getYear();
+   Mmonth = (unsigned) inDate.getMonth();
+   Mday = (unsigned) inDate.getDay();
+   // Rcpp::Rcout << Myear << " mm " << Mmonth << " dd " << Mday+1 <<"\n";
+   unsigned ndatPrec = 0, ndatTemp = 0, ndatLai = 0;
+   ndatPrec = Prec.size();
+   ndatTemp = Temp.size();
+   ndatLai = Lai.size();
+
+   if((ndatTemp!=ndatPrec)&&(ndatPrec!=ndatLai)) {
+     Rcpp::stop("\n Different size of input precipitation, temperature, and Lai vectors.\n");
+   }
+
+   hdata mPrec(1,1), mTemp(1,1), mLai(1,1);
+
+   mPrec.resize(ndatPrec);
+   mTemp.resize(ndatPrec);
+   mLai.resize(ndatPrec);
+
+   for(unsigned it=0;it<ndatPrec;it++){
+     mPrec[it] = Prec[it];
+     mTemp[it] = Temp[it];
+     mLai[it] = Lai[it];
+   }
+   // for(unsigned it=0;it<ndatPrec;it++){
+   //   Rcpp::Rcout << mPrec[it] << "\n";
+   //   Rcpp::Rcout << mTemp[it] << "\n";
+   // }
+   // Rcpp::Rcout <<  "Loading the gw type  to HRU ID "  << std::endl;
+   //    dHruVec[it].set_paramsToSim(parsToLoad);
+   // Rcpp::Rcout<<"threads="<<omp_get_num_threads()<<std::endl;
+
+   dHRUM_ptr.get()->loadPTLDatToAllHrus(mPrec, mTemp, mLai, 0.0, Myear, Mmonth, Mday);
+
+   return  ;
+ }

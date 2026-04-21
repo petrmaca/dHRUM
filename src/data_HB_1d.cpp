@@ -38,6 +38,7 @@ data_HB_1d::data_HB_1d(): numTS(0),
   EtpO(1,1),
   PoiS(1,1),
   PoiG(1,1),
+  Lai(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -169,6 +170,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   EtpO(1,1),
   PoiS(1,1),
   PoiG(1,1),
+  Lai(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -219,6 +221,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   PonS = other.PonS;//!< Pond storage
   PoiS = other.PoiS;//!< Percolation between the pond and the soil
   PoiG = other.PoiG;//!< Percolation between the pond and the groundwater
+  Lai= other.Lai;//!< Leaf area index
   init_SoiS = other.init_SoiS;//!< Initial value of soil storage
   init_GroS = other.init_GroS;//!< Initial value of groundwater storage
   init_CanS = other.init_SteS;//!< Initial value of Canopy Interception storage
@@ -275,6 +278,7 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     PonS = rhs.PonS;//!< Pond storage
     PoiS = rhs.PoiS;//!< Percolation between the pond and the soil
     PoiG = rhs.PoiG;//!< Percolation between the pond and the groundwater
+    Lai = rhs.Lai;//!< Leaf area index
     init_SoiS = rhs.init_SoiS;//!< Initial value of soil storage
     init_GroS = rhs.init_GroS;//!< Initial value of groundwater storage
     init_CanS = rhs.init_SteS;//!< Initial value of Canopy Interception storage
@@ -408,6 +412,10 @@ void data_HB_1d::s_data(const hdata& dta,const ts_type& _tsType, bool updateNumT
     PoiG = dta;
     //    std::cout << "New POIG --> loaded\n";
     break;
+  case ts_type::LAI:
+    Lai = dta;
+    //    std::cout << "New LAI --> loaded\n";
+    break;
   }
 //    //PRE.insert(PRE.begin(), data);
 //    if(!Erase) {
@@ -508,6 +516,9 @@ void data_HB_1d::s_varVal(const numberSel& dta, const unsigned& tst,const ts_typ
   case ts_type::POIG:
     PoiG[tst] = dta;
     break;
+  case ts_type::LAI:
+    Lai[tst] = dta;
+    break;
 
 }
   return ;
@@ -575,6 +586,8 @@ numberSel data_HB_1d::g_dta(const unsigned& tst,const ts_type& _tsType) {
     return PoiS[tst];
   case ts_type::POIG:
     return PoiG[tst];
+  case ts_type::LAI:
+    return Lai[tst];
   }
 
   return 0;
@@ -1195,6 +1208,8 @@ hdata data_HB_1d::get_HbTsData(const ts_type& _tsType) {
     return PoiS;
   case ts_type::POIG:
     return PoiG;
+  case ts_type::LAI:
+    return Lai;
   }
 
   hdata helpV(-9999,1);
@@ -1309,6 +1324,9 @@ void data_HB_1d::setOneTstoZero(const ts_type& _tsType) {
     break;
   case ts_type::POIG:
     PoiG = 0.0;
+    break;
+  case ts_type::LAI:
+    Lai = 0.0;
     break;
   }
 

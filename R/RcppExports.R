@@ -152,6 +152,9 @@ setGWtypeToAlldHrus <- function(dHRUM_ptr, gwTypes, hruIds) {
     invisible(.Call(`_dHRUM_setGWtypeToAlldHrus`, dHRUM_ptr, gwTypes, hruIds))
 }
 
+#' Sets the similar Precipitation, Temperature and LAI vectors to dHRUM and init's the date using beg. of period.
+NULL
+
 #' Sets similar input data obtained from file to all single Hrus at dHRUM instance.
 #'
 #' Loads the data from file to a single dHRUM instance created  the \code{initdHruModel(nHrus,Areas,IdsHrus)} function
@@ -244,9 +247,13 @@ setPTInputsToDistdHRUM <- function(dHRUM_ptr, DataDF) {
     invisible(.Call(`_dHRUM_setPTInputsToDistdHRUM`, dHRUM_ptr, DataDF))
 }
 
+setPTLInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, Lai, inDate) {
+    invisible(.Call(`_dHRUM_setPTLInputsToAlldHrus`, dHRUM_ptr, Prec, Temp, Lai, inDate))
+}
+
 #' Sets the types of interception models types to dHRU model for all single HRUs.
 #'
-#' Setting the interception type to dHRUM to all HRUs. Possibe types: \code{Rutter_Gash,van_Dijk}
+#' Setting the interception type to dHRUM to all HRUs. Possibe types: \code{Rutter_Gash,van_Dijk,Eliades}
 #'
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
