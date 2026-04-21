@@ -253,7 +253,7 @@ setPTLInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, Lai, inDate) {
 
 #' Sets the types of interception models types to dHRU model for all single HRUs.
 #'
-#' Setting the interception type to dHRUM to all HRUs. Possibe types: \code{Rutter_Gash,van_Dijk,Eliades}
+#' Setting the interception type to dHRUM to all HRUs. Possible types: \code{Rutter_Gash,van_Dijk,Eliades}
 #'
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
@@ -719,6 +719,25 @@ calcPetToAllHrusDist <- function(dHRUM_ptr, Latitude, PetTypeStrNames, HruIds) {
 #' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 setNumFastResAlldHrus <- function(dHRUM_ptr, numFastRes, hruIds) {
     invisible(.Call(`_dHRUM_setNumFastResAlldHrus`, dHRUM_ptr, numFastRes, hruIds))
+}
+
+#' Sets the types of snow melt models types to dHRU model for all single HRUs.
+#'
+#' Setting the snow melt type to dHRUM to all HRUs. Possibe types: \code{DFF}
+#'
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @param snowMeltModelTypes a charater vector of Surface retention type names
+#' @param hruIds ids on Hrus
+#' @export
+#' @examples
+#' nHrus <- 200
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' setSnowMeltModeltypeToAlldHrus(dHRUM_ptr = dhrus,snowMeltModelTypes=rep("DDF",times= length(Areas)),hruIds=IdsHrus)
+setSnowMeltModeltypeToAlldHrus <- function(dHRUM_ptr, snowMeltModelTypes, hruIds) {
+    invisible(.Call(`_dHRUM_setSnowMeltModeltypeToAlldHrus`, dHRUM_ptr, snowMeltModelTypes, hruIds))
 }
 
 #' Sets the similar values of params to dHRU model for all single HRUs.

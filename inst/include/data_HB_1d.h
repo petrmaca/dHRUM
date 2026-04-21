@@ -145,6 +145,7 @@ class data_HB_1d {
 
   numberSel init_GroS1;//!< Initial value of groundwater storage for LIN_2SE and LIN_2PA
   numberSel init_GroS2;//!< Initial value of groundwater storage for LIN_2SE and LIN_2PA
+  numberSel init_IntSnow;//!< Initial value of snow intercepted on vegation
 
   numberDta numfastRes;//!<  the number of fast response reservoirs
   hdata StateFastRes;//!< The state variables of fast response reservoirs

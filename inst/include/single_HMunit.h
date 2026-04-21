@@ -43,6 +43,27 @@ class single_HMunit {
   void interception_snow();//!< Update snow storage and interception
   void interception_NoSnow(interception_STORtype _intrc_STORAGE);//!< Update the Canopy and Stem Interception storages without snow
   void interception_WithSnow(interception_STORtype _intrc_STORAGE);//!< Update the Canopy and Stem Interception storage with snow
+
+  void interceptions(interception_STORtype _intrc_STORAGE);
+
+  void interception_RutterGash_winter();
+  void interception_RutterGash_melt();
+  void interception_RutterGash_summer();
+
+
+  void interception_vanDijk_winter();
+  void interception_vanDijk_melt();
+  void interception_vanDijk_summer();
+
+  void interception_Eliades_winter();
+  void interception_Eliades_melt();
+  void interception_Eliades_summer();
+
+  void snowPrec();
+  void snow_Melt(snow_Model _snow_MeltType);
+  void snow_DDF();
+
+
   void surface_retention(surface_STORtype _surf_STORtype);//!< Update surface retention
   void soil_buffer(soil_STORtype _soil_STORtype);//!< Update the soil buffer states
   void fast_response(fast_Response _fast_RESPONSE);//!< The fast runoff response
@@ -110,6 +131,9 @@ class single_HMunit {
   void set_fast_response(fast_Response _fast_RESPONSE);
   fast_Response get_fastResponseType();
 
+  void set_Snow_MDL(snow_Model _snow_Model);
+  snow_Model get_snow_MDL();
+
   std::vector<numberSel> water_balance(numberSel next_soil, numberSel val, std::vector<numberSel> vals);//!< Method for preserving mass balance
 
   void print_sHRU_settings();
@@ -167,6 +191,7 @@ private:
   numberSel prev_SurS;//!< The helper variable for updating surface storage
   numberSel prev_GroS1;//!< The helper variable for updating groundwater storage for LIN_2SE and LIN_2PA
   numberSel prev_GroS2;//!< The helper variable for updating groundwater storage for LIN_2SE and LIN_2PA
+  numberSel prev_IntSnow;//!< The helper variable for updating dual state interception model intercepted snow
 
   numberSel et_demand;//!< The helper on ET demand
   numberDta help_nmbFR;//!< The helper for number of fast reservoirs
@@ -189,7 +214,8 @@ private:
   PondSOISPerc_type pondSOISPERCout;//!< Type of percolation from pond to soil
   PondGWPerc_type  pondGWPERCin;//!< Type of percolation from   groundwater to pond
   PondGWPerc_type  pondGWPERCout;//!< Type of percolation from pond to groundwater
-  PondRouT_type  PondROUT ;//!< Pond outlet method
+  PondRouT_type  PondROUT;//!< Pond outlet method
+  snow_Model Snow_MDL;//!< Snow melt model
 
   std::vector<std::string>Current_par_names;
   std::vector<std::pair<std::string,std::string>> Current_sHMu_configuration;//!< vector of pairs with single HMunit configuration

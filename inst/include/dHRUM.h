@@ -64,6 +64,7 @@ class dHRUM {
   void initGWtypeToAlldHrus(std::vector<std::pair<unsigned, gs_STORtype>>& gs_STORtypes);
   void initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype>>& soil_STORtypes);
   void initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,interception_STORtype>>& interception_STORtype);
+  void initSnowMelMdltypeToAlldHrus(std::vector<std::pair<unsigned,snow_Model>>& snow_MLTModels);
   void initSurfaceStypeToAlldHrus(std::vector<std::pair<unsigned,surface_STORtype>>& surface_STORtype);
   void initFastResponsesToAlldHrus(std::vector<std::pair<unsigned,fast_Response>>& fast_RESPONSESTypes);
   void initPondToAlldHrus(std::vector<std::pair<unsigned,pond_type>>& pondTypes);
