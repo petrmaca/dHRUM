@@ -172,6 +172,7 @@ class single_HMunit {
   void current_configuration();
 
   numberSel LAI_INTstMax();
+  void updateIntcpnStLai(bool updateLai);
 
 
 protected:
@@ -216,6 +217,8 @@ private:
   PondGWPerc_type  pondGWPERCout;//!< Type of percolation from pond to groundwater
   PondRouT_type  PondROUT;//!< Pond outlet method
   snow_Model Snow_MDL;//!< Snow melt model
+
+  bool InstStLai;
 
   std::vector<std::string>Current_par_names;
   std::vector<std::pair<std::string,std::string>> Current_sHMu_configuration;//!< vector of pairs with single HMunit configuration

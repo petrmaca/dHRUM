@@ -40,7 +40,8 @@ single_HMunit::single_HMunit(): tstRM(0),
   PondROUT{},
   Snow_MDL{},
   Current_par_names(),
-  Current_sHMu_configuration()
+  Current_sHMu_configuration(),
+  InstStLai{}
   {
 
   set_nmbFastres(1);
@@ -80,6 +81,7 @@ single_HMunit::single_HMunit(): tstRM(0),
 
   Current_par_names.size();
   Current_sHMu_configuration.size();
+  InstStLai = false;
 
 }
 
@@ -138,7 +140,8 @@ pondGWPERCout{},
 PondROUT{},
 Snow_MDL{},
 Current_par_names(),
-Current_sHMu_configuration()
+Current_sHMu_configuration(),
+InstStLai{}
 {
 
   tstRM = other.tstRM;//!< The counter for main loop in run model
@@ -179,6 +182,8 @@ Current_sHMu_configuration()
 
   Current_par_names = other.Current_par_names;
   Current_sHMu_configuration = other.Current_sHMu_configuration;
+
+  InstStLai = other.InstStLai;
 
 }
 
@@ -233,6 +238,8 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
 
     Current_par_names = rhs.Current_par_names;
     Current_sHMu_configuration = rhs.Current_sHMu_configuration;
+
+    InstStLai = rhs.InstStLai;
 
   } // handle self assignment
   //assignment operator
@@ -1792,15 +1799,16 @@ void single_HMunit::interception_snow() {
 
 void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
 
-  numberSel Smax = 0.0;
-  Smax = LAI_INTstMax();
-  par_HRU.s_params(Smax, par_HRUtype::INTstMax);
+  if(InstStLai) {
+    numberSel Smax = 0.0;
+    Smax = LAI_INTstMax();
+    par_HRU.s_params(Smax, par_HRUtype::INTstMax);
+    par_HRU.s_params((Smax * 0.9), par_HRUtype::CAN_ST);
+    par_HRU.s_params((Smax * 0.1), par_HRUtype::STEM_ST);
+  }
 
-  par_HRU.s_params((Smax * 0.9), par_HRUtype::CAN_ST);
-  par_HRU.s_params((Smax * 0.1), par_HRUtype::STEM_ST);
 
-
-    switch(_intrc_STORAGE) {
+  switch(_intrc_STORAGE) {
 
     case interception_STORtype::Rutter_Gash:{
       if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
@@ -3890,4 +3898,13 @@ numberSel single_HMunit::LAI_INTstMax() {
     //hlp_INTstMax=0.935 + 0.498 *get_dta(tstRM, ts_type::LAI)-0.00575*(get_dta(tstRM, ts_type::LAI)*get_dta(tstRM, ts_type::LAI)); //von Hoyningen-Huene, J. 1981. Die Interzeption Des Niederschlags in Landwirtschaftlichen Pflanzenbeständen
 
     return hlp_INTstMax;
+}
+
+
+void single_HMunit::updateIntcpnStLai(bool updateLai){
+
+  InstStLai = updateLai;
+
+  return ;
+
 }

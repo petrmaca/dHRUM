@@ -4,7 +4,7 @@
 \alias{setInterceptiontypeToAlldHrus}
 \title{Sets the types of interception models types to dHRU model for all single HRUs.}
 \usage{
-setInterceptiontypeToAlldHrus(dHRUM_ptr, intcptnTypes, hruIds)
+setInterceptiontypeToAlldHrus(dHRUM_ptr, intcptnTypes, hruIds, InstStLai)
 }
 \arguments{
 \item{dHRUM_ptr}{pointer to dHRUM instance}
@@ -12,6 +12,8 @@ setInterceptiontypeToAlldHrus(dHRUM_ptr, intcptnTypes, hruIds)
 \item{intcptnTypes}{a charater vector of Interception type names}
 
 \item{hruIds}{ids on Hrus}
+
+\item{InstStLai}{the TRUE/FALSE vector allowing the use of the LAI trnasformed max interception, canopy, and stem storage}
 }
 \description{
 Setting the interception type to dHRUM to all HRUs. Possible types: \code{Rutter_Gash,van_Dijk,Eliades}

@@ -259,6 +259,7 @@ setPTLInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, Lai, inDate) {
 #' @param dHRUM_ptr pointer to dHRUM instance
 #' @param intcptnTypes a charater vector of Interception type names
 #' @param hruIds ids on Hrus
+#' @param InstStLai the TRUE/FALSE vector allowing the use of the LAI trnasformed max interception, canopy, and stem storage
 #' @export
 #' @examples
 #' nHrus <- 200
@@ -266,8 +267,8 @@ setPTLInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, Lai, inDate) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
-setInterceptiontypeToAlldHrus <- function(dHRUM_ptr, intcptnTypes, hruIds) {
-    invisible(.Call(`_dHRUM_setInterceptiontypeToAlldHrus`, dHRUM_ptr, intcptnTypes, hruIds))
+setInterceptiontypeToAlldHrus <- function(dHRUM_ptr, intcptnTypes, hruIds, InstStLai) {
+    invisible(.Call(`_dHRUM_setInterceptiontypeToAlldHrus`, dHRUM_ptr, intcptnTypes, hruIds, InstStLai))
 }
 
 #' Initialization of dHRU pointer to a dHRUM

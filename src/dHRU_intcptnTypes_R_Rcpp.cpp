@@ -8,6 +8,7 @@
 //' @param dHRUM_ptr pointer to dHRUM instance
 //' @param intcptnTypes a charater vector of Interception type names
 //' @param hruIds ids on Hrus
+//' @param InstStLai the TRUE/FALSE vector allowing the use of the LAI trnasformed max interception, canopy, and stem storage
 //' @export
 //' @examples
 //' nHrus <- 200
@@ -16,23 +17,35 @@
 //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 //' setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
 // [[Rcpp::export]]
-void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector intcptnTypes, Rcpp::CharacterVector hruIds) {
+void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector intcptnTypes, Rcpp::CharacterVector hruIds, Rcpp::LogicalVector InstStLai) {
   unsigned numINTRTypes = intcptnTypes.size();
   unsigned numHruIdNames = hruIds.size();
+  unsigned numIntStLai = InstStLai.size();
 
   //check if names are consistent
   //for which hrus we want to change the stor type - vector of character
-  if(numINTRTypes!=numHruIdNames) {
-    Rcpp::Rcout << "The number of INTERCEPTION types does not correspond to the number of HRUs " << numINTRTypes <<"\n";
-    Rcpp::stop("\nWrong size number of interception types.\n");
+  if((numINTRTypes!=numHruIdNames)||(numINTRTypes!=numIntStLai)||(numHruIdNames!=numIntStLai) ){
+    Rcpp::Rcout << "The number of INTERCEPTION types does not correspond to the number of HRUs or number of Lai TRUE/FALSE" << numINTRTypes <<"\n";
+    Rcpp::stop("\nWrong size number of interception types or LAI settings.\n");
   } else {
     std::vector<std::string> intcpNameStr = Rcpp::as<std::vector<std::string> >(intcptnTypes);
-   for(unsigned it=0; it<numINTRTypes;it++ ){
+
+    for(unsigned it=0; it<numINTRTypes;it++ ){
       if ( std::find(allTnterceptionStorTypeNames.begin(), allTnterceptionStorTypeNames.end(), intcpNameStr[it]) == allTnterceptionStorTypeNames.end()) {
         Rcpp::Rcout << "\nSomething wrong on item " << (it+1) << "\n";
         Rcpp::stop("\n Wrong names of Interception Type Values.\n");
       }
     }
+
+    for(unsigned it = 0; it < numIntStLai; ++it) {
+
+      if (Rcpp::LogicalVector::is_na(InstStLai[it])) {
+        Rcpp::Rcout << "TRUE/FALSE on LAI for HRU " << it << " is NA\n";
+        Rcpp::stop("\nWrong inputs of interception types or LAI settings.\n");
+      }
+
+    }
+
    const std::vector<std::string> ids = dHRUM_ptr.get()->getHRUIds();
    std::vector<std::string> hruIdName = Rcpp::as<std::vector<std::string> >(hruIds);
 
@@ -74,7 +87,20 @@ void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterV
          break;
          }
        }
-    dHRUM_ptr.get()->initIntrcptnStypeToAlldHrus(intcptnTypesToLoad);
+
+     std::vector<bool> vecINtStLai;
+     vecINtStLai.resize(numIntStLai);
+
+     for(unsigned it = 0; it < numIntStLai; ++it) {
+       if (Rcpp::LogicalVector::is_na(InstStLai[it])) {
+         vecINtStLai[it] = false; // Custom rule: Treat NA as false
+       } else {
+         vecINtStLai[it] = InstStLai[it];
+       }
+     }
+
+
+    dHRUM_ptr.get()->initIntrcptnStypeToAlldHrus(intcptnTypesToLoad, vecINtStLai);
   }
 
 
