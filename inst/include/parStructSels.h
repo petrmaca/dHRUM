@@ -53,6 +53,8 @@ enum class interception_STORtype { Rutter_Gash, van_Dijk, Eliades};
 const interception_STORtype all_Interceptions[]{ interception_STORtype::Rutter_Gash, interception_STORtype::van_Dijk, interception_STORtype::Eliades};
 const std::vector<std::string> allTnterceptionStorTypeNames {"Rutter_Gash","van_Dijk", "Eliades"};
 
+enum class interception_SMAXtype {};
+
 enum class surface_STORtype {SurfaceAll, SurfacePRTL, Wetland};
 const surface_STORtype all_SurfacStors[] {surface_STORtype::SurfaceAll, surface_STORtype::SurfacePRTL,surface_STORtype::Wetland};
 const std::vector<std::string> allSurfacStorsNames {"SurfaceAll","SurfacePRTL","Wetland"};
