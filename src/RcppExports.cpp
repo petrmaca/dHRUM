@@ -145,15 +145,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // setInterceptiontypeToAlldHrus
-void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector intcptnTypes, Rcpp::CharacterVector hruIds, Rcpp::LogicalVector InstStLai);
-RcppExport SEXP _dHRUM_setInterceptiontypeToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP intcptnTypesSEXP, SEXP hruIdsSEXP, SEXP InstStLaiSEXP) {
+void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector intcptnTypes, Rcpp::CharacterVector hruIds, Rcpp::LogicalVector InstStLai, Rcpp::CharacterVector smaxlaiTypes);
+RcppExport SEXP _dHRUM_setInterceptiontypeToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP intcptnTypesSEXP, SEXP hruIdsSEXP, SEXP InstStLaiSEXP, SEXP smaxlaiTypesSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type intcptnTypes(intcptnTypesSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type hruIds(hruIdsSEXP);
     Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type InstStLai(InstStLaiSEXP);
-    setInterceptiontypeToAlldHrus(dHRUM_ptr, intcptnTypes, hruIds, InstStLai);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type smaxlaiTypes(smaxlaiTypesSEXP);
+    setInterceptiontypeToAlldHrus(dHRUM_ptr, intcptnTypes, hruIds, InstStLai, smaxlaiTypes);
     return R_NilValue;
 END_RCPP
 }
@@ -395,7 +396,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_setPTDateInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTDateInputsToAlldHrus, 4},
     {"_dHRUM_setPTInputsToDistdHRUM", (DL_FUNC) &_dHRUM_setPTInputsToDistdHRUM, 2},
     {"_dHRUM_setPTLInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTLInputsToAlldHrus, 5},
-    {"_dHRUM_setInterceptiontypeToAlldHrus", (DL_FUNC) &_dHRUM_setInterceptiontypeToAlldHrus, 4},
+    {"_dHRUM_setInterceptiontypeToAlldHrus", (DL_FUNC) &_dHRUM_setInterceptiontypeToAlldHrus, 5},
     {"_dHRUM_initdHruModel", (DL_FUNC) &_dHRUM_initdHruModel, 4},
     {"_dHRUM_getOutput", (DL_FUNC) &_dHRUM_getOutput, 1},
     {"_dHRUM_printToFile", (DL_FUNC) &_dHRUM_printToFile, 2},

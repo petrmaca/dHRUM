@@ -3,12 +3,14 @@
 //' Sets the types of interception models types to dHRU model for all single HRUs.
 //'
 //' Setting the interception type to dHRUM to all HRUs. Possible types: \code{Rutter_Gash,van_Dijk,Eliades}
+//' Setting the model for calculating the Smac based on LAI models: \code{Pitman,VonHoyningenHuene}
 //'
 //'
 //' @param dHRUM_ptr pointer to dHRUM instance
 //' @param intcptnTypes a charater vector of Interception type names
 //' @param hruIds ids on Hrus
 //' @param InstStLai the TRUE/FALSE vector allowing the use of the LAI trnasformed max interception, canopy, and stem storage
+//' @param smaxlaiTypes the name of the model used for calculating the Smax based on lai
 //' @export
 //' @examples
 //' nHrus <- 200
@@ -17,7 +19,7 @@
 //' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 //' setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
 // [[Rcpp::export]]
-void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector intcptnTypes, Rcpp::CharacterVector hruIds, Rcpp::LogicalVector InstStLai) {
+void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector intcptnTypes, Rcpp::CharacterVector hruIds, Rcpp::LogicalVector InstStLai, Rcpp::CharacterVector smaxlaiTypes) {
   unsigned numINTRTypes = intcptnTypes.size();
   unsigned numHruIdNames = hruIds.size();
   unsigned numIntStLai = InstStLai.size();
@@ -56,7 +58,7 @@ void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterV
        Rcpp::stop("\n Wrong names of Hru Id Values.\n");
      }
    }
-     std::map<std::string, interception_STORtype> s_mapStringToINTCPtype_HRUtype = {
+    std::map<std::string, interception_STORtype> s_mapStringToINTCPtype_HRUtype = {
        {"Rutter_Gash", interception_STORtype::Rutter_Gash},
        {"van_Dijk", interception_STORtype::van_Dijk},
        {"Eliades", interception_STORtype::Eliades}
@@ -99,8 +101,29 @@ void setInterceptiontypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterV
        }
      }
 
+     std::map<std::string, lai_SmaxModel> s_mapStringToSmaxLai_HRUtype = {
+       {"Pitman", lai_SmaxModel::Pitman},
+       {"VonHoyningenHuene", lai_SmaxModel::VonHoyningenHuene}
+     };
 
-    dHRUM_ptr.get()->initIntrcptnStypeToAlldHrus(intcptnTypesToLoad, vecINtStLai);
+
+     std::vector<std::pair<unsigned,lai_SmaxModel>> SmaxLaiTypesToLoad;
+
+     std::vector<std::string> smaxlaiNameStr = Rcpp::as<std::vector<std::string> >(smaxlaiTypes);
+
+     for(unsigned id=0;id<numHruIdNames;id++) {
+       switch(s_mapStringToSmaxLai_HRUtype[smaxlaiNameStr[id]]) {
+       case lai_SmaxModel::Pitman:
+         SmaxLaiTypesToLoad.push_back(std::make_pair(indexHru[id], lai_SmaxModel::Pitman));
+         break;
+       case lai_SmaxModel::VonHoyningenHuene:
+         SmaxLaiTypesToLoad.push_back(std::make_pair(indexHru[id],  lai_SmaxModel::VonHoyningenHuene));
+         break;
+       }
+     }
+
+
+    dHRUM_ptr.get()->initIntrcptnStypeToAlldHrus(intcptnTypesToLoad, vecINtStLai,SmaxLaiTypesToLoad);
   }
 
 

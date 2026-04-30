@@ -161,12 +161,13 @@ void dHRUM::initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype
   }
 
 
-void dHRUM::initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,interception_STORtype>>& interception_STORtypes, std::vector<bool> updateLAI) {
+void dHRUM::initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,interception_STORtype>>& interception_STORtypes, std::vector<bool> updateLAI, std::vector<std::pair<unsigned,lai_SmaxModel>> SmaxLaiType) {
 
 #pragma omp parallel for num_threads(num_threads)
   for(unsigned int i=0; i<interception_STORtypes.size(); i++) {
     dHruVec[interception_STORtypes[i].first].set_inteceptionType(interception_STORtypes[i].second);
     dHruVec[interception_STORtypes[i].first].updateIntcpnStLai(updateLAI[i]);
+    dHruVec[SmaxLaiType[i].first].setSmaxLaiModel(SmaxLaiType[i].second);
   }
 
   return;

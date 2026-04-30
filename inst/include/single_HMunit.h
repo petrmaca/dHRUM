@@ -174,6 +174,9 @@ class single_HMunit {
   numberSel LAI_INTstMax();
   void updateIntcpnStLai(bool updateLai);
 
+  void setSmaxLaiModel(lai_SmaxModel _laiSmaxModell);
+  lai_SmaxModel getSmaxLaiModel();
+
 
 protected:
 
@@ -207,6 +210,7 @@ private:
   gs_STORtype gs_STORAGE;//!< Type of groundwater storage
   soil_STORtype soil_STORAGE;//!< Type of soil storage
   interception_STORtype intrc_STORAGE;//!< type of interception storage
+  lai_SmaxModel laiSmaxType;
   surface_STORtype srfs_STORAGE;//!< the type of surface retention storage
   fast_Response fast_RESPONSE;//!< the type of fast response
   pond_type pond;//!< the type of pond (water reservoir)

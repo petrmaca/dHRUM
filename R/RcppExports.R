@@ -254,12 +254,14 @@ setPTLInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, Lai, inDate) {
 #' Sets the types of interception models types to dHRU model for all single HRUs.
 #'
 #' Setting the interception type to dHRUM to all HRUs. Possible types: \code{Rutter_Gash,van_Dijk,Eliades}
+#' Setting the model for calculating the Smac based on LAI models: \code{Pitman,VonHoyningenHuene}
 #'
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
 #' @param intcptnTypes a charater vector of Interception type names
 #' @param hruIds ids on Hrus
 #' @param InstStLai the TRUE/FALSE vector allowing the use of the LAI trnasformed max interception, canopy, and stem storage
+#' @param smaxlaiTypes the name of the model used for calculating the Smax based on lai
 #' @export
 #' @examples
 #' nHrus <- 200
@@ -267,8 +269,8 @@ setPTLInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, Lai, inDate) {
 #' IdsHrus <- paste0("ID",seq(1:length(Areas)))
 #' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 #' setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
-setInterceptiontypeToAlldHrus <- function(dHRUM_ptr, intcptnTypes, hruIds, InstStLai) {
-    invisible(.Call(`_dHRUM_setInterceptiontypeToAlldHrus`, dHRUM_ptr, intcptnTypes, hruIds, InstStLai))
+setInterceptiontypeToAlldHrus <- function(dHRUM_ptr, intcptnTypes, hruIds, InstStLai, smaxlaiTypes) {
+    invisible(.Call(`_dHRUM_setInterceptiontypeToAlldHrus`, dHRUM_ptr, intcptnTypes, hruIds, InstStLai, smaxlaiTypes))
 }
 
 #' Initialization of dHRU pointer to a dHRUM

@@ -29,6 +29,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   gs_STORAGE{},
   soil_STORAGE{},
   intrc_STORAGE{},
+  laiSmaxType{},
   srfs_STORAGE{},
   fast_RESPONSE{},
   pond{},
@@ -67,6 +68,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   gs_STORAGE = gs_STORtype::LIN_RES;
   soil_STORAGE = soil_STORtype::PDM;
   intrc_STORAGE = interception_STORtype::Rutter_Gash;
+  laiSmaxType = lai_SmaxModel::Pitman;
   srfs_STORAGE = surface_STORtype::SurfaceAll;
   fast_RESPONSE = fast_Response::SerialCascadeLinRes;
   pond = pond_type::noPond;
@@ -129,6 +131,7 @@ Coflw(0),
 gs_STORAGE{},
 soil_STORAGE{},
 intrc_STORAGE{},
+laiSmaxType{},
 srfs_STORAGE{},
 fast_RESPONSE{},
 pond{},
@@ -169,6 +172,7 @@ InstStLai{}
   gs_STORAGE = other.gs_STORAGE;
   soil_STORAGE = other.soil_STORAGE;
   intrc_STORAGE = other.intrc_STORAGE;
+  laiSmaxType = other.laiSmaxType;
   srfs_STORAGE = other.srfs_STORAGE;
   fast_RESPONSE = other.fast_RESPONSE;
   pond = other.pond;
@@ -225,6 +229,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     gs_STORAGE = rhs.gs_STORAGE;//!< The type of groundwater storage
     soil_STORAGE = rhs.soil_STORAGE;
     intrc_STORAGE = rhs.intrc_STORAGE;
+    laiSmaxType = rhs.laiSmaxType;
     srfs_STORAGE = rhs.srfs_STORAGE;
     fast_RESPONSE = rhs.fast_RESPONSE;
     pond = rhs.pond;
@@ -3894,8 +3899,14 @@ numberSel single_HMunit::LAI_INTstMax() {
 
     numberSel hlp_INTstMax = 0.0;
 
-    hlp_INTstMax=0.461*get_dta(tstRM, ts_type::LAI); //eq (15)    https://doi.org/10.1016/0022-1694(89)90111-X
-    //hlp_INTstMax=0.935 + 0.498 *get_dta(tstRM, ts_type::LAI)-0.00575*(get_dta(tstRM, ts_type::LAI)*get_dta(tstRM, ts_type::LAI)); //von Hoyningen-Huene, J. 1981. Die Interzeption Des Niederschlags in Landwirtschaftlichen Pflanzenbeständen
+    switch(laiSmaxType) {
+    case lai_SmaxModel::Pitman:
+      hlp_INTstMax=0.461*get_dta(tstRM, ts_type::LAI);
+      break;
+    case lai_SmaxModel::VonHoyningenHuene:
+      hlp_INTstMax=0.935 + 0.498 *get_dta(tstRM, ts_type::LAI)-0.00575*(get_dta(tstRM, ts_type::LAI)*get_dta(tstRM, ts_type::LAI));
+      break;
+    }
 
     return hlp_INTstMax;
 }
@@ -3908,3 +3919,18 @@ void single_HMunit::updateIntcpnStLai(bool updateLai){
   return ;
 
 }
+
+
+void single_HMunit::setSmaxLaiModel(lai_SmaxModel _laiSmaxModel){
+
+  laiSmaxType = _laiSmaxModel;
+
+  return ;
+}
+
+lai_SmaxModel single_HMunit::getSmaxLaiModel(){
+
+  return laiSmaxType;
+
+}
+
