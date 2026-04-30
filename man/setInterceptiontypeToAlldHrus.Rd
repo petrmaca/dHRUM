@@ -32,5 +32,9 @@ nHrus <- 200
 Areas <- runif(nHrus,min = 1,max  = 10)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas))
+InstStLai = rep(TRUE,times= length(Areas))
+setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai,smaxlaiTypes )
+
 setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
 }
