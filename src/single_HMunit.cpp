@@ -1806,10 +1806,14 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
 
   if(InstStLai) {
     numberSel Smax = 0.0;
-    Smax = LAI_INTstMax();
-    par_HRU.s_params(Smax, par_HRUtype::INTstMax);
-    par_HRU.s_params((Smax * 0.9), par_HRUtype::CAN_ST);
-    par_HRU.s_params((Smax * 0.1), par_HRUtype::STEM_ST);
+    if(_intrc_STORAGE == interception_STORtype::Rutter_Gash){
+      Smax = LAI_INTstMax();
+      par_HRU.s_params((Smax * 0.9), par_HRUtype::CAN_ST);
+      par_HRU.s_params((Smax * 0.1), par_HRUtype::STEM_ST);
+    } else {
+      Smax = LAI_INTstMax();
+      par_HRU.s_params(Smax, par_HRUtype::INTstMax);
+    }
   }
 
 
@@ -2218,7 +2222,7 @@ void single_HMunit::snowPrec(){
 
   if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
     Snoww = get_dta(tstRM, ts_type::PREC);
-    std::cout << " snow " << Snoww << " \n";
+    // std::cout << " snow " << Snoww << " \n";
   } else {
     Snoww = 0.0;
   }
@@ -2293,21 +2297,12 @@ void single_HMunit::run_HB() {
   numberSel helprm=0.0;
   for(tstRM=0; tstRM < Numdta ; tstRM++) {
     et_demand = get_dta(tstRM,ts_type::PET);
-    // std::cout << " beg "<< et_demand << "\n";
-    // double s = get_dta(tstRM,ts_type::LAI);
-    // std::string d= std::to_string(s);
-    // std::cout<< d << "\n";
-
-    //old version dHRUM -- Ludek and Petr
-    // numberSel hlp = LAI_INTstMax(); // return the maximum interception storage capacity based on LAI
-    //std::cout<<std::to_string(hlp)<<std::endl;
-    // interception_snow();
-    //old version dHRUM -- Ludek and Petr
 
     snowPrec();
     snow_Melt(Snow_MDL);
     interceptions(intrc_STORAGE);
 
+    //old interception interface
     // snow_Melt(snow_Model::DDF);
     // interceptions(interception_STORtype::Eliades);
 
@@ -2352,7 +2347,7 @@ void single_HMunit::run_HB() {
 void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
 
   hdata dta(val, numDTA);
-    // std::cout << "Initializing the hdata setup " << get_numdta() << " ups numDTA "<< numDTA << std::endl;
+  // std::cout << "Initializing the hdata setup " << get_numdta() << " ups numDTA "<< numDTA << std::endl;
   set_data(dta,ts_type::PREC);
   // std::cout << " prec ok\n";
   set_data(dta,ts_type::AET);
@@ -2392,10 +2387,8 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   set_data(dta,ts_type::POIG);
   set_data(dta,ts_type::LAI);
   // std::cout << " tor ok\n";
-
   // get_numdta();
-
-     // std::cout << "The total number of initialized time intervals is " << get_numdta() << " ." << std::endl;
+  // std::cout << "The total number of initialized time intervals is " << get_numdta() << " ." << std::endl;
 
   return ;
 
