@@ -21,11 +21,11 @@ setInterceptiontypeToAlldHrus(
 
 \item{InstStLai}{the TRUE/FALSE vector allowing the use of the LAI trnasformed max interception, canopy, and stem storage}
 
-\item{smaxlaiTypes}{the name of the model used for calculating the Smax based on lai}
+\item{smaxlaiTypes}{the name of the model used for calculating the Smax based on LAI}
 }
 \description{
 Setting the interception type to dHRUM to all HRUs. Possible types: \code{Rutter_Gash,van_Dijk,Eliades}
-Setting the model for calculating the Smac based on LAI models: \code{Pitman,VonHoyningenHuene}
+Setting the model for calculating the Smax based on LAI models: \code{Pitman,VonHoyningenHuene}
 }
 \examples{
 nHrus <- 200

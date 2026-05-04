@@ -3,14 +3,14 @@
 //' Sets the types of interception models types to dHRU model for all single HRUs.
 //'
 //' Setting the interception type to dHRUM to all HRUs. Possible types: \code{Rutter_Gash,van_Dijk,Eliades}
-//' Setting the model for calculating the Smac based on LAI models: \code{Pitman,VonHoyningenHuene}
+//' Setting the model for calculating the Smax based on LAI models: \code{Pitman,VonHoyningenHuene}
 //'
 //'
 //' @param dHRUM_ptr pointer to dHRUM instance
 //' @param intcptnTypes a charater vector of Interception type names
 //' @param hruIds ids on Hrus
 //' @param InstStLai the TRUE/FALSE vector allowing the use of the LAI trnasformed max interception, canopy, and stem storage
-//' @param smaxlaiTypes the name of the model used for calculating the Smax based on lai
+//' @param smaxlaiTypes the name of the model used for calculating the Smax based on LAI
 //' @export
 //' @examples
 //' nHrus <- 200
