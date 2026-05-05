@@ -271,8 +271,7 @@ setPTLInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, Lai, inDate) {
 #' smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas))
 #' InstStLai = rep(TRUE,times= length(Areas))
 #' setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai,smaxlaiTypes )
-#'
-#' setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
+#' setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai,smaxlaiTypes )
 setInterceptiontypeToAlldHrus <- function(dHRUM_ptr, intcptnTypes, hruIds, InstStLai, smaxlaiTypes) {
     invisible(.Call(`_dHRUM_setInterceptiontypeToAlldHrus`, dHRUM_ptr, intcptnTypes, hruIds, InstStLai, smaxlaiTypes))
 }

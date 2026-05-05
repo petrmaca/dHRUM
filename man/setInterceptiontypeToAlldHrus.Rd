@@ -35,6 +35,5 @@ dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
 smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas))
 InstStLai = rep(TRUE,times= length(Areas))
 setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai,smaxlaiTypes )
-
-setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
+setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai,smaxlaiTypes )
 }
