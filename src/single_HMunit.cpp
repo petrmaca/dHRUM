@@ -1805,14 +1805,21 @@ void single_HMunit::interception_snow() {
 void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
 
   if(InstStLai) {
-    numberSel Smax = 0.0;
+    numberSel Smax = 0.0, CSfrac = 0.0, k = 0.4;
     if(_intrc_STORAGE == interception_STORtype::Rutter_Gash){
       Smax = LAI_INTstMax();
       par_HRU.s_params((Smax * 0.9), par_HRUtype::CAN_ST);
       par_HRU.s_params((Smax * 0.1), par_HRUtype::STEM_ST);
+      CSfrac = 1 - std::exp(-k*get_dta(tstRM, ts_type::LAI));
+      par_HRU.s_params(0.9*CSfrac,par_HRUtype::CDIV);
+      par_HRU.s_params(0.1*CSfrac,par_HRUtype::SDIV);
+      // std::cout << CSfrac << " "<< par_HRU.g_par(par_HRUtype::SDIV) << " " <<par_HRU.g_par(par_HRUtype::CDIV) <<"\n";
     } else {
       Smax = LAI_INTstMax();
       par_HRU.s_params(Smax, par_HRUtype::INTstMax);
+      CSfrac = 1 - std::exp(-k*get_dta(tstRM, ts_type::LAI));
+      par_HRU.s_params(CSfrac,par_HRUtype::CSfrac);
+      // std::cout << CSfrac << " "<< par_HRU.g_par(par_HRUtype::CSfrac) << "\n";
     }
   }
 
