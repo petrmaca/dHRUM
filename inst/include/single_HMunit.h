@@ -65,6 +65,24 @@ class single_HMunit {
 
 
   void surface_retention(surface_STORtype _surf_STORtype);//!< Update surface retention
+  void surface_Retention(surface_STORtype _surf_STORtype);
+
+  void surface_RetAll();
+  void surface_RetAll_summer();
+  void surface_RetAll_melt();
+  void surface_RetAll_winter();
+
+  void surface_RetPRTL();
+  void surface_RetPRTL_summer();
+  void surface_RetPRTL_melt();
+  void surface_RetPRTL_winter();
+
+  void surface_RetWTLND();
+  void surface_RetWTLND_summer();
+  void surface_RetWTLND_melt();
+  void surface_RetWTLND_winter();
+
+
   void soil_buffer(soil_STORtype _soil_STORtype);//!< Update the soil buffer states
   void fast_response(fast_Response _fast_RESPONSE);//!< The fast runoff response
   void slow_response(gs_STORtype _gs_STORtype);//!< The slow runoff response

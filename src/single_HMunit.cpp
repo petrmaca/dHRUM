@@ -448,6 +448,132 @@ void single_HMunit::set_stateFastRes(const numberSel& helpState,const unsigned& 
   return ;
 }
 
+void single_HMunit::surface_Retention(surface_STORtype _surf_STORtype){
+
+  switch(_surf_STORtype) {
+
+    case surface_STORtype::SurfaceAll: {
+      surface_RetAll();
+      break;
+    }
+
+    case surface_STORtype::SurfacePRTL: {
+      surface_RetPRTL();
+      break;
+    }
+
+    case surface_STORtype::Wetland: {
+
+      break;
+    }
+
+  }
+
+  return  ;
+}
+
+void single_HMunit::surface_RetAll(){
+
+  if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
+      surface_RetAll_winter();
+  } else {
+    if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
+      surface_RetAll_melt();
+    } else {
+      surface_RetAll_summer();
+    }
+  }
+
+  return ;
+
+}
+
+
+void single_HMunit::surface_RetAll_summer(){
+
+  return ;
+}
+void single_HMunit::surface_RetAll_melt(){
+
+
+  return ;
+}
+void single_HMunit::surface_RetAll_winter(){
+
+
+  return ;
+}
+
+
+void single_HMunit::surface_RetPRTL(){
+
+  if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
+      surface_RetPRTL_winter();
+  } else {
+    if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
+      surface_RetPRTL_melt();
+    } else {
+      surface_RetPRTL_summer();
+    }
+  }
+
+  return ;
+
+}
+
+void single_HMunit::surface_RetPRTL_summer(){
+
+  return ;
+}
+
+void single_HMunit::surface_RetPRTL_melt(){
+
+  return ;
+
+}
+
+void single_HMunit::surface_RetPRTL_winter(){
+
+
+  return ;
+}
+
+void single_HMunit::surface_RetWTLND(){
+
+  if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
+      surface_RetWTLND_winter();
+  } else {
+    if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
+      surface_RetWTLND_melt();
+    } else {
+      surface_RetWTLND_summer();
+    }
+  }
+
+  return ;
+
+}
+void single_HMunit::surface_RetWTLND_summer(){
+
+  return ;
+
+
+}
+void single_HMunit::surface_RetWTLND_melt(){
+
+
+  return ;
+
+}
+
+void single_HMunit::surface_RetWTLND_winter(){
+
+
+  return ;
+
+}
+
+
 /** \brief Update all surface retention
  *
  */

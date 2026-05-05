@@ -28,10 +28,14 @@ výstupy jsou: odtok z nádrže, výpar z nádrže, odběr, průsak (SOIS, GROS)
 
 26/3/2026
 -intercepce propojit INTscMax s nekalibrovanymi hodnoatami pro vegetacni pokryv -done partly
--pridat sezoni dynamiku s LAI - Done partly
+-pridat sezoni dynamiku s LAI - Done
 -pridat elliades cos je les reps jehlicnany a Ec je funci PET * (Cv +Pres- Dc)/INTstMax - done
 
 20/4/2026
--zkontrolovat snih v intercepcnich modelech
+- zkontrolovat snih v intercepcnich modelech
 - dualni intercepcni model
+-pridat dat LAI pro ohre do dHRUM baliku - done
+
+5/5/2026
+-surface retention rozdelit do rezimu
 
