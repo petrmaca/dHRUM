@@ -660,6 +660,8 @@ case soil_STORtype::PDM: {
 
   if(prev_Soil <= get_par(par_HRUtype::CMIN)){
 // the storages in soil filled with c<=c_min
+
+// std::cout << " evap 01 " << evap <<  " next_soil " << next_soil << " smx pdm "<<get_par(par_HRUtype::SMAXpdm)<< " "<<get_par(par_HRUtype::C_MAX)<< " "<<get_par(par_HRUtype::CMIN)<<"\n";
 // no pdm Snew = Sold + PrecEf - evap from c with c<=c_min
     prev_Soil = prev_Soil + get_dta(tstRM, ts_type::INFL);
 // checking the ooverflow during one interval
@@ -723,7 +725,7 @@ case soil_STORtype::PDM: {
   // et_demand = update_ETDEMAND(evap, true);
   // evap = help_EvapSR;
 
-  // std::cout << " evap 1 " << evap <<  " next_soil " << next_soil <<"\n";
+ // std::cout << " evap 1 " << evap <<  " next_soil " << next_soil << " SMaXPDM "<<get_par(par_HRUtype::SMAXpdm)<< "\n";
 
   prev_Soil = std::max(static_cast<numberSel>(prev_Soil - evap),static_cast<numberSel>(0.0));
 
@@ -2238,7 +2240,7 @@ void single_HMunit::interception_vanDijk_winter(){
   return ;
 }
 void single_HMunit::interception_vanDijk_melt(){
-  numberSel Dc = 0.0, Ec =0.0;
+  numberSel Dc = 0.0, Ec =0.0, Pref = 0.0;
   //snow melt and precipitatn enters a leaves the interception store at the same day
   // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
   //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);

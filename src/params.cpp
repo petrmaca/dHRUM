@@ -47,6 +47,7 @@ params::params(): numPars(1),
   numberSel helpSmax = 0;
   helpSmax = (pars[0] * pars[22] +pars[1]) / (pars[0]+1);
   pars[3] = helpSmax;
+  // std::cout << "New ALPHA upswfwefwreefrew2 --> loaded\n";
   pars[23] = 10;//!< FC Field capacity [mm] [0,inf)
   pars[24] = 0.5;//!< Forest fraction [0,1]
   pars[25] = 0.5;//!< KF2 Storage coefficient of runoff response reservoirs [0,1]
@@ -89,7 +90,7 @@ params::params(): numPars(1),
 
   numberSel helpSmaxPDMUp = 0;
   helpSmaxPDMUp = (up_pars[0]*up_pars[22] + up_pars[1]) / (up_pars[0]+1);
-  pars[3] = helpSmaxPDMUp;
+  up_pars[3] = helpSmaxPDMUp;
 
   up_pars[23] = 100;//!< FC Field capacity [mm] [0,inf)
   up_pars[24] = 1;//!< Forest fraction [0,1]
@@ -218,11 +219,12 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
   case par_HRUtype::B_SOIL:
     pars[0] = par_dta;
     pars[3] = (pars[0]*pars[22] + pars[1]) / (pars[0]+1);
-//    std::cout << "New b_soil --> loaded\n";
+    std::cout << "New smaxPDM01 --> loaded"<< pars[3] << "\n";
     break;
   case par_HRUtype::C_MAX:
     pars[1] = par_dta;
     pars[3] = (pars[0]*pars[22] +  pars[1]) / (pars[0]+1);
+    std::cout << "New smaxPDM02 --> loaded"<< pars[3] << "\n";
 //    std::cout << "New c_max --> loaded\n";
     break;
   case par_HRUtype::B_EVAP:
@@ -231,7 +233,7 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     break;
   case par_HRUtype::SMAXpdm:
     pars[3] = par_dta;
-    pars[1] = pars[3]*(pars[0]+1) - (pars[0]*pars[22]);//For preventing the losing the link between b_soil and cmax and cmin see pdm paper hess 2007
+    // pars[1] = pars[3]*(pars[0]+1) - (pars[0]*pars[22]);//For preventing the losing the link between b_soil and cmax and cmin see pdm paper hess 2007
 //    std::cout << "New Smax --> loaded\n";
     break;
   case par_HRUtype::KS:
@@ -307,8 +309,8 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     break;
   case par_HRUtype::CMIN:
     pars[22] = par_dta;
-    pars[3] = (pars[0] * pars[22] +pars[2]) / (pars[0] +1 );//for preventing consisntency beteewn cmin cmax smax in pdm model
-//    std::cout << "New ALPHA --> loaded\n";
+    pars[3] = (pars[0] * pars[22] +pars[1]) / (pars[0] +1 );//for preventing consisntency beteewn cmin cmax smax in pdm model
+    // std::cout << "New ALPHA ups --> loaded\n";
     break;
   case par_HRUtype::FC:
     pars[23] = par_dta;
@@ -365,7 +367,8 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     break;
   }
 
-  pars[3] = (pars[0] * pars[22] +pars[2]) / (pars[0] +1 );
+  pars[3] = (pars[0] * pars[22] +pars[1]) / (pars[0] +1 );
+  // std::cout << "New ALPHA ups2 --> loaded "<< pars[3]<<"\n";
 
   return ;
 }
@@ -384,11 +387,13 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
   case par_HRUtype::B_SOIL:
     pars[0] = par_dta;
     pars[3] = (pars[1] + pars[0] * pars[22])/ (pars[0]+1);
+    // std::cout << "New ALPHA ups --> loaded\n";
 //    std::cout << "New b_soil --> loaded\n";
     break;
   case par_HRUtype::C_MAX:
     pars[1] = par_dta;
     pars[3] = (pars[1] + pars[0] * pars[22])/ (pars[0]+1);
+    // std::cout << "New Smax 1--> loaded" << pars[3] <<"\n";
 //    std::cout << "New c_max --> loaded\n";
     break;
   case par_HRUtype::B_EVAP:
@@ -397,8 +402,8 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
     break;
   case par_HRUtype::SMAXpdm:
     pars[3] = par_dta;
-    pars[1] = pars[3]*(pars[0]+1) -(pars[0]*pars[22]);
-//    std::cout << "New Smax --> loaded\n";
+    // pars[1] = pars[3]*(pars[0]+1) -(pars[0]*pars[22]);
+    std::cout << "New Smax 3--> loaded" << pars[3] <<"\n";
     break;
   case par_HRUtype::KS:
     pars[4] = par_dta;
@@ -475,6 +480,7 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
   case par_HRUtype::CMIN:
     pars[22] = par_dta;
     pars[3] = (pars[1] + pars[0] * pars[22])/ (pars[0]+1);
+    // std::cout << "New ALPHA ups3 --> loaded"<< pars[3]<<"\n";
 //    std::cout << "New ALPHA --> loaded\n";
     break;
   case par_HRUtype::FC:
@@ -557,6 +563,7 @@ numberSel params::g_par(const par_HRUtype& _parType) {
     break;
   case par_HRUtype::SMAXpdm:
     value =  pars[3];
+    // std::cout << "New ALPHA ups55 --> loaded"<< pars[3] << " " << value<<"\n";
     break;
   case par_HRUtype::KS:
     value =  pars[4];
@@ -715,6 +722,7 @@ void params::s_default() {
   numberSel helpSmax;
   helpSmax = pars[1] / (pars[0]+1);
   pars[3] = helpSmax;//!< Smaxpdm calculate using Cmax and b_soil
+  // std::cout << "New ALPHA ups def --> loaded\n";
   pars[4] = 0.1;//!< Storage coefficient of groundwater storage [0,1],VC1
   pars[5] = 0.5;//!< Storage coefficient of runoff response reservoirs [0,1],VC1
   pars[6] = 0.5;//!< Divider of percolation into the direct flow input par[6]*Perc and  groundwater input (1-par[6])*Perc [0,1],VC1
@@ -805,6 +813,7 @@ numberSel params::g_par_low(const par_HRUtype& _parType) {
     break;
   case par_HRUtype::SMAXpdm:
     value =  low_pars[3];
+    // std::cout << "New ALPHA ups  dddc2 --> loaded\n";
     break;
   case par_HRUtype::KS:
     value =  low_pars[4];
@@ -929,6 +938,7 @@ numberSel params::g_par_up(const par_HRUtype& _parType) {
     break;
   case par_HRUtype::SMAXpdm:
     value =  up_pars[3];
+    // std::cout << "New ALPH dwdnqjA ups2 --> loaded\n";
     break;
   case par_HRUtype::KS:
     value =  up_pars[4];
