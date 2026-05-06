@@ -616,7 +616,7 @@ void single_HMunit::surface_retention(surface_STORtype _surf_STORtype) {
 
     set_varValue(prev_SurS, tstRM, ts_type::SURS);
     set_varValue(EvapSR, tstRM, ts_type::ETSW);
-    set_varValue(RetOut,tstRM,ts_type::PREF);
+    set_varValue(RetOut,tstRM,ts_type::INFL);
 
     break;
   }
@@ -661,7 +661,7 @@ case soil_STORtype::PDM: {
   if(prev_Soil <= get_par(par_HRUtype::CMIN)){
 // the storages in soil filled with c<=c_min
 // no pdm Snew = Sold + PrecEf - evap from c with c<=c_min
-    prev_Soil = prev_Soil + get_dta(tstRM, ts_type::PREF);
+    prev_Soil = prev_Soil + get_dta(tstRM, ts_type::INFL);
 // checking the ooverflow during one interval
     if(prev_Soil > get_par(par_HRUtype::SMAXpdm)){
       overFL = prev_Soil - get_par(par_HRUtype::SMAXpdm);
@@ -685,11 +685,11 @@ case soil_STORtype::PDM: {
      }
 
     //Overflow if soil tank fully filled
-    overFl1 = std::max(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF) + c_init - get_par(par_HRUtype::C_MAX)), static_cast<numberSel>(0.0));
-    if(overFl1 > get_dta(tstRM, ts_type::PREF)) {
+    overFl1 = std::max(static_cast<numberSel>(get_dta(tstRM, ts_type::INFL) + c_init - get_par(par_HRUtype::C_MAX)), static_cast<numberSel>(0.0));
+    if(overFl1 > get_dta(tstRM, ts_type::INFL)) {
       ppInf = 0.0;
     } else {
-      ppInf = get_dta(tstRM, ts_type::PREF) - overFl1;
+      ppInf = get_dta(tstRM, ts_type::INFL) - overFl1;
     }
 
     //Newly proposed soil water depth C
@@ -752,11 +752,11 @@ case soil_STORtype::PDM2: {
 
   c1 = get_par(par_HRUtype::C_MAX) * (1- (std::pow(dummy,(1/(get_par(par_HRUtype::B_SOIL)+1)))));
 
-  c2 = std::min((c1 + get_dta(tstRM, ts_type::PREF)), get_par(par_HRUtype::C_MAX));
+  c2 = std::min((c1 + get_dta(tstRM, ts_type::INFL)), get_par(par_HRUtype::C_MAX));
   //the  lost of water
   c2 = std::max(c2,0.0);
 
-  er1=std::max(get_dta(tstRM, ts_type::PREF) - get_par(par_HRUtype::C_MAX) +c1,0.0);
+  er1=std::max(get_dta(tstRM, ts_type::INFL) - get_par(par_HRUtype::C_MAX) +c1,0.0);
 
   dummy = 1- c2 / get_par(par_HRUtype::C_MAX);
   dummy = std::max(dummy,0.0);
@@ -795,15 +795,15 @@ case soil_STORtype::COLLIE_V2: {
 
 /*    if (prev_Soil > get_par(par_HRUtype::SMAX)) {
       //overFl1 [mm/d] is saturation excess overland flow
-      overFl1 = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+      overFl1 = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
     } else {
       overFl1 = 0;
     }
 */
-    overFl1 = std::max((prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF))-get_par(par_HRUtype::SMAX)-E_v-E_b-overFl2), 0.0);
+    overFl1 = std::max((prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::INFL))-get_par(par_HRUtype::SMAX)-E_v-E_b-overFl2), 0.0);
 
 
-    next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+    next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
 
     std::vector<numberSel> updated_vals;
 
@@ -849,7 +849,7 @@ case soil_STORtype::NEW_ZEALAND: {
 
 /*    if(prev_Soil >= get_par(par_HRUtype::SMAX)) {
       //saturation excess runoff
-      overFl1 = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+      overFl1 = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
     } else {
       overFl1 = 0;
     }
@@ -859,8 +859,8 @@ case soil_STORtype::NEW_ZEALAND: {
     overFl3 = get_par(par_HRUtype::KF2) * prev_Soil;
     //std::cout << overFl3 << " " << prev_Soil << " " << std::endl;
 
-    overFl1 = std::max((prev_Soil +static_cast<numberSel>(get_dta(tstRM, ts_type::PREF))-get_par(par_HRUtype::SMAX)-E_v-E_b-overFl2-overFl3), 0.0);
-    next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+    overFl1 = std::max((prev_Soil +static_cast<numberSel>(get_dta(tstRM, ts_type::INFL))-get_par(par_HRUtype::SMAX)-E_v-E_b-overFl2-overFl3), 0.0);
+    next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
 
     std::vector<numberSel> updated_vals;
 
@@ -888,19 +888,19 @@ case soil_STORtype::NEW_ZEALAND: {
   /*
 case soil_STORtype::GR4J: {
     //P_n is the net precipitation
-    if(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) >= static_cast<numberSel>(get_dta(tstRM, ts_type::PET))) {
-      P_n = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) - static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+    if(static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)) >= static_cast<numberSel>(get_dta(tstRM, ts_type::PET))) {
+      P_n = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)) - static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
     } else {
       P_n = 0;
     }
 
     //P_s is fraction of the net precipitation P_n redirected to soil moisture
     P_s = P_n * (1 - std::pow(prev_Soil / get_par(par_HRUtype::SMAX), 2));
-    //P_s = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+    //P_s = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
 
     //evap is the net evaporation
-    if (static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) > static_cast<numberSel>(get_dta(tstRM, ts_type::PREF))) {
-      E_p = static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) - static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+    if (static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) > static_cast<numberSel>(get_dta(tstRM, ts_type::INFL))) {
+      E_p = static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) - static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
     } else {
       E_p = 0;
     }
@@ -957,12 +957,12 @@ case soil_STORtype::GR4J: {
   updated_vals.clear();
 
 //vypocet vstupu do zasobniku a dopocet celkoveho odtoku
-  P_s = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) * (1 - std::pow((prev_Soil / get_par(par_HRUtype::SMAX)), 2));
+  P_s = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)) * (1 - std::pow((prev_Soil / get_par(par_HRUtype::SMAX)), 2));
   if(P_s > (get_par(par_HRUtype::SMAX) - prev_Soil)){
     P_s = get_par(par_HRUtype::SMAX) - prev_Soil;
   }
   next_soil = prev_Soil + P_s;
-  overFL = overFL + (static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) - P_s);
+  overFL = overFL + (static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)) - P_s);
 
 //ulozeni velicin
     set_varValue(next_soil, tstRM, ts_type::SOIS);
@@ -996,12 +996,12 @@ case soil_STORtype::SBROOK_V1: {
     //overFl1 is saturation excess from flow [mm/d]
 
     if(prev_Soil >= get_par(par_HRUtype::SMAX)) {
-      overFl1 = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+      overFl1 = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
     } else {
       overFl1 = 0;
     }
 
-    next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+    next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
 
     std::vector<numberSel> updated_vals;
 
@@ -1043,10 +1043,10 @@ case soil_STORtype::SBROOK_V1: {
   }
 
   //vypocet mozneho prepadu z tanku
-  overFl1 = std::max((prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) - get_par(par_HRUtype::SMAX) - E_v - E_b - overFl2), 0.0);
+  overFl1 = std::max((prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)) - get_par(par_HRUtype::SMAX) - E_v - E_b - overFl2), 0.0);
 
   //aktualizace zasoby o vstup
-  next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::PREF));
+  next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
 
   std::vector<numberSel> updated_vals;
 
@@ -1083,7 +1083,7 @@ case soil_STORtype::HILLSLOPE: {
     // //OLD 1st version
     // //incomming interception is reduced by interception storage which is assumed to evaporate before the next
     // //precipitation event
-    // //P_n = std::max(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) - static_cast<numberSel>(get_dta(tstRM, ts_type::INTS)),static_cast<numberSel>(0.0));
+    // //P_n = std::max(static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)) - static_cast<numberSel>(get_dta(tstRM, ts_type::INTS)),static_cast<numberSel>(0.0));
     //
     // //Evaporation from soil moisture evap [mm/d] occurs at the potential rate PET whenever possible
     // if(prev_Soil > 0) {
@@ -1137,16 +1137,16 @@ case soil_STORtype::HILLSLOPE: {
     }
 
     // Percolation and soil storage update
-    // perc = (1-(pow((1 - prev_Soil / get_par(par_HRUtype::SMAX)),get_par(par_HRUtype::KF_NONLIN)))) * get_dta(tstRM,ts_type::PREF);
+    // perc = (1-(pow((1 - prev_Soil / get_par(par_HRUtype::SMAX)),get_par(par_HRUtype::KF_NONLIN)))) * get_dta(tstRM,ts_type::INFL);
 
-    if(((prev_Soil + get_dta(tstRM,ts_type::PREF))) > get_par(par_HRUtype::SMAX)) {
+    if(((prev_Soil + get_dta(tstRM,ts_type::INFL))) > get_par(par_HRUtype::SMAX)) {
      // prev_Soil = get_par(par_HRUtype::SMAX);
-      perc = prev_Soil + get_dta(tstRM,ts_type::PREF) - get_par(par_HRUtype::SMAX);
+      perc = prev_Soil + get_dta(tstRM,ts_type::INFL) - get_par(par_HRUtype::SMAX);
     } else {
-      perc = (1-(pow((1 - prev_Soil / get_par(par_HRUtype::SMAX)),get_par(par_HRUtype::KF_NONLIN)))) * get_dta(tstRM,ts_type::PREF);
+      perc = (1-(pow((1 - prev_Soil / get_par(par_HRUtype::SMAX)),get_par(par_HRUtype::KF_NONLIN)))) * get_dta(tstRM,ts_type::INFL);
       }
 
-    prev_Soil = prev_Soil + get_dta(tstRM,ts_type::PREF) - perc;
+    prev_Soil = prev_Soil + get_dta(tstRM,ts_type::INFL) - perc;
 
     set_varValue(prev_Soil, tstRM, ts_type::SOIS);
     set_varValue(E_b,tstRM, ts_type::EVBS);
@@ -1160,7 +1160,7 @@ case soil_STORtype::HILLSLOPE: {
 case soil_STORtype::PLATEAU: {
 
     //ppInf is infiltration based on maximum infiltration rate INFR_MAX [mm/d] and infiltration excess [mm/d]
-    ppInf = std::min(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)), get_par(par_HRUtype::INFR_MAX));
+    ppInf = std::min(static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)), get_par(par_HRUtype::INFR_MAX));
 
     //c_init represents the wilting point
     c_init = get_par(par_HRUtype::WP) * get_par(par_HRUtype::SMAX);
@@ -1207,8 +1207,8 @@ case soil_STORtype::PLATEAU: {
 
 case soil_STORtype::PLATEAU: {
   //vypocet vstupu do pudniho zasobniku a prepadu mimo zasobnik
-  ppInf = std::min(static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)), get_par(par_HRUtype::INFR_MAX));
-  ppExc = static_cast<numberSel>(get_dta(tstRM, ts_type::PREF)) - ppInf;
+  ppInf = std::min(static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)), get_par(par_HRUtype::INFR_MAX));
+  ppExc = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)) - ppInf;
 
   //vypocet c_init
   c_init = get_par(par_HRUtype::WP) * get_par(par_HRUtype::SMAX);
@@ -2061,14 +2061,13 @@ void single_HMunit::interception_RutterGash_winter(){
   set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
 
   Pref = Througf + (1-get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT)) + (1-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
-
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
 }
 void single_HMunit::interception_RutterGash_melt(){
 
-  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
+  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0, Pref =0.0;
 
   OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
@@ -2132,12 +2131,15 @@ void single_HMunit::interception_RutterGash_melt(){
   Througf = (OverflowCan + CanOut) * get_par(par_HRUtype::CSDIV) + StemOut + OverflowStem;
   set_varValue(Througf, tstRM, ts_type::TROF);
   set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
+
+  Pref = Througf + (1-get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT)) + (1-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
 }
 void single_HMunit::interception_RutterGash_summer(){
 
-  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0;
+  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0, Pref =0.0;
 
   OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
@@ -2201,6 +2203,9 @@ void single_HMunit::interception_RutterGash_summer(){
   Througf = (OverflowCan + CanOut) * get_par(par_HRUtype::CSDIV) + StemOut + OverflowStem;
   set_varValue(Througf, tstRM, ts_type::TROF);
   set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
+
+  Pref = Througf + (1-get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT)) + (1-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
 }
@@ -2208,7 +2213,7 @@ void single_HMunit::interception_RutterGash_summer(){
 
 
 void single_HMunit::interception_vanDijk_winter(){
-  numberSel Dc = 0.0, Ec =0.0;
+  numberSel Dc = 0.0, Ec =0.0, Pref =0.0;
   //snow melt and precipitatn enters a leaves the interception store at the same day
   // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
   //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
@@ -2253,7 +2258,7 @@ void single_HMunit::interception_vanDijk_melt(){
 
 }
 void single_HMunit::interception_vanDijk_summer(){
-  numberSel Dc = 0.0, Ec =0.0;
+  numberSel Dc = 0.0, Ec =0.0, Pref =0.0;
   //snow melt and precipitatn enters a leaves the interception store at the same day
   // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
   //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
@@ -2278,7 +2283,7 @@ void single_HMunit::interception_vanDijk_summer(){
 
 
 void single_HMunit::interception_Eliades_winter(){
-  numberSel Dc = 0.0, Ec =0.0;
+  numberSel Dc = 0.0, Ec =0.0, Pref =0.0;
   //snow melt and precipitatn enters a leaves the interception store at the same day
   // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
   //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
@@ -2302,7 +2307,7 @@ void single_HMunit::interception_Eliades_winter(){
 
 void single_HMunit::interception_Eliades_melt(){
 
-  numberSel Dc = 0.0, Ec =0.0;
+  numberSel Dc = 0.0, Ec =0.0, Pref =0.0;
   //snow melt and precipitatn enters a leaves the interception store at the same day
   // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
   //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
@@ -2328,7 +2333,7 @@ void single_HMunit::interception_Eliades_melt(){
 
 void single_HMunit::interception_Eliades_summer(){
 
-  numberSel Dc = 0.0, Ec =0.0;
+  numberSel Dc = 0.0, Ec =0.0, Pref =0.0;
   //snow melt and precipitatn enters a leaves the interception store at the same day
   // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
   //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
@@ -2522,6 +2527,7 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   set_data(dta,ts_type::POIS);
   set_data(dta,ts_type::POIG);
   set_data(dta,ts_type::LAI);
+  set_data(dta,ts_type::INFL);
   // std::cout << " tor ok\n";
   // get_numdta();
   // std::cout << "The total number of initialized time intervals is " << get_numdta() << " ." << std::endl;
@@ -3189,6 +3195,10 @@ void single_HMunit::print_interception_STORtype() {
 
   case interception_STORtype::van_Dijk:
     std::cout << "The interception_STORtype is a van_Dijk." << std::endl;
+    break;
+
+  case interception_STORtype::Eliades:
+    std::cout << "The interception_STORtype is a Eliades." << std::endl;
     break;
   }
 }

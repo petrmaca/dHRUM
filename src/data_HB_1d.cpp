@@ -39,6 +39,7 @@ data_HB_1d::data_HB_1d(): numTS(0),
   PoiS(1,1),
   PoiG(1,1),
   Lai(1,1),
+  InfL(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -172,6 +173,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   PoiS(1,1),
   PoiG(1,1),
   Lai(1,1),
+  InfL(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -224,6 +226,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   PoiS = other.PoiS;//!< Percolation between the pond and the soil
   PoiG = other.PoiG;//!< Percolation between the pond and the groundwater
   Lai= other.Lai;//!< Leaf area index
+  InfL= other.InfL;//!< Infiltration to soil storage
   init_SoiS = other.init_SoiS;//!< Initial value of soil storage
   init_GroS = other.init_GroS;//!< Initial value of groundwater storage
   init_CanS = other.init_SteS;//!< Initial value of Canopy Interception storage
@@ -282,6 +285,7 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     PoiS = rhs.PoiS;//!< Percolation between the pond and the soil
     PoiG = rhs.PoiG;//!< Percolation between the pond and the groundwater
     Lai = rhs.Lai;//!< Leaf area index
+    InfL=rhs.InfL;//!< Infiltration to soil storage
     init_SoiS = rhs.init_SoiS;//!< Initial value of soil storage
     init_GroS = rhs.init_GroS;//!< Initial value of groundwater storage
     init_CanS = rhs.init_SteS;//!< Initial value of Canopy Interception storage
@@ -420,6 +424,10 @@ void data_HB_1d::s_data(const hdata& dta,const ts_type& _tsType, bool updateNumT
     Lai = dta;
     //    std::cout << "New LAI --> loaded\n";
     break;
+  case ts_type::INFL:
+    InfL = dta;
+    //    std::cout << "New INFL --> loaded\n";
+    break;
   }
 //    //PRE.insert(PRE.begin(), data);
 //    if(!Erase) {
@@ -523,6 +531,9 @@ void data_HB_1d::s_varVal(const numberSel& dta, const unsigned& tst,const ts_typ
   case ts_type::LAI:
     Lai[tst] = dta;
     break;
+  case ts_type::INFL:
+    InfL[tst] = dta;
+    break;
 
 }
   return ;
@@ -592,6 +603,8 @@ numberSel data_HB_1d::g_dta(const unsigned& tst,const ts_type& _tsType) {
     return PoiG[tst];
   case ts_type::LAI:
     return Lai[tst];
+  case ts_type::INFL:
+    return InfL[tst];
   }
 
   return 0;
@@ -1220,6 +1233,8 @@ hdata data_HB_1d::get_HbTsData(const ts_type& _tsType) {
     return PoiG;
   case ts_type::LAI:
     return Lai;
+  case ts_type::INFL:
+    return InfL;
   }
 
   hdata helpV(-9999,1);
@@ -1337,6 +1352,9 @@ void data_HB_1d::setOneTstoZero(const ts_type& _tsType) {
     break;
   case ts_type::LAI:
     Lai = 0.0;
+    break;
+  case ts_type::INFL:
+    InfL = 0.0;
     break;
   }
 
