@@ -152,9 +152,6 @@ setGWtypeToAlldHrus <- function(dHRUM_ptr, gwTypes, hruIds) {
     invisible(.Call(`_dHRUM_setGWtypeToAlldHrus`, dHRUM_ptr, gwTypes, hruIds))
 }
 
-#' Sets the similar Precipitation, Temperature and LAI vectors to dHRUM and init's the date using beg. of period.
-NULL
-
 #' Sets similar input data obtained from file to all single Hrus at dHRUM instance.
 #'
 #' Loads the data from file to a single dHRUM instance created  the \code{initdHruModel(nHrus,Areas,IdsHrus)} function
@@ -247,6 +244,28 @@ setPTInputsToDistdHRUM <- function(dHRUM_ptr, DataDF) {
     invisible(.Call(`_dHRUM_setPTInputsToDistdHRUM`, dHRUM_ptr, DataDF))
 }
 
+#' Sets the similar Precipitation, Temperature and LAI vectors to dHRUM and init's the date using beg. of period.
+#'
+#' Setting the similar vector of Precipitation ,temperature and LAI to all single HRU.
+#' Setting the calender using the first date fo period using the first date of period
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
+#' @param Prec vector of values of precipitation
+#' @param Temp vector of values of temperature
+#' @param Lai vector of values of leaf area index
+#' @param inDate the first date of simulation period
+#' @export
+#' @examples
+#' nHrus <- 2
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' setGWtypeToAlldHrus(dHRUM_ptr = dhrus,gwTypes=rep("LIN_2SE",times= length(Areas)),hruIds=IdsHrus)
+#' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
+#' prec=c(1,2,3)
+#' temp=c(1,2,3)
+#' lai=c(1,2,3)
+#' setPTLInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, Lai = lai, as.Date("1990/01/30"))
 setPTLInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, Lai, inDate) {
     invisible(.Call(`_dHRUM_setPTLInputsToAlldHrus`, dHRUM_ptr, Prec, Temp, Lai, inDate))
 }
