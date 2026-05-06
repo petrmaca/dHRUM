@@ -2232,6 +2232,9 @@ void single_HMunit::interception_vanDijk_winter(){
   set_varValue(Ec, tstRM, ts_type::EVAC);
   set_varValue(prevIntS,tstRM, ts_type::INTS);
 
+  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  set_varValue(Pref, tstRM, ts_type::PREF);
+
   return ;
 }
 void single_HMunit::interception_vanDijk_melt(){
@@ -2253,6 +2256,9 @@ void single_HMunit::interception_vanDijk_melt(){
   set_varValue(Dc, tstRM, ts_type::TROF);
   set_varValue(Ec, tstRM, ts_type::EVAC);
   set_varValue(prevIntS,tstRM, ts_type::INTS);
+
+  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
 
@@ -2276,6 +2282,9 @@ void single_HMunit::interception_vanDijk_summer(){
   set_varValue(Dc, tstRM, ts_type::TROF);
   set_varValue(Ec, tstRM, ts_type::EVAC);
   set_varValue(prevIntS,tstRM, ts_type::INTS);
+
+  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
 
@@ -2302,7 +2311,10 @@ void single_HMunit::interception_Eliades_winter(){
   set_varValue(Ec, tstRM, ts_type::EVAC);
   set_varValue(prevIntS,tstRM, ts_type::INTS);
 
+  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  set_varValue(Pref, tstRM, ts_type::PREF);
 
+  return ;
 }
 
 void single_HMunit::interception_Eliades_melt(){
@@ -2326,6 +2338,8 @@ void single_HMunit::interception_Eliades_melt(){
   set_varValue(Ec, tstRM, ts_type::EVAC);
   set_varValue(prevIntS,tstRM, ts_type::INTS);
 
+  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
 }
@@ -2351,6 +2365,9 @@ void single_HMunit::interception_Eliades_summer(){
   set_varValue(Dc, tstRM, ts_type::TROF);
   set_varValue(Ec, tstRM, ts_type::EVAC);
   set_varValue(prevIntS,tstRM, ts_type::INTS);
+
+  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
 }
