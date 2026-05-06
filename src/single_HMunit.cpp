@@ -2060,7 +2060,7 @@ void single_HMunit::interception_RutterGash_winter(){
   set_varValue(Througf, tstRM, ts_type::TROF);
   set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
 
-  Pref = Througf + (1-get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  Pref = Througf + (1-get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT)) + (1-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
 
   set_varValue(Pref, tstRM, ts_type::PREF);
 
