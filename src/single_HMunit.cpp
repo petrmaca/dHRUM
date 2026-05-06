@@ -2205,7 +2205,7 @@ void single_HMunit::snowPrec(){
 
   if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
     Snoww = get_dta(tstRM, ts_type::PREC);
-    std::cout << " snow " << Snoww << " \n";
+    //std::cout << " snow " << Snoww << " \n";
   } else {
     Snoww = 0.0;
   }
