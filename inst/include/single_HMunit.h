@@ -50,6 +50,11 @@ class single_HMunit {
   void interception_RutterGash_melt();
   void interception_RutterGash_summer();
 
+  void interception_modRutterValen_winter();
+  void interception_modRutterValen_melt();
+  void interception_modRutterValen_summer();
+
+
 
   void interception_vanDijk_winter();
   void interception_vanDijk_melt();

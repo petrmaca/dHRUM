@@ -108,6 +108,8 @@ lines(outDF$INTS, type ="l",col="green")
 plot(outDF$INTS, type ="l",col="green", ylim=range(outDF$TROF))
 lines(outDF$TROF, col ="grey")
 lines(outDF$PREF, col ="blue")
+lines(outDF$PREC, col ="black")
+
 lines(outDF$EVAC, type ="l")
 lines(outDF$PET, col ="red")
 lines(outDF$AET, col ="blue")

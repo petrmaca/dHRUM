@@ -1957,12 +1957,15 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
 
     case interception_STORtype::Rutter_Gash:{
       if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
-      interception_RutterGash_winter();
+      // interception_RutterGash_winter();
+      interception_modRutterValen_summer();
          } else {
                 if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
-                  interception_RutterGash_melt();
+                  // interception_RutterGash_melt();
+                  interception_modRutterValen_summer();
                 } else {
-                  interception_RutterGash_summer();
+                  // interception_RutterGash_summer();
+                  interception_modRutterValen_summer();
                    }
                 }
       break;
@@ -2213,7 +2216,157 @@ void single_HMunit::interception_RutterGash_summer(){
   return ;
 }
 
+void single_HMunit::interception_modRutterValen_winter(){
 
+  numberSel Dc = 0.0, Dt = 0.0, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0, Pref =0.0;
+
+  Dc = std::max((prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::CAN_ST)),0.0);
+  // std::cout << Dc << " dc\n";
+  prevCanS = prevCanS + (get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+  // std::cout << prevCanS << " prevCanS\n";
+  EvapCanop = std::min((prevCanS / get_par(par_HRUtype::CAN_ST)* get_dta(tstRM,ts_type::PET)),prevCanS);
+
+  numberSel help_Ec = update_ETDEMAND(EvapCanop, false);
+  et_demand = update_ETDEMAND(EvapCanop, true);
+  EvapCanop = help_Ec;
+
+  prevCanS = prevCanS - EvapCanop;
+  // std::cout << prevCanS << " prevCanS\n";
+
+  Dt = std::max((prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + get_par(par_HRUtype::CSDIV)*Dc - get_par(par_HRUtype::STEM_ST)),0.0);
+  // std::cout << Dt << " Dt\n";
+  prevSteS = prevSteS + (get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + get_par(par_HRUtype::CSDIV)*Dc - Dt;
+  // std::cout << prevSteS << " prevSteS\n";
+  EvapStem = std::min((prevSteS / get_par(par_HRUtype::STEM_ST)* get_dta(tstRM,ts_type::PET)),prevSteS);
+  // std::cout << prevSteS << " EvapStem\n";
+  numberSel help_Es = update_ETDEMAND(EvapStem, false);
+  et_demand = update_ETDEMAND(EvapStem, true);
+  EvapStem = help_Es;
+
+  prevSteS = prevSteS - EvapStem;
+  // std::cout << prevSteS << " prevSteS po evap\n";
+
+  set_varValue(prevCanS, tstRM, ts_type::CANS);
+  set_varValue(prevSteS, tstRM, ts_type::STES);
+
+  set_varValue( (1-get_par(par_HRUtype::CSDIV)*Dc), tstRM, ts_type::CANF);
+  set_varValue(EvapCanop, tstRM, ts_type::EVAC);
+
+  set_varValue(Dt, tstRM, ts_type::STEF);
+  set_varValue(EvapStem, tstRM, ts_type::EVAS);
+
+  Througf = ((1-get_par(par_HRUtype::CSDIV))*Dc) + Dt;
+  // std::cout << Througf << "Througf\n";
+  set_varValue(Througf, tstRM, ts_type::TROF);
+  set_varValue(prevCanS + prevSteS,tstRM,ts_type::INTS);
+
+  Pref = Througf + (1-get_par(par_HRUtype::CDIV)-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  set_varValue(Pref, tstRM, ts_type::PREF);
+
+  return ;
+
+}
+void single_HMunit::interception_modRutterValen_melt(){
+
+  numberSel Dc = 0.0, Dt = 0.0, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0, Pref =0.0;
+
+  Dc = std::max((prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::CAN_ST)),0.0);
+  // std::cout << Dc << " dc\n";
+  prevCanS = prevCanS + (get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+  // std::cout << prevCanS << " prevCanS\n";
+  EvapCanop = std::min((prevCanS / get_par(par_HRUtype::CAN_ST)* get_dta(tstRM,ts_type::PET)),prevCanS);
+
+  numberSel help_Ec = update_ETDEMAND(EvapCanop, false);
+  et_demand = update_ETDEMAND(EvapCanop, true);
+  EvapCanop = help_Ec;
+
+  prevCanS = prevCanS - EvapCanop;
+  // std::cout << prevCanS << " prevCanS\n";
+
+  Dt = std::max((prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + get_par(par_HRUtype::CSDIV)*Dc - get_par(par_HRUtype::STEM_ST)),0.0);
+  // std::cout << Dt << " Dt\n";
+  prevSteS = prevSteS + (get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + get_par(par_HRUtype::CSDIV)*Dc - Dt;
+  // std::cout << prevSteS << " prevSteS\n";
+  EvapStem = std::min((prevSteS / get_par(par_HRUtype::STEM_ST)* get_dta(tstRM,ts_type::PET)),prevSteS);
+  // std::cout << prevSteS << " EvapStem\n";
+  numberSel help_Es = update_ETDEMAND(EvapStem, false);
+  et_demand = update_ETDEMAND(EvapStem, true);
+  EvapStem = help_Es;
+
+  prevSteS = prevSteS - EvapStem;
+  // std::cout << prevSteS << " prevSteS po evap\n";
+
+  set_varValue(prevCanS, tstRM, ts_type::CANS);
+  set_varValue(prevSteS, tstRM, ts_type::STES);
+
+  set_varValue( (1-get_par(par_HRUtype::CSDIV)*Dc), tstRM, ts_type::CANF);
+  set_varValue(EvapCanop, tstRM, ts_type::EVAC);
+
+  set_varValue(Dt, tstRM, ts_type::STEF);
+  set_varValue(EvapStem, tstRM, ts_type::EVAS);
+
+  Througf = ((1-get_par(par_HRUtype::CSDIV))*Dc) + Dt;
+  // std::cout << Througf << "Througf\n";
+  set_varValue(Througf, tstRM, ts_type::TROF);
+  set_varValue(prevCanS + prevSteS,tstRM,ts_type::INTS);
+
+  Pref = Througf + (1-get_par(par_HRUtype::CDIV)-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  set_varValue(Pref, tstRM, ts_type::PREF);
+
+  return ;
+
+}
+
+void single_HMunit::interception_modRutterValen_summer(){
+
+  numberSel Dc = 0.0, Dt = 0.0, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0, Pref =0.0;
+
+  Dc = std::max((prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::CAN_ST)),0.0);
+  // std::cout << Dc << " dc\n";
+  prevCanS = prevCanS + (get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+  // std::cout << prevCanS << " prevCanS\n";
+  EvapCanop = std::min((prevCanS / get_par(par_HRUtype::CAN_ST)* get_dta(tstRM,ts_type::PET)),prevCanS);
+
+  numberSel help_Ec = update_ETDEMAND(EvapCanop, false);
+  et_demand = update_ETDEMAND(EvapCanop, true);
+  EvapCanop = help_Ec;
+
+  prevCanS = prevCanS - EvapCanop;
+  // std::cout << prevCanS << " prevCanS\n";
+
+  Dt = std::max((prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + get_par(par_HRUtype::CSDIV)*Dc - get_par(par_HRUtype::STEM_ST)),0.0);
+  // std::cout << Dt << " Dt\n";
+  prevSteS = prevSteS + (get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + get_par(par_HRUtype::CSDIV)*Dc - Dt;
+  // std::cout << prevSteS << " prevSteS\n";
+  EvapStem = std::min((prevSteS / get_par(par_HRUtype::STEM_ST)* get_dta(tstRM,ts_type::PET)),prevSteS);
+  // std::cout << prevSteS << " EvapStem\n";
+  numberSel help_Es = update_ETDEMAND(EvapStem, false);
+  et_demand = update_ETDEMAND(EvapStem, true);
+  EvapStem = help_Es;
+
+  prevSteS = prevSteS - EvapStem;
+  // std::cout << prevSteS << " prevSteS po evap\n";
+
+  set_varValue(prevCanS, tstRM, ts_type::CANS);
+  set_varValue(prevSteS, tstRM, ts_type::STES);
+
+  set_varValue( (1-get_par(par_HRUtype::CSDIV)*Dc), tstRM, ts_type::CANF);
+  set_varValue(EvapCanop, tstRM, ts_type::EVAC);
+
+  set_varValue(Dt, tstRM, ts_type::STEF);
+  set_varValue(EvapStem, tstRM, ts_type::EVAS);
+
+  Througf = ((1-get_par(par_HRUtype::CSDIV))*Dc) + Dt;
+  // std::cout << Througf << "Througf\n";
+  set_varValue(Througf, tstRM, ts_type::TROF);
+  set_varValue(prevCanS + prevSteS,tstRM,ts_type::INTS);
+
+  Pref = Througf + (1-get_par(par_HRUtype::CDIV)-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  set_varValue(Pref, tstRM, ts_type::PREF);
+
+  return ;
+
+}
 
 void single_HMunit::interception_vanDijk_winter(){
   numberSel Dc = 0.0, Ec =0.0, Pref =0.0;
