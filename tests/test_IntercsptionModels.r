@@ -9,7 +9,7 @@ meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 
 prec[1:2] = 0.0
-temp=rnorm(numdata,15,3)
+temp=rnorm(numdata,-15,3)
 # plot(prec, type="l")
 # plot(temp, type="l")
 #nHrus <- 15000
@@ -61,7 +61,7 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 20, B_EVAP = 2.5,  KS = 0.01, KF = 0.0
                     KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =0,L=0.1, B_EXP = 0.3, KFR = 0.03,
                     INTstMax = 2,INTstScale = 1, CSfrac = 1)
 
-(1.6*10+100)/(1.6+1)
+# (1.6*10+100)/(1.6+1) smax cmin=10 cmax =100 bsoil= 1.6
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 
 
