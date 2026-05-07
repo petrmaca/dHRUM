@@ -9,7 +9,7 @@ meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 
 prec[1:2] = 0.0
-temp=rnorm(numdata,-5,3)
+temp=rnorm(numdata,15,3)
 # plot(prec, type="l")
 # plot(temp, type="l")
 #nHrus <- 15000
@@ -26,9 +26,9 @@ dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 
 
 setSnowMeltModeltypeToAlldHrus(dHRUM_ptr = dhrus,snowMeltModelTypes = rep("DDF",times= length(Areas)),hruIds=IdsHrus)
-# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
-setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas)))
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas)))
@@ -55,13 +55,13 @@ plot(lai)
 
 # setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
 setPTLInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, Lai = lai, as.Date("1990/01/30"))
-ParDF = data.frame( B_SOIL = 1.6, C_MAX = 100, B_EVAP = 2.5,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.5,
+ParDF = data.frame( B_SOIL = 1.6, C_MAX = 20, B_EVAP = 2.5,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.5,
                     SDIV = 0.2, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = -2.0,
-                    RETCAP = 10, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
+                    RETCAP = 2, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
                     KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =0,L=0.1, B_EXP = 0.3, KFR = 0.03,
                     INTstMax = 2,INTstScale = 1, CSfrac = 1)
 
-100/(1.6+1)
+(1.6*10+100)/(1.6+1)
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 
 
@@ -86,6 +86,11 @@ outDF <- data.frame(outDta$outDta)
 names(outDF) <-c(outDta$VarsNams)
 outDF = as.data.table(outDF)
 
+min(outDF$PREC -outDF$PREF)
+min(outDF$PREC -outDF$TROF)
+min(outDF$PREF -outDF$TROF)
+
+
 plot(outDF$INTS, type ="l",col="green")
 plot(outDF$TEMP, type ="l")
 plot(outDF$PREC, type ="l")
@@ -109,7 +114,16 @@ lines(outDF$AET, col ="blue")
 lines(outDF$PET, col ="red")
 lines(outDF$INFL, col ="lightblue")
 lines(outDF$SOIS, col ="red")
+lines(outDF$PERC, col ="red")
 
+min(outDF$PREC -outDF$PREF)
+min(outDF$PREC -outDF$TROF)
+min(outDF$PREF -outDF$TROF)
+
+
+sum(outDF$TROF)
+sum(outDF$PREC)
+max(outDF$SOIS)
 
 plot(outDF$SOIS, col ="red", type="l")
 # van Dijk model
@@ -131,7 +145,7 @@ IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
 
-# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 

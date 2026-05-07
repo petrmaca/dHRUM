@@ -219,12 +219,12 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
   case par_HRUtype::B_SOIL:
     pars[0] = par_dta;
     pars[3] = (pars[0]*pars[22] + pars[1]) / (pars[0]+1);
-    std::cout << "New smaxPDM01 --> loaded"<< pars[3] << "\n";
+    // std::cout << "New smaxPDM01 --> loaded"<< pars[3] << "\n";
     break;
   case par_HRUtype::C_MAX:
     pars[1] = par_dta;
     pars[3] = (pars[0]*pars[22] +  pars[1]) / (pars[0]+1);
-    std::cout << "New smaxPDM02 --> loaded"<< pars[3] << "\n";
+    // std::cout << "New smaxPDM02 --> loaded"<< pars[3] << "\n";
 //    std::cout << "New c_max --> loaded\n";
     break;
   case par_HRUtype::B_EVAP:
@@ -367,7 +367,7 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
     break;
   }
 
-  pars[3] = (pars[0] * pars[22] +pars[1]) / (pars[0] +1 );
+  pars[3] = (pars[0] * pars[22] + pars[1]) / (pars[0] +1 );
   // std::cout << "New ALPHA ups2 --> loaded "<< pars[3]<<"\n";
 
   return ;
@@ -403,7 +403,7 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
   case par_HRUtype::SMAXpdm:
     pars[3] = par_dta;
     // pars[1] = pars[3]*(pars[0]+1) -(pars[0]*pars[22]);
-    std::cout << "New Smax 3--> loaded" << pars[3] <<"\n";
+    // std::cout << "New Smax 3--> loaded" << pars[3] <<"\n";
     break;
   case par_HRUtype::KS:
     pars[4] = par_dta;

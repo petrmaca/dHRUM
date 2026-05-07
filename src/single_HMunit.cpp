@@ -1939,6 +1939,7 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
       par_HRU.s_params((Smax * 0.9), par_HRUtype::CAN_ST);
       par_HRU.s_params((Smax * 0.1), par_HRUtype::STEM_ST);
       CSfrac = 1 - std::exp(-k*get_dta(tstRM, ts_type::LAI));
+      // std::cout<< CSfrac << std::endl;
       par_HRU.s_params(0.9*CSfrac,par_HRUtype::CDIV);
       par_HRU.s_params(0.1*CSfrac,par_HRUtype::SDIV);
       // std::cout << CSfrac << " "<< par_HRU.g_par(par_HRUtype::SDIV) << " " <<par_HRU.g_par(par_HRUtype::CDIV) <<"\n";
@@ -2062,7 +2063,7 @@ void single_HMunit::interception_RutterGash_winter(){
   set_varValue(Througf, tstRM, ts_type::TROF);
   set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
 
-  Pref = Througf + (1-get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT)) + (1-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  Pref = Througf + (1-get_par(par_HRUtype::CDIV)-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
@@ -2134,7 +2135,7 @@ void single_HMunit::interception_RutterGash_melt(){
   set_varValue(Througf, tstRM, ts_type::TROF);
   set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
 
-  Pref = Througf + (1-get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT)) + (1-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  Pref = Througf + (1-get_par(par_HRUtype::CDIV)-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
@@ -2206,7 +2207,7 @@ void single_HMunit::interception_RutterGash_summer(){
   set_varValue(Througf, tstRM, ts_type::TROF);
   set_varValue((get_dta(tstRM, ts_type::CANS) + get_dta(tstRM, ts_type::STES)),tstRM,ts_type::INTS);
 
-  Pref = Througf + (1-get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT)) + (1-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  Pref = Througf + (1-get_par(par_HRUtype::CDIV)-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
