@@ -245,7 +245,9 @@ private:
   PondRouT_type  PondROUT;//!< Pond outlet method
   snow_Model Snow_MDL;//!< Snow melt model
 
-  bool InstStLai;
+  bool InstStLai;//!< Controsl for LAI impeemnted in interception models
+  bool Wetland;//!< Control for Wetlenad presented in HRU
+
 
   std::vector<std::string>Current_par_names;
   std::vector<std::pair<std::string,std::string>> Current_sHMu_configuration;//!< vector of pairs with single HMunit configuration
