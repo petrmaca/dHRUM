@@ -16,12 +16,13 @@ temp=rnorm(numdata,15,3)
 
 # Eliades model
 
-nHrus <- 1
-ntreads <-1
+nHrus <- 11000
+ntreads <-4
 #Areas <- runif(nHrus,min = 1,max  = 10) #[m2]
 Areas <- runif(nHrus,min = 38780000,max  = 38780050)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 Lais <- rep(TRUE, nHrus)
+
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 
 
