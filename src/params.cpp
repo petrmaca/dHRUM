@@ -1099,11 +1099,11 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     break;
   case surface_STORtype::SurfacePRTL:
     full_list.insert(full_list.end(),L_SurfacePRTL.begin(),L_SurfacePRTL.end());
-    std::cout << "WARNING!! No parametr set for surface_STORtype::SurfacePRTL" << std::endl;
+    // std::cout << "WARNING!! No parametr set for surface_STORtype::SurfacePRTL" << std::endl;
     break;
   case surface_STORtype::Wetland:
     full_list.insert(full_list.end(),L_Wetland.begin(),L_Wetland.end() );
-    std::cout << "WARNING!! No parametr set for surface_STORtype::Wetland" << std::endl;
+    // std::cout << "WARNING!! No parametr set for surface_STORtype::Wetland" << std::endl;
     break;
   }
 

@@ -671,7 +671,7 @@ void single_HMunit::surface_RetPRTL_summer(){
   prev_SurS = prev_SurS - EvapSR;
 
   // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
-    prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
+  prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
   // } else {
     // prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
     // }
