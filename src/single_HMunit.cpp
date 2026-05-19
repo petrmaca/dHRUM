@@ -2193,11 +2193,11 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
     case interception_STORtype::Rutter_Gash:{
       if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
       // interception_RutterGash_winter();
-      interception_modRutterValen_summer();
+      interception_modRutterValen_winter();
          } else {
                 if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
                   // interception_RutterGash_melt();
-                  interception_modRutterValen_summer();
+                  interception_modRutterValen_melt();
                 } else {
                   // interception_RutterGash_summer();
                   interception_modRutterValen_summer();
