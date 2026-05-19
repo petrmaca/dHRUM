@@ -519,6 +519,7 @@ void single_HMunit::surface_RetAll_summer(){
   if (EvapSR > prev_SurS) {
     EvapSR = prev_SurS;
   }
+
   if(EvapSR > 0.0){
     numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
     et_demand = update_ETDEMAND(EvapSR, true);
@@ -580,7 +581,7 @@ void single_HMunit::surface_RetAll_melt(){
   // }
 
   RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
-  std::cout << RetOut << "  retout " << prev_SurS <<std::endl;
+  // std::cout << RetOut << "  retout " << prev_SurS <<std::endl;
   prev_SurS = prev_SurS - RetOut;
 
   Infl = RetOut;
@@ -619,7 +620,7 @@ void single_HMunit::surface_RetAll_winter(){
   // }
 
   RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
-  std::cout << RetOut << "  retout " << prev_SurS <<std::endl;
+  // std::cout << RetOut << "  retout " << prev_SurS <<std::endl;
   prev_SurS = prev_SurS - RetOut;
 
   Infl = RetOut;
@@ -2504,9 +2505,9 @@ void single_HMunit::interception_modRutterValen_melt(){
 
   numberSel Dc = 0.0, Dt = 0.0, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0, Pref =0.0;
 
-  Dc = std::max((prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::CAN_ST)),0.0);
+  Dc = std::max((prevCanS + get_par(par_HRUtype::CDIV) * ( get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::CAN_ST)),0.0);
   // std::cout << Dc << " dc\n";
-  prevCanS = prevCanS + (get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+  prevCanS = prevCanS + (get_par(par_HRUtype::CDIV)) * ( get_dta(tstRM, ts_type::MELT)) - Dc;
   // std::cout << prevCanS << " prevCanS\n";
   EvapCanop = std::min((prevCanS / get_par(par_HRUtype::CAN_ST)* get_dta(tstRM,ts_type::PET)),prevCanS);
 
@@ -2517,9 +2518,9 @@ void single_HMunit::interception_modRutterValen_melt(){
   prevCanS = prevCanS - EvapCanop;
   // std::cout << prevCanS << " prevCanS\n";
 
-  Dt = std::max((prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + get_par(par_HRUtype::CSDIV)*Dc - get_par(par_HRUtype::STEM_ST)),0.0);
+  Dt = std::max((prevSteS + get_par(par_HRUtype::SDIV) * ( get_dta(tstRM, ts_type::MELT)) + get_par(par_HRUtype::CSDIV)*Dc - get_par(par_HRUtype::STEM_ST)),0.0);
   // std::cout << Dt << " Dt\n";
-  prevSteS = prevSteS + (get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) + get_par(par_HRUtype::CSDIV)*Dc - Dt;
+  prevSteS = prevSteS + (get_par(par_HRUtype::SDIV)) * ( get_dta(tstRM, ts_type::MELT)) + get_par(par_HRUtype::CSDIV)*Dc - Dt;
   // std::cout << prevSteS << " prevSteS\n";
   EvapStem = std::min((prevSteS / get_par(par_HRUtype::STEM_ST)* get_dta(tstRM,ts_type::PET)),prevSteS);
   // std::cout << prevSteS << " EvapStem\n";
@@ -2544,7 +2545,7 @@ void single_HMunit::interception_modRutterValen_melt(){
   set_varValue(Througf, tstRM, ts_type::TROF);
   set_varValue(prevCanS + prevSteS,tstRM,ts_type::INTS);
 
-  Pref = Througf + (1-get_par(par_HRUtype::CDIV)-get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  Pref = Througf + (1-get_par(par_HRUtype::CDIV)-get_par(par_HRUtype::SDIV)) * ( get_dta(tstRM, ts_type::MELT));
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
@@ -2633,8 +2634,14 @@ void single_HMunit::interception_vanDijk_melt(){
   // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
   //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
   // } else Dc =0.0;
-  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
-  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+
+  // Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+  // prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+
+  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * ( get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::MELT)) - Dc;
+
+
   Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);
 
   numberSel help_Ec = update_ETDEMAND(Ec, false);
@@ -2647,7 +2654,8 @@ void single_HMunit::interception_vanDijk_melt(){
   set_varValue(Ec, tstRM, ts_type::EVAC);
   set_varValue(prevIntS,tstRM, ts_type::INTS);
 
-  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  // Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * ( get_dta(tstRM, ts_type::MELT));
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
@@ -2714,8 +2722,8 @@ void single_HMunit::interception_Eliades_melt(){
   // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
   //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
   // } else Dc =0.0;
-  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
-  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * ( get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
+  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::MELT)) - Dc;
   Ec = std::min((prevIntS / get_par(par_HRUtype::INTstMax)* get_dta(tstRM,ts_type::PET)),prevIntS);
 
   numberSel help_Ec = update_ETDEMAND(Ec, false);
@@ -2728,7 +2736,7 @@ void single_HMunit::interception_Eliades_melt(){
   set_varValue(Ec, tstRM, ts_type::EVAC);
   set_varValue(prevIntS,tstRM, ts_type::INTS);
 
-  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * ( get_dta(tstRM, ts_type::MELT));
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
@@ -2871,7 +2879,7 @@ void single_HMunit::run_HB() {
   //  std::cout << "prev_Ground storage before zeros " << prev_Grou << std::endl;
   //  std::cout << "prevCanS  " << prevCanS << std::endl;
   //  std::cout << "prevSteS " << prevSteS << std::endl;
-  //  std::cout << "prevSnoS " << prevSnoS << std::endl;
+   std::cout << "prevSnoS " << prevSnoS << std::endl;
   //  std::cout << "prev_SurS " << prev_SurS << std::endl;
   //  std::cout << "prev_Soil " << prev_Soil << std::endl;
   //  std::cout << "prev_Grou " << prev_Grou << std::endl;

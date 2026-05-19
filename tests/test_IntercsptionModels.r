@@ -8,8 +8,8 @@ probwet =0.9
 meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 
-prec[1:2] = 0.0
-temp=rnorm(numdata,18,3)
+# prec[1:2] = 0.0
+temp=rnorm(numdata,-2,2)
 # plot(prec, type="l")
 # plot(temp, type="l")
 #nHrus <- 15000
@@ -28,8 +28,8 @@ dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 
 setSnowMeltModeltypeToAlldHrus(dHRUM_ptr = dhrus,snowMeltModelTypes = rep("DDF",times= length(Areas)),hruIds=IdsHrus)
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
-setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
-# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas)))
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas)))
@@ -59,7 +59,7 @@ plot(lai)
 # setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
 setPTLInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, Lai = lai, as.Date("1990/01/30"))
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 20, B_EVAP = 2.5,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.5,
-                    SDIV = 0.2, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = -2.0,
+                    SDIV = 0.2, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 6, TMEL = -20.0,
                     RETCAP = 2, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
                     KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =0,L=0.1, B_EXP = 0.3, KFR = 0.03,
                     INTstMax = 2,INTstScale = 1, CSfrac = 1)
@@ -126,18 +126,40 @@ lines(outDF$INFL,col="red")
 plot(outDF$INFL,col="red", type='l')
 
 min(outDF$PREC - outDF$PREF)
+min(outDF$PREC - outDF$MELT)
 min(outDF$PREC - outDF$TROF)
 min(outDF$PREF - outDF$TROF)
 
 min(outDF$PREF - outDF$INFL)
 
-
-dt=data.frame(pf=outDF$PREF, inl=outDF$INFL, e=outDF$ETWS, s=outDF$SURS,dd=outDF$PREF -outDF$INFL)
+dt=data.frame(pf=outDF$PREF, tt=outDF$TEMP, sn=outDF$SNOW, m=outDF$MELT,dd=outDF$PREC -outDF$MELT)
+dT=data.frame(pf=outDF$PREF, inl=outDF$INFL, e=outDF$ETWS, s=outDF$SURS,dd=outDF$PREF -outDF$INFL)
 
 sum(outDF$TROF)
+
 sum(outDF$PREC)
 sum(outDF$PREF)
+sum(outDF$EVAC)
+sum(outDF$EVAS)
+
+PrecNoSnow = outDF$PREC -outDF$SNOW
+
+sum(PrecNoSnow) + sum(outDF$MELT)
+
+sum(PrecNoSnow) + sum(outDF$MELT) - sum(outDF$PREF)
+sum(outDF$EVAC)
+
+sum(outDF$PREC)- (sum(outDF$PREF)+sum(outDF$EVAC)+sum(outDF$EVAS))
+sum(outDF$SNOW-outDF$MELT)
+outDF$PREF[length(outDF$PREF)]
+
+sum(outDF$SNOW)
+sum(outDF$MELT)
+
+sum(outDF$PREF)
+sum(outDF$ETWS)
 sum(outDF$INFL)
+
 sum(outDF$SURS)
 max(outDF$SOIS)
 
