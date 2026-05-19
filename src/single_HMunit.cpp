@@ -464,21 +464,24 @@ void single_HMunit::surface_Retention(surface_STORtype _surf_STORtype){
   switch(_surf_STORtype) {
 
     case surface_STORtype::SurfaceAll: {
+      // std::cout << " ups \n";
       surface_RetAll();
       break;
     }
 
     case surface_STORtype::SurfacePRTL: {
+      // std::cout << " ups2 \n";
       surface_RetPRTL();
       break;
     }
 
     case surface_STORtype::Wetland: {
-
+      // std::cout << " ups3 \n";
       break;
     }
 
   }
+  // surface_RetAll_summer();
 
   return  ;
 }
@@ -494,6 +497,8 @@ void single_HMunit::surface_RetAll(){
       surface_RetAll_summer();
     }
   }
+
+  // surface_RetAll_summer();
 
   return ;
 
@@ -514,24 +519,28 @@ void single_HMunit::surface_RetAll_summer(){
   if (EvapSR > prev_SurS) {
     EvapSR = prev_SurS;
   }
+  if(EvapSR > 0.0){
+    numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
+    et_demand = update_ETDEMAND(EvapSR, true);
+    EvapSR = help_EvapSR;
+  }
 
-  numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
-  et_demand = update_ETDEMAND(EvapSR, true);
-  EvapSR = help_EvapSR;
-
-  std::cout << prev_SurS << "  prevS Beveap " << tstRM <<std::endl;
+  // std::cout << prev_SurS << "  prevS Beveap " << EvapSR <<std::endl;
 
   prev_SurS = prev_SurS - EvapSR;
-  std::cout << prev_SurS << "  prevS afteveap " << tstRM <<std::endl;
+
+  // std::cout << prev_SurS << "  prevS afteveap " << EvapSR <<std::endl;
 
   // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
+
+  // std::cout << get_dta(tstRM, ts_type::PREF) << "  prevS afteveap " << get_dta(tstRM, ts_type::PREF)+ prev_SurS <<std::endl;
     prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::PREF);
   // } else {
     // prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::PREF);
   // }
 
   RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
-   std::cout << RetOut << "  retout " << prev_SurS <<std::endl;
+   // std::cout << RetOut << "  retout " << prev_SurS <<std::endl;
   prev_SurS = prev_SurS - RetOut;
 
   Infl = RetOut;
@@ -565,13 +574,13 @@ void single_HMunit::surface_RetAll_melt(){
   prev_SurS = prev_SurS - EvapSR;
 
   // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
-    prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::PREF);
+  prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::PREF);
   // } else {
     // prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::PREF);
   // }
 
   RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
-  // std::cout << RetOut << "  retout " << tstRM <<std::endl;
+  std::cout << RetOut << "  retout " << prev_SurS <<std::endl;
   prev_SurS = prev_SurS - RetOut;
 
   Infl = RetOut;
@@ -610,7 +619,7 @@ void single_HMunit::surface_RetAll_winter(){
   // }
 
   RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
-  // std::cout << RetOut << "  retout " << tstRM <<std::endl;
+  std::cout << RetOut << "  retout " << prev_SurS <<std::endl;
   prev_SurS = prev_SurS - RetOut;
 
   Infl = RetOut;
@@ -2846,7 +2855,8 @@ void single_HMunit::run_HB() {
     // interceptions(interception_STORtype::Eliades);
 
     // std::cout << " interception "<< et_demand << " evac " << get_dta(tstRM, ts_type::EVAC) << " evas " << get_dta(tstRM, ts_type::EVAS) <<"\n";
-    surface_retention(srfs_STORAGE);//
+    // surface_retention(srfs_STORAGE);//old interface
+    surface_Retention(srfs_STORAGE);//new interface
     // std::cout << " surf ret "<< et_demand << " ewsr " << get_dta(tstRM,ts_type::ETSW) <<"\n";
     // std::cout << tstRM << "\n\n";
     soil_buffer(soil_STORAGE);//

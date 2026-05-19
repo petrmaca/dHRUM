@@ -61,7 +61,7 @@
            indexHru[i] = j;
          }
        }
-       // std::cout << indexHru[i];
+        // std::cout << indexHru[i];
      }
 
      std::vector<std::pair<unsigned,surface_STORtype>> surfaceStorTypesToLoad;

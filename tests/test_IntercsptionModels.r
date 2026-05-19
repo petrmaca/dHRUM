@@ -9,7 +9,7 @@ meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 
 prec[1:2] = 0.0
-temp=rnorm(numdata,15,3)
+temp=rnorm(numdata,-2,3)
 # plot(prec, type="l")
 # plot(temp, type="l")
 #nHrus <- 15000
@@ -28,8 +28,8 @@ dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 
 setSnowMeltModeltypeToAlldHrus(dHRUM_ptr = dhrus,snowMeltModelTypes = rep("DDF",times= length(Areas)),hruIds=IdsHrus)
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
-# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
-setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas)))
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas)))
@@ -38,6 +38,8 @@ setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times
 
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
 setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfaceAll",times= length(Areas)),hruIds=IdsHrus)
+# setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfacePRTL",times= length(Areas)),hruIds=IdsHrus)
+# setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("Wetland",times= length(Areas)),hruIds=IdsHrus)
 setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
 setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PDM",times= length(Areas)), hruIds = IdsHrus)
 #setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
@@ -129,6 +131,9 @@ min(outDF$PREF - outDF$TROF)
 
 min(outDF$PREF - outDF$INFL)
 
+
+dt=data.frame(pf=outDF$PREF, inl=outDF$INFL, e=outDF$ETWS, s=outDF$SURS,dd=outDF$PREF -outDF$INFL)
+
 sum(outDF$TROF)
 sum(outDF$PREC)
 sum(outDF$PREF)
@@ -137,6 +142,10 @@ sum(outDF$SURS)
 max(outDF$SOIS)
 
 sum(outDF$ETWS)
+
+sum(outDF$INFL) + sum(outDF$ETWS)
+
+sum(outDF$PREF)
 
 plot(outDF$SOIS, col ="red", type="l")
 # van Dijk model
