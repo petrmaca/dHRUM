@@ -40,9 +40,10 @@ single_HMunit::single_HMunit(): tstRM(0),
   pondGWPERCout{},
   PondROUT{},
   Snow_MDL{},
+  InstStLai{},
+  Wetland{},
   Current_par_names(),
-  Current_sHMu_configuration(),
-  InstStLai{}
+  Current_sHMu_configuration()
   {
 
   set_nmbFastres(1);
@@ -79,6 +80,10 @@ single_HMunit::single_HMunit(): tstRM(0),
   pondGWPERCout = PondGWPerc_type::noPondGWPerc;
   PondROUT = PondRouT_type::noPondRouT;
   Snow_MDL = snow_Model::DDF;
+
+  InstStLai = false;
+  Wetland = false;
+
   et_demand = 0.0;
 
   Current_par_names.size();
@@ -142,9 +147,10 @@ pondGWPERCin{},
 pondGWPERCout{},
 PondROUT{},
 Snow_MDL{},
+InstStLai{},
+Wetland{},
 Current_par_names(),
-Current_sHMu_configuration(),
-InstStLai{}
+Current_sHMu_configuration()
 {
 
   tstRM = other.tstRM;//!< The counter for main loop in run model
@@ -183,6 +189,9 @@ InstStLai{}
   pondGWPERCout = other.pondGWPERCout;
   PondROUT = other.PondROUT;
   Snow_MDL = other.Snow_MDL;
+
+  InstStLai = other.InstStLai;
+  Wetland = other.Wetland;
 
   Current_par_names = other.Current_par_names;
   Current_sHMu_configuration = other.Current_sHMu_configuration;
@@ -241,10 +250,12 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     PondROUT = rhs.PondROUT;
     Snow_MDL = rhs.Snow_MDL;
 
-    Current_par_names = rhs.Current_par_names;
-    Current_sHMu_configuration = rhs.Current_sHMu_configuration;
 
     InstStLai = rhs.InstStLai;
+    Wetland = rhs.Wetland;
+
+    Current_par_names = rhs.Current_par_names;
+    Current_sHMu_configuration = rhs.Current_sHMu_configuration;
 
   } // handle self assignment
   //assignment operator
@@ -491,7 +502,50 @@ void single_HMunit::surface_RetAll(){
 
 void single_HMunit::surface_RetAll_summer(){
 
-  numberSel RetOut = 0.0, EvapSR = 0.0;
+  numberSel RetOut = 0.0, EvapSR = 0.0, Infl = 0.0;
+  //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
+  // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
+  EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+
+  if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
+    EvapSR = 0.0;
+  }
+
+  if (EvapSR > prev_SurS) {
+    EvapSR = prev_SurS;
+  }
+
+  numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
+  et_demand = update_ETDEMAND(EvapSR, true);
+  EvapSR = help_EvapSR;
+
+  std::cout << prev_SurS << "  prevS Beveap " << tstRM <<std::endl;
+
+  prev_SurS = prev_SurS - EvapSR;
+  std::cout << prev_SurS << "  prevS afteveap " << tstRM <<std::endl;
+
+  // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
+    prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::PREF);
+  // } else {
+    // prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::PREF);
+  // }
+
+  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
+   std::cout << RetOut << "  retout " << prev_SurS <<std::endl;
+  prev_SurS = prev_SurS - RetOut;
+
+  Infl = RetOut;
+
+  set_varValue(prev_SurS, tstRM, ts_type::SURS);
+  set_varValue(EvapSR, tstRM, ts_type::ETSW);
+  set_varValue(Infl,tstRM,ts_type::INFL);
+
+  return ;
+
+}
+void single_HMunit::surface_RetAll_melt(){
+
+  numberSel RetOut = 0.0, EvapSR = 0.0, Infl = 0.0;
   //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
   // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
   EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
@@ -510,32 +564,60 @@ void single_HMunit::surface_RetAll_summer(){
 
   prev_SurS = prev_SurS - EvapSR;
 
-  if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
-    prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
-      (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT));
-  } else {
-    prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
-      (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT) + (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) *get_dta(tstRM, ts_type::PREC));
-  }
+  // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
+    prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::PREF);
+  // } else {
+    // prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::PREF);
+  // }
 
   RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
   // std::cout << RetOut << "  retout " << tstRM <<std::endl;
   prev_SurS = prev_SurS - RetOut;
 
+  Infl = RetOut;
+
   set_varValue(prev_SurS, tstRM, ts_type::SURS);
   set_varValue(EvapSR, tstRM, ts_type::ETSW);
-  set_varValue(RetOut,tstRM,ts_type::INFL);
-
-  return ;
-
-}
-void single_HMunit::surface_RetAll_melt(){
-
+  set_varValue(Infl,tstRM,ts_type::INFL);
 
   return ;
 }
 void single_HMunit::surface_RetAll_winter(){
 
+  numberSel RetOut = 0.0, EvapSR = 0.0, Infl = 0.0;
+  //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
+  // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
+  EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+
+  if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
+    EvapSR = 0.0;
+  }
+
+  if (EvapSR > prev_SurS) {
+    EvapSR = prev_SurS;
+  }
+
+  numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
+  et_demand = update_ETDEMAND(EvapSR, true);
+  EvapSR = help_EvapSR;
+
+  prev_SurS = prev_SurS - EvapSR;
+
+  // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
+    prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::PREF);
+  // } else {
+    // prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::PREF);
+  // }
+
+  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
+  // std::cout << RetOut << "  retout " << tstRM <<std::endl;
+  prev_SurS = prev_SurS - RetOut;
+
+  Infl = RetOut;
+
+  set_varValue(prev_SurS, tstRM, ts_type::SURS);
+  set_varValue(EvapSR, tstRM, ts_type::ETSW);
+  set_varValue(Infl,tstRM,ts_type::INFL);
 
   return ;
 }
@@ -559,10 +641,80 @@ void single_HMunit::surface_RetPRTL(){
 
 void single_HMunit::surface_RetPRTL_summer(){
 
+  numberSel RetOut = 0.0, EvapSR = 0.0, Infl = 0.0;
+  //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
+  // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
+  EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+
+  if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
+    EvapSR = 0.0;
+  }
+
+  if (EvapSR > prev_SurS) {
+    EvapSR = prev_SurS;
+  }
+
+  numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
+  et_demand = update_ETDEMAND(EvapSR, true);
+  EvapSR = help_EvapSR;
+
+  prev_SurS = prev_SurS - EvapSR;
+
+  // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
+    prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
+  // } else {
+    // prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
+    // }
+
+  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
+
+  Infl = RetOut + (1-get_par(par_HRUtype::SRFrac))*get_dta(tstRM, ts_type::PREF);
+  // std::cout << RetOut << "  retout " << tstRM <<std::endl;
+  prev_SurS = prev_SurS - RetOut;
+
+  set_varValue(prev_SurS, tstRM, ts_type::SURS);
+  set_varValue(EvapSR, tstRM, ts_type::ETSW);
+  set_varValue(Infl,tstRM,ts_type::INFL);
+
   return ;
 }
 
 void single_HMunit::surface_RetPRTL_melt(){
+
+  numberSel RetOut = 0.0, EvapSR = 0.0, Infl = 0.0;
+  //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
+  // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
+  EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+
+  if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
+    EvapSR = 0.0;
+  }
+
+  if (EvapSR > prev_SurS) {
+    EvapSR = prev_SurS;
+  }
+
+  numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
+  et_demand = update_ETDEMAND(EvapSR, true);
+  EvapSR = help_EvapSR;
+
+  prev_SurS = prev_SurS - EvapSR;
+
+  // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
+    prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
+  // } else {
+    // prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
+  // }
+
+  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
+
+  Infl = RetOut + (1-get_par(par_HRUtype::SRFrac))*get_dta(tstRM, ts_type::PREF);
+  // std::cout << RetOut << "  retout " << tstRM <<std::endl;
+  prev_SurS = prev_SurS - RetOut;
+
+  set_varValue(prev_SurS, tstRM, ts_type::SURS);
+  set_varValue(EvapSR, tstRM, ts_type::ETSW);
+  set_varValue(Infl,tstRM,ts_type::INFL);
 
   return ;
 
@@ -570,6 +722,40 @@ void single_HMunit::surface_RetPRTL_melt(){
 
 void single_HMunit::surface_RetPRTL_winter(){
 
+  numberSel RetOut = 0.0, EvapSR = 0.0, Infl = 0.0;
+  //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
+  // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
+  EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+
+  if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
+    EvapSR = 0.0;
+  }
+
+  if (EvapSR > prev_SurS) {
+    EvapSR = prev_SurS;
+  }
+
+  numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
+  et_demand = update_ETDEMAND(EvapSR, true);
+  EvapSR = help_EvapSR;
+
+  prev_SurS = prev_SurS - EvapSR;
+
+  // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
+    prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
+  // } else {
+    // prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
+  // }
+
+  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
+
+  Infl = RetOut + (1-get_par(par_HRUtype::SRFrac))*get_dta(tstRM, ts_type::PREF);
+  // std::cout << RetOut << "  retout " << tstRM <<std::endl;
+  prev_SurS = prev_SurS - RetOut;
+
+  set_varValue(prev_SurS, tstRM, ts_type::SURS);
+  set_varValue(EvapSR, tstRM, ts_type::ETSW);
+  set_varValue(Infl,tstRM,ts_type::INFL);
 
   return ;
 }
@@ -1980,6 +2166,7 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
       par_HRU.s_params(0.9*CSfrac,par_HRUtype::CDIV);
       par_HRU.s_params(0.1*CSfrac,par_HRUtype::SDIV);
       par_HRU.s_params(CSdiv,par_HRUtype::CSDIV);
+      par_HRU.s_params(CSfrac,par_HRUtype::CSfrac);
       // std::cout << CSfrac << " "<< par_HRU.g_par(par_HRUtype::SDIV) << " " <<par_HRU.g_par(par_HRUtype::CDIV) <<"\n";
     } else {
       Smax = LAI_INTstMax();

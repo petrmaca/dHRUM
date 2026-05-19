@@ -92,7 +92,9 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       {"KFR", par_HRUtype::KFR},
       {"INTstMax", par_HRUtype::INTstMax},
       {"CSfrac", par_HRUtype::CSfrac},
-      {"INTstScale",par_HRUtype::INTstScale}
+      {"INTstScale",par_HRUtype::INTstScale},
+      {"WtlnFrac",par_HRUtype::WtlnFrac},
+      {"SRFrac",par_HRUtype::SRFrac}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -286,6 +288,12 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       case par_HRUtype::INTstScale:
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::INTstScale));
         break;
+      case par_HRUtype::WtlnFrac:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::WtlnFrac));
+        break;
+      case par_HRUtype::SRFrac:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::SRFrac));
+        break;
       }
     }
 
@@ -391,8 +399,9 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
       {"KFR", par_HRUtype::KFR},
       {"INTstMax", par_HRUtype::INTstMax},
       {"CSfrac", par_HRUtype::CSfrac},
-      {"INTstScale",par_HRUtype::INTstScale}
-
+      {"INTstScale",par_HRUtype::INTstScale},
+      {"WtlnFrac",par_HRUtype::WtlnFrac},
+      {"SRFrac",par_HRUtype::SRFrac}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -589,6 +598,12 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
         break;
       case par_HRUtype::INTstScale:
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::INTstScale));
+        break;
+      case par_HRUtype::WtlnFrac:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::WtlnFrac));
+        break;
+      case par_HRUtype::SRFrac:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::SRFrac));
         break;
       }
     }

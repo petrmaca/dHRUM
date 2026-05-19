@@ -12,7 +12,7 @@ params::params(): numPars(1),
   Current_lowparameter_val({1.0})
   {
   // std::cout << "(double low_pars.resize(numPars,numPars))1" << std::endl;
-  numPars = 38;//for Nparams params it must equal to Nparams --> not smaller i.e. Nparams-1
+  numPars = 40;//for Nparams params it must equal to Nparams --> not smaller i.e. Nparams-1
   //the indexing is 0,1, ... Nparams-1 th number of  params is Nparams
   // std::cout << "(double low_pars.resize(numPars,numPars)02)" << std::endl;
 
@@ -63,6 +63,10 @@ params::params(): numPars(1),
   pars[35] = 8;//!< van Dijk max interception storage [0, inft]
   pars[36] = 0.5;//!< van Dijk canopy and stem cover fraction [0, 1]
   pars[37] = 1;//!< interception sclaing facor for winter inetrception storage
+  pars[38] = 0.0;//!< WtlnFrac fraction of wetland storage in given HRU [0,1]
+  pars[39] = 0.0;//!< SRFrac fraction of surface retention storage in given HRU [0,1]
+
+
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
   up_pars[1] = 1000.0;//!< C_MAX Max storage of storages distributed by Pareto distribution [0,inf],VC1
@@ -107,6 +111,9 @@ params::params(): numPars(1),
   up_pars[35] = 10;//!< van Dijk interception max storage
   up_pars[36] = 0.5;//!< van Dijk canopy and stem cover fraction [0, 1]
   up_pars[37] = 2;//!< interception sclaing facor for winter interception storage
+  up_pars[38] = 1.0;//!< WtlnFrac fraction of wetland storage in given HRU [0,1]
+  up_pars[39] = 1.0;//!< SRFrac fraction of surface retention storage in given HRU [0,1]
+
 
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
@@ -152,6 +159,8 @@ params::params(): numPars(1),
   low_pars[35] = 0.0;//!< van Dijk interception max storage
   low_pars[36] = 0.5;//!< van Dijk canopy and stem cover fraction [0, 1]
   low_pars[37] = 1;//!< interception sclaing facor for winter interception storage
+  low_pars[38] = 0.0;//!< WtlnFrac fraction of wetland storage in given HRU [0,1]
+  low_pars[39] = 0.0;//!< SRFrac fraction of surface retention storage in given HRU [0,1]
 
   Current_parameter_string.size();//PM why two times?
   Current_parameter_list.size();
@@ -365,6 +374,12 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
   case par_HRUtype::INTstScale:
     pars[37] = par_dta;
     break;
+  case par_HRUtype::WtlnFrac:
+    pars[38] = par_dta;
+    break;
+  case par_HRUtype::SRFrac:
+    pars[39] = par_dta;
+    break;
   }
 
   pars[3] = (pars[0] * pars[22] + pars[1]) / (pars[0] +1 );
@@ -536,6 +551,12 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
   case par_HRUtype::INTstScale:
     pars[37] = par_dta;
     break;
+  case par_HRUtype::WtlnFrac:
+    pars[38] = par_dta;
+    break;
+  case par_HRUtype::SRFrac:
+    pars[39] = par_dta;
+    break;
   }
   return ;
 }
@@ -667,6 +688,13 @@ numberSel params::g_par(const par_HRUtype& _parType) {
   case par_HRUtype::INTstScale:
     value = pars[37];
     break;
+  case par_HRUtype::WtlnFrac:
+    value = pars[38];
+    break;
+  case par_HRUtype::SRFrac:
+    value = pars[39];
+    break;
+
 
 }
   return value;
@@ -757,6 +785,8 @@ void params::s_default() {
   pars[35] = 15;//!< van Dijk interception max storage
   pars[36] = 0.5;//!< van Dijk interception canopy and sten cover fraction
   pars[37] = 1;//!< interception storage scaling factor for change in interception storage in winter
+  pars[38] = 0.0;
+  pars[39] = 0.0;
 
   numFastRes = 1;
 
@@ -917,6 +947,12 @@ numberSel params::g_par_low(const par_HRUtype& _parType) {
   case par_HRUtype::INTstScale:
     value = low_pars[37];
     break;
+  case par_HRUtype::WtlnFrac:
+    value = pars[38];
+    break;
+  case par_HRUtype::SRFrac:
+    value = pars[39];
+    break;
   }
   return value;
 
@@ -1041,6 +1077,12 @@ numberSel params::g_par_up(const par_HRUtype& _parType) {
     break;
   case par_HRUtype::INTstScale:
     value = up_pars[37];
+    break;
+  case par_HRUtype::WtlnFrac:
+    value = up_pars[38];
+    break;
+  case par_HRUtype::SRFrac:
+    value = up_pars[39];
     break;
   }
   return value;
@@ -1302,7 +1344,12 @@ void params::print_par_list(std::list<par_HRUtype> par_list){
     case par_HRUtype::INTstScale:
       std::cout <<std::left << std::setw(spacer)<< "INTstScale:"<< "\t\t";
       break;
-
+    case par_HRUtype::WtlnFrac:
+      std::cout <<std::left << std::setw(spacer)<< "WtlnFrac:"<< "\t\t";
+      break;
+    case par_HRUtype::SRFrac:
+      std::cout <<std::left << std::setw(spacer)<< "SRFrac:"<< "\t\t";
+      break;
     }
     // std::cout << Current_parameter_val[counter] << "\t";
     // std::cout << Current_upparameter_val[counter] << "\t";
@@ -1429,6 +1476,12 @@ std::vector<std::string> params::par_HRUtype_to_string(std::list<par_HRUtype> pa
       break;
     case par_HRUtype::INTstScale:
       par_vec.push_back("INTstScale");
+      break;
+    case par_HRUtype::WtlnFrac:
+      par_vec.push_back("WtlnFrac");
+      break;
+    case par_HRUtype::SRFrac:
+      par_vec.push_back("SRFrac");
       break;
     }
   }
