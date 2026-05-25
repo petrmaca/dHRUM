@@ -787,6 +787,8 @@ void single_HMunit::surface_RetWTLND(){
 }
 void single_HMunit::surface_RetWTLND_summer(){
 
+  numberSel PET_WTLND = 0.0, fVeg = 0.0, T_Wact = 0.0, Qinfl = 0.0, Qov = 0.0;
+
   return ;
 
 
