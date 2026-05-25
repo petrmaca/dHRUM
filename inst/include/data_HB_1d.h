@@ -134,7 +134,8 @@ class data_HB_1d {
   hdata PoiG; //!<  groundwater percolation input pond
 
   hdata Lai; //!<  Leaf area index [m2/m2]
-  hdata InfL; //!<  Infiltration to soil storage
+  hdata InfL;//!<  Infiltration to soil storage
+  hdata Trns;//!< The transpiration from wetland
 
 
   numberSel init_SoiS;//!< Initial value of soil storage

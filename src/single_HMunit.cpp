@@ -477,6 +477,7 @@ void single_HMunit::surface_Retention(surface_STORtype _surf_STORtype){
 
     case surface_STORtype::Wetland: {
       // std::cout << " ups3 \n";
+      surface_RetWTLND();
       break;
     }
 
@@ -773,10 +774,12 @@ void single_HMunit::surface_RetPRTL_winter(){
 void single_HMunit::surface_RetWTLND(){
 
   if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
-      surface_RetWTLND_winter();
+      // surface_RetWTLND_winter();
+    surface_RetWTLND_summer();
   } else {
     if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
-      surface_RetWTLND_melt();
+      // surface_RetWTLND_melt();
+      surface_RetWTLND_summer();
     } else {
       surface_RetWTLND_summer();
     }
@@ -787,13 +790,85 @@ void single_HMunit::surface_RetWTLND(){
 }
 void single_HMunit::surface_RetWTLND_summer(){
 
-  numberSel PET_WTLND = 0.0, fVeg = 0.0, T_Wact = 0.0, Qinfl = 0.0, Qov = 0.0;
+  numberSel PET_WTLND = 0.0, fVeg = 0.0, T_Wact = 0.0, Qinfl = 0.0, Qov = 0.0, kinct = 0.4;
+  numberSel Pet_Trns = 0.0, Pet_Evpr=0.0, sfracE = 0.0, sfracT = 0.0;
+  numberSel Evpr = 0.0, TrnsW = 0.0;
+
+
+
+  //adding the pref to wetland and calculating the Overflow
+  Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP) + get_dta(tstRM, ts_type::PREF)),0.0);
+  prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF) - Qov;
+
+  // std::cout << Qov<< " qov prevSurs " << prev_SurS<< std::endl;
+  //vegetation in wetland, evaporation transpiration
+  fVeg = 1 - std::exp(-kinct * get_dta(tstRM, ts_type::LAI));
+
+  PET_WTLND = et_demand;
+  Pet_Trns = fVeg * PET_WTLND;
+  Pet_Evpr = (1-fVeg) * PET_WTLND;
+
+  sfracE = std::min((prev_SurS / get_par(par_HRUtype::RETCAP)),1.0);
+  Evpr = Pet_Evpr * sfracE;
+
+  sfracT  = std::min((prev_SurS / (0.3*get_par(par_HRUtype::RETCAP))),1.0);//0.2*get_par(par_HRUtype::RETCAP) is critical treshold for transpiration
+  TrnsW = Pet_Trns * sfracT;
+
+  // std::cout << sfracT<< " sfracT TrnsW " << TrnsW<< std::endl;
+  et_demand = et_demand - TrnsW - Evpr;
+
+  prev_SurS = prev_SurS - TrnsW - Evpr;
+
+  Qinfl = 0.1 * prev_SurS; // fixed storage coefficient for wetland inifltration/percolation
+
+  prev_SurS = prev_SurS - Qinfl;
+
+  set_varValue(prev_SurS, tstRM, ts_type::SURS);
+  set_varValue(Evpr, tstRM, ts_type::ETSW);
+  set_varValue(TrnsW, tstRM, ts_type::TRNS);
+  set_varValue((Qinfl + Qov),tstRM,ts_type::INFL);
 
   return ;
 
-
 }
+
 void single_HMunit::surface_RetWTLND_melt(){
+
+  numberSel PET_WTLND = 0.0, fVeg = 0.0, T_Wact = 0.0, Qinfl = 0.0, Qov = 0.0, kinct = 0.4;
+  numberSel Pet_Trns = 0.0, Pet_Evpr=0.0, sfracE = 0.0, sfracT = 0.0;
+  numberSel Evpr = 0.0, TrnsW = 0.0;
+
+  //adding the pref to wetland and calculating the Overflow
+  Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP) + get_dta(tstRM, ts_type::PREF)),0.0);
+  prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF) - Qov;
+
+  //vegetation in wetland, evaporation transpiration
+  fVeg = 1 - std::exp(-kinct * get_dta(tstRM, ts_type::LAI));
+
+  PET_WTLND = et_demand;
+  Pet_Trns = fVeg * PET_WTLND;
+  Pet_Evpr = (1-fVeg) * PET_WTLND;
+
+  sfracE = std::min((prev_SurS / get_par(par_HRUtype::RETCAP)),1.0);
+  Evpr = Pet_Evpr * sfracE;
+
+  sfracT  = std::min((prev_SurS / (0.2*get_par(par_HRUtype::RETCAP))),1.0);//0.2*get_par(par_HRUtype::RETCAP) is critical treshold for transpiration
+  TrnsW = Pet_Trns * sfracT;
+
+  et_demand = et_demand - TrnsW - Evpr;
+
+  prev_SurS = prev_SurS - TrnsW - Evpr;
+
+  Qinfl = 0.4 * prev_SurS; // fixed storage coefficient for wetland inifltration/percolation
+
+  prev_SurS = prev_SurS - Qinfl;
+
+  set_varValue(prev_SurS, tstRM, ts_type::SURS);
+  set_varValue(Evpr, tstRM, ts_type::ETSW);
+  set_varValue(TrnsW, tstRM, ts_type::TRNS);
+  set_varValue((Qinfl + Qov),tstRM,ts_type::INFL);
+
+  return ;
 
 
   return ;
@@ -801,6 +876,42 @@ void single_HMunit::surface_RetWTLND_melt(){
 }
 
 void single_HMunit::surface_RetWTLND_winter(){
+
+  numberSel PET_WTLND = 0.0, fVeg = 0.0, T_Wact = 0.0, Qinfl = 0.0, Qov = 0.0, kinct = 0.4;
+  numberSel Pet_Trns = 0.0, Pet_Evpr=0.0, sfracE = 0.0, sfracT = 0.0;
+  numberSel Evpr = 0.0, TrnsW = 0.0;
+
+  //adding the pref to wetland and calculating the Overflow
+  Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP) + get_dta(tstRM, ts_type::PREF)),0.0);
+  prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF) - Qov;
+
+  //vegetation in wetland, evaporation transpiration
+  fVeg = 1 - std::exp(-kinct * get_dta(tstRM, ts_type::LAI));
+
+  PET_WTLND = et_demand;
+  Pet_Trns = fVeg * PET_WTLND;
+  Pet_Evpr = (1-fVeg) * PET_WTLND;
+
+  sfracE = std::min((prev_SurS / get_par(par_HRUtype::RETCAP)),1.0);
+  Evpr = Pet_Evpr * sfracE;
+
+  sfracT  = std::min((prev_SurS / (0.2*get_par(par_HRUtype::RETCAP))),1.0);//0.2*get_par(par_HRUtype::RETCAP) is critical treshold for transpiration
+  TrnsW = Pet_Trns * sfracT;
+
+  et_demand = et_demand - TrnsW - Evpr;
+
+  prev_SurS = prev_SurS - TrnsW - Evpr;
+
+  Qinfl = 0.1 * prev_SurS; // fixed storage coefficient for wetland inifltration/percolation
+
+  prev_SurS = prev_SurS - Qinfl;
+
+  set_varValue(prev_SurS, tstRM, ts_type::SURS);
+  set_varValue(Evpr, tstRM, ts_type::ETSW);
+  set_varValue(TrnsW, tstRM, ts_type::TRNS);
+  set_varValue((Qinfl + Qov),tstRM,ts_type::INFL);
+
+  return ;
 
 
   return ;
@@ -2881,7 +2992,7 @@ void single_HMunit::run_HB() {
   //  std::cout << "prev_Ground storage before zeros " << prev_Grou << std::endl;
   //  std::cout << "prevCanS  " << prevCanS << std::endl;
   //  std::cout << "prevSteS " << prevSteS << std::endl;
-   std::cout << "prevSnoS " << prevSnoS << std::endl;
+   // std::cout << "prevSnoS " << prevSnoS << std::endl;
   //  std::cout << "prev_SurS " << prev_SurS << std::endl;
   //  std::cout << "prev_Soil " << prev_Soil << std::endl;
   //  std::cout << "prev_Grou " << prev_Grou << std::endl;
@@ -2946,6 +3057,7 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   set_data(dta,ts_type::POIG);
   set_data(dta,ts_type::LAI);
   set_data(dta,ts_type::INFL);
+  set_data(dta,ts_type::TRNS);
   // std::cout << " tor ok\n";
   // get_numdta();
   // std::cout << "The total number of initialized time intervals is " << get_numdta() << " ." << std::endl;
