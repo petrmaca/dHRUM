@@ -2717,26 +2717,28 @@ void single_HMunit::interception_modRutterValen_summer(){
 }
 
 void single_HMunit::interception_vanDijk_winter(){
+
   numberSel Dc = 0.0, Ec =0.0, Pref =0.0;
   //snow melt and precipitatn enters a leaves the interception store at the same day
   // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
   //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
   // } else Dc =0.0;
-  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
-  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
-  Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);
+  Dc = std::max((prev_IntSnow + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::SNOW)) - get_par(par_HRUtype::INTstMax)),0.0);
+  prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::SNOW)) - Dc;
+  Ec = std::min(get_dta(tstRM,ts_type::PET),prev_IntSnow);
 
   numberSel help_Ec = update_ETDEMAND(Ec, false);
   et_demand = update_ETDEMAND(Ec, true);
   Ec = help_Ec;
 
-  prevIntS = prevIntS - Ec;
+  prev_IntSnow = prev_IntSnow - Ec;
 
-  set_varValue(Dc, tstRM, ts_type::TROF);
+  set_varValue(0.0, tstRM, ts_type::TROF);
   set_varValue(Ec, tstRM, ts_type::EVAC);
-  set_varValue(prevIntS,tstRM, ts_type::INTS);
+  set_varValue(prev_IntSnow,tstRM, ts_type::INTS);
 
-  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  Pref = 0.0;
+  prevSnoS = prevSnoS + Dc; //In winter period the Dc is snow flux and enters the snow pack
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
@@ -2936,10 +2938,10 @@ void single_HMunit::snow_DDF(){
     // if(Snow_melt <0) std::cout  <<"negative melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
   } else Snow_melt = 0.0;
 
-  if ((prevSnoS + Snoww - Snow_melt)<0){
+  if ((prevSnoS + (1 - get_par(par_HRUtype::CSfrac)) * (Snoww) - Snow_melt)<0){
     prevSnoS = 0.0;
-    Snow_melt = prevSnoS + Snoww;
-  } else prevSnoS = prevSnoS + Snoww - Snow_melt;
+    Snow_melt = prevSnoS + (1 - get_par(par_HRUtype::CSfrac)) * (Snoww);
+  } else prevSnoS = prevSnoS + (1 - get_par(par_HRUtype::CSfrac)) * (Snoww) - Snow_melt;
   // std::cout  <<" melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
    // std::cout << " prevSnoS " << prevSnoS << " MELT " << Snow_melt<< " " << std::endl;
   // set_varValue(prevSnoS,tstRM,ts_type::SNOW);
@@ -2967,6 +2969,7 @@ void single_HMunit::run_HB() {
   for(tstRM=0; tstRM < Numdta ; tstRM++) {
     et_demand = get_dta(tstRM,ts_type::PET);
 
+    get_InterceptionsSmax(intrc_STORAGE);
     snowPrec();
     snow_Melt(Snow_MDL);
     interceptions(intrc_STORAGE);
@@ -2992,10 +2995,11 @@ void single_HMunit::run_HB() {
   //  std::cout << "prev_Ground storage before zeros " << prev_Grou << std::endl;
   //  std::cout << "prevCanS  " << prevCanS << std::endl;
   //  std::cout << "prevSteS " << prevSteS << std::endl;
-   // std::cout << "prevSnoS " << prevSnoS << std::endl;
+   std::cout << "prevSnoS " << prevSnoS << std::endl;
   //  std::cout << "prev_SurS " << prev_SurS << std::endl;
   //  std::cout << "prev_Soil " << prev_Soil << std::endl;
   //  std::cout << "prev_Grou " << prev_Grou << std::endl;
+   std::cout << "Prev Ints Snow " << prev_IntSnow << std::endl;
   //  std::cout << "precolation " << get_dta((tstRM-3),ts_type::PREC) << std::endl;
   //  std::cout << "Tot RM " << get_dta((tstRM-1),ts_type::TOTR) << std::endl;
   //  std::cout << "Tot Soil " << get_dta((tstRM-3),ts_type::SOIS) << std::endl;
@@ -4603,3 +4607,31 @@ lai_SmaxModel single_HMunit::getSmaxLaiModel(){
 
 }
 
+void single_HMunit::get_InterceptionsSmax(interception_STORtype _intrc_STORAGE){
+
+  if(InstStLai) {
+    numberSel Smax = 0.0, CSfrac = 0.0, k = 0.4, CSdiv = 0.0;
+    if(_intrc_STORAGE == interception_STORtype::Rutter_Gash){
+      Smax = LAI_INTstMax();
+      par_HRU.s_params((Smax * 0.9), par_HRUtype::CAN_ST);
+      par_HRU.s_params((Smax * 0.1), par_HRUtype::STEM_ST);
+      CSfrac = 1 - std::exp(-k*get_dta(tstRM, ts_type::LAI));
+      // std::cout<< CSfrac << std::endl;
+      CSdiv = std::exp(-k*get_dta(tstRM, ts_type::LAI));
+      par_HRU.s_params(0.9*CSfrac,par_HRUtype::CDIV);
+      par_HRU.s_params(0.1*CSfrac,par_HRUtype::SDIV);
+      par_HRU.s_params(CSdiv,par_HRUtype::CSDIV);
+      par_HRU.s_params(CSfrac,par_HRUtype::CSfrac);
+      // std::cout << CSfrac << " "<< par_HRU.g_par(par_HRUtype::SDIV) << " " <<par_HRU.g_par(par_HRUtype::CDIV) <<"\n";
+    } else {
+      Smax = LAI_INTstMax();
+      par_HRU.s_params(Smax, par_HRUtype::INTstMax);
+      CSfrac = 1 - std::exp(-k*get_dta(tstRM, ts_type::LAI));
+      par_HRU.s_params(CSfrac,par_HRUtype::CSfrac);
+      // std::cout << CSfrac << " "<< par_HRU.g_par(par_HRUtype::CSfrac) << "\n";
+    }
+  }
+
+  return ;
+
+}
