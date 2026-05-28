@@ -51,7 +51,7 @@ Rcpp::List getOutput(Rcpp::XPtr<dHRUM> dHRUM_ptr){
   }
   Rcpp::StringVector VarsNams({"YEAR", "MONTH", "DAY", "JDAY",    \
                               "PREC","SNOW","AET","PET","TEMP",   \
-                              "MELT","TROF","STEF","CANF","CANS", \
+                              "MELT","MELV","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \
                               "SOIS","GROS","SURS","TOTR","BASF",\
                               "DIRR","PERC","PREF", "ETSW","PONS",\
@@ -168,7 +168,7 @@ Rcpp::List getOutputDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
 
   Rcpp::StringVector VarsNams({"YEAR", "MONTH", "DAY", "JDAY",    \
                               "PREC","SNOW","AET","PET","TEMP",   \
-                              "MELT","TROF","STEF","CANF","CANS", \
+                              "MELT","MELV","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \
                               "SOIS","GROS","SURS","TOTR","BASF",\
                               "DIRR","PERC","PREF", "ETSW","PONS",\
@@ -233,7 +233,7 @@ Rcpp::List dHRUMrun(Rcpp::XPtr<dHRUM> dHRUM_ptr){
   }
   Rcpp::StringVector VarsNams({"YEAR", "MONTH", "DAY", "JDAY",    \
                               "PREC","SNOW","AET","PET","TEMP",   \
-                              "MELT","TROF","STEF","CANF","CANS", \
+                              "MELT","MELV","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \
                               "SOIS","GROS","SURS","TOTR","BASF", \
                               "DIRR","PERC","PREF", "ETWS","PONS", \
@@ -316,7 +316,7 @@ Rcpp::List dHRUMrunDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
 
   Rcpp::StringVector VarsNams({"YEAR", "MONTH", "DAY", "JDAY",    \
                               "PREC","SNOW","AET","PET","TEMP",   \
-                              "MELT","TROF","STEF","CANF","CANS", \
+                              "MELT","MELV","TROF","STEF","CANF","CANS", \
                               "STES","EVAC","EVAS","EVBS","INTS", \
                               "SOIS","GROS","SURS","TOTR","BASF",\
                               "DIRR","PERC","PREF", "ETWS","PONS",\

@@ -123,6 +123,7 @@ class data_HB_1d {
   hdata DirR;//!< Direct Runoff
 
   hdata Melt;//!< SnowMelt
+  hdata Melv;//!< SnowMelt for intercepted snow
   hdata Perc;//!< Percolation
   hdata Pref;//!< Effective Precipitation
 

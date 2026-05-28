@@ -31,6 +31,7 @@ data_HB_1d::data_HB_1d(): numTS(0),
   Basf(1,1),
   DirR(1,1),
   Melt(1,1),
+  Melv(1,1),
   Perc(1,1),
   Pref(1,1),
   Etsw(1,1),
@@ -166,6 +167,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Basf(1,1),
   DirR(1,1),
   Melt(1,1),
+  Melv(1,1),
   Perc(1,1),
   Pref(1,1),
   Etsw(1,1),
@@ -220,6 +222,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Basf = other.Basf;//!< Baseflow
   DirR = other.DirR;//!< Direct Runoff
   Melt = other.Melt;//!< Melting
+  Melv = other.Melv;//!< Melting from interception storage
   Perc = other.Perc;//!< Percolation
   Pref = other.Pref;//!< Effective Precipitation
   Etsw = other.Etsw;//!< Evaporation from surface retention
@@ -280,6 +283,7 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     Basf = rhs.Basf;//!< Baseflow
     DirR = rhs.DirR;//!< Direct Runoff
     Melt = rhs.Melt;//!< Melting
+    Melv = rhs.Melv;//!< Melting from interception storage
     Perc = rhs.Perc;//!< Percolation
     Pref = rhs.Pref;//!< Effective Precipitation
     Etsw = rhs.Etsw;//!< Evaporation from surface retention
@@ -396,6 +400,10 @@ void data_HB_1d::s_data(const hdata& dta,const ts_type& _tsType, bool updateNumT
   case ts_type::MELT:
     Melt = dta;
 //    std::cout << "New Melt --> loaded\n";
+    break;
+  case ts_type::MELV:
+    Melv = dta;
+    //    std::cout << "New Melv --> loaded\n";
     break;
   case ts_type::PERC:
     Perc = dta;
@@ -516,6 +524,9 @@ void data_HB_1d::s_varVal(const numberSel& dta, const unsigned& tst,const ts_typ
   case ts_type::MELT:
     Melt[tst] = dta;
     break;
+  case ts_type::MELV:
+    Melv[tst] = dta;
+    break;
   case ts_type::PERC:
     Perc[tst] = dta;
     break;
@@ -600,6 +611,8 @@ numberSel data_HB_1d::g_dta(const unsigned& tst,const ts_type& _tsType) {
     return DirR[tst];
   case ts_type::MELT:
     return Melt[tst];
+  case ts_type::MELV:
+    return Melv[tst];
   case ts_type::PERC:
     return Perc[tst];
   case ts_type::PREF:
@@ -1234,6 +1247,8 @@ hdata data_HB_1d::get_HbTsData(const ts_type& _tsType) {
     return DirR;
   case ts_type::MELT:
     return Melt;
+  case ts_type::MELV:
+    return Melv;
   case ts_type::PERC:
     return Perc;
   case ts_type::PREF:
@@ -1347,6 +1362,9 @@ void data_HB_1d::setOneTstoZero(const ts_type& _tsType) {
     break;
   case ts_type::MELT:
     Melt = 0.0;
+    break;
+  case ts_type::MELV:
+    Melv = 0.0;
     break;
   case ts_type::PERC:
     Perc = 0.0;

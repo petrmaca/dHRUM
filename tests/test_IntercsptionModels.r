@@ -9,7 +9,7 @@ meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 
 # prec[1:2] = 0.0
-temp=rnorm(numdata,-20,2)
+temp=rnorm(numdata,-2,2)
 # plot(prec, type="l")
 # plot(temp, type="l")
 #nHrus <- 15000
@@ -28,8 +28,8 @@ dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 
 setSnowMeltModeltypeToAlldHrus(dHRUM_ptr = dhrus,snowMeltModelTypes = rep("DDF",times= length(Areas)),hruIds=IdsHrus)
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
-setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
-# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas)))
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas)))
@@ -93,20 +93,21 @@ outDF = as.data.table(outDF)
 PrecNoSnow = outDF$PREC -outDF$SNOW
 
 sum(outDF$PREC)
-sum(PrecNoSnow) + sum(outDF$MELT)
+sum(PrecNoSnow) +sum(outDF$SNOW)
 
-sum(PrecNoSnow) + sum(outDF$MELT) - sum(outDF$PREF)
+sum(outDF$MELT) + sum(outDF$MELV)
+sum(outDF$MELT) + sum(outDF$MELV)
+
+sum(PrecNoSnow) + sum(outDF$MELT) + sum(outDF$MELV) - sum(outDF$PREF)
 sum(outDF$EVAC)
 
 sum(outDF$PREC)- (sum(outDF$PREF)+sum(outDF$EVAC)+sum(outDF$EVAS))
 # sum(outDF$SNOW-outDF$MELT)
 outDF$PREF[length(outDF$PREF)]
 
-
 min(outDF$PREC -outDF$PREF)
 min(outDF$PREC -outDF$TROF)
 min(outDF$PREF -outDF$TROF)
-
 
 plot(outDF$INTS, type ="l",col="green")
 plot(outDF$TEMP, type ="l")
