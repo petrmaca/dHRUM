@@ -97,6 +97,7 @@ class data_HB_1d {
 
   hdata Prec;//!< Precipitation
   hdata Snow;//!< Snow depth
+  hdata Rain;//!< Rainfall depth
   hdata AEt;//!< Actual Evapotranspiration
   hdata PEt;//!< Potential Evapotranspiration
 
@@ -137,6 +138,8 @@ class data_HB_1d {
   hdata Lai; //!<  Leaf area index [m2/m2]
   hdata InfL;//!<  Infiltration to soil storage
   hdata Trns;//!< The transpiration from wetland
+
+  hdata Subl;//!< The snow sublimation
 
 
   numberSel init_SoiS;//!< Initial value of soil storage

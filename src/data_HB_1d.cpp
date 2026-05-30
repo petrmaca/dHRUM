@@ -12,6 +12,7 @@ data_HB_1d::data_HB_1d(): numTS(0),
   init_day(1,1),
   Prec(1,1),
   Snow(1,1),
+  Rain(1,1),
   AEt(1,1),
   PEt(1,1),
   Temp(1,1),
@@ -42,6 +43,7 @@ data_HB_1d::data_HB_1d(): numTS(0),
   Lai(1,1),
   InfL(1,1),
   Trns(1,1),
+  Subl(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -148,6 +150,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   init_day(1,1),
   Prec(1,1),
   Snow(1,1),
+  Rain(1,1),
   AEt(1,1),
   PEt(1,1),
   Temp(1,1),
@@ -178,6 +181,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Lai(1,1),
   InfL(1,1),
   Trns(1,1),
+  Subl(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -203,6 +207,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   init_day = other.init_day;
   Prec = other.Prec;//!< Precipitation
   Snow = other.Snow;//!< Snow depth
+  Rain = other.Rain;//!< Rainfall depth
   AEt = other.AEt;//!< Actual Evapotranspiration
   PEt = other.PEt;//!< Potential Evapotranspiration
   Temp = other.Temp;//!< Temperature
@@ -233,6 +238,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Lai = other.Lai;//!< Leaf area index
   InfL = other.InfL;//!< Infiltration to soil storage
   Trns = other.Trns;//!< The transpiration from wetland
+  Subl = other.Subl;//!< The sublimation from snow cover
   init_SoiS = other.init_SoiS;//!< Initial value of soil storage
   init_GroS = other.init_GroS;//!< Initial value of groundwater storage
   init_CanS = other.init_SteS;//!< Initial value of Canopy Interception storage
@@ -264,6 +270,7 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     init_day = rhs.init_day;
     Prec = rhs.Prec;//!< Precipitation
     Snow = rhs.Snow;//!< Snow depth
+    Rain = rhs.Rain;//!< Rainfall depth
     AEt = rhs.AEt;//!< Actual Evapotranspiration
     PEt = rhs.PEt;//!< Potential Evapotranspiration
     Temp = rhs.Temp;//!< Temperature
@@ -294,6 +301,7 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     Lai = rhs.Lai;//!< Leaf area index
     InfL = rhs.InfL;//!< Infiltration to soil storage
     Trns = rhs.Trns;//!< The transpiration from wetland
+    Subl = rhs.Subl;//!< Sublimation depth
 
     init_SoiS = rhs.init_SoiS;//!< Initial value of soil storage
     init_GroS = rhs.init_GroS;//!< Initial value of groundwater storage
@@ -324,6 +332,10 @@ void data_HB_1d::s_data(const hdata& dta,const ts_type& _tsType, bool updateNumT
   case ts_type::SNOW:
     Snow = dta;
 //    std::cout << "New snow --> loaded\n";
+    break;
+  case ts_type::RAIN:
+    Rain = dta;
+    //    std::cout << "New snow --> loaded\n";
     break;
   case ts_type::AET:
     AEt = dta;
@@ -445,6 +457,10 @@ void data_HB_1d::s_data(const hdata& dta,const ts_type& _tsType, bool updateNumT
     Trns = dta;
     //    std::cout << "New TRNS --> loaded\n";
     break;
+  case ts_type::SUBL:
+    Subl = dta;
+    //    std::cout << "New subl --> loaded\n";
+    break;
   }
 //    //PRE.insert(PRE.begin(), data);
 //    if(!Erase) {
@@ -466,6 +482,9 @@ void data_HB_1d::s_varVal(const numberSel& dta, const unsigned& tst,const ts_typ
     break;
   case ts_type::SNOW:
     Snow[tst] = dta;
+    break;
+  case ts_type::RAIN:
+    Rain[tst] = dta;
     break;
   case ts_type::AET:
     AEt[tst] = dta;
@@ -558,7 +577,9 @@ void data_HB_1d::s_varVal(const numberSel& dta, const unsigned& tst,const ts_typ
     Trns[tst] = dta;
     //    std::cout << "New TRNS --> loaded\n";
     break;
-
+  case ts_type::SUBL:
+    Subl[tst] = dta;
+    break;
 }
   return ;
 
@@ -573,6 +594,8 @@ numberSel data_HB_1d::g_dta(const unsigned& tst,const ts_type& _tsType) {
     return Prec[tst];
   case ts_type::SNOW:
     return Snow[tst];
+  case ts_type::RAIN:
+    return Rain[tst];
   case ts_type::AET:
     return AEt[tst];
   case ts_type::PET:
@@ -633,6 +656,8 @@ numberSel data_HB_1d::g_dta(const unsigned& tst,const ts_type& _tsType) {
     return InfL[tst];
   case ts_type::TRNS:
     return Trns[tst];
+  case ts_type::SUBL:
+    return Subl[tst];
     //    std::cout << "New TRNS --> loaded\n";
     break;
   }
@@ -1209,6 +1234,8 @@ hdata data_HB_1d::get_HbTsData(const ts_type& _tsType) {
     return Prec;
   case ts_type::SNOW:
     return Snow;
+  case ts_type::RAIN:
+    return Rain;
   case ts_type::AET:
     return AEt;
   case ts_type::PET:
@@ -1269,6 +1296,8 @@ hdata data_HB_1d::get_HbTsData(const ts_type& _tsType) {
     return InfL;
   case ts_type::TRNS:
     return Trns;
+  case ts_type::SUBL:
+    return Subl;
   }
 
   hdata helpV(-9999,1);
@@ -1305,6 +1334,9 @@ void data_HB_1d::setOneTstoZero(const ts_type& _tsType) {
     break;
   case ts_type::SNOW:
     Snow = 0.0;
+    break;
+  case ts_type::RAIN:
+    Rain = 0.0;
     break;
   case ts_type::AET:
     AEt = 0.0;
@@ -1395,6 +1427,9 @@ void data_HB_1d::setOneTstoZero(const ts_type& _tsType) {
     break;
   case ts_type::TRNS:
     Trns = 0.0;
+    break;
+  case ts_type::SUBL:
+    Subl = 0.0;
     break;
   }
 
