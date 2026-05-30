@@ -109,7 +109,7 @@ sum(outDF$TROF)
 sum(PrecNoSnow) + sum(outDF$MELT) + sum(outDF$MELV) - sum(outDF$PREF)
 sum(outDF$EVAC)
 
-sum(outDF$EVAC)+sum(outDF$PREF)
+sum(outDF$EVAC)+sum(outDF$PREF)+ sum(outDF$SUBL)
 
 sum(outDF$PREC)- (sum(outDF$PREF)+sum(outDF$EVAC)+sum(outDF$EVAS)+sum(outDF$SUBL))
 # sum(outDF$SNOW-outDF$MELT)
