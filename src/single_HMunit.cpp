@@ -2723,25 +2723,27 @@ void single_HMunit::interception_modRutterValen_summer(){
 
 void single_HMunit::interception_vanDijk_winter(){
 
-  numberSel Dc = 0.0, Ec =0.0, Pref =0.0;
-  //snow melt and precipitatn enters a leaves the interception store at the same day
-  // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
-  //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
-  // } else Dc =0.0;
-  Dc = std::max((prev_IntSnow + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::SNOW)) - get_par(par_HRUtype::INTstMax)),0.0);
-  prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::SNOW)) - Dc;
-  Ec = std::min(get_dta(tstRM,ts_type::PET),prev_IntSnow);
+  numberSel Dc = 0.0, Sublm =0.0, Pref =0.0, Snoww = 0.0;
 
-  numberSel help_Ec = update_ETDEMAND(Ec, false);
-  et_demand = update_ETDEMAND(Ec, true);
-  Ec = help_Ec;
+  Snoww = get_dta(tstRM, ts_type::SNOW);
+  prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
 
-  prev_IntSnow = prev_IntSnow - Ec;
+  Dc = std::max((prev_IntSnow - get_par(par_HRUtype::INTstMax)),0.0);
+  prev_IntSnow = prev_IntSnow - Dc;
+
+  Sublm = std::min(get_dta(tstRM,ts_type::PET),prev_IntSnow);
+
+  numberSel help_Sublm = update_ETDEMAND(Sublm, false);
+  et_demand = update_ETDEMAND(Sublm, true);
+  Sublm = help_Sublm;
+
+  prev_IntSnow = prev_IntSnow - Sublm;
 
   set_varValue(0.0, tstRM, ts_type::TROF);
-  set_varValue(Ec, tstRM, ts_type::EVAC);
+  set_varValue(Sublm, tstRM, ts_type::SUBL);
   set_varValue(prev_IntSnow,tstRM, ts_type::INTS);
 
+  // Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
   Pref = 0.0;
   prevSnoS = prevSnoS + Dc; //In winter period the Dc is snow flux and enters the snow pack
   set_varValue(Pref, tstRM, ts_type::PREF);
@@ -2749,46 +2751,53 @@ void single_HMunit::interception_vanDijk_winter(){
   return ;
 }
 void single_HMunit::interception_vanDijk_melt(){
-  numberSel Dc = 0.0, Ec =0.0, Pref = 0.0;
-  //snow melt and precipitatn enters a leaves the interception store at the same day
-  // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
-  //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
-  // } else Dc =0.0;
 
-  // Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
-  // prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+  numberSel Dc = 0.0, Subl =0.0, Pref =0.0, Snoww = 0.0;
 
-  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * ( get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
-  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::MELT)) - Dc;
+  Snoww = get_dta(tstRM, ts_type::SNOW);
+  prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
 
+  Dc = std::max((prev_IntSnow - get_par(par_HRUtype::INTstMax)),0.0);
+  prev_IntSnow = prev_IntSnow - Dc;
 
-  Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);
+  Subl = std::min(get_dta(tstRM,ts_type::PET),prev_IntSnow);
 
-  numberSel help_Ec = update_ETDEMAND(Ec, false);
-  et_demand = update_ETDEMAND(Ec, true);
-  Ec = help_Ec;
+  numberSel help_Sublm = update_ETDEMAND(Subl, false);
+  et_demand = update_ETDEMAND(Subl, true);
+  Subl = help_Sublm;
 
-  prevIntS = prevIntS - Ec;
+  prev_IntSnow = prev_IntSnow - Subl;
 
-  set_varValue(Dc, tstRM, ts_type::TROF);
-  set_varValue(Ec, tstRM, ts_type::EVAC);
-  set_varValue(prevIntS,tstRM, ts_type::INTS);
+  set_varValue(Dc, tstRM, ts_type::MELV);
+  set_varValue(Subl, tstRM, ts_type::SUBL);
+  set_varValue(prev_IntSnow,tstRM, ts_type::INTS);
 
-  // Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
-  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * ( get_dta(tstRM, ts_type::MELT));
+  Pref = Dc + get_dta(tstRM, ts_type::MELT);
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
 
 }
 void single_HMunit::interception_vanDijk_summer(){
+
   numberSel Dc = 0.0, Ec =0.0, Pref =0.0;
-  //snow melt and precipitatn enters a leaves the interception store at the same day
-  // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
-  //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
-  // } else Dc =0.0;
-  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax)),0.0);
-  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - Dc;
+  numberSel Subl = 0.0, Snoww = 0.0, DcMelt = 0.0;
+
+  Snoww = get_dta(tstRM, ts_type::SNOW);
+  prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
+  DcMelt = std::max((prev_IntSnow - get_par(par_HRUtype::INTstMax)),0.0);
+  prev_IntSnow = prev_IntSnow - DcMelt;
+
+  Subl = std::min(get_dta(tstRM,ts_type::PET),prev_IntSnow);
+
+  numberSel help_Subl = update_ETDEMAND(Subl, false);
+  et_demand = update_ETDEMAND(Subl, true);
+  Subl = help_Subl;
+
+  prev_IntSnow = prev_IntSnow - Subl;
+
+  Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::RAIN)) - get_par(par_HRUtype::INTstMax)),0.0);
+  prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::RAIN)) - Dc;
   Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);
 
   numberSel help_Ec = update_ETDEMAND(Ec, false);
@@ -2797,11 +2806,12 @@ void single_HMunit::interception_vanDijk_summer(){
 
   prevIntS = prevIntS - Ec;
 
+  set_varValue(Subl, tstRM, ts_type::SUBL);
   set_varValue(Dc, tstRM, ts_type::TROF);
   set_varValue(Ec, tstRM, ts_type::EVAC);
   set_varValue(prevIntS,tstRM, ts_type::INTS);
 
-  Pref = Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::PREC)+ get_dta(tstRM, ts_type::MELT));
+  Pref = DcMelt +  Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::RAIN)) + get_dta(tstRM, ts_type::MELT);
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
@@ -2850,35 +2860,6 @@ void single_HMunit::interception_Eliades_melt(){
   numberSel Dc = 0.0, Subl =0.0, Pref =0.0, Snoww = 0.0;
 
   Snoww = get_dta(tstRM, ts_type::SNOW);
-  //snow melt and precipitatn enters a leaves the interception store at the same day
-  // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
-  //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
-  // } else Dc =0.0;
-  // Dc = std::max((prev_IntSnow + get_dta(tstRM, ts_type::MELV) - get_par(par_HRUtype::INTstMax)),0.0);
-  // Dc = get_dta(tstRM, ts_type::MELV);
-  // numberSel Snow_melv = 0.0;
-  //
-  // if(get_dta(tstRM, ts_type::TEMP) > get_par(par_HRUtype::TMEL)) {
-  //   // Snow_melv = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prev_IntSnow);
-  //   Snow_melv = get_par(par_HRUtype::CSfrac) *  std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prev_IntSnow);
-  //   // if(Snow_melt <0) std::cout  <<"negative melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
-  // } else Snow_melv = 0.0;
-  //
-  // if ((prev_IntSnow + get_par(par_HRUtype::CSfrac) * Snoww - Snow_melv)<0){
-  //   prev_IntSnow = 0.0;
-  //   Snow_melv = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
-  // } else prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
-  // // std::cout  <<" melt  " << Snow_melt << "  "<< prevSnoS << " " << get_par(par_HRUtype::TMEL) << " " <<get_dta(tstRM, ts_type::TEMP) <<" \n";
-  // // std::cout << " prevSnoS " << prevSnoS << " MELT " << Snow_melt<< " " << std::endl;
-  // // set_varValue(prevSnoS,tstRM,ts_type::SNOW);
-  //
-  // // set_varValue(Snow_melv,tstRM,ts_type::MELV);
-  //
-  // // set_varValue(get_par(par_HRUtype::CSfrac) * Snow_melt,tstRM,ts_type::MELV);
-
-  // set_varValue((get_par(par_HRUtype::CSfrac)),tstRM,ts_type::MELV);
-
-  Snoww = get_dta(tstRM, ts_type::SNOW);
   prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
 
   Dc = std::max((prev_IntSnow - get_par(par_HRUtype::INTstMax)),0.0);
@@ -2909,10 +2890,6 @@ void single_HMunit::interception_Eliades_summer(){
   numberSel Subl = 0.0, Snoww = 0.0, DcMelt = 0.0;
 
   Snoww = get_dta(tstRM, ts_type::SNOW);
-  //snow melt and precipitatn enters a leaves the interception store at the same day
-  // if(get_par(par_HRUtype::INTstMax) > prevIntS) {
-  //  Dc = prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - get_par(par_HRUtype::INTstMax);
-  // } else Dc =0.0;
 
   prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
 
