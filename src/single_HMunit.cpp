@@ -2361,11 +2361,15 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
 
 void single_HMunit::interception_RutterGash_winter(){
 
-  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0, Pref =0.0;
+  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, Sublm = 0.0, EvapStem = 0.0, Througf = 0.0, Pref =0.0;
 
-  OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
+  Snoww = get_dta(tstRM, ts_type::SNOW);
+  prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CDIV)) * (Snoww);
+
+  OverflowCan = std::max((prev_IntSnow - get_par(par_HRUtype::CAN_ST)),0.0);
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
-  prevCanS = prevCanS - OverflowCan;
+  prev_IntSnow = prev_IntSnow - OverflowCan;
+
   EvapCanop = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
 
   numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
