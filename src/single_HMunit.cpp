@@ -2361,25 +2361,28 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
 
 void single_HMunit::interception_RutterGash_winter(){
 
-  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, Sublm = 0.0, EvapStem = 0.0, Througf = 0.0, Pref =0.0;
+  numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, SublmC = 0.0, EvapStem = 0.0, Througf = 0.0, Pref =0.0;
+  numberSel Snoww = 0.0;
 
   Snoww = get_dta(tstRM, ts_type::SNOW);
   prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CDIV)) * (Snoww);
+  prev_StemSnow = prev_StemSnow + (get_par(par_HRUtype::SDIV)) * (Snoww);
 
   OverflowCan = std::max((prev_IntSnow - get_par(par_HRUtype::CAN_ST)),0.0);
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
   prev_IntSnow = prev_IntSnow - OverflowCan;
 
-  EvapCanop = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  SublmC = std::min(std::pow(((prev_IntSnow) / get_par(par_HRUtype::CAN_ST)),2/3),prev_IntSnow);
 
-  numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
-  et_demand = update_ETDEMAND(EvapCanop, true);
-  EvapCanop = help_EvapCanop;
+  numberSel help_SublmC = update_ETDEMAND(SublmC, false);
+  et_demand = update_ETDEMAND(SublmC, true);
+  SublmC = help_SublmC;
 
-  prevCanS = prevCanS - EvapCanop;
+  prev_IntSnow = prev_IntSnow - SublmC;
 
-  CanOut = std::min((prevCanS / get_par(par_HRUtype::CAN_ST) * EvapCanop),prevCanS);
-  prevCanS = prevCanS - CanOut;
+  CanOut = std::min((prev_StemSnow / get_par(par_HRUtype::CAN_ST) * SublmC),prev_StemSnow);
+  prev_StemSnow = prev_StemSnow - CanOut;
+//here start editing
   set_varValue(prevCanS, tstRM, ts_type::CANS);
 
   prevCanS =  prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_par(par_HRUtype::CDIV) *get_dta(tstRM, ts_type::MELT));
@@ -2405,7 +2408,7 @@ void single_HMunit::interception_RutterGash_winter(){
   prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_par(par_HRUtype::SDIV) * get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan);
 
   set_varValue((CanOut + OverflowCan), tstRM, ts_type::CANF);
-  set_varValue(EvapCanop, tstRM, ts_type::EVAC);
+  set_varValue(SublmC, tstRM, ts_type::EVAC);
 
   set_varValue((StemOut + OverflowStem), tstRM, ts_type::STEF);
   set_varValue(EvapStem, tstRM, ts_type::EVAS);
