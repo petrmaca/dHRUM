@@ -17,6 +17,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   prev_GroS1(0.0),
   prev_GroS2(0.0),
   prev_IntSnow(0.0),
+  prev_StemSnow(0.0),
   et_demand(0.0),
   help_nmbFR(0),
   ifrb(0),
@@ -63,6 +64,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   prev_GroS1 = get_initState(init_Stype::GROS1);
   prev_GroS2 = get_initState(init_Stype::GROS2);
   prev_IntSnow = get_initState(init_Stype::INTRCPSNOW);
+  prev_StemSnow = get_initState(init_Stype::STEMSTSNOW);
   p_defaultParams(false);
   // std::cout << "INITprevDR " << prev_Grou << std::endl;
   tstRM = 0;
@@ -124,6 +126,7 @@ prev_SurS(0.0),
 prev_GroS1(0.0),
 prev_GroS2(0.0),
 prev_IntSnow(0.0),
+prev_StemSnow(0.0),
 et_demand(0.0),
 help_nmbFR(0),
 ifrb(0),
@@ -166,6 +169,7 @@ Current_sHMu_configuration()
   prev_GroS1 = other.prev_GroS1;
   prev_GroS2 = other.prev_GroS2;
   prev_IntSnow = other.prev_IntSnow;
+  prev_StemSnow = otehr.prev_StemSnow;
   et_demand = other.et_demand;
   help_nmbFR = other.help_nmbFR;//!< The helper for number of fast reservoirs
   ifrb = other.ifrb;//!< For loop counter
@@ -226,6 +230,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     prev_GroS1 = rhs.prev_GroS1;
     prev_GroS2 = rhs.prev_GroS2;
     prev_IntSnow = rhs.prev_IntSnow;
+    prev_StemSnow = rhs.prev_StemSnow;
     et_demand = rhs.et_demand;
     help_nmbFR = rhs.help_nmbFR;//!< The helper for number of fast reservoirs
     ifrb = rhs.ifrb;//!< For loop counter
@@ -406,6 +411,7 @@ void single_HMunit::set_ZeroinitStates(const unsigned& numres) {
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::GROS1);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::GROS2);
   hyd_dta.s_initStates(help_data,zeroState,init_Stype::INTRCPSNOW);
+  hyd_dta.s_initStates(help_data,zeroState,init_Stype::STEMSTSNOW);
 
   return ;
 }
@@ -2787,6 +2793,7 @@ void single_HMunit::interception_vanDijk_summer(){
   prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
   DcMelt = std::max((prev_IntSnow - get_par(par_HRUtype::INTstMax)),0.0);
   prev_IntSnow = prev_IntSnow - DcMelt;
+  set_varValue(DcMelt, tstRM, ts_type::MELV);
 
   Subl = std::min(get_dta(tstRM,ts_type::PET),prev_IntSnow);
 

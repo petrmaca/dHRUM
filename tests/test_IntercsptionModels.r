@@ -103,7 +103,7 @@ sum(PrecNoSnow) + sum(outDF$SNOW)
 
 sum(outDF$SNOW)
 sum(outDF$SNOW) - (sum(outDF$MELT) + sum(outDF$MELV) + sum(outDF$SUBL))
-sum(outDF$MELT) + sum(outDF$MELV)
+sum(outDF$MELT) + sum(outDF$MELV)   + sum(outDF$SUBL)
 
 sum(outDF$TROF)
 

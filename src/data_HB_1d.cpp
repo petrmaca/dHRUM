@@ -54,6 +54,7 @@ data_HB_1d::data_HB_1d(): numTS(0),
   init_GroS1(0.0),
   init_GroS2(0.0),
   init_IntSnow(0.0),
+  init_StemSnow(0.0),
   numfastRes(1),
   StateFastRes(1.0,1),
   OutFastRes(1.0,1) {
@@ -192,6 +193,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   init_GroS1(0.0),
   init_GroS2(0.0),
   init_IntSnow(0.0),
+  init_StemSnow(0.0),
   numfastRes(1),
   StateFastRes(1,1),
   OutFastRes(1,1) {
@@ -249,6 +251,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   init_GroS1 = other.init_GroS1;
   init_GroS2 = other.init_GroS2;
   init_IntSnow = other.init_IntSnow;
+  init_StemSnow = other.init_StemSnow;
   numfastRes = other.numfastRes;
   StateFastRes = other.StateFastRes;
   OutFastRes = other.OutFastRes;
@@ -313,6 +316,7 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     init_GroS1 = rhs.init_GroS1;
     init_GroS2 = rhs.init_GroS2;
     init_IntSnow = rhs.init_IntSnow;
+    init_StemSnow = rhs.init_StemSnow;
     numfastRes = rhs.numfastRes;
     StateFastRes = rhs.StateFastRes;
     OutFastRes = rhs.OutFastRes;
@@ -702,6 +706,9 @@ void data_HB_1d::s_initStates(const hdata& initfastRes, const numberSel& init_St
   case init_Stype::INTRCPSNOW:
     init_IntSnow = init_State;
     break;
+  case init_Stype::STEMSTSNOW:
+    init_StemSnow = init_State;
+    break;
   }
 
   return ;
@@ -747,6 +754,9 @@ numberSel data_HB_1d::g_initState(const init_Stype& _Stype) {
     break;
   case init_Stype::INTRCPSNOW:
     return init_IntSnow;
+    break;
+  case init_Stype::STEMSTSNOW:
+    return init_StemSnow;
     break;
   case init_Stype::FASTRES:
     return StateFastRes[1];// returns only the init state of the first reservoir
