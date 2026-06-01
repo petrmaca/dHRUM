@@ -169,7 +169,7 @@ Current_sHMu_configuration()
   prev_GroS1 = other.prev_GroS1;
   prev_GroS2 = other.prev_GroS2;
   prev_IntSnow = other.prev_IntSnow;
-  prev_StemSnow = otehr.prev_StemSnow;
+  prev_StemSnow = other.prev_StemSnow;
   et_demand = other.et_demand;
   help_nmbFR = other.help_nmbFR;//!< The helper for number of fast reservoirs
   ifrb = other.ifrb;//!< For loop counter
@@ -2360,6 +2360,7 @@ void single_HMunit::interceptions(interception_STORtype _intrc_STORAGE){
 }
 
 void single_HMunit::interception_RutterGash_winter(){
+
   numberSel CanOut = 0.0, StemOut = 0.0, OverflowCan = 0.0, OverflowStem, EvapCanop = 0.0, EvapStem = 0.0, Througf = 0.0, Pref =0.0;
 
   OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
@@ -2370,15 +2371,6 @@ void single_HMunit::interception_RutterGash_winter(){
   numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
   et_demand = update_ETDEMAND(EvapCanop, true);
   EvapCanop = help_EvapCanop;
-  //
-  //
-  // if(EvapCanop >= et_demand) {
-  //   EvapCanop = et_demand;
-  //   et_demand = 0.0;
-  // }
-  // else {
-  //   et_demand = et_demand - EvapCanop;
-  // }
 
   prevCanS = prevCanS - EvapCanop;
 
@@ -2398,21 +2390,14 @@ void single_HMunit::interception_RutterGash_winter(){
   et_demand = update_ETDEMAND(EvapStem, true);
   EvapStem = help_EvapStem;
 
-  // if(EvapStem >= et_demand) {
-  //   EvapStem = et_demand;
-  //   et_demand = 0.0;
-  // }
-  // else {
-  //   et_demand = et_demand - EvapStem;
-  // }
 
   prevSteS = prevSteS - EvapStem;
 
   StemOut = std::min((prevCanS) / get_par(par_HRUtype::CAN_ST) * EvapStem, prevSteS);
   prevSteS = prevSteS - StemOut;
   set_varValue(prevSteS, tstRM, ts_type::STES);
-  //CanOut + OverflowCan is the total output from canopy storage
-  //this is divided into the input to stem storage and remaining part goes to throufall
+
+
   prevSteS = prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::PREC) + get_par(par_HRUtype::SDIV) * get_dta(tstRM, ts_type::MELT)) + (1 - get_par(par_HRUtype::CSDIV)) * (CanOut + OverflowCan);
 
   set_varValue((CanOut + OverflowCan), tstRM, ts_type::CANF);
