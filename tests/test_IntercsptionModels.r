@@ -9,7 +9,7 @@ meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 
 # prec[1:2] = 0.0
-temp=rnorm(numdata,2,15)
+temp=rnorm(numdata,2,2)
 # plot(prec, type="l")
 # plot(temp, type="l")
 #nHrus <- 15000
