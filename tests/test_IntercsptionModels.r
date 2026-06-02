@@ -9,7 +9,7 @@ meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 
 # prec[1:2] = 0.0
-temp=rnorm(numdata,2,2)
+temp=rnorm(numdata,20,2)
 # plot(prec, type="l")
 # plot(temp, type="l")
 #nHrus <- 15000
@@ -66,7 +66,7 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 20, B_EVAP = 2.5,  KS = 0.01, KF = 0.0
                     SDIV = 0.2, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 6, TMEL = -6.0,
                     RETCAP = 8, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
                     KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =0,L=0.1, B_EXP = 0.3, KFR = 0.03,
-                    INTstMax = 2,INTstScale = 1, CSfrac = 1, SRFrac =0.75,Kinct = 0.4,KwPe=0.1)
+                    INTstMax = 2,INTstScale = 1, CSfrac = 1, SRFrac =0.75,Kinct = 0.8, KwPe=0.01)
 
 # (1.6*10+100)/(1.6+1) smax cmin=10 cmax =100 bsoil= 1.6
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
@@ -156,10 +156,14 @@ plot(outDF$INFL,col="red", type='l')
 sum(outDF$INFL)
 sum(outDF$PREF)
 
-plot(outDF$SURS,col="red",type="l")
+plot(outDF$SURS,col="red",type="l", ylim=c(0, max(outDF$SURS)))
 lines(outDF$TRNS, col="green")
 lines(outDF$EVBS, col="blue")
+lines((outDF$EVBS+outDF$TRNS), col="grey")
 
+
+sum(outDF$PET)
+sum(outDF$AET)
 sum(outDF$ETWS)
 sum(outDF$PREF)
 sum(outDF$TRNS)

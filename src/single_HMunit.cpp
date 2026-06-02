@@ -3511,7 +3511,7 @@ void single_HMunit::upadate_actualET() {
 
   numberSel aet = 0.0;
 
-  aet = get_dta(tstRM, ts_type::SUBL) + get_dta(tstRM, ts_type::EVAC) + get_dta(tstRM, ts_type::EVAS) + get_dta(tstRM, ts_type::ETSW) + get_dta(tstRM, ts_type::EVBS);
+  aet = get_dta(tstRM, ts_type::SUBL) + get_dta(tstRM, ts_type::EVAC) + get_dta(tstRM, ts_type::EVAS) + get_dta(tstRM, ts_type::ETSW) + get_dta(tstRM, ts_type::EVBS)+ get_dta(tstRM, ts_type::TRNS);
   set_varValue(aet, tstRM,ts_type::AET);
 
 }
