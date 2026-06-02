@@ -1,0 +1,6 @@
+cat(
+  paste0("-I", R.home("include")),
+  paste0("-I", system.file("include", package = "Rcpp")),
+  "-I./inst/include",
+  sep = "\n"
+)
