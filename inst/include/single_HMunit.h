@@ -78,7 +78,7 @@ class single_HMunit {
   void snow_DDF();
 
 
-  void surface_retention(surface_STORtype _surf_STORtype);//!< Update surface retention
+  // void surface_retention(surface_STORtype _surf_STORtype);//!< Update surface retention
   void surface_Retention(surface_STORtype _surf_STORtype);
 
   void surface_RetAll();

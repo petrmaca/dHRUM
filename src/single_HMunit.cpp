@@ -712,11 +712,11 @@ void single_HMunit::surface_RetWTLND(){
 
   if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TMEL)) {
       // surface_RetWTLND_winter();
-    surface_RetWTLND_summer();
+    surface_RetWTLND_winter();
   } else {
     if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)){
       // surface_RetWTLND_melt();
-      surface_RetWTLND_summer();
+      surface_RetWTLND_melt();
     } else {
       surface_RetWTLND_summer();
     }
@@ -727,19 +727,16 @@ void single_HMunit::surface_RetWTLND(){
 }
 void single_HMunit::surface_RetWTLND_summer(){
 
-  numberSel PET_WTLND = 0.0, fVeg = 0.0, T_Wact = 0.0, Qinfl = 0.0, Qov = 0.0, kinct = 0.4;
+  numberSel PET_WTLND = 0.0, fVeg = 0.0, Qinfl = 0.0, Qov = 0.0;
   numberSel Pet_Trns = 0.0, Pet_Evpr=0.0, sfracE = 0.0, sfracT = 0.0;
   numberSel Evpr = 0.0, TrnsW = 0.0;
-
-
 
   //adding the pref to wetland and calculating the Overflow
   Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP) + get_dta(tstRM, ts_type::PREF)),0.0);
   prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF) - Qov;
 
-  // std::cout << Qov<< " qov prevSurs " << prev_SurS<< std::endl;
   //vegetation in wetland, evaporation transpiration
-  fVeg = 1 - std::exp(-kinct * get_dta(tstRM, ts_type::LAI));
+  fVeg = 1 - std::exp(-get_par(par_HRUtype::Kinct) * get_dta(tstRM, ts_type::LAI));
 
   PET_WTLND = et_demand;
   Pet_Trns = fVeg * PET_WTLND;
@@ -747,16 +744,25 @@ void single_HMunit::surface_RetWTLND_summer(){
 
   sfracE = std::min((prev_SurS / get_par(par_HRUtype::RETCAP)),1.0);
   Evpr = Pet_Evpr * sfracE;
+  Evpr = std::min(Evpr,prev_SurS);
 
-  sfracT  = std::min((prev_SurS / (0.3*get_par(par_HRUtype::RETCAP))),1.0);//0.2*get_par(par_HRUtype::RETCAP) is critical treshold for transpiration
+  numberSel help_EvapSR = update_ETDEMAND(Evpr, false);
+  et_demand = update_ETDEMAND(Evpr, true);
+  Evpr = help_EvapSR;
+
+  prev_SurS = prev_SurS - Evpr;
+
+  sfracT  = std::min((prev_SurS / (0.2*get_par(par_HRUtype::RETCAP))),1.0);//0.2*get_par(par_HRUtype::RETCAP) is critical treshold for transpiration
   TrnsW = Pet_Trns * sfracT;
+  TrnsW = std::min(TrnsW,prev_SurS);
 
-  // std::cout << sfracT<< " sfracT TrnsW " << TrnsW<< std::endl;
-  et_demand = et_demand - TrnsW - Evpr;
+  numberSel help_EvapTR = update_ETDEMAND(TrnsW, false);
+  et_demand = update_ETDEMAND(TrnsW, true);
+  TrnsW = help_EvapTR;
 
-  prev_SurS = prev_SurS - TrnsW - Evpr;
+  prev_SurS = prev_SurS - TrnsW;
 
-  Qinfl = 0.1 * prev_SurS; // fixed storage coefficient for wetland inifltration/percolation
+  Qinfl = get_par(par_HRUtype::KwPe) * prev_SurS;
 
   prev_SurS = prev_SurS - Qinfl;
 
@@ -771,7 +777,7 @@ void single_HMunit::surface_RetWTLND_summer(){
 
 void single_HMunit::surface_RetWTLND_melt(){
 
-  numberSel PET_WTLND = 0.0, fVeg = 0.0, T_Wact = 0.0, Qinfl = 0.0, Qov = 0.0, kinct = 0.4;
+  numberSel PET_WTLND = 0.0, fVeg = 0.0, Qinfl = 0.0, Qov = 0.0;
   numberSel Pet_Trns = 0.0, Pet_Evpr=0.0, sfracE = 0.0, sfracT = 0.0;
   numberSel Evpr = 0.0, TrnsW = 0.0;
 
@@ -780,7 +786,7 @@ void single_HMunit::surface_RetWTLND_melt(){
   prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF) - Qov;
 
   //vegetation in wetland, evaporation transpiration
-  fVeg = 1 - std::exp(-kinct * get_dta(tstRM, ts_type::LAI));
+  fVeg = 1 - std::exp(-get_par(par_HRUtype::Kinct) * get_dta(tstRM, ts_type::LAI));
 
   PET_WTLND = et_demand;
   Pet_Trns = fVeg * PET_WTLND;
@@ -788,15 +794,25 @@ void single_HMunit::surface_RetWTLND_melt(){
 
   sfracE = std::min((prev_SurS / get_par(par_HRUtype::RETCAP)),1.0);
   Evpr = Pet_Evpr * sfracE;
+  Evpr = std::min(Evpr,prev_SurS);
+
+  numberSel help_EvapSR = update_ETDEMAND(Evpr, false);
+  et_demand = update_ETDEMAND(Evpr, true);
+  Evpr = help_EvapSR;
+
+  prev_SurS = prev_SurS - Evpr;
 
   sfracT  = std::min((prev_SurS / (0.2*get_par(par_HRUtype::RETCAP))),1.0);//0.2*get_par(par_HRUtype::RETCAP) is critical treshold for transpiration
   TrnsW = Pet_Trns * sfracT;
+  TrnsW = std::min(TrnsW,prev_SurS);
 
-  et_demand = et_demand - TrnsW - Evpr;
+  numberSel help_EvapTR = update_ETDEMAND(TrnsW, false);
+  et_demand = update_ETDEMAND(TrnsW, true);
+  TrnsW = help_EvapTR;
 
-  prev_SurS = prev_SurS - TrnsW - Evpr;
+  prev_SurS = prev_SurS - TrnsW;
 
-  Qinfl = 0.4 * prev_SurS; // fixed storage coefficient for wetland inifltration/percolation
+  Qinfl = get_par(par_HRUtype::KwPe) * prev_SurS; // fixed storage coefficient for wetland inifltration/percolation
 
   prev_SurS = prev_SurS - Qinfl;
 
@@ -804,9 +820,6 @@ void single_HMunit::surface_RetWTLND_melt(){
   set_varValue(Evpr, tstRM, ts_type::ETSW);
   set_varValue(TrnsW, tstRM, ts_type::TRNS);
   set_varValue((Qinfl + Qov),tstRM,ts_type::INFL);
-
-  return ;
-
 
   return ;
 
@@ -814,110 +827,84 @@ void single_HMunit::surface_RetWTLND_melt(){
 
 void single_HMunit::surface_RetWTLND_winter(){
 
-  numberSel PET_WTLND = 0.0, fVeg = 0.0, T_Wact = 0.0, Qinfl = 0.0, Qov = 0.0, kinct = 0.4;
-  numberSel Pet_Trns = 0.0, Pet_Evpr=0.0, sfracE = 0.0, sfracT = 0.0;
-  numberSel Evpr = 0.0, TrnsW = 0.0;
+  // During winter: accept PREF input and route overflow, no ET or infiltration (frozen surface)
+  numberSel Qov = 0.0;
 
-  //adding the pref to wetland and calculating the Overflow
-  Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP) + get_dta(tstRM, ts_type::PREF)),0.0);
+  Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP) + get_dta(tstRM, ts_type::PREF)), 0.0);
   prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF) - Qov;
 
-  //vegetation in wetland, evaporation transpiration
-  fVeg = 1 - std::exp(-kinct * get_dta(tstRM, ts_type::LAI));
-
-  PET_WTLND = et_demand;
-  Pet_Trns = fVeg * PET_WTLND;
-  Pet_Evpr = (1-fVeg) * PET_WTLND;
-
-  sfracE = std::min((prev_SurS / get_par(par_HRUtype::RETCAP)),1.0);
-  Evpr = Pet_Evpr * sfracE;
-
-  sfracT  = std::min((prev_SurS / (0.2*get_par(par_HRUtype::RETCAP))),1.0);//0.2*get_par(par_HRUtype::RETCAP) is critical treshold for transpiration
-  TrnsW = Pet_Trns * sfracT;
-
-  et_demand = et_demand - TrnsW - Evpr;
-
-  prev_SurS = prev_SurS - TrnsW - Evpr;
-
-  Qinfl = 0.1 * prev_SurS; // fixed storage coefficient for wetland inifltration/percolation
-
-  prev_SurS = prev_SurS - Qinfl;
-
   set_varValue(prev_SurS, tstRM, ts_type::SURS);
-  set_varValue(Evpr, tstRM, ts_type::ETSW);
-  set_varValue(TrnsW, tstRM, ts_type::TRNS);
-  set_varValue((Qinfl + Qov),tstRM,ts_type::INFL);
-
-  return ;
-
+  set_varValue(0.0, tstRM, ts_type::ETSW);
+  set_varValue(0.0, tstRM, ts_type::TRNS);
+  set_varValue(Qov, tstRM, ts_type::INFL);
 
   return ;
 
 }
 
 
-/** \brief Update all surface retention
- *
- */
-void single_HMunit::surface_retention(surface_STORtype _surf_STORtype) {
-
-  switch(_surf_STORtype) {
-
-  case surface_STORtype::SurfaceAll: {
-
-    numberSel RetOut = 0.0, EvapSR = 0.0;
-    //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
-    // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
-    EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
-
-    if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
-      EvapSR = 0.0;
-    }
-
-    if (EvapSR > prev_SurS) {
-      EvapSR = prev_SurS;
-    }
-
-    numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
-    et_demand = update_ETDEMAND(EvapSR, true);
-    EvapSR = help_EvapSR;
-
-    prev_SurS = prev_SurS - EvapSR;
-
-    if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
-      prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
-        (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT));
-      } else {
-        prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
-        (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT) + (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) *get_dta(tstRM, ts_type::PREC));
-      }
-
-    RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
-      // std::cout << RetOut << "  retout " << tstRM <<std::endl;
-    prev_SurS = prev_SurS - RetOut;
-
-    set_varValue(prev_SurS, tstRM, ts_type::SURS);
-    set_varValue(EvapSR, tstRM, ts_type::ETSW);
-    set_varValue(RetOut,tstRM,ts_type::INFL);
-
-    break;
-  }
-
- case surface_STORtype::SurfacePRTL: {
-
-  break;
-  }
-
-  case surface_STORtype::Wetland: {
-
-    break;
-  }
-
-  }
-
-
-  return ;
-}
+// /** \brief Update all surface retention
+//  *
+//  */
+// void single_HMunit::surface_retention(surface_STORtype _surf_STORtype) {
+//
+//   switch(_surf_STORtype) {
+//
+//   case surface_STORtype::SurfaceAll: {
+//
+//     numberSel RetOut = 0.0, EvapSR = 0.0;
+//     //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
+//     // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
+//     EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+//
+//     if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
+//       EvapSR = 0.0;
+//     }
+//
+//     if (EvapSR > prev_SurS) {
+//       EvapSR = prev_SurS;
+//     }
+//
+//     numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
+//     et_demand = update_ETDEMAND(EvapSR, true);
+//     EvapSR = help_EvapSR;
+//
+//     prev_SurS = prev_SurS - EvapSR;
+//
+//     if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
+//       prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
+//         (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT));
+//       } else {
+//         prev_SurS = prev_SurS  + get_dta(tstRM, ts_type::TROF) +  \
+//         (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::MELT) + (1 - get_par(par_HRUtype::CDIV)  - get_par(par_HRUtype::SDIV)) *get_dta(tstRM, ts_type::PREC));
+//       }
+//
+//     RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
+//       // std::cout << RetOut << "  retout " << tstRM <<std::endl;
+//     prev_SurS = prev_SurS - RetOut;
+//
+//     set_varValue(prev_SurS, tstRM, ts_type::SURS);
+//     set_varValue(EvapSR, tstRM, ts_type::ETSW);
+//     set_varValue(RetOut,tstRM,ts_type::INFL);
+//
+//     break;
+//   }
+//
+//  case surface_STORtype::SurfacePRTL: {
+//
+//   break;
+//   }
+//
+//   case surface_STORtype::Wetland: {
+//
+//     break;
+//   }
+//
+//   }
+//
+//
+//   return ;
+// }
 
 
 /** \brief updates states in soil buffer in single pdm unit

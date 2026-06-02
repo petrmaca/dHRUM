@@ -28,10 +28,10 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
   unsigned numParsNames = ParsNames.size();
   unsigned numParsVals = ParsVec.size();
 
-  if((numParsNames!=numParsVals) || (numParsNames>40) || (numParsVals>40)) {
+  if((numParsNames!=numParsVals) || (numParsNames>42) || (numParsVals>42)) {
     Rcpp::Rcout << "The number of names of params is " << numParsNames <<"\n";
     Rcpp::Rcout << "The number of values of params is " << numParsVals <<"\n";
-    Rcpp::stop("\n Those values are different or higher or smaller then required max possible number of all dHRU Par Values =38.\n");
+    Rcpp::stop("\n Those values are different or higher or smaller then required max possible number of all dHRU Par Values =42.\n");
 
   } else {
 
@@ -94,7 +94,9 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       {"CSfrac", par_HRUtype::CSfrac},
       {"INTstScale",par_HRUtype::INTstScale},
       {"WtlnFrac",par_HRUtype::WtlnFrac},
-      {"SRFrac",par_HRUtype::SRFrac}
+      {"SRFrac", par_HRUtype::SRFrac},
+      {"Kinct", par_HRUtype::Kinct},
+      {"KwPe", par_HRUtype::KwPe}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -294,6 +296,12 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       case par_HRUtype::SRFrac:
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::SRFrac));
         break;
+      case par_HRUtype::Kinct:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::Kinct));
+        break;
+      case par_HRUtype::KwPe:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::KwPe));
+        break;
       }
     }
 
@@ -401,7 +409,9 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
       {"CSfrac", par_HRUtype::CSfrac},
       {"INTstScale",par_HRUtype::INTstScale},
       {"WtlnFrac",par_HRUtype::WtlnFrac},
-      {"SRFrac",par_HRUtype::SRFrac}
+      {"SRFrac",par_HRUtype::SRFrac},
+      {"Kinct", par_HRUtype::Kinct},
+      {"KwPe", par_HRUtype::KwPe}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -604,6 +614,12 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
         break;
       case par_HRUtype::SRFrac:
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::SRFrac));
+        break;
+      case par_HRUtype::Kinct:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::Kinct));
+        break;
+      case par_HRUtype::KwPe:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::KwPe));
         break;
       }
     }
