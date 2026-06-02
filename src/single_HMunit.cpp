@@ -635,8 +635,11 @@ void single_HMunit::surface_RetPRTL(){
 void single_HMunit::surface_RetPRTL_summer(){
 
   numberSel RetOut = 0.0, EvapSR = 0.0, Infl = 0.0;
-  //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
-  // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
+
+  prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
+  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
+  prev_SurS = prev_SurS - RetOut;
+
   EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
 
   if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
@@ -653,17 +656,7 @@ void single_HMunit::surface_RetPRTL_summer(){
 
   prev_SurS = prev_SurS - EvapSR;
 
-  // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
-  prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
-  // } else {
-    // prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
-    // }
-
-  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
-
   Infl = RetOut + (1-get_par(par_HRUtype::SRFrac))*get_dta(tstRM, ts_type::PREF);
-  // std::cout << RetOut << "  retout " << tstRM <<std::endl;
-  prev_SurS = prev_SurS - RetOut;
 
   set_varValue(prev_SurS, tstRM, ts_type::SURS);
   set_varValue(EvapSR, tstRM, ts_type::ETSW);
@@ -675,8 +668,11 @@ void single_HMunit::surface_RetPRTL_summer(){
 void single_HMunit::surface_RetPRTL_melt(){
 
   numberSel RetOut = 0.0, EvapSR = 0.0, Infl = 0.0;
-  //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
-  // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
+
+  prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
+  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
+  prev_SurS = prev_SurS - RetOut;
+
   EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
 
   if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
@@ -693,17 +689,7 @@ void single_HMunit::surface_RetPRTL_melt(){
 
   prev_SurS = prev_SurS - EvapSR;
 
-  // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
-    prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
-  // } else {
-    // prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
-  // }
-
-  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
-
   Infl = RetOut + (1-get_par(par_HRUtype::SRFrac))*get_dta(tstRM, ts_type::PREF);
-  // std::cout << RetOut << "  retout " << tstRM <<std::endl;
-  prev_SurS = prev_SurS - RetOut;
 
   set_varValue(prev_SurS, tstRM, ts_type::SURS);
   set_varValue(EvapSR, tstRM, ts_type::ETSW);
@@ -715,40 +701,9 @@ void single_HMunit::surface_RetPRTL_melt(){
 
 void single_HMunit::surface_RetPRTL_winter(){
 
-  numberSel RetOut = 0.0, EvapSR = 0.0, Infl = 0.0;
-  //  RetOut = std::max((static_cast<numberSel>(prev_SurS) - static_cast<numberSel>(get_par(par_HRUtype::RETCAP))),0.0);
-  // EvapSR = std::max((static_cast<numberSel>(0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289))),0.0);
-  EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
-
-  if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
-    EvapSR = 0.0;
-  }
-
-  if (EvapSR > prev_SurS) {
-    EvapSR = prev_SurS;
-  }
-
-  numberSel help_EvapSR = update_ETDEMAND(EvapSR, false);
-  et_demand = update_ETDEMAND(EvapSR, true);
-  EvapSR = help_EvapSR;
-
-  prev_SurS = prev_SurS - EvapSR;
-
-  // if(get_dta(tstRM, ts_type::TEMP) < get_par(par_HRUtype::TETR)) {
-    prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
-  // } else {
-    // prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
-  // }
-
-  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
-
-  Infl = RetOut + (1-get_par(par_HRUtype::SRFrac))*get_dta(tstRM, ts_type::PREF);
-  // std::cout << RetOut << "  retout " << tstRM <<std::endl;
-  prev_SurS = prev_SurS - RetOut;
-
-  set_varValue(prev_SurS, tstRM, ts_type::SURS);
-  set_varValue(EvapSR, tstRM, ts_type::ETSW);
-  set_varValue(Infl,tstRM,ts_type::INFL);
+  set_varValue(0.0, tstRM, ts_type::SURS);
+  set_varValue(0.0, tstRM, ts_type::ETSW);
+  set_varValue(0.0,tstRM,ts_type::INFL);
 
   return ;
 }

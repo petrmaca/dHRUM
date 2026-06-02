@@ -163,7 +163,11 @@ lines(outDF$EVBS, col="blue")
 sum(outDF$ETWS)
 sum(outDF$PREF)
 sum(outDF$TRNS)
-sum(outDF$INFL)
+sum(outDF$INFL) +sum(outDF$ETWS)
+
+sum(outDF$PREF) - (sum(outDF$INFL) +sum(outDF$ETWS))
+outDF$SURS[length(outDF$SURS)]
+
 
 sum(outDF$INFL) +sum(outDF$TRNS)+sum(outDF$ETWS)
 
