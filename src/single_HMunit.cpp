@@ -637,10 +637,10 @@ void single_HMunit::surface_RetPRTL_summer(){
   numberSel RetOut = 0.0, EvapSR = 0.0, Infl = 0.0;
 
   prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
-  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
+  RetOut = std::max((prev_SurS - get_par(par_HRUtype::SRFrac)*get_par(par_HRUtype::RETCAP)),0.0);
   prev_SurS = prev_SurS - RetOut;
 
-  EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+  EvapSR = get_par(par_HRUtype::SRFrac)*0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
 
   if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
     EvapSR = 0.0;
@@ -670,10 +670,10 @@ void single_HMunit::surface_RetPRTL_melt(){
   numberSel RetOut = 0.0, EvapSR = 0.0, Infl = 0.0;
 
   prev_SurS = prev_SurS  + get_par(par_HRUtype::SRFrac)*get_dta(tstRM, ts_type::PREF);
-  RetOut = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)),0.0);
+  RetOut = std::max((prev_SurS - get_par(par_HRUtype::SRFrac)*get_par(par_HRUtype::RETCAP)),0.0);
   prev_SurS = prev_SurS - RetOut;
 
-  EvapSR = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
+  EvapSR = get_par(par_HRUtype::SRFrac)*0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
 
   if((EvapSR < 0.0)||(std::isnan(EvapSR))) {
     EvapSR = 0.0;
