@@ -88,7 +88,8 @@ const std::list<par_HRUtype> L_LIN_2PA = { par_HRUtype::KS, par_HRUtype::ADIV, p
 const std::list<par_HRUtype> L_FLEX_RES = { par_HRUtype::KS, par_HRUtype::ADIV, par_HRUtype::KS2, par_HRUtype::THR };
 const std::list<par_HRUtype> L_EXP_LOG = { par_HRUtype::KS, par_HRUtype::ADIV, par_HRUtype::B_EXP };
 //soil_STORAGE
-const std::list<par_HRUtype> L_PDM = { par_HRUtype::B_SOIL, par_HRUtype::C_MAX, par_HRUtype::B_EVAP, par_HRUtype::SMAXpdm, par_HRUtype::CMIN };
+// const std::list<par_HRUtype> L_PDM = { par_HRUtype::B_SOIL, par_HRUtype::C_MAX, par_HRUtype::B_EVAP, par_HRUtype::SMAXpdm, par_HRUtype::CMIN };
+const std::list<par_HRUtype> L_PDM = { par_HRUtype::B_SOIL, par_HRUtype::C_MAX, par_HRUtype::B_EVAP, par_HRUtype::CMIN };
 const std::list<par_HRUtype> L_COLLIE_V2 = { par_HRUtype::KF, par_HRUtype::FC, par_HRUtype::FOREST_FRACT, par_HRUtype::SMAX};
 const std::list<par_HRUtype> L_NEW_ZEALAND = { par_HRUtype::KF, par_HRUtype::FC, par_HRUtype::FOREST_FRACT, par_HRUtype::KF2, par_HRUtype::KF_NONLIN, par_HRUtype::SMAX};
 const std::list<par_HRUtype> L_GR4J = { par_HRUtype::SMAX};
