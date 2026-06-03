@@ -50,4 +50,4 @@ setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascad
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
 
 pars <-getCurdHRUpars(dHRUM_ptr = dhrus, singleHruId = 0)
-
+pars
