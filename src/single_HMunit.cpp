@@ -2891,11 +2891,11 @@ void single_HMunit::run_HB() {
   //  std::cout << "prev_Ground storage before zeros " << prev_Grou << std::endl;
   //  std::cout << "prevCanS  " << prevCanS << std::endl;
   //  std::cout << "prevSteS " << prevSteS << std::endl;
-   std::cout << "prevSnoS " << prevSnoS << std::endl;
+   // std::cout << "prevSnoS " << prevSnoS << std::endl;
   //  std::cout << "prev_SurS " << prev_SurS << std::endl;
   //  std::cout << "prev_Soil " << prev_Soil << std::endl;
   //  std::cout << "prev_Grou " << prev_Grou << std::endl;
-   std::cout << "Prev Ints Snow " << prev_IntSnow << std::endl;
+   // std::cout << "Prev Ints Snow " << prev_IntSnow << std::endl;
   //  std::cout << "precolation " << get_dta((tstRM-3),ts_type::PREC) << std::endl;
   //  std::cout << "Tot RM " << get_dta((tstRM-1),ts_type::TOTR) << std::endl;
   //  std::cout << "Tot Soil " << get_dta((tstRM-3),ts_type::SOIS) << std::endl;
