@@ -17,17 +17,17 @@ temp=rnorm(numdata,20,2)
 # Eliades model
 
 nHrus <- 1
-ntreads <-1
+ntreads <- 1
 #Areas <- runif(nHrus,min = 1,max  = 10) #[m2]
 Areas <- runif(nHrus,min = 38780000,max  = 38780050)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
-Lais <- rep(TRUE, nHrus)
+
 
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 
 
-setSnowMeltModeltypeToAlldHrus(dHRUM_ptr = dhrus,snowMeltModelTypes = rep("DDF",times= length(Areas)),hruIds=IdsHrus)
-setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+setSnowMeltModeltypeToAlldHrus(dHRUM_ptr = dhrus,snowMeltModelTypes = rep("DDF",times = length(Areas)),hruIds = IdsHrus)
+setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times = length(Areas)),hruIds = IdsHrus,InstStLai = rep(TRUE,times = length(Areas)),smaxlaiTypes = rep("Pitman",times = length(Areas)))
 
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 
