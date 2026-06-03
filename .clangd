@@ -1,0 +1,5 @@
+CompileFlags:
+  Add:
+    - -I/usr/share/R/include
+    - -I/home/hubert/R/x86_64-pc-linux-gnu-library/4.6/Rcpp/include
+    - -std=c++17
