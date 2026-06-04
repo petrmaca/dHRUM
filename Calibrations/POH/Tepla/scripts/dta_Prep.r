@@ -7,8 +7,10 @@ SRAdta <- as.data.table(read.fst("/home/hubert/MyData/POH/data/OUT/chp4Plus/chp4
 TEMPMindta <- as.data.table(read.fst("/home/hubert/MyData/POH/data/OUT/chp4Plus/chp4Plus_TMIN_SC2.fst"))
 TEMPMaxdta <- as.data.table(read.fst("/home/hubert/MyData/POH/data/OUT/chp4Plus/chp4Plus_TMAX_SC2.fst"))
 TEMPavgdta <- merge(TEMPMindta, TEMPMaxdta, by = c("DTM", "chp_4"))
-TEMPavgdta[,Tavg := (Tmin + Tmax)/2]
+TEMPavgdta[, Tavg := (Tmin + Tmax)/2]
 Qmd <-  as.data.table(read.fst("/home/hubert/MyData/POH/data/rmvody/mQ_4chpPlus.fst"))
+Lai
+
 
 nHrus <- 1
 ntreads <- 1
