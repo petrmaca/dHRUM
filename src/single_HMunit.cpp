@@ -2590,6 +2590,12 @@ void single_HMunit::interception_vanDijk_winter(){
 
   numberSel Dc = 0.0, Sublm =0.0, Pref =0.0, Snoww = 0.0;
 
+  if(prevIntS > 0.0){
+    set_varValue(prevIntS, tstRM, ts_type::REFR);
+    prev_IntSnow = prev_IntSnow + prevIntS;//refreezing of liquid water
+    prevIntS = 0.0;
+  }
+
   Snoww = get_dta(tstRM, ts_type::SNOW);
   prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
 
@@ -2618,6 +2624,12 @@ void single_HMunit::interception_vanDijk_winter(){
 void single_HMunit::interception_vanDijk_melt(){
 
   numberSel DcMelt = 0.0, Subl =0.0, Pref =0.0, Snoww = 0.0, Dddf = 0.0;
+
+  if(prevIntS > 0.0){
+    set_varValue(prevIntS, tstRM, ts_type::REFR);
+    prev_IntSnow = prev_IntSnow + prevIntS;//refreezing of liquid water
+    prevIntS = 0.0;
+  }
 
   Snoww = get_dta(tstRM, ts_type::SNOW);
   prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
@@ -2697,6 +2709,12 @@ void single_HMunit::interception_Eliades_winter(){
 
   numberSel Dc = 0.0, Sublm =0.0, Pref =0.0, Snoww = 0.0;
 
+  if(prevIntS > 0.0){
+    set_varValue(prevIntS, tstRM, ts_type::REFR);
+    prev_IntSnow = prev_IntSnow + prevIntS;//refreezing of liquid water
+    prevIntS = 0.0;
+  }
+
   Snoww = get_dta(tstRM, ts_type::SNOW);
   prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
 
@@ -2726,6 +2744,12 @@ void single_HMunit::interception_Eliades_winter(){
 void single_HMunit::interception_Eliades_melt(){
 
   numberSel DcMelt = 0.0, Subl =0.0, Pref =0.0, Snoww = 0.0, Dddf = 0.0;
+
+  if(prevIntS > 0.0){
+    set_varValue(prevIntS, tstRM, ts_type::REFR);
+    prev_IntSnow = prev_IntSnow + prevIntS;//refreezing of liquid water
+    prevIntS = 0.0;
+  }
 
   Snoww = get_dta(tstRM, ts_type::SNOW);
   prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
@@ -2849,7 +2873,7 @@ void single_HMunit::snow_Melt(snow_Model _snow_MeltType){
 
 void single_HMunit::snow_DDF(){
 
-  numberSel Snow_melt = 0.0, Snoww = 0.0;
+  numberSel Snow_melt = 0.0, Snoww = 0.0, Subl = 0.0;
 
   Snoww = get_dta(tstRM, ts_type::SNOW);
   if(get_dta(tstRM, ts_type::TEMP) > get_par(par_HRUtype::TMEL)) {
@@ -2993,6 +3017,7 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   set_data(dta,ts_type::INFL);
   set_data(dta,ts_type::TRNS);
   set_data(dta,ts_type::SUBL);
+  set_data(dta,ts_type::REFR);
   // std::cout << " tor ok\n";
   // get_numdta();
   // std::cout << "The total number of initialized time intervals is " << get_numdta() << " ." << std::endl;

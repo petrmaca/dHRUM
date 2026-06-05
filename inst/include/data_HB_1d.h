@@ -140,7 +140,7 @@ class data_HB_1d {
   hdata Trns;//!< The transpiration from wetland
 
   hdata Subl;//!< The snow sublimation
-
+  hdata Refr;//!< The water refreezing  from interception
 
   numberSel init_SoiS;//!< Initial value of soil storage
   numberSel init_GroS;//!< Initial value of groundwater storage
