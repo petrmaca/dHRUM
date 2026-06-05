@@ -9,7 +9,7 @@ meanifwet = 8
 prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
 
 # prec[1:2] = 0.0
-temp=rnorm(numdata,20,2)
+temp=rnorm(numdata,0,2)
 # plot(prec, type="l")
 # plot(temp, type="l")
 #nHrus <- 15000
@@ -53,7 +53,7 @@ setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PDM",times= length
 # setPondToOnedHru(dHRUM_ptr = dhrus,0,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
 # setPondToOnedHru(dHRUM_ptr = dhrus,5,names(pondDF1),as.numeric(pondDF1),as.character(pondDF2),names(pondDF2))
 # LAdt = as.data.table(readRDS("LAI_POH_Category.rds"))
-LAdt = as.data.table(get_Lai_Data())
+LAdt = as.data.table(get_Lai_DataCat())
 ctgrs = unique(LAdt$Category)
 ctgrs
 lai = LAdt[Category %in% ctgrs[17],mean_LAI]
@@ -63,7 +63,7 @@ plot(lai)
 # setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
 setPTLInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, Lai = lai, as.Date("1990/01/30"))
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 20, B_EVAP = 2.5,  KS = 0.01, KF = 0.03, ADIV = 0.8, CDIV = 0.5,
-                    SDIV = 0.2, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 6, TMEL = -6.0,
+                    SDIV = 0.2, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 6, TMEL = -1.0,
                     RETCAP = 8, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
                     KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =0,L=0.1, B_EXP = 0.3, KFR = 0.03,
                     INTstMax = 2,INTstScale = 1, CSfrac = 1, SRFrac =0.75,Kinct = 0.8, KwPe=0.01)
@@ -126,6 +126,7 @@ plot(outDF$PREC, type ="l")
 plot(outDF$SNOW, type ="l")
 plot(outDF$MELT, type ="l")
 plot(outDF$MELV, type ="l")
+plot(outDF$SUBL, type ="l")
 
 plot(outDF$INTS, type ="l",col="green",ylim=c(0,range(c(outDF$PET,outDF$INTS))[2]))
 lines(outDF$EVAC, type ="l")
