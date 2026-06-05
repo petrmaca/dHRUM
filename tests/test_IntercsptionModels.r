@@ -27,9 +27,9 @@ dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 
 
 setSnowMeltModeltypeToAlldHrus(dHRUM_ptr = dhrus,snowMeltModelTypes = rep("DDF",times = length(Areas)),hruIds = IdsHrus)
-setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times = length(Areas)),hruIds = IdsHrus,InstStLai = rep(TRUE,times = length(Areas)),smaxlaiTypes = rep("Pitman",times = length(Areas)))
+# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times = length(Areas)),hruIds = IdsHrus,InstStLai = rep(TRUE,times = length(Areas)),smaxlaiTypes = rep("Pitman",times = length(Areas)))
 
-# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 
@@ -104,6 +104,7 @@ sum(PrecNoSnow) + sum(outDF$SNOW)
 sum(outDF$SNOW)
 sum(outDF$SNOW) - (sum(outDF$MELT) + sum(outDF$MELV) + sum(outDF$SUBL))
 sum(outDF$MELT) + sum(outDF$MELV)   + sum(outDF$SUBL)
+sum(outDF$REFR)
 
 sum(outDF$TROF)
 
