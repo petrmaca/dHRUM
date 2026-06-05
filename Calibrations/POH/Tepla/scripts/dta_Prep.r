@@ -13,6 +13,9 @@ Qmd <-  as.data.table(read.fst("/home/hubert/MyData/POH/data/rmvody/mQ_4chpPlus.
 Lai <- as.data.table(get_Lai_DataPOh())
 Lai[, unique(CHP_14)]
 
+tepla <- as.data.table(read.table("/home/hubert/MyData/POH/data/OUT/catchments/Tepla_chp14s.txt",header = 1))
+
+as.character(tepla[1,2])
 
 nHrus <- 1
 ntreads <- 1
@@ -22,7 +25,9 @@ IdsHrus <- paste0("ID",seq(1:length(Areas)))
 
 Days <- c(30,60,90,120,150,180,210,240,270,300,330,355,364)
 
-basinCHP <- Lai[, unique(CHP_14)][1]
+# basinCHP <- Lai[, unique(CHP_14)][1]
+basinCHP <- as.character(tepla[1,2])
+
 
 # SRAdta[chp_4 %in% basinCHP,]
 
@@ -58,8 +63,8 @@ calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 
 
 pars <- as.data.table(getCurdHRUpars(dHRUM_ptr = dhrus, singleHruId = 0))
-# pars = pars[-10,]
-# pars[8,3]=5
+pars = pars[-c(6,8,10,12,13,14),]
+
 parscor = pars
 
 parNames <- parscor$Cur_names
@@ -192,4 +197,5 @@ points(p_OBS, simBest, col = "red", pch = 19)
 legend("topright", legend = c("Observed", "Simulated (SCE-UA)"),
        col = c("black", "red"), pch = 19)
 
-plot(dF$TOTR, type="l")
+plot(dF$TOTR, type="l",ylab="R [mm/day]", xlab ="T [day]")
+lines(dF$BASF, col="red")

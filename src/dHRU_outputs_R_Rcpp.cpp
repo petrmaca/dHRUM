@@ -34,7 +34,7 @@ Rcpp::List getOutput(Rcpp::XPtr<dHRUM> dHRUM_ptr){
   Rcpp::NumericMatrix outDta( nrowOutMat, ncolOutMat ) ;
   hdata helpVal = dHRUM_ptr.get()->get_HbDta(all_ts[0]);
   // numTSvar
-#pragma omp parallel for
+#pragma omp parallel for num_threads(dHRUM_ptr->get_num_treads())
   for(unsigned j=0;j<4;j++){
     caldata helpVal = dHRUM_ptr.get()->get_CalDta(all_caDT[j]);
     for(unsigned i=0; i<nrowOutMat; i++){
@@ -42,7 +42,7 @@ Rcpp::List getOutput(Rcpp::XPtr<dHRUM> dHRUM_ptr){
     }
   }
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(dHRUM_ptr->get_num_treads())
   for(unsigned j=4;j<ncolOutMat;j++){
     hdata helpVal = dHRUM_ptr.get()->get_HbDta(all_ts[j-4]);
     for(unsigned i=0; i<nrowOutMat; i++){
@@ -142,7 +142,7 @@ Rcpp::List getOutputDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
     }
   // numTSvar
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(dHRUM_ptr->get_num_treads())
   for(unsigned j=0;j<4;j++){
     unsigned indexrowCal=0;
     for(unsigned itHRU=0; itHRU<dHRUM_ptr->getdHRUdim(); itHRU++){
@@ -154,7 +154,7 @@ Rcpp::List getOutputDist(Rcpp::XPtr<dHRUM> dHRUM_ptr){
     }
   }
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(dHRUM_ptr->get_num_treads())
   for(unsigned j=4;j<ncolOutMat;j++){
     unsigned indexrowNu=0;
     for(unsigned itHRU=0; itHRU<dHRUM_ptr->getdHRUdim(); itHRU++){
