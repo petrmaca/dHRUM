@@ -96,7 +96,8 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       {"WtlnFrac",par_HRUtype::WtlnFrac},
       {"SRFrac", par_HRUtype::SRFrac},
       {"Kinct", par_HRUtype::Kinct},
-      {"KwPe", par_HRUtype::KwPe}
+      {"KwPe", par_HRUtype::KwPe},
+      {"Csnow", par_HRUtype::Csnow}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -302,6 +303,9 @@ void setParamsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVe
       case par_HRUtype::KwPe:
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::KwPe));
         break;
+      case par_HRUtype::Csnow:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::Csnow));
+        break;
       }
     }
 
@@ -411,7 +415,8 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
       {"WtlnFrac",par_HRUtype::WtlnFrac},
       {"SRFrac",par_HRUtype::SRFrac},
       {"Kinct", par_HRUtype::Kinct},
-      {"KwPe", par_HRUtype::KwPe}
+      {"KwPe", par_HRUtype::KwPe},
+      {"Csnow", par_HRUtype::Csnow}
     };
 
     std::vector<std::pair<numberSel,par_HRUtype>> ParsToLoad;
@@ -620,6 +625,9 @@ void setParamsToOnedHru(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector ParsVec
         break;
       case par_HRUtype::KwPe:
         ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::KwPe));
+        break;
+      case par_HRUtype::Csnow:
+        ParsToLoad.push_back(std::make_pair((numberSel) parsVals[id], par_HRUtype::Csnow));
         break;
       }
     }
