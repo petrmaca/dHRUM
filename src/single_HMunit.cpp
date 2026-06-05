@@ -607,7 +607,7 @@ void single_HMunit::surface_RetAll_melt(){
 }
 void single_HMunit::surface_RetAll_winter(){
 
-  set_varValue(0.0, tstRM, ts_type::SURS);
+  set_varValue(prev_SurS, tstRM, ts_type::SURS);
   set_varValue(0.0, tstRM, ts_type::ETSW);
   set_varValue(0.0,tstRM,ts_type::INFL);
 
@@ -2301,6 +2301,7 @@ void single_HMunit::interception_RutterGash_melt(){
 
   numberSel Dc = 0.0, SublC = 0.0, Ds = 0.0, SublS = 0.0;
   numberSel Througf = 0.0, Pref =0.0, Snoww = 0.0;
+  numberSel Ddfc = 0.0, Ddfs = 0.0;
 
   Snoww = get_dta(tstRM, ts_type::SNOW);
   prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CDIV)) * (Snoww);
@@ -2317,6 +2318,9 @@ void single_HMunit::interception_RutterGash_melt(){
 
   prev_IntSnow = prev_IntSnow - SublC;
 
+  Ddfc = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prev_IntSnow);
+  prev_IntSnow = prev_IntSnow - Ddfc;
+
   Ds = std::max((prev_StemSnow - get_par(par_HRUtype::STEM_ST)),0.0);
   prev_StemSnow = prev_StemSnow - Ds;
 
@@ -2327,6 +2331,9 @@ void single_HMunit::interception_RutterGash_melt(){
   SublS = help_SublS;
 
   prev_StemSnow = prev_StemSnow - SublS;
+
+  Ddfs = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prev_StemSnow);
+  prev_StemSnow = prev_StemSnow - Ddfs;
 
   set_varValue(prev_StemSnow, tstRM, ts_type::STES);
   set_varValue(prev_IntSnow, tstRM, ts_type::CANS);
@@ -2341,7 +2348,7 @@ void single_HMunit::interception_RutterGash_melt(){
 
   set_varValue(Througf, tstRM, ts_type::TROF);
 
-  set_varValue((Dc + Ds), tstRM, ts_type::MELV);
+  set_varValue((Dc + Ds + Ddfs +Ddfc), tstRM, ts_type::MELV);
 
   Pref = (get_dta(tstRM, ts_type::MELV)+ get_dta(tstRM, ts_type::MELT));
   set_varValue(Pref, tstRM, ts_type::PREF);
@@ -2354,6 +2361,7 @@ void single_HMunit::interception_RutterGash_summer(){
 
   numberSel Dc = 0.0, Ds = 0.0, Ec =0.0, Es =0.0, Trof =0.0, Pref =0.0;
   numberSel SublS = 0.0, SublC =0.0, Snoww = 0.0, DcMelt = 0.0, DsMelt = 0.0;
+  numberSel Ddfc = 0.0, Ddfs = 0.0;
 //snow to storage
   Snoww = get_dta(tstRM, ts_type::SNOW);
   prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CDIV)) * (Snoww);
@@ -2367,6 +2375,10 @@ void single_HMunit::interception_RutterGash_summer(){
   et_demand = update_ETDEMAND(SublC, true);
   SublC = help_SublC;
   prev_IntSnow = prev_IntSnow - SublC;
+
+  Ddfc = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prev_IntSnow);
+  prev_IntSnow = prev_IntSnow - Ddfc;
+
 //overflow stem storage is melt from stem storage
   DsMelt = std::max((prev_StemSnow - get_par(par_HRUtype::STEM_ST)),0.0);
   prev_StemSnow = prev_StemSnow - DsMelt;
@@ -2376,6 +2388,9 @@ void single_HMunit::interception_RutterGash_summer(){
   et_demand = update_ETDEMAND(SublS, true);
   SublS = help_SublS;
   prev_StemSnow = prev_StemSnow - SublS;
+
+  Ddfs = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prev_StemSnow);
+  prev_StemSnow = prev_StemSnow - Ddfs;
 
 //Liquid interception dynamics
   Dc = std::max((prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::RAIN)) - get_par(par_HRUtype::CAN_ST)),0.0);
@@ -2407,12 +2422,12 @@ void single_HMunit::interception_RutterGash_summer(){
   set_varValue(Es, tstRM, ts_type::EVAS);
   set_varValue((prevSteS + prevCanS+prev_StemSnow + prev_IntSnow),tstRM, ts_type::INTS);
 
-  Trof = DcMelt +  Dc + DsMelt + Ds;
+  Trof = DcMelt +  Dc + DsMelt + Ds + Ddfc + Ddfs;
   set_varValue(Trof, tstRM, ts_type::TROF);
-  set_varValue((DcMelt+DsMelt), tstRM, ts_type::MELV);
+  set_varValue((DcMelt+DsMelt+Ddfc+Ddfs), tstRM, ts_type::MELV);
 
 
-  Pref = DcMelt +  Dc + DsMelt + Ds + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::RAIN)) + get_dta(tstRM, ts_type::MELT);
+  Pref = get_dta(tstRM,  ts_type::TROF) + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::RAIN)) + get_dta(tstRM, ts_type::MELT);
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
@@ -2602,13 +2617,13 @@ void single_HMunit::interception_vanDijk_winter(){
 }
 void single_HMunit::interception_vanDijk_melt(){
 
-  numberSel Dc = 0.0, Subl =0.0, Pref =0.0, Snoww = 0.0;
+  numberSel DcMelt = 0.0, Subl =0.0, Pref =0.0, Snoww = 0.0, Dddf = 0.0;
 
   Snoww = get_dta(tstRM, ts_type::SNOW);
   prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
 
-  Dc = std::max((prev_IntSnow - get_par(par_HRUtype::INTstMax)),0.0);
-  prev_IntSnow = prev_IntSnow - Dc;
+  DcMelt = std::max((prev_IntSnow - get_par(par_HRUtype::INTstMax)),0.0);
+  prev_IntSnow = prev_IntSnow - DcMelt;
 
   Subl = std::min(get_dta(tstRM,ts_type::PET),prev_IntSnow);
 
@@ -2618,11 +2633,15 @@ void single_HMunit::interception_vanDijk_melt(){
 
   prev_IntSnow = prev_IntSnow - Subl;
 
-  set_varValue(Dc, tstRM, ts_type::MELV);
+  Dddf = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prev_IntSnow);
+  prev_IntSnow = prev_IntSnow - Dddf;
+
+
+  set_varValue((DcMelt+Dddf), tstRM, ts_type::MELV);
   set_varValue(Subl, tstRM, ts_type::SUBL);
   set_varValue(prev_IntSnow,tstRM, ts_type::INTS);
 
-  Pref = Dc + get_dta(tstRM, ts_type::MELT);
+  Pref = DcMelt + Dddf + get_dta(tstRM, ts_type::MELT);
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
@@ -2630,7 +2649,7 @@ void single_HMunit::interception_vanDijk_melt(){
 }
 void single_HMunit::interception_vanDijk_summer(){
 
-  numberSel Dc = 0.0, Ec =0.0, Pref =0.0;
+  numberSel Dc = 0.0, Ec =0.0, Pref =0.0, Dddf = 0.0;
   numberSel Subl = 0.0, Snoww = 0.0, DcMelt = 0.0;
 
   Snoww = get_dta(tstRM, ts_type::SNOW);
@@ -2647,6 +2666,9 @@ void single_HMunit::interception_vanDijk_summer(){
 
   prev_IntSnow = prev_IntSnow - Subl;
 
+  Dddf = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prev_IntSnow);
+  prev_IntSnow = prev_IntSnow - Dddf;
+
   Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::RAIN)) - get_par(par_HRUtype::INTstMax)),0.0);
   prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::RAIN)) - Dc;
   Ec = std::min(get_dta(tstRM,ts_type::PET),prevIntS);
@@ -2658,12 +2680,12 @@ void single_HMunit::interception_vanDijk_summer(){
   prevIntS = prevIntS - Ec;
 
   set_varValue(Subl, tstRM, ts_type::SUBL);
-  set_varValue(DcMelt, tstRM, ts_type::MELV);
+  set_varValue((DcMelt + Dddf), tstRM, ts_type::MELV);
   set_varValue(Dc, tstRM, ts_type::TROF);
   set_varValue(Ec, tstRM, ts_type::EVAC);
   set_varValue(prevIntS,tstRM, ts_type::INTS);
 
-  Pref = DcMelt +  Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::RAIN)) + get_dta(tstRM, ts_type::MELT);
+  Pref = DcMelt + Dddf + Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::RAIN)) + get_dta(tstRM, ts_type::MELT);
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
@@ -2703,14 +2725,15 @@ void single_HMunit::interception_Eliades_winter(){
 
 void single_HMunit::interception_Eliades_melt(){
 
-  numberSel Dc = 0.0, Subl =0.0, Pref =0.0, Snoww = 0.0;
+  numberSel DcMelt = 0.0, Subl =0.0, Pref =0.0, Snoww = 0.0, Dddf = 0.0;
 
   Snoww = get_dta(tstRM, ts_type::SNOW);
   prev_IntSnow = prev_IntSnow + (get_par(par_HRUtype::CSfrac)) * (Snoww);
 
-  Dc = std::max((prev_IntSnow - get_par(par_HRUtype::INTstMax)),0.0);
-  prev_IntSnow = prev_IntSnow - Dc;
+  DcMelt = std::max((prev_IntSnow - get_par(par_HRUtype::INTstMax)),0.0);
+  prev_IntSnow = prev_IntSnow - DcMelt;
   Subl = std::min((prev_IntSnow / get_par(par_HRUtype::INTstMax)*get_dta(tstRM,ts_type::PET)),prev_IntSnow);
+
 
   numberSel help_Sublm = update_ETDEMAND(Subl, false);
   et_demand = update_ETDEMAND(Subl, true);
@@ -2718,11 +2741,15 @@ void single_HMunit::interception_Eliades_melt(){
 
   prev_IntSnow = prev_IntSnow - Subl;
 
-  set_varValue(Dc, tstRM, ts_type::MELV);
+  Dddf = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prev_IntSnow);
+  prev_IntSnow = prev_IntSnow - Dddf;
+
+
+  set_varValue((DcMelt+Dddf), tstRM, ts_type::MELV);
   set_varValue(Subl, tstRM, ts_type::SUBL);
   set_varValue(prev_IntSnow,tstRM, ts_type::INTS);
 
-  Pref = Dc + get_dta(tstRM, ts_type::MELT);
+  Pref = DcMelt + Dddf + get_dta(tstRM, ts_type::MELT);
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
@@ -2732,7 +2759,7 @@ void single_HMunit::interception_Eliades_melt(){
 
 void single_HMunit::interception_Eliades_summer(){
 
-  numberSel Dc = 0.0, Ec =0.0, Pref =0.0;
+  numberSel Dc = 0.0, Ec =0.0, Pref =0.0, Dddf = 0.0;
   numberSel Subl = 0.0, Snoww = 0.0, DcMelt = 0.0;
 
   // Snoww = get_dta(tstRM, ts_type::SNOW);
@@ -2749,6 +2776,9 @@ void single_HMunit::interception_Eliades_summer(){
 
   prev_IntSnow = prev_IntSnow - Subl;
 
+  Dddf = std::min(get_par(par_HRUtype::DDFA) * (get_dta(tstRM, ts_type::TEMP) - get_par(par_HRUtype::TMEL)), prev_IntSnow);
+  prev_IntSnow = prev_IntSnow - Dddf;
+
   Dc = std::max((prevIntS + get_par(par_HRUtype::CSfrac) * (get_dta(tstRM, ts_type::RAIN)) - get_par(par_HRUtype::INTstMax)),0.0);
   prevIntS = prevIntS + (get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::RAIN)) - Dc;
   Ec = std::min((prevIntS / get_par(par_HRUtype::INTstMax)* get_dta(tstRM,ts_type::PET)),prevIntS);
@@ -2760,12 +2790,12 @@ void single_HMunit::interception_Eliades_summer(){
   prevIntS = prevIntS - Ec;
 
   set_varValue(Subl, tstRM, ts_type::SUBL);
-  set_varValue(DcMelt, tstRM, ts_type::MELV);
+  set_varValue((DcMelt+Dddf), tstRM, ts_type::MELV);
   set_varValue(Dc, tstRM, ts_type::TROF);
   set_varValue(Ec, tstRM, ts_type::EVAC);
   set_varValue(prevIntS,tstRM, ts_type::INTS);
 
-  Pref = DcMelt +  Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::RAIN)) + get_dta(tstRM, ts_type::MELT);
+  Pref = DcMelt + Dddf + Dc + (1-get_par(par_HRUtype::CSfrac)) * (get_dta(tstRM, ts_type::RAIN)) + get_dta(tstRM, ts_type::MELT);
   set_varValue(Pref, tstRM, ts_type::PREF);
 
   return ;
