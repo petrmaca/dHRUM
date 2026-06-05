@@ -34,7 +34,7 @@ params::params(): numPars(1),
   pars[10] = 1.0;//!< STEM_ST The Max stem and trunk storage [0,inf],VC1
   pars[11] = 0.5;//!< CSDIV The divider of canopy outflow to throughflow and stemflow storage [0,1],VC1
   pars[12] = 1;//!< TETR The threshold temperature for determining snow [-inf,inf] better [-5,5]
-  pars[13] = 2;//!<  DDFA The day degree model for snow melt [o, inf] better [0,2],VC1
+  pars[13] = 6;//!<  DDFA The day degree model for snow melt [o, inf] better [0,2],VC1
   pars[14] = 0;//!<  TMEL The threshold temperature for determining melting process [-inf, inf] better [-5,5]
   pars[15] = 4;//!< RETCAP The maximum capacity of surface retention [0, inf],VC1
   pars[16] = 1;//!< L The amount of groundwater recharge removed from the linear reservoir [0,1]
@@ -83,9 +83,9 @@ params::params(): numPars(1),
   up_pars[10] = 100;//!< STEM_ST The Max stem and trunk storage [0,inf],VC1
   up_pars[11] = 1;//!< CSDIV The divider of canopy outflow to throughflow and stemflow storage [0,1],VC1
   up_pars[12] = 1;//!< TETR The threshold temperature for determining snow [-inf,inf] better [-5,5]
-  up_pars[13] = 2;//!<  DDFA The day degree model for snow melt [o, inf] better [0,2],VC1
+  up_pars[13] = 8;//!<  DDFA The day degree model for snow melt [o, inf] better [0,2],VC1
   up_pars[14] = 0;//!<  TMEL The threshold temperature for determining melting process [-inf, inf] better [-5,5]
-  up_pars[15] = 100;//!< RETCAP The maximum capacity of surface retention [0, inf],VC1
+  up_pars[15] = 20;//!< RETCAP The maximum capacity of surface retention [0, inf],VC1
   up_pars[16] = 1;//!< L The amount of groundwater recharge removed from the linear reservoir [0,1]
   up_pars[17] = 1;//!< D_BYPASS The amount of groundwater recharge removed from the linear reservoir [0,1]
   up_pars[18] = 1;//!< B_EXP Power coefficient
@@ -111,7 +111,7 @@ params::params(): numPars(1),
   up_pars[33] = 1;//!< RBEI River bed infiltration rate (infiltration to ground water storage)
   up_pars[34] = 1;//!< KFR runnoff koeficient from fast response
   up_pars[35] = 10;//!< van Dijk interception max storage
-  up_pars[36] = 0.5;//!< van Dijk canopy and stem cover fraction [0, 1]
+  up_pars[36] = 1;//!< van Dijk canopy and stem cover fraction [0, 1]
   up_pars[37] = 2;//!< interception sclaing facor for winter interception storage
   up_pars[38] = 1.0;//!< WtlnFrac fraction of wetland storage in given HRU [0,1]
   up_pars[39] = 1.0;//!< SRFrac fraction of surface retention storage in given HRU [0,1]
