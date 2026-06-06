@@ -171,11 +171,12 @@ params::params(): numPars(1),
   low_pars[41] = 0.0;//!< KwPe Storage coefficient for wetland percolation [0,1]
   low_pars[42] = 0.02;//!< Sublimation Coefficient [0.02,0.25] or [0.002,0.44] mm/day/hPa
 
-  Current_parameter_string.size();//PM why two times?
-  Current_parameter_list.size();
-  Current_parameter_val.size();
-  Current_upparameter_val.size();
-  Current_lowparameter_val.size();
+  unsigned ups;
+  ups = Current_parameter_string.size();//PM why two times?
+  ups = Current_parameter_list.size();
+  ups = Current_parameter_val.size();
+  ups = Current_upparameter_val.size();
+  ups = Current_lowparameter_val.size();
   //setting of defaulst current params lists up cur low names
   //  std::cout << "Params are initialized." << std::endl;
 }
