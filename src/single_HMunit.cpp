@@ -702,7 +702,7 @@ void single_HMunit::surface_RetPRTL_melt(){
 
 void single_HMunit::surface_RetPRTL_winter(){
 
-  set_varValue(0.0, tstRM, ts_type::SURS);
+  set_varValue(prev_SurS, tstRM, ts_type::SURS);
   set_varValue(0.0, tstRM, ts_type::ETSW);
   set_varValue(0.0,tstRM,ts_type::INFL);
 
