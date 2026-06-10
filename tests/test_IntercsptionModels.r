@@ -29,9 +29,9 @@ dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 setSnowMeltModeltypeToAlldHrus(dHRUM_ptr = dhrus,snowMeltModelTypes = rep("DDF",times = length(Areas)),hruIds = IdsHrus)
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times = length(Areas)),hruIds = IdsHrus,InstStLai = rep(TRUE,times = length(Areas)),smaxlaiTypes = rep("Pitman",times = length(Areas)))
 
-setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 
-# setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
+setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("Pitman",times= length(Areas)))
 
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas)))
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,InstStLai = rep(TRUE,times= length(Areas)),smaxlaiTypes = rep("VonHoyningenHuene",times= length(Areas)))
@@ -94,15 +94,20 @@ names(outDF) <-c(outDta$VarsNams)
 outDF = as.data.table(outDF)
 
 
-PrecNoSnow = outDF$PREC -outDF$SNOW
+PrecNoSnow = outDF$PREC - outDF$SNOW
+
+sum(PrecNoSnow) - sum(outDF$RAIN)- sum(outDF$SUBL)
 
 sum(outDF$PREC)
 sum(outDF$PREF)
 sum(outDF$EVAC) + sum(outDF$PREF) + sum(outDF$SUBL) +sum(outDF$EVAS)
-sum(PrecNoSnow) + sum(outDF$SNOW)
+# sum(PrecNoSnow) + sum(outDF$SNOW) + sum(outDF$SUBL)
+
+sum(outDF$PREC)
+sum(outDF$RAIN) + sum(outDF$SNOW) + sum(outDF$SUBL)
 
 sum(outDF$SNOW)
-sum(outDF$SNOW) - (sum(outDF$MELT) + sum(outDF$MELV) + sum(outDF$SUBL))
+# sum(outDF$SNOW) - (sum(outDF$MELT) + sum(outDF$MELV) + sum(outDF$SUBL))
 
 sum(outDF$MELT) + sum(outDF$MELV)   + sum(outDF$SUBL)
 sum(outDF$REFR)
