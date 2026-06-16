@@ -3073,7 +3073,11 @@ void single_HMunit::run_HB() {
   //  std::cout << "prev_Ground storage before zeros " << prev_Grou << std::endl;
   //  std::cout << "prevCanS  " << prevCanS << std::endl;
   //  std::cout << "prevSteS " << prevSteS << std::endl;
+<<<<<<< HEAD
    // std::cout << "prevSnoS " << prevSnoS << std::endl;
+=======
+  //  std::cout << "prevSnoS " << prevSnoS << std::endl;
+>>>>>>> ffc637382f1a340a05a767328d7a8d7d82631402
   //  std::cout << "prev_SurS " << prev_SurS << std::endl;
   //  std::cout << "prev_Soil " << prev_Soil << std::endl;
   //  std::cout << "prev_Grou " << prev_Grou << std::endl;
