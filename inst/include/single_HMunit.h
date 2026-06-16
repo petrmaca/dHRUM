@@ -77,6 +77,11 @@ class single_HMunit {
   void snow_Melt(snow_Model _snow_MeltType);
   void snow_DDF();
 
+  void pdm();//WRR implementation
+  void pdm2();//Montanari implementation
+  void collieV2();
+  numberSel collieForestFrac();
+
 
   // void surface_retention(surface_STORtype _surf_STORtype);//!< Update surface retention
   void surface_Retention(surface_STORtype _surf_STORtype);
