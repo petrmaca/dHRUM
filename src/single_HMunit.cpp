@@ -750,6 +750,7 @@ void single_HMunit::surface_RetWTLND_summer(){
   numberSel help_EvapSR = update_ETDEMAND(Evpr, false);
   et_demand = update_ETDEMAND(Evpr, true);
   Evpr = help_EvapSR;
+  // std::cout << Evpr << "\n";
 
   prev_SurS = prev_SurS - Evpr;
 
@@ -831,12 +832,13 @@ void single_HMunit::surface_RetWTLND_winter(){
   // During winter: accept PREF input and route overflow, no ET or infiltration (frozen surface)
   numberSel Qov = 0.0;
 
-  Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP) + get_dta(tstRM, ts_type::PREF)), 0.0);
+  // Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP) + get_dta(tstRM, ts_type::PREF)), 0.0);
   prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF) - Qov;
 
   set_varValue(prev_SurS, tstRM, ts_type::SURS);
   set_varValue(0.0, tstRM, ts_type::ETSW);
   set_varValue(0.0, tstRM, ts_type::TRNS);
+  // set_varValue(Qov, tstRM, ts_type::INFL);
   set_varValue(Qov, tstRM, ts_type::INFL);
 
   return ;
@@ -1037,6 +1039,10 @@ case soil_STORtype::PDM2: {
 
   er2 = std::max(((c2-c1) - (w2-w1)),0.0);
   evap = (1- (((get_par(par_HRUtype::C_MAX) - c2)/(get_par(par_HRUtype::B_SOIL)+1))/(get_par(par_HRUtype::C_MAX)/(get_par(par_HRUtype::B_SOIL)+1)))) * get_dta(tstRM, ts_type::PET);
+  numberSel help_EvapSR = update_ETDEMAND(evap, false);
+  et_demand = update_ETDEMAND(evap, true);
+  evap = help_EvapSR;
+
 
   w2 = std::max(w2-evap,0.0);
   //the  lost of et
@@ -1053,6 +1059,11 @@ case soil_STORtype::PDM2: {
 case soil_STORtype::COLLIE_V2: {
     //actual evaporation is split between bare soil evaporation E_b and transpiration through vegetation E_v
     E_b = prev_Soil / get_par(par_HRUtype::SMAX) * (1 - get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
+    // numberSel help_EvapSR = update_ETDEMAND(E_b, false);
+    // et_demand = update_ETDEMAND(E_b, true);
+    // E_b = help_EvapSR;
+
+
 
     if (prev_Soil > get_par(par_HRUtype::FC)) {
       E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
@@ -1487,13 +1498,20 @@ case soil_STORtype::PLATEAU: {
 
   //vypocet aktualni evptr.
   evap = static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) * std::max((get_par(par_HRUtype::RF) * (prev_Soil - c_init)/(get_par(par_HRUtype::SMAX) - c_init)), static_cast<numberSel>(0.0));
+  evap = std::min(evap, next_soil);
+
+  numberSel help_EvapSR = update_ETDEMAND(evap, false);
+  et_demand = update_ETDEMAND(evap, true);
+  evap = help_EvapSR;
+
+  next_soil = next_soil - evap;
 
   //vypocet overFL
   overFL = std::max((prev_Soil + ppInf + get_par(par_HRUtype::C) - get_par(par_HRUtype::SMAX) - evap), static_cast<numberSel>(0.0));
 
   //aktualizace pudni zasoby o vstupy a ztraty
   next_soil = prev_Soil + ppInf + get_par(par_HRUtype::C);
-  next_soil = next_soil - evap;
+
   next_soil = next_soil - overFL;
 
   //doplneni overFL
@@ -3001,7 +3019,7 @@ void single_HMunit::run_HB() {
   //  std::cout << "prev_Ground storage before zeros " << prev_Grou << std::endl;
   //  std::cout << "prevCanS  " << prevCanS << std::endl;
   //  std::cout << "prevSteS " << prevSteS << std::endl;
-   std::cout << "prevSnoS " << prevSnoS << std::endl;
+   // std::cout << "prevSnoS " << prevSnoS << std::endl;
   //  std::cout << "prev_SurS " << prev_SurS << std::endl;
   //  std::cout << "prev_Soil " << prev_Soil << std::endl;
   //  std::cout << "prev_Grou " << prev_Grou << std::endl;
@@ -3050,7 +3068,6 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   set_data(dta,ts_type::INTS);
   //!< Surface retention
   set_data(dta,ts_type::SURS);
-  set_data(dta,ts_type::ETSW);
   set_data(dta,ts_type::PREF);
   // std::cout << " precf ok\n";
   //!< soil percolation
@@ -3071,6 +3088,7 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   set_data(dta,ts_type::LAI);
   set_data(dta,ts_type::INFL);
   set_data(dta,ts_type::TRNS);
+  set_data(dta,ts_type::ETSW);
   set_data(dta,ts_type::SUBL);
   set_data(dta,ts_type::REFR);
   // std::cout << " tor ok\n";

@@ -3,10 +3,10 @@
 # {
 library(dHRUM)
 library(data.table)
-numdata =365
-probwet =0.9
+numdata = 365
+probwet = 0.9
 meanifwet = 8
-prec= rbinom(numdata,1,probwet)*rexp(numdata,1/meanifwet)
+prec= rbinom(numdata,1,probwet) * rexp(numdata,1/meanifwet)
 
 # prec[1:2] = 0.0
 temp=rnorm(numdata,-1,2)
@@ -40,9 +40,9 @@ setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times
 
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
 
-setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfaceAll",times= length(Areas)),hruIds=IdsHrus)
+# setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfaceAll",times= length(Areas)),hruIds=IdsHrus)
 # setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfacePRTL",times= length(Areas)),hruIds=IdsHrus)
-# setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("Wetland",times= length(Areas)),hruIds=IdsHrus)
+setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("Wetland",times= length(Areas)),hruIds=IdsHrus)
 
 setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
 setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PDM",times= length(Areas)), hruIds = IdsHrus)
@@ -166,7 +166,7 @@ sum(outDF$PREF)
 
 plot(outDF$SURS,col="red",type="l", ylim=c(0, max(outDF$SURS)))
 lines(outDF$TRNS, col="green")
-lines(outDF$EVBS, col="blue")
+lines(outDF$ETSW, col="blue")
 lines((outDF$EVBS+outDF$TRNS), col="grey")
 
 
@@ -224,7 +224,7 @@ sum(outDF$INFL)
 sum(outDF$SURS)
 max(outDF$SOIS)
 
-sum(outDF$ETWS)
+sum(outDF$ETSW)
 
 sum(outDF$INFL) + sum(outDF$ETWS)
 
