@@ -1067,8 +1067,10 @@ void single_HMunit::collieV2(){
   ForestFrac = collieForestFrac();
   par_HRU.s_params(ForestFrac,par_HRUtype::FOREST_FRACT);
 
-//soil storage overflow 1
+//infiltration
   prev_Soil = prev_Soil + get_dta(tstRM, ts_type::INFL);
+
+  //soil storage overflow 1
   overFl1 = std::max(prev_Soil - get_par(par_HRUtype::SMAX), 0.0);
 
   prev_Soil = prev_Soil - overFl1;
@@ -1093,41 +1095,7 @@ void single_HMunit::collieV2(){
   overFl2 = std::min(get_par(par_HRUtype::KF) * (prev_Soil - get_par(par_HRUtype::FC)), prev_Soil);
   prev_Soil = prev_Soil - overFl2;
 
-
-  // if (prev_Soil > get_par(par_HRUtype::FC)) {
-  //    E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
-  //    //overFl2 [mm/d] is subsurface flow regulated by runoff coefficient KF
-  //    overFl2 = get_par(par_HRUtype::KF) * (prev_Soil - get_par(par_HRUtype::FC));
-  // } else {
-  //    E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) * (prev_Soil/get_par(par_HRUtype::FC));
-  //    overFl2 = 0;
-  // }
-  //
-/*    if (prev_Soil > get_par(par_HRUtype::SMAX)) {
- //overFl1 [mm/d] is saturation excess overland flow
- overFl1 = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
-} else {
- overFl1 = 0;
-}
- */
-  // overFl1 = std::max((prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::INFL))-get_par(par_HRUtype::SMAX)-E_v-E_b-overFl2), 0.0);
-
-
-  // next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
-
-  // std::vector<numberSel> updated_vals;
-
-  // updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_v, E_b});
-  // next_soil = updated_vals[0];
-  // evap = updated_vals[1];
-  //
-  // updated_vals.clear();
-
-// updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1, overFl2});
-// next_soil = updated_vals[0];
-// overFL = updated_vals[1];
-//
-// updated_vals.clear();
+//transpiration
   trns = get_dta(tstRM, ts_type::TRNS);
   trns = trns + E_v;
 
@@ -3073,11 +3041,8 @@ void single_HMunit::run_HB() {
   //  std::cout << "prev_Ground storage before zeros " << prev_Grou << std::endl;
   //  std::cout << "prevCanS  " << prevCanS << std::endl;
   //  std::cout << "prevSteS " << prevSteS << std::endl;
-<<<<<<< HEAD
    // std::cout << "prevSnoS " << prevSnoS << std::endl;
-=======
   //  std::cout << "prevSnoS " << prevSnoS << std::endl;
->>>>>>> ffc637382f1a340a05a767328d7a8d7d82631402
   //  std::cout << "prev_SurS " << prev_SurS << std::endl;
   //  std::cout << "prev_Soil " << prev_Soil << std::endl;
   //  std::cout << "prev_Grou " << prev_Grou << std::endl;
