@@ -81,6 +81,8 @@ class single_HMunit {
   void pdm2();//Montanari implementation
   void collieV2();
   void new_Zealand();
+  void gr4j();
+  void sBrookV1();
 
   numberSel collieForestFrac();
 

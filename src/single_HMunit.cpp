@@ -1175,6 +1175,101 @@ void single_HMunit::new_Zealand(){
 
 }
 
+// https://www.sciencedirect.com/science/article/pii/S0022169425017330
+void single_HMunit::gr4j(){
+
+  numberSel overFl1 = 0.0, E_s = 0.0, P_s = 0.0, P_p = 0.0, perc = 0.0;
+
+  P_s = get_dta(tstRM, ts_type::INFL) * (1 - std::pow((prev_Soil / get_par(par_HRUtype::SMAX)), 2));
+  if(P_s > (get_par(par_HRUtype::SMAX) - prev_Soil)){
+    P_s = get_par(par_HRUtype::SMAX) - prev_Soil;
+  }
+
+  //infiltration
+  prev_Soil = prev_Soil + P_s;
+
+  //pocitam E_s na zaklade PET
+  E_s = std::min(get_dta(tstRM, ts_type::PET) * (2 * (prev_Soil / get_par(par_HRUtype::SMAX)) - std::pow((prev_Soil / get_par(par_HRUtype::SMAX)), 2)), prev_Soil);
+  numberSel help_EvapES = update_ETDEMAND(E_s, false);
+  et_demand = update_ETDEMAND(E_s, true);
+  E_s = help_EvapES;
+
+  prev_Soil = prev_Soil - E_s;
+
+
+  //pocitam perkolaci ze zasobniku
+  P_p = std::min(std::pow(get_par(par_HRUtype::SMAX), -4) / 4 * (std::pow((4.0 / 9.0), 4)) * std::pow(std::abs(prev_Soil), 5), prev_Soil);
+
+
+  //vypocet vstupu do zasobniku a dopocet celkoveho odtoku
+
+  prev_Soil = prev_Soil -  P_p;
+  perc = P_p + (get_dta(tstRM, ts_type::INFL) - P_s);
+
+  //ulozeni velicin
+  set_varValue(prev_Soil, tstRM, ts_type::SOIS);
+  set_varValue(E_s, tstRM, ts_type::EVBS);
+  set_varValue(perc, tstRM, ts_type::PERC);
+
+  return ;
+
+}
+
+void single_HMunit::sBrookV1(){
+
+  numberSel ForestFrac = 0.0, E_b = 0.0, overFl1 = 0.0, E_v = 0.0, overFl2 = 0.0, trns = 0.0;
+
+  ForestFrac = collieForestFrac();
+
+  prev_Soil = prev_Soil + get_dta(tstRM, ts_type::INFL);
+
+  overFl1 = std::max(prev_Soil - get_par(par_HRUtype::SMAX), 0.0);
+  prev_Soil = prev_Soil - overFl1;
+
+
+  //pocitam vypar z pudy
+  E_b = std::min((prev_Soil / get_par(par_HRUtype::SMAX)) * (1 - get_par(par_HRUtype::FOREST_FRACT)) * get_dta(tstRM, ts_type::PET),prev_Soil);
+  numberSel help_EvapEB = update_ETDEMAND(E_b, false);
+  et_demand = update_ETDEMAND(E_b, true);
+  E_b = help_EvapEB;
+
+  prev_Soil = prev_Soil  - E_b;
+
+  //pocitam transpiraci a odtok z tanku
+  if(prev_Soil > get_par(par_HRUtype::FC)) {
+    E_v = std::min(get_par(par_HRUtype::FOREST_FRACT) * get_dta(tstRM, ts_type::PET), prev_Soil);
+   } else {
+    E_v = std::min(prev_Soil / get_par(par_HRUtype::FC) * get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET)), prev_Soil);
+    }
+  numberSel help_EvapEV = update_ETDEMAND(E_v, false);
+  et_demand = update_ETDEMAND(E_v, true);
+  E_v = help_EvapEV;
+
+  prev_Soil = prev_Soil  - E_v;
+
+  trns = get_dta(tstRM, ts_type::TRNS);
+  trns = trns + E_v;
+
+  //pocitam transpiraci a odtok z tanku
+  if(prev_Soil > get_par(par_HRUtype::FC)) {
+    overFl2 = std::min((std::pow(((prev_Soil - get_par(par_HRUtype::FC)) * get_par(par_HRUtype::KF)), (1 / get_par(par_HRUtype::KF_NONLIN)))), prev_Soil);
+  } else {
+    overFl2 = 0;
+  }
+
+  prev_Soil = prev_Soil - overFl2;
+
+  //vypocet mozneho prepadu z tanku
+
+  set_varValue(prev_Soil, tstRM, ts_type::SOIS);
+  set_varValue(E_b,tstRM, ts_type::EVBS);
+  set_varValue(trns,tstRM, ts_type::TRNS);
+  set_varValue((overFl1 + overFl2), tstRM, ts_type::PERC);
+
+  return ;
+
+}
+
 /** \brief updates states in soil buffer in single pdm unit
  *
  *  updating of states in soil buffer in single pdm unit
@@ -1202,197 +1297,21 @@ switch(_soil_STORtype) {
     break;
     }
 
-
-case soil_STORtype::NEW_ZEALAND: {
+   case soil_STORtype::NEW_ZEALAND: {
 
     new_Zealand();
     break;
 }
 
-  /*
 case soil_STORtype::GR4J: {
-    //P_n is the net precipitation
-    if(static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)) >= static_cast<numberSel>(get_dta(tstRM, ts_type::PET))) {
-      P_n = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)) - static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
-    } else {
-      P_n = 0;
-    }
 
-    //P_s is fraction of the net precipitation P_n redirected to soil moisture
-    P_s = P_n * (1 - std::pow(prev_Soil / get_par(par_HRUtype::SMAX), 2));
-    //P_s = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
-
-    //evap is the net evaporation
-    if (static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) > static_cast<numberSel>(get_dta(tstRM, ts_type::INFL))) {
-      E_p = static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) - static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
-    } else {
-      E_p = 0;
-    }
-
-    //E_s is fraction of the net evaporation evap subtracted from soil moisture
-    E_s = E_p * (2 * (prev_Soil/get_par(par_HRUtype::SMAX)) - std::pow(prev_Soil/get_par(par_HRUtype::SMAX), 2));
-
-    //overFl is the percolation to deeper soil waters
-    overFl1 = std::pow(get_par(par_HRUtype::SMAX), -4) / 4 * (std::pow(4.0/9.0, -4)) * std::pow(std::abs(prev_Soil),5);
-
-    next_soil = prev_Soil + P_s;
-
-    std::vector<numberSel> updated_vals;
-
-    updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_s});
-    next_soil = updated_vals[0];
-    evap = updated_vals[1];
-
-    updated_vals.clear();
-
-    updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1});
-    next_soil = updated_vals[0];
-    overFL = updated_vals[1];
-
-    updated_vals.clear();
-
-    set_varValue(next_soil, tstRM, ts_type::SOIS);
-    set_varValue(evap,tstRM, ts_type::EVBS);
-    set_varValue(overFL, tstRM, ts_type::PERC);
-
-    prev_Soil = next_soil;
-
-    break;
+    gr4j();
+    break ;
 }
-*/
-
-case soil_STORtype::GR4J: {
-//pocitam E_s na zaklade PET
-  E_s = static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) * (2 * (prev_Soil / get_par(par_HRUtype::SMAX)) - std::pow((prev_Soil / get_par(par_HRUtype::SMAX)), 2));
-//pocitam perkolaci ze zasobniku
-  overFl1 = std::pow(get_par(par_HRUtype::SMAX), -4) / 4 * (std::pow((4.0 / 9.0), 4)) * std::pow(std::abs(prev_Soil), 5);
-
-//aktualizace zasoby, odecitam vypar
-  std::vector<numberSel> updated_vals;
-  updated_vals = water_balance(prev_Soil, evap, std::vector<numberSel>{E_s});
-  prev_Soil = updated_vals[0];
-  evap = updated_vals[1];
-  updated_vals.clear();
-
-//aktualizace zasoby, odecitam perkolaci
-  updated_vals = water_balance(prev_Soil, overFL, std::vector<numberSel>{overFl1});
-  prev_Soil = updated_vals[0];
-  overFL = updated_vals[1];
-  updated_vals.clear();
-
-//vypocet vstupu do zasobniku a dopocet celkoveho odtoku
-  P_s = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)) * (1 - std::pow((prev_Soil / get_par(par_HRUtype::SMAX)), 2));
-  if(P_s > (get_par(par_HRUtype::SMAX) - prev_Soil)){
-    P_s = get_par(par_HRUtype::SMAX) - prev_Soil;
-  }
-  next_soil = prev_Soil + P_s;
-  overFL = overFL + (static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)) - P_s);
-
-//ulozeni velicin
-    set_varValue(next_soil, tstRM, ts_type::SOIS);
-    set_varValue(evap, tstRM, ts_type::EVBS);
-    set_varValue(overFL, tstRM, ts_type::PERC);
-
-    prev_Soil = next_soil;
-
-    break;
-}
-
-
-
-
-/*
-case soil_STORtype::SBROOK_V1: {
-    //E_b is bare soil evaporation
-    E_b = prev_Soil / get_par(par_HRUtype::SMAX) * (1 - get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
-
-    //E_v is transpiration from vegetation
-    //overFl2 is non-linear subsurface flow using the wilting point FC as
-    //a threshold for flow generation and two flow parameters KF[d] and RUONOFF_NONLIN[-]
-    if(prev_Soil > get_par(par_HRUtype::FC)) {
-      E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
-      overFl2 = std::pow((prev_Soil - get_par(par_HRUtype::FC)) / get_par(par_HRUtype::KF), 1/get_par(par_HRUtype::KF_NONLIN));
-    } else {
-      E_v = prev_Soil / get_par(par_HRUtype::FC) * get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
-      overFl2 = 0;
-    }
-
-    //overFl1 is saturation excess from flow [mm/d]
-
-    if(prev_Soil >= get_par(par_HRUtype::SMAX)) {
-      overFl1 = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
-    } else {
-      overFl1 = 0;
-    }
-
-    next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
-
-    std::vector<numberSel> updated_vals;
-
-    updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_v, E_b});
-    next_soil = updated_vals[0];
-    evap = updated_vals[1];
-
-    updated_vals.clear();
-
-    updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1, overFl2});
-    next_soil = updated_vals[0];
-    overFL = updated_vals[1];
-
-    updated_vals.clear();
-
-    set_varValue(next_soil, tstRM, ts_type::SOIS);
-    set_varValue(evap,tstRM, ts_type::EVBS);
-    set_varValue(overFL, tstRM, ts_type::PERC);
-
-    prev_Soil = next_soil;
-
-    break;
-}
-*/
 
 case soil_STORtype::SBROOK_V1: {
 
-  //pocitam vypar z pudy
-  E_b = (prev_Soil / get_par(par_HRUtype::SMAX)) * (1 - get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
-
-  //pocitam transpiraci a odtok z tanku
-  if(prev_Soil > get_par(par_HRUtype::FC)) {
-    E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
-    overFl2 = std::pow(((prev_Soil - get_par(par_HRUtype::FC)) * get_par(par_HRUtype::KF)), (1 / get_par(par_HRUtype::KF_NONLIN)));
-  }
-  else{
-    E_v = prev_Soil / get_par(par_HRUtype::FC) * get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
-    overFl2 = 0;
-  }
-
-  //vypocet mozneho prepadu z tanku
-  overFl1 = std::max((prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::INFL)) - get_par(par_HRUtype::SMAX) - E_v - E_b - overFl2), 0.0);
-
-  //aktualizace zasoby o vstup
-  next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
-
-  std::vector<numberSel> updated_vals;
-
-  //aktualizace zasoby o vypar
-  updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_v, E_b});
-  next_soil = updated_vals[0];
-  evap = updated_vals[1];
-  updated_vals.clear();
-
-  //aktualizacezasoby  o odtok
-  updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1, overFl2});
-  next_soil = updated_vals[0];
-  overFL = updated_vals[1];
-
-  updated_vals.clear();
-
-  set_varValue(next_soil, tstRM, ts_type::SOIS);
-  set_varValue(evap,tstRM, ts_type::EVBS);
-  set_varValue(overFL, tstRM, ts_type::PERC);
-
-  prev_Soil = next_soil;
-
+  sBrookV1();
   break;
 }
 

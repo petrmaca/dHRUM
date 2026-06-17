@@ -40,15 +40,17 @@ setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times
 
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
 
-# setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfaceAll",times= length(Areas)),hruIds=IdsHrus)
+setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfaceAll",times= length(Areas)),hruIds=IdsHrus)
 # setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfacePRTL",times= length(Areas)),hruIds=IdsHrus)
-setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("Wetland",times= length(Areas)),hruIds=IdsHrus)
+# setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("Wetland",times= length(Areas)),hruIds=IdsHrus)
 
 setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
 # setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PDM",times= length(Areas)), hruIds = IdsHrus)
 # setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PDM2",times= length(Areas)), hruIds = IdsHrus)
 # setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("COLLIE_V2",times= length(Areas)), hruIds = IdsHrus)
-setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("NEW_ZEALAND",times= length(Areas)), hruIds = IdsHrus)
+# setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("NEW_ZEALAND",times= length(Areas)), hruIds = IdsHrus)
+setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("GR4J",times= length(Areas)), hruIds = IdsHrus)
+# setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("SBROOK_V1",times= length(Areas)), hruIds = IdsHrus)
 #setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
 # pondDF1 = data.frame( PondArea = 40500, PonsMax= 45000, MRF= 0.039, Coflw=0.3)
 # pondDF2 = data.frame( Pond_ET = "ETpond1", Pond_inSOIS= "noPondSOISPerc", Pond_inGW = "noPondGWPerc",
@@ -67,7 +69,7 @@ lai = LAdt[Category %in% ctgrs[17], mean_LAI]
 setPTLInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, Lai = lai, as.Date("1990/01/30"))
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 20, B_EVAP = 2.5,  KS = 0.01, KF = 0.1, ADIV = 0.8, CDIV = 0.5,
                     SDIV = 0.2, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 6, TMEL = -1.0,
-                    RETCAP = 8, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 1,SMAX = 8,
+                    RETCAP = 8, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 2,SMAX = 8,
                     KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =0,L=0.1, B_EXP = 0.3, KFR = 0.03,
                     INTstMax = 2,INTstScale = 1, CSfrac = 1, SRFrac =0.75,Kinct = 0.8, KwPe=0.01, Csnow = 0.5)
 
@@ -228,8 +230,9 @@ sum(outDF$INFL) + sum(outDF$ETWS)
 
 sum(outDF$PREF)
 
-plot(outDF$SOIS, col = "red", type="l")
+plot(outDF$SOIS, col = "red", type="l", ylim =c(0, max(outDF$SOIS)))
 lines(outDF$TRNS, col="green")
 lines(outDF$EVBS, col="blue")
 lines(outDF$AET)
 lines(outDF$PET, col="red")
+
