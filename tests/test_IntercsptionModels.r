@@ -51,7 +51,8 @@ setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascad
 # setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("NEW_ZEALAND",times= length(Areas)), hruIds = IdsHrus)
 # setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("GR4J",times= length(Areas)), hruIds = IdsHrus)
 # setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("SBROOK_V1",times= length(Areas)), hruIds = IdsHrus)
-setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("HILLSLOPE",times= length(Areas)), hruIds = IdsHrus)
+# setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("HILLSLOPE",times= length(Areas)), hruIds = IdsHrus)
+setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PLATEAU",times= length(Areas)), hruIds = IdsHrus)
 #setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
 # pondDF1 = data.frame( PondArea = 40500, PonsMax= 45000, MRF= 0.039, Coflw=0.3)
 # pondDF2 = data.frame( Pond_ET = "ETpond1", Pond_inSOIS= "noPondSOISPerc", Pond_inGW = "noPondGWPerc",

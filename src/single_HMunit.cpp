@@ -1318,21 +1318,23 @@ void single_HMunit::plateau(){
 
   overFl = std::max(prev_Soil - get_par(par_HRUtype::SMAX), 0.0);
   prev_Soil = prev_Soil - overFl;
-  //
+
+
   // ppInf = std::min((get_dta(tstRM, ts_type::INFL)), get_par(par_HRUtype::INFR_MAX));
   // ppExc = get_dta(tstRM, ts_type::INFL) - ppInf;
   //
   // //vypocet c_init
-  // c_init = get_par(par_HRUtype::WP) * get_par(par_HRUtype::SMAX);
+  c_init = get_par(par_HRUtype::WP) * get_par(par_HRUtype::SMAX);
   //
-  // //vypocet aktualni evptr.
-  // evap = std::min((get_dta(tstRM, ts_type::PET)) * std::max((get_par(par_HRUtype::RF) * (prev_Soil - c_init)/(get_par(par_HRUtype::SMAX) - c_init)), static_cast<numberSel>(0.0)), prev_Soil);
-  // numberSel help_EvapSR = update_ETDEMAND(evap, false);
-  // et_demand = update_ETDEMAND(evap, true);
-  // evap = help_EvapSR;
-  //
-  // prev_Soil = prev_Soil - evap;
-  //
+  //vypocet aktualni evptr.
+
+  evap = (get_dta(tstRM, ts_type::PET)) * (std::max((get_par(par_HRUtype::RF) * (prev_Soil - c_init)/(get_par(par_HRUtype::SMAX) - c_init)), static_cast<numberSel>(0.0)));
+  numberSel help_EvapSR = update_ETDEMAND(evap, false);
+  et_demand = update_ETDEMAND(evap, true);
+  evap = help_EvapSR;
+
+  prev_Soil = prev_Soil - evap;
+
   // //vypocet overFL
   // overFL = std::max((prev_Soil + ppInf + get_par(par_HRUtype::C) - get_par(par_HRUtype::SMAX) - evap), static_cast<numberSel>(0.0));
   //
@@ -1344,9 +1346,9 @@ void single_HMunit::plateau(){
   // //doplneni overFL
   // overFL = overFL + ppExc;
   //
-  // set_varValue(prev_Soil, tstRM, ts_type::SOIS);
-  // set_varValue(evap, tstRM, ts_type::EVBS);
-  // set_varValue(overFL, tstRM, ts_type::PERC);
+  set_varValue(prev_Soil, tstRM, ts_type::SOIS);
+  set_varValue(evap, tstRM, ts_type::EVBS);
+  set_varValue(overFl, tstRM, ts_type::PERC);
 
   return ;
 
@@ -1453,7 +1455,8 @@ case soil_STORtype::PLATEAU: {
 */
 
 case soil_STORtype::PLATEAU: {
-  //vypocet vstupu do pudniho zasobniku a prepadu mimo zasobnik
+
+  plateau();
   break;
   }
 
