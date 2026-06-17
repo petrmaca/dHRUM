@@ -83,6 +83,8 @@ class single_HMunit {
   void new_Zealand();
   void gr4j();
   void sBrookV1();
+  void hillslope();
+  void plateau();
 
   numberSel collieForestFrac();
 

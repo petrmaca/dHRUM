@@ -51,7 +51,7 @@ params::params(): numPars(1),
   pars[23] = 10;//!< FC Field capacity [mm] [0,inf)
   pars[24] = 0.5;//!< Forest fraction [0,1]
   pars[25] = 0.5;//!< KF2 Storage coefficient of runoff response reservoirs [0,1]
-  pars[26] = 0.5;//!< KF_NONLIN runoff non-linearity parameter [-] [0,inf)
+  pars[26] = 0.1;//!< KF_NONLIN runoff non-linearity parameter [-] [0,1]
   pars[27] = 1;//!< C capillary rise [mm d-1] [0, inf)
   pars[28] = 1;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
   pars[29] = 0.5;//!< RF evaporation reduction factor [-] [0,1]
@@ -102,7 +102,7 @@ params::params(): numPars(1),
   up_pars[23] = 100;//!< FC Field capacity [mm] [0,inf)
   up_pars[24] = 1;//!< Forest fraction [0,1]
   up_pars[25] = 1;//!< KF2 Storage coefficient of runoff response reservoirs [0,1],VC1
-  up_pars[26] = 1;//!< KF_NONLIN runoff non-linearity parameter [-] [0,inf)
+  up_pars[26] = 1;//!< KF_NONLIN runoff non-linearity parameter [-] [0,1]
   up_pars[27] = 100;//!< C capillary rise [mm d-1] [0, inf)
   up_pars[28] = 100;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
   up_pars[29] = 1;//!< RF evaporation reduction factor [-] [0,1]
@@ -153,7 +153,7 @@ params::params(): numPars(1),
   low_pars[23] = 0.0;//!< FC Field capacity [mm] [0,inf)
   low_pars[24] = 0.0;//!< Forest fraction [0,1]
   low_pars[25] = 0.0;//!< KF2 Storage coefficient of runoff response reservoirs [0,1]
-  low_pars[26] = 0.0;//!< KF_NONLIN runoff non-linearity parameter [-] [0,inf)
+  low_pars[26] = 0.0;//!< KF_NONLIN runoff non-linearity parameter [-] [0,1]
   low_pars[27] = 0.0;//!< C capillary rise [mm d-1] [0, inf)
   low_pars[28] = 0.0;//!< INFR_MAX Maximum infiltration rate [mm/d], [0,inf)
   low_pars[29] = 0.0;//!< RF evaporation reduction factor [-] [0,1]

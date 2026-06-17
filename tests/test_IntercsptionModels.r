@@ -49,8 +49,9 @@ setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascad
 # setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PDM2",times= length(Areas)), hruIds = IdsHrus)
 # setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("COLLIE_V2",times= length(Areas)), hruIds = IdsHrus)
 # setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("NEW_ZEALAND",times= length(Areas)), hruIds = IdsHrus)
-setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("GR4J",times= length(Areas)), hruIds = IdsHrus)
+# setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("GR4J",times= length(Areas)), hruIds = IdsHrus)
 # setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("SBROOK_V1",times= length(Areas)), hruIds = IdsHrus)
+setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("HILLSLOPE",times= length(Areas)), hruIds = IdsHrus)
 #setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
 # pondDF1 = data.frame( PondArea = 40500, PonsMax= 45000, MRF= 0.039, Coflw=0.3)
 # pondDF2 = data.frame( Pond_ET = "ETpond1", Pond_inSOIS= "noPondSOISPerc", Pond_inGW = "noPondGWPerc",
@@ -70,7 +71,7 @@ setPTLInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, Lai = lai, as.Date("1990
 ParDF = data.frame( B_SOIL = 1.6, C_MAX = 20, B_EVAP = 2.5,  KS = 0.01, KF = 0.1, ADIV = 0.8, CDIV = 0.5,
                     SDIV = 0.2, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 6, TMEL = -1.0,
                     RETCAP = 8, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 2,SMAX = 8,
-                    KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =0,L=0.1, B_EXP = 0.3, KFR = 0.03,
+                    KF_NONLIN = 0.05, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =0,L=0.1, B_EXP = 0.3, KFR = 0.03,
                     INTstMax = 2,INTstScale = 1, CSfrac = 1, SRFrac =0.75,Kinct = 0.8, KwPe=0.01, Csnow = 0.5)
 
 # (1.6*10+100)/(1.6+1) smax cmin=10 cmax =100 bsoil= 1.6
