@@ -47,7 +47,8 @@ setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("Wetland",ti
 setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
 # setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PDM",times= length(Areas)), hruIds = IdsHrus)
 # setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PDM2",times= length(Areas)), hruIds = IdsHrus)
-setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("COLLIE_V2",times= length(Areas)), hruIds = IdsHrus)
+# setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("COLLIE_V2",times= length(Areas)), hruIds = IdsHrus)
+setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("NEW_ZEALAND",times= length(Areas)), hruIds = IdsHrus)
 #setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
 # pondDF1 = data.frame( PondArea = 40500, PonsMax= 45000, MRF= 0.039, Coflw=0.3)
 # pondDF2 = data.frame( Pond_ET = "ETpond1", Pond_inSOIS= "noPondSOISPerc", Pond_inGW = "noPondGWPerc",
@@ -60,7 +61,7 @@ ctgrs = unique(LAdt$Category)
 ctgrs
 lai = LAdt[Category %in% ctgrs[17], mean_LAI]
 
-plot(lai)
+# plot(lai)
 
 # setPTInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, as.Date("1990/01/30"))
 setPTLInputsToAlldHrus(dhrus, Prec = prec, Temp = temp, Lai = lai, as.Date("1990/01/30"))
@@ -73,14 +74,11 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 20, B_EVAP = 2.5,  KS = 0.01, KF = 0.1
 # (1.6*10+100)/(1.6+1) smax cmin=10 cmax =100 bsoil= 1.6
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))
 
-
 # getCurdHRUpars(dHRUM_ptr = dhrus,0)
 # getAllHRUpars(dHRUM_ptr = dhrus)
 
 # getCurSHRUconfig(dHRUM_ptr = dhrus,0)
 # getAllHRUconfigs(dHRUM_ptr = dhrus)
-
-
 
 calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 # calcHBInAlldHrus(dHRUM_ptr = dhrus)
@@ -90,11 +88,9 @@ calcPetToAllHrus(dHRUM_ptr = dhrus,50.1,"HAMON")
 
 outDta <- dHRUMrun(dHRUM_ptr = dhrus)
 
-
 outDF <- data.frame(outDta$outDta)
 names(outDF) <-c(outDta$VarsNams)
 outDF = as.data.table(outDF)
-
 
 PrecNoSnow = outDF$PREC - outDF$SNOW
 
@@ -233,5 +229,7 @@ sum(outDF$INFL) + sum(outDF$ETWS)
 sum(outDF$PREF)
 
 plot(outDF$SOIS, col = "red", type="l")
-
-
+lines(outDF$TRNS, col="green")
+lines(outDF$EVBS, col="blue")
+lines(outDF$AET)
+lines(outDF$PET, col="red")

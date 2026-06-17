@@ -1075,6 +1075,14 @@ void single_HMunit::collieV2(){
 
   prev_Soil = prev_Soil - overFl1;
 
+  //transpiration through vegetation E_v
+  E_v = std::min(prev_Soil / get_par(par_HRUtype::SMAX) * (get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET)), prev_Soil);
+  numberSel help_EvapEV = update_ETDEMAND(E_v, false);
+  et_demand = update_ETDEMAND(E_v, true);
+  E_v = help_EvapEV;
+
+  prev_Soil = prev_Soil - E_v;
+
 //bare soil evaporation E_b
   E_b = std::min(prev_Soil / get_par(par_HRUtype::SMAX) * (1 - get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET)), prev_Soil);
   numberSel help_EvapSR = update_ETDEMAND(E_b, false);
@@ -1083,13 +1091,7 @@ void single_HMunit::collieV2(){
 
   prev_Soil = prev_Soil - E_b;
 
-//transpiration through vegetation E_v
-  E_v = std::min(prev_Soil / get_par(par_HRUtype::SMAX) * (get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET)), prev_Soil);
-  numberSel help_EvapEV = update_ETDEMAND(E_v, false);
-  et_demand = update_ETDEMAND(E_v, true);
-  E_v = help_EvapEV;
 
-  prev_Soil = prev_Soil - E_v;
 
 //percolation from soil storage
   overFl2 = std::min(get_par(par_HRUtype::KF) * (prev_Soil - get_par(par_HRUtype::FC)), prev_Soil);
@@ -1105,7 +1107,74 @@ void single_HMunit::collieV2(){
   set_varValue((overFl1 + overFl2), tstRM, ts_type::PERC);
 
 return ;
+
 }
+
+void single_HMunit::new_Zealand(){
+
+  numberSel ForestFrac = 0.0, overFl1 = 0.0, E_v  = 0.0, E_b  = 0.0;
+  numberSel overFl2 = 0.0, overFl3 = 0.0, trns = 0.0;
+
+  ForestFrac = collieForestFrac();
+  par_HRU.s_params(ForestFrac,par_HRUtype::FOREST_FRACT);
+
+  //infiltration
+  prev_Soil = prev_Soil + get_dta(tstRM, ts_type::INFL);
+
+  //soil storage overflow 1
+  overFl1 = std::max(prev_Soil - get_par(par_HRUtype::SMAX), 0.0);
+
+  prev_Soil = prev_Soil - overFl1;
+
+  //transpiration through vegetation E_v
+  if(prev_Soil > get_par(par_HRUtype::FC)) {
+    //E_v is evaporation through vegetation
+    E_v = std::min(get_par(par_HRUtype::FOREST_FRACT) * get_dta(tstRM, ts_type::PET), prev_Soil);
+  } else {
+    E_v = std::min(get_par(par_HRUtype::FOREST_FRACT) * get_dta(tstRM, ts_type::PET) * (prev_Soil / get_par(par_HRUtype::FC)), prev_Soil);
+  }
+
+  numberSel help_EvapEV = update_ETDEMAND(E_v, false);
+  et_demand = update_ETDEMAND(E_v, true);
+  E_v = help_EvapEV;
+
+  prev_Soil = prev_Soil - E_v;
+
+  //E_b is bare soil evaporation
+  E_b = std::min(prev_Soil / get_par(par_HRUtype::SMAX) * (1 - get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET)), prev_Soil);
+  numberSel help_EvapEB = update_ETDEMAND(E_b, false);
+  et_demand = update_ETDEMAND(E_b, true);
+  E_b = help_EvapEB;
+
+  prev_Soil = prev_Soil - E_b;
+
+  if(prev_Soil >= get_par(par_HRUtype::FC)) {
+    //overFl2 is subsurface runoff
+    overFl2 = std::min(pow(get_par(par_HRUtype::KF) * (prev_Soil - get_par(par_HRUtype::FC)),get_par(par_HRUtype::KF_NONLIN)), prev_Soil);
+  } else {
+    overFl2 = 0;
+  }
+
+  prev_Soil = prev_Soil - overFl2;
+
+  //overFl3 represents baseflow controlled by time scale parameter KF2
+  overFl3 = std::min(get_par(par_HRUtype::KF2) * prev_Soil,prev_Soil);
+  //std::cout << overFl3 << " " << prev_Soil << " " << std::endl;
+
+  prev_Soil = prev_Soil - overFl3;
+
+  trns = get_dta(tstRM, ts_type::TRNS);
+  trns = trns + E_v;
+
+  set_varValue(prev_Soil, tstRM, ts_type::SOIS);
+  set_varValue(E_b,tstRM, ts_type::EVBS);
+  set_varValue(trns,tstRM, ts_type::TRNS);
+  set_varValue((overFl1+overFl2+overFl3), tstRM, ts_type::PERC);
+
+  return ;
+
+}
+
 /** \brief updates states in soil buffer in single pdm unit
  *
  *  updating of states in soil buffer in single pdm unit
@@ -1135,58 +1204,8 @@ switch(_soil_STORtype) {
 
 
 case soil_STORtype::NEW_ZEALAND: {
-    if(prev_Soil > get_par(par_HRUtype::FC)) {
-      //E_v is evaporation through vegetation
-      E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
-    } else {
-      E_v = get_par(par_HRUtype::FOREST_FRACT) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET)) * (next_soil / get_par(par_HRUtype::FC));
-    }
 
-    //E_b is bare soil evaporation
-    E_b = prev_Soil / get_par(par_HRUtype::SMAX) * (1 - get_par(par_HRUtype::FOREST_FRACT)) * static_cast<numberSel>(get_dta(tstRM, ts_type::PET));
-
-    if(prev_Soil >= get_par(par_HRUtype::FC)) {
-      //overFl2 is subsurface runoff
-      overFl2 = pow(get_par(par_HRUtype::KF) * (prev_Soil - get_par(par_HRUtype::FC)),get_par(par_HRUtype::KF_NONLIN));
-    } else {
-      overFl2 = 0;
-    }
-
-/*    if(prev_Soil >= get_par(par_HRUtype::SMAX)) {
-      //saturation excess runoff
-      overFl1 = static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
-    } else {
-      overFl1 = 0;
-    }
-*/
-
-    //overFl3 represents baseflow controlled by time scale parameter KF2
-    overFl3 = get_par(par_HRUtype::KF2) * prev_Soil;
-    //std::cout << overFl3 << " " << prev_Soil << " " << std::endl;
-
-    overFl1 = std::max((prev_Soil +static_cast<numberSel>(get_dta(tstRM, ts_type::INFL))-get_par(par_HRUtype::SMAX)-E_v-E_b-overFl2-overFl3), 0.0);
-    next_soil = prev_Soil + static_cast<numberSel>(get_dta(tstRM, ts_type::INFL));
-
-    std::vector<numberSel> updated_vals;
-
-    updated_vals = water_balance(next_soil, evap, std::vector<numberSel>{E_v, E_b});
-    next_soil = updated_vals[0];
-    evap = updated_vals[1];
-
-    updated_vals.clear();
-
-    updated_vals = water_balance(next_soil, overFL, std::vector<numberSel>{overFl1, overFl2, overFl3});
-    next_soil = updated_vals[0];
-    overFL = updated_vals[1];
-
-    updated_vals.clear();
-
-    set_varValue(next_soil, tstRM, ts_type::SOIS);
-    set_varValue(evap,tstRM, ts_type::EVBS);
-    set_varValue(overFL, tstRM, ts_type::PERC);
-
-    prev_Soil = next_soil;
-
+    new_Zealand();
     break;
 }
 
