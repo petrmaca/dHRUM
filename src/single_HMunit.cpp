@@ -1094,7 +1094,7 @@ void single_HMunit::collieV2(){
 
 
 //percolation from soil storage
-  overFl2 = std::min(get_par(par_HRUtype::KF) * (prev_Soil - get_par(par_HRUtype::FC)), prev_Soil);
+  overFl2 = std::max(get_par(par_HRUtype::KF) * (prev_Soil - get_par(par_HRUtype::FC)), 0.0);
   prev_Soil = prev_Soil - overFl2;
 
 //transpiration
