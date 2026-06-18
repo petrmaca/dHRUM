@@ -1054,7 +1054,7 @@ numberSel single_HMunit::collieForestFrac(){
 
   numberSel ForestFrac = 0.0, k =0.4;
 
-  ForestFrac = 1 - std::exp(-k*get_dta(tstRM, ts_type::LAI));;
+  ForestFrac = 1 - std::exp(-k*get_dta(tstRM, ts_type::LAI));
 
   return ForestFrac;
 }
