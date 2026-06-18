@@ -1061,7 +1061,7 @@ numberSel single_HMunit::collieForestFrac(){
 
 void single_HMunit::collieV2(){
 
-  numberSel E_b = 0.0, E_v = 0.0, overFl2 = 0.0, overFl1 = 0.0, next_soil = 0.0, trns = 0.0;
+  numberSel E_b = 0.0, E_v = 0.0, overFl2 = 0.0, overFl1 = 0.0, trns = 0.0;
   numberSel  ForestFrac = 0.0;
 
   ForestFrac = collieForestFrac();
@@ -1090,8 +1090,6 @@ void single_HMunit::collieV2(){
   E_b = help_EvapSR;
 
   prev_Soil = prev_Soil - E_b;
-
-
 
 //percolation from soil storage
   overFl2 = std::max(get_par(par_HRUtype::KF) * (prev_Soil - get_par(par_HRUtype::FC)), 0.0);
