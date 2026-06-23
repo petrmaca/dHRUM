@@ -202,13 +202,28 @@ setPTLInputsToDistdHRUM(dhrus, dtaIpns)
 calcPetToAllHrusDist(dHRUM_ptr = dhrus,latBas,rep("HAMON", times =nHrus),basinCHPs)
 
 
+parsList = list()
+for(i in 1:j){
+  # i=1
+  parsList[[i]] <- as.data.table(getCurdHRUpars(dHRUM_ptr = dhrus, singleHruId = i-1))
+  parsList[[i]] = parsList[[i]][-c(6,8,10,12,13,14),]
+  parsList[[i]][, ID := basinCHPs[i]]
+}
+parsList = rbindlist(parsList)
 
-Dta<-dHRUMrunDist(dHRUM_ptr = dhrus)
+ups = dcast(parsList, ID ~ Cur_names, value.var = "Cur_par", fill = 0)
+
+ParsDT = data.table(t(parsList$Cur_par))
+names(ParsDT) = parsList$Cur_names
+
+ParsDT = data.table(pars = parsList$Cur_par)
+names(ParsDT) = parsList$Cur_names
+
+setParsToDistdHRUM(dHRUM_ptr = dhrus, ParsDF = ups[,2:10], PrintPars = FALSE)
+
+
+Dta <- dHRUMrunDist(dHRUM_ptr = dhrus)
 dF  <- data.frame(Dta$outDta)
 dF <- cbind(dF,Dta$Ids)
 names(dF) <- c(Dta$VarsNams)
 dF = as.data.table(dF)
-
-
-
-
