@@ -639,6 +639,15 @@ void dHRUM::loadPTInputsToOneHru(hdata Prec, hdata Temp, const numberSel& val,co
 
 }
 
+void dHRUM::loadPTLInputsToOneHru(hdata Prec, hdata Temp, hdata Lai, const numberSel& val,const unsigned& inYear, const unsigned& inMonth,const unsigned& inDay, unsigned HruIt) {
+
+  dHruVec[HruIt].load_data_PTL( Prec, Temp, Lai, val, inYear, inMonth, inDay);
+
+  return;
+
+}
+
+
 std::vector<std::string> dHRUM::getHRUIds() {
 
   std::vector<std::string> ids(getdHRUdim());

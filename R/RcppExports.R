@@ -152,6 +152,9 @@ setGWtypeToAlldHrus <- function(dHRUM_ptr, gwTypes, hruIds) {
     invisible(.Call(`_dHRUM_setGWtypeToAlldHrus`, dHRUM_ptr, gwTypes, hruIds))
 }
 
+#' Sets the distributed Precipitation, Temperature vectors to distributed dHRUM and init's the date using beg. of period.
+NULL
+
 #' Sets similar input data obtained from file to all single Hrus at dHRUM instance.
 #'
 #' Loads the data from file to a single dHRUM instance created  the \code{initdHruModel(nHrus,Areas,IdsHrus)} function
@@ -242,6 +245,10 @@ setPTDateInputsToAlldHrus <- function(dHRUM_ptr, Prec, Temp, DateVec) {
 #' setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus,soilTypes=rep("PDM",times= length(Areas)),hruIds=IdsHrus)
 setPTInputsToDistdHRUM <- function(dHRUM_ptr, DataDF) {
     invisible(.Call(`_dHRUM_setPTInputsToDistdHRUM`, dHRUM_ptr, DataDF))
+}
+
+setPTLInputsToDistdHRUM <- function(dHRUM_ptr, DataDF) {
+    invisible(.Call(`_dHRUM_setPTLInputsToDistdHRUM`, dHRUM_ptr, DataDF))
 }
 
 #' Sets the similar Precipitation, Temperature and LAI vectors to dHRUM and init's the date using beg. of period.

@@ -130,6 +130,17 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// setPTLInputsToDistdHRUM
+void setPTLInputsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame DataDF);
+RcppExport SEXP _dHRUM_setPTLInputsToDistdHRUM(SEXP dHRUM_ptrSEXP, SEXP DataDFSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type DataDF(DataDFSEXP);
+    setPTLInputsToDistdHRUM(dHRUM_ptr, DataDF);
+    return R_NilValue;
+END_RCPP
+}
 // setPTLInputsToAlldHrus
 void setPTLInputsToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::NumericVector Prec, Rcpp::NumericVector Temp, Rcpp::NumericVector Lai, Rcpp::Date inDate);
 RcppExport SEXP _dHRUM_setPTLInputsToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP PrecSEXP, SEXP TempSEXP, SEXP LaiSEXP, SEXP inDateSEXP) {
@@ -395,6 +406,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_setPTInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTInputsToAlldHrus, 4},
     {"_dHRUM_setPTDateInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTDateInputsToAlldHrus, 4},
     {"_dHRUM_setPTInputsToDistdHRUM", (DL_FUNC) &_dHRUM_setPTInputsToDistdHRUM, 2},
+    {"_dHRUM_setPTLInputsToDistdHRUM", (DL_FUNC) &_dHRUM_setPTLInputsToDistdHRUM, 2},
     {"_dHRUM_setPTLInputsToAlldHrus", (DL_FUNC) &_dHRUM_setPTLInputsToAlldHrus, 5},
     {"_dHRUM_setInterceptiontypeToAlldHrus", (DL_FUNC) &_dHRUM_setInterceptiontypeToAlldHrus, 5},
     {"_dHRUM_initdHruModel", (DL_FUNC) &_dHRUM_initdHruModel, 4},
