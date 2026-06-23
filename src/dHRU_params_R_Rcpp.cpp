@@ -811,7 +811,7 @@ void setParsToDistdHRUM(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::DataFrame ParsDF, boo
        Rcpp::Named("Cur_par") = cur_par,
        Rcpp::Named("Up_bound") = up_par,
        Rcpp::Named("Low_bound") = low_par,
-       Rcpp::Named("sHRU_ID") = HRU_name);
+       Rcpp::Named("Ids") = HRU_name);
 
      alldfs.insert( HruId, df );
    }
@@ -916,7 +916,7 @@ Rcpp::List getAllHRUconfigs(Rcpp::XPtr<dHRUM> dHRUM_ptr) {
      df=Rcpp::DataFrame::create(
        Rcpp::Named("Name") = names,
        Rcpp::Named("Value") = values,
-       Rcpp::Named("sHRU_ID") = textID);
+       Rcpp::Named("Ids") = textID);
 
      alldfs.insert( i, df );
     }
