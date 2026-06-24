@@ -211,15 +211,12 @@ for(i in 1:j){
 }
 parsList = rbindlist(parsList)
 
-ups = dcast(parsList, ID ~ Cur_names, value.var = "Cur_par", fill = 0)
+ParsWDT = dcast(parsList, ID ~ Cur_names, value.var = "Cur_par", fill = 0)
 
-ParsDT = data.table(t(parsList$Cur_par))
-names(ParsDT) = parsList$Cur_names
+# ParsDT = data.table(t(parsList$Cur_par))
+# names(ParsDT) = parsList$Cur_names
 
-ParsDT = data.table(pars = parsList$Cur_par)
-names(ParsDT) = parsList$Cur_names
-
-setParsToDistdHRUM(dHRUM_ptr = dhrus, ParsDF = ups[,2:10], PrintPars = FALSE)
+setParsToDistdHRUM(dHRUM_ptr = dhrus, ParsDF = ParsWDT[,2:10], PrintPars = FALSE)
 
 
 Dta <- dHRUMrunDist(dHRUM_ptr = dhrus)
