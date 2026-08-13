@@ -6,6 +6,21 @@
 #include <string>
 #include <map>
 
+
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <valarray>
+#include <cmath>
+#include <string>
+#include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <algorithm>
+#include <vector>
+#include <utility>
+
 //#include "parStructSels.h"
 
 // Type for numbers selector
