@@ -1764,7 +1764,7 @@ void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
   OverflowCan = std::max((prevCanS - get_par(par_HRUtype::CAN_ST)),0.0);
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
   prevCanS = prevCanS - OverflowCan;
-  EvapCanop = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  EvapCanop = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2.0/3.0),prevCanS);
 
   numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
   et_demand = update_ETDEMAND(EvapCanop, true);
@@ -1791,7 +1791,7 @@ void single_HMunit::interception_NoSnow(interception_STORtype _intrc_STORAGE) {
   OverflowStem = std::max((prevSteS - get_par(par_HRUtype::STEM_ST)),0.0);
   prevSteS = prevSteS - OverflowStem;
 
-  EvapStem = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+  EvapStem = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2.0/3.0)), prevSteS);
 
   numberSel help_EvapStem = update_ETDEMAND(EvapStem, false);
   et_demand = update_ETDEMAND(EvapStem, true);
@@ -1918,7 +1918,7 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
   // prevCanS = prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::PREC) + get_dta(tstRM, ts_type::MELT)) - OverCanst_update + OverflowCan_Return;
 
   //the sublimation of snow
-  EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  EvapCanop = std::min(pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2.0/3.0),prevCanS);
 
   numberSel help_EvapCanop = update_ETDEMAND(EvapCanop, false);
   et_demand = update_ETDEMAND(EvapCanop, true);
@@ -1944,7 +1944,7 @@ void single_HMunit::interception_WithSnow(interception_STORtype _intrc_STORAGE) 
   OverflowStem = std::max((prevSteS - get_par(par_HRUtype::STEM_ST)),0.0);
   prevSteS = prevSteS - OverflowStem;
   //!< VIC model for canopy evaporation (prevCanS/ get_par(par_HRUtype::CAN_ST))^(2/3)
-  EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+  EvapStem = std::min(pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2.0/3.0)), prevSteS);
 
   numberSel help_EvapStem = update_ETDEMAND(EvapStem, false);
   et_demand = update_ETDEMAND(EvapStem, true);
