@@ -2350,7 +2350,7 @@ void single_HMunit::interception_RutterGash_summer(){
 //Liquid interception dynamics
   Dc = std::max((prevCanS + get_par(par_HRUtype::CDIV) * (get_dta(tstRM, ts_type::RAIN)) - get_par(par_HRUtype::CAN_ST)),0.0);
   prevCanS = prevCanS + (get_par(par_HRUtype::CDIV)) * (get_dta(tstRM, ts_type::RAIN)) - Dc;
-  Ec = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),2/3),prevCanS);
+  Ec = std::min(std::pow(((prevCanS) / get_par(par_HRUtype::CAN_ST)),(2.0/3.0)),prevCanS);
 
   numberSel help_Ec = update_ETDEMAND(Ec, false);
   et_demand = update_ETDEMAND(Ec, true);
@@ -2360,7 +2360,7 @@ void single_HMunit::interception_RutterGash_summer(){
 
   Ds = std::max((prevSteS + get_par(par_HRUtype::SDIV) * (get_dta(tstRM, ts_type::RAIN)) - get_par(par_HRUtype::STEM_ST)),0.0);
   prevSteS = prevSteS + (get_par(par_HRUtype::SDIV)) * (get_dta(tstRM, ts_type::RAIN)) - Ds;
-  Es = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2/3)), prevSteS);
+  Es = std::min(std::pow(((prevSteS) / get_par(par_HRUtype::STEM_ST)),(2.0/3.0)), prevSteS);
 
   numberSel help_Es = update_ETDEMAND(Es, false);
   et_demand = update_ETDEMAND(Es, true);
