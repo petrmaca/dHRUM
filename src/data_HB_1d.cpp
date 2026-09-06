@@ -246,7 +246,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Refr = other.Refr;
   init_SoiS = other.init_SoiS;//!< Initial value of soil storage
   init_GroS = other.init_GroS;//!< Initial value of groundwater storage
-  init_CanS = other.init_SteS;//!< Initial value of Canopy Interception storage
+  init_CanS = other.init_CanS;//!< Initial value of Canopy Interception storage
   init_SteS = other.init_SteS;//!< Initial value of Stem Interception storage
   init_Intr = other.init_Intr;//!< Initial value of Interception storage
   init_SnoS = other.init_SnoS;//!< Initial variable of Snow storage
@@ -311,7 +311,7 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     Refr = rhs.Refr;
     init_SoiS = rhs.init_SoiS;//!< Initial value of soil storage
     init_GroS = rhs.init_GroS;//!< Initial value of groundwater storage
-    init_CanS = rhs.init_SteS;//!< Initial value of Canopy Interception storage
+    init_CanS = rhs.init_CanS;//!< Initial value of Canopy Interception storage
     init_SteS = rhs.init_SteS;//!< Initial value of Stem Interception storage
     init_Intr = rhs.init_Intr;//!< Initial value of van Dijk Interception storage
     init_SnoS = rhs.init_SnoS;//!< Initial variable of Snow storage
