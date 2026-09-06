@@ -1056,7 +1056,7 @@ void data_HB_1d::BlaneycriddlePET(){
     Nn[tst] = 24 / M_PI * omega / (365*12);
   }
 
-  for(unsigned tst=1; tst<numTS; tst++) {
+  for(unsigned tst=0; tst<numTS; tst++) {
     PEt[tst] = (Nn[tst] * 0.85 ) * 100 * (0.46 * Temp[tst] + 8.13);
     //Xu and Singh 2001
     //Evaluation and generalization of temperature-basedmethods for
