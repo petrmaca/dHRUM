@@ -14,6 +14,10 @@
 # C++ behavior, including the quirk that the final year's annual heat index
 # sums only Jan--Nov (see REFACTORING_PLAN.md). Fixing that quirk requires
 # updating this test.
+#
+# Note: a dedicated guard for the fixed Blaney-Criddle day-1 bug (pre-fix
+# C++ never wrote PEt[0]) is at the bottom of this script; the test fails
+# with an explanatory message if that bug is ever reintroduced.
 
 library(dHRUM)
 
@@ -125,6 +129,40 @@ thorne_expected <- function(temp, year, month, jday, lat) {
 }
 expected$THORNTHWAITE <- thorne_expected(temp, yr, mon, jday, lat)
 
+# ---------- Blaney-Criddle day-1 bug (fixed in commit 0c76cc6) ----------
+#
+# Bug in data_HB_1d::BlaneycriddlePET (src/data_HB_1d.cpp): the loop that
+# fills PEt was written as
+#
+#   for (unsigned tst = 1; tst < numTS; tst++)
+#     PEt[tst] = (Nn[tst] * 0.85) * 100 * (0.46 * Temp[tst] + 8.13);
+#
+# starting at tst = 1, so PEt[0] was never written. The first simulated
+# day therefore kept whatever value PEt already held -- in practice the
+# zero fill from model setup -- and every Blaney-Criddle run silently
+# reported PET = 0 on day 1 (formula gives ~0.97 for the Jan-1 start used
+# here; ~5.34 for a June start at lat 50). Days from 2 onward were
+# correct, which made the bug easy to miss.
+#
+# Fix (correct way to write the loop): start at tst = 0 so every time
+# step, including the first day, is written:
+#
+#   for (unsigned tst = 0; tst < numTS; tst++)
+#     PEt[tst] = (Nn[tst] * 0.85) * 100 * (0.46 * Temp[tst] + 8.13);
+#
+# blaneycriddle_buggy() transcribes the pre-fix loop so this script can
+# demonstrate the bug's impact; the guard at the bottom locks in the fix.
+blaneycriddle_buggy <- function(temp, om) {
+  n <- length(temp)
+  pet <- numeric(n)  # stale zero fill: mirrors unwritten PEt[0] in C++
+  for (tst in 2:n) { # buggy loop starts at the second time step
+    pet[tst] <- (24 / pi * om[tst] / (365 * 12) * 0.85) * 100 *
+                (0.46 * temp[tst] + 8.13)
+  }
+  pet
+}
+bc_buggy <- blaneycriddle_buggy(temp, om)
+
 # ---------- compare --------------------------------------------------------
 
 tol <- 1e-9
@@ -146,6 +184,25 @@ for (i in seq_along(expected)) {
 }
 
 print(format(results, digits = 8), right = FALSE)
+
+# ---------- Blaney-Criddle day-1 bug guard ------------------------------
+# Show the bug's impact and fail loudly with an explanation if the pre-fix
+# behaviour (PEt[0] never written) ever returns.
+bc_got <- run_pet("BLANEYCRIDDLE")
+cat(sprintf(paste0(
+  "\nBlaney-Criddle day-1 bug demonstration:\n",
+  "  day 1 pre-fix (buggy transcription): %.6f\n",
+  "  day 1 correct (formula):             %.6f\n",
+  "  day 1 compiled (current C++):        %.6f\n"),
+  bc_buggy[1], expected[["BLANEYCRIDDLE"]][1], bc_got[1]))
+if (abs(bc_got[1] - expected[["BLANEYCRIDDLE"]][1]) >= tol) {
+  stop(paste0(
+    "BLANEYCRIDDLE day-1 regression: compiled value ", bc_got[1],
+    " != formula value ", expected[["BLANEYCRIDDLE"]][1], ".\n",
+    "PEt[0] is likely never written -- in data_HB_1d::BlaneycriddlePET ",
+    "the loop filling PEt must start at tst = 0, not tst = 1 ",
+    "(see bug comment block in tests/pet_regression.r)."))
+}
 
 if (any(results$status == "FAIL")) {
   stop("PET regression test FAILED for: ",
