@@ -92,7 +92,7 @@ params::params(): numPars(1),
   up_pars[18] = 1;//!< B_EXP Power coefficient
   up_pars[19] = 1;//!< KS2 Storage coefficient of groundwater storage [0,1],VC1
   up_pars[20] = 100;//!< THR Threshold coefficient for threshold-controlled linear storage [1,inf]
-  up_pars[21] = 10;//!< ALPHA Divider for two parallel linear reservoirs
+  up_pars[21] = 1;//!< ALPHA Divider for two parallel linear reservoirs
   up_pars[22] = 200;//!< CIMN lower limit of c in soils pdm reservoir
 
   numberSel helpSmaxPDMUp = 0;
