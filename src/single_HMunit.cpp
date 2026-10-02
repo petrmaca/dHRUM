@@ -41,6 +41,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   pondGWPERCout{},
   PondROUT{},
   Snow_MDL{},
+  Adiv_MDL{},
   InstStLai{},
   Wetland{},
   Current_par_names(),
@@ -82,6 +83,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   pondGWPERCout = PondGWPerc_type::noPondGWPerc;
   PondROUT = PondRouT_type::noPondRouT;
   Snow_MDL = snow_Model::DDF;
+  Adiv_MDL = adiv_Model::CnstAdiv;
 
   InstStLai = false;
   Wetland = false;
@@ -151,6 +153,7 @@ pondGWPERCin{},
 pondGWPERCout{},
 PondROUT{},
 Snow_MDL{},
+Adiv_MDL{},
 InstStLai{},
 Wetland{},
 Current_par_names(),
@@ -194,6 +197,7 @@ Current_sHMu_configuration()
   pondGWPERCout = other.pondGWPERCout;
   PondROUT = other.PondROUT;
   Snow_MDL = other.Snow_MDL;
+  Adiv_MDL = other.Adiv_MDL;
 
   InstStLai = other.InstStLai;
   Wetland = other.Wetland;
@@ -255,6 +259,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     pondGWPERCout = rhs.pondGWPERCout;
     PondROUT = rhs.PondROUT;
     Snow_MDL = rhs.Snow_MDL;
+    Adiv_MDL = rhs.Adiv_MDL;
 
 
     InstStLai = rhs.InstStLai;
@@ -2941,7 +2946,8 @@ void single_HMunit::run_HB() {
     surface_Retention(srfs_STORAGE);//new interface
     // std::cout << " surf ret "<< et_demand << " ewsr " << get_dta(tstRM,ts_type::ETSW) <<"\n";
     // std::cout << tstRM << "\n\n";
-    soil_buffer(soil_STORAGE);//
+    soil_buffer(soil_STORAGE);
+    updateSLowFastDivider();
     fast_response(fast_RESPONSE);
     slow_response(gs_STORAGE);
     helprm = (get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR));
@@ -3770,7 +3776,7 @@ void single_HMunit::print_sHRU_settings() {
 
 void single_HMunit::current_params() {
 
-  par_HRU.current_param(gs_STORAGE,soil_STORAGE,intrc_STORAGE,srfs_STORAGE,fast_RESPONSE );
+  par_HRU.current_param(gs_STORAGE,soil_STORAGE,intrc_STORAGE,srfs_STORAGE,fast_RESPONSE,Snow_MDL,Adiv_MDL);
 
   // std::cout<<"velikost vectoru s names params: "<<par_HRU.Current_parameter_string.size()<<std::endl;
   // Current_par_names=par_HRU.Current_parameter_string;
@@ -4599,3 +4605,46 @@ void single_HMunit::get_InterceptionsSmax(interception_STORtype _intrc_STORAGE){
   return ;
 
 }
+
+void single_HMunit::set_Adiv_MDL(adiv_Model _adiv_Model)
+{
+
+  Adiv_MDL = _adiv_Model;
+
+}
+
+adiv_Model single_HMunit::get_adiv_MDL(){
+
+  return Adiv_MDL;
+
+}
+
+
+
+void single_HMunit::updateSLowFastDivider(){
+
+  numberSel Smax = 0.0, curSoilState = 0.0, adiv = 0.0;
+
+  switch(Adiv_MDL) {
+  case adiv_Model::CnstAdiv:
+    //ADIV par controls fast runoff divider o percolation it is constant over the period
+    break;
+  case adiv_Model::adivSoilSat:
+    curSoilState = get_dta(tstRM, ts_type::SOIS);
+    if(soil_STORAGE ==soil_STORtype::PDM) Smax = get_par(par_HRUtype::SMAXpdm);
+      else { if(soil_STORAGE == soil_STORtype::PDM2) Smax = (get_par(par_HRUtype::C_MAX) / (get_par(par_HRUtype::B_SOIL)+1));
+        else Smax = get_par(par_HRUtype::SMAX);
+           }
+    adiv = std::pow( (curSoilState / Smax), get_par(par_HRUtype::ADIVexp));
+    par_HRU.s_params(adiv,par_HRUtype::ADIV);
+
+    break;
+  }
+
+
+
+
+
+}
+
+

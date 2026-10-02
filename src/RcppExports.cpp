@@ -358,6 +358,18 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// setFastSlowDivModeltypeToAlldHrus
+void setFastSlowDivModeltypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector adivsModelTypes, Rcpp::CharacterVector hruIds);
+RcppExport SEXP _dHRUM_setFastSlowDivModeltypeToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP adivsModelTypesSEXP, SEXP hruIdsSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<dHRUM> >::type dHRUM_ptr(dHRUM_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type adivsModelTypes(adivsModelTypesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type hruIds(hruIdsSEXP);
+    setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr, adivsModelTypes, hruIds);
+    return R_NilValue;
+END_RCPP
+}
 // setSnowMeltModeltypeToAlldHrus
 void setSnowMeltModeltypeToAlldHrus(Rcpp::XPtr<dHRUM> dHRUM_ptr, Rcpp::CharacterVector snowMeltModelTypes, Rcpp::CharacterVector hruIds);
 RcppExport SEXP _dHRUM_setSnowMeltModeltypeToAlldHrus(SEXP dHRUM_ptrSEXP, SEXP snowMeltModelTypesSEXP, SEXP hruIdsSEXP) {
@@ -425,6 +437,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dHRUM_calcPetToAllHrus", (DL_FUNC) &_dHRUM_calcPetToAllHrus, 3},
     {"_dHRUM_calcPetToAllHrusDist", (DL_FUNC) &_dHRUM_calcPetToAllHrusDist, 4},
     {"_dHRUM_setNumFastResAlldHrus", (DL_FUNC) &_dHRUM_setNumFastResAlldHrus, 3},
+    {"_dHRUM_setFastSlowDivModeltypeToAlldHrus", (DL_FUNC) &_dHRUM_setFastSlowDivModeltypeToAlldHrus, 3},
     {"_dHRUM_setSnowMeltModeltypeToAlldHrus", (DL_FUNC) &_dHRUM_setSnowMeltModeltypeToAlldHrus, 3},
     {"_dHRUM_setSoilStorTypeToAlldHrus", (DL_FUNC) &_dHRUM_setSoilStorTypeToAlldHrus, 3},
     {"_dHRUM_setSurfaceStortypeToAlldHrus", (DL_FUNC) &_dHRUM_setSurfaceStortypeToAlldHrus, 3},

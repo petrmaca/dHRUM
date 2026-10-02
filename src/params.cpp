@@ -12,7 +12,7 @@ params::params(): numPars(1),
   Current_lowparameter_val({1.0})
   {
   // std::cout << "(double low_pars.resize(numPars,numPars))1" << std::endl;
-  numPars = 43;//for Nparams params it must equal to Nparams --> not smaller i.e. Nparams-1
+  numPars = 44;//for Nparams params it must equal to Nparams --> not smaller i.e. Nparams-1
   //the indexing is 0,1, ... Nparams-1 th number of  params is Nparams
   // std::cout << "(double low_pars.resize(numPars,numPars)02)" << std::endl;
 
@@ -68,7 +68,7 @@ params::params(): numPars(1),
   pars[40] = 0.4;//!< Wetland distribution fraction [0,1]
   pars[41] = 0.1;//!< Storage coefficient for wetlad percolation [0,1]
   pars[42] = 0.05;//!< Sublimation Coefficient [0.02,0.25] or [0.002,0.44] mm/day/hPa
-
+  pars[43] = 1.0;//!< Power coefficient for divider between slow and fast response [-] [0.001,\\infty]
 
 // Upper bounds of parameters
   up_pars[0] = 3.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
@@ -119,7 +119,7 @@ params::params(): numPars(1),
   up_pars[40] = 1.0;//!< Kinct Beer-Lambert extinction coefficient [0,1]
   up_pars[41] = 1.0;//!< KwPe Storage coefficient for wetland percolation [0,1]
   up_pars[42] = 0.44;//!< Sublimation Coefficient [0.02,0.25] or [0.002,0.44] mm/day/hPa
-
+  up_pars[43] = 3.0;//!< Power coefficient for divider between slow and fast response [-] [0.001,3]
 
 // Lower bounds of parameters
   low_pars[0] = 0.0;//!< B_SOIL Parameter controlling shape of Pareto distribution of soil storages [0,inf] however [0.5,3],VC1
@@ -170,6 +170,8 @@ params::params(): numPars(1),
   low_pars[40] = 0.1;//!< Kinct Beer-Lambert extinction coefficient [0,1]
   low_pars[41] = 0.0;//!< KwPe Storage coefficient for wetland percolation [0,1]
   low_pars[42] = 0.02;//!< Sublimation Coefficient [0.02,0.25] or [0.002,0.44] mm/day/hPa
+  low_pars[43] = 0.2;//!< Power coefficient for divider between slow and fast response [-]
+
 
   unsigned ups;
   ups = Current_parameter_string.size();//PM why two times?
@@ -399,6 +401,9 @@ void params::s_params(const numberSel& par_dta,par_HRUtype _parType) {
   case par_HRUtype::Csnow:
     pars[42] = par_dta;
     break;
+  case par_HRUtype::ADIVexp:
+    pars[43] = par_dta;
+    break;
   }
 
   pars[3] = (pars[0] * pars[22] + pars[1]) / (pars[0] +1 );
@@ -585,6 +590,9 @@ void params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) {
   case par_HRUtype::Csnow:
     pars[42] = par_dta;
     break;
+  case par_HRUtype::ADIVexp:
+    pars[43] = par_dta;
+    break;
   }
   return ;
 }
@@ -731,6 +739,9 @@ numberSel params::g_par(const par_HRUtype& _parType) {
   case par_HRUtype::Csnow:
     value = pars[42];
     break;
+  case par_HRUtype::ADIVexp:
+    value = pars[43];
+    break;
 }
 
   return value;
@@ -826,6 +837,7 @@ void params::s_default() {
   pars[40] = 0.4;//!< Kinct Beer-Lambert extinction coefficient [-]
   pars[41] = 0.1;//!< KwPe wetland percolation storage coefficient [0,1]
   pars[42] = 0.1;//!< Sublimation Coefficient [0.02,0.25] or [0.002,0.44] mm/day/hPa
+  pars[43] = 1.0;//!< Power coefficient for divider between slow and fast response [-] [0.001,\\infty]
 
   numFastRes = 1;
 
@@ -843,7 +855,7 @@ void params::p_param() {
                                       "DDFA: ", "TMEL: ", "RETCAP: ", "L: ", "D_BYPASS: ", "B_EXP: ", "KS2: ",    \
                                       "THR: ", "ALPHA: ","CMIN: ","FC: ","FOREST_FRACT: ", "KF2: ",               \
                                       "KF_NONLIN: ", "C: ", "INFR_MAX: ", "RF: ", "WP: ", "SMAX: ", "RBAI:", "RBEI:", "KFR:","INTstMax: ", \
-                                      "CSfrac: ", "INTstScale","WtlnFrac","SRFrac","Kinct","KwPe","Csnow"};
+                                      "CSfrac: ", "INTstScale","WtlnFrac","SRFrac","Kinct","KwPe","Csnow","ADIVexp"};
 
   std::cout << std::endl << "Printing the values of parameters:" << std::endl << std::endl;
   for(unsigned pp=0; pp<numPars ; pp++ ) {
@@ -1001,6 +1013,9 @@ numberSel params::g_par_low(const par_HRUtype& _parType) {
   case par_HRUtype::Csnow:
     value = low_pars[42];
     break;
+  case par_HRUtype::ADIVexp:
+    value = low_pars[43];
+    break;
 }
 
     return value;
@@ -1142,11 +1157,14 @@ numberSel params::g_par_up(const par_HRUtype& _parType) {
   case par_HRUtype::Csnow:
     value = up_pars[42];
     break;
+  case par_HRUtype::ADIVexp:
+    value = up_pars[43];
+    break;
   }
   return value;
 }
 
-void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP ) {
+void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP, snow_Model Snow_MDL, adiv_Model adiv_MDL) {
 
   std::list<par_HRUtype> full_list;
   //std::cout<<"full list size v params BEGINING: "<<full_list.size()<<std::endl;
@@ -1417,6 +1435,9 @@ void params::print_par_list(std::list<par_HRUtype> par_list){
     case par_HRUtype::Csnow:
       std::cout <<std::left << std::setw(spacer)<< "Csnow:"<< "\t\t";
       break;
+    case par_HRUtype::ADIVexp:
+      std::cout <<std::left << std::setw(spacer)<< "ADIVexp:"<< "\t\t";
+      break;
     }
     // std::cout << Current_parameter_val[counter] << "\t";
     // std::cout << Current_upparameter_val[counter] << "\t";
@@ -1558,6 +1579,9 @@ std::vector<std::string> params::par_HRUtype_to_string(std::list<par_HRUtype> pa
       break;
     case par_HRUtype::Csnow:
       par_vec.push_back("Csnow");
+      break;
+    case par_HRUtype::ADIVexp:
+      par_vec.push_back("ADIVexp");
       break;
     }
   }

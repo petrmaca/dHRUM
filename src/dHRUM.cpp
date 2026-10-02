@@ -15,6 +15,8 @@ dHRUM::dHRUM(): num_threads(0),
   interception_STORtypes(),
   surf_STORtypes(),
   fast_RESPONSESTypes(),
+  snow_MLTypes(),
+  adiv_Types(),
   pondTypes()
   {
   //ctor
@@ -39,7 +41,10 @@ dHRUM::dHRUM(const dHRUM& other): num_threads(0),
   sw_STORtypes(),
   interception_STORtypes(),
   surf_STORtypes(),
-  fast_RESPONSESTypes()
+  fast_RESPONSESTypes(),
+  snow_MLTypes(),
+  adiv_Types(),
+  pondTypes()
   {
 
   dHruVec = other.dHruVec;
@@ -55,6 +60,8 @@ dHRUM::dHRUM(const dHRUM& other): num_threads(0),
   interception_STORtypes = other.interception_STORtypes;
   surf_STORtypes = other.surf_STORtypes;
   fast_RESPONSESTypes = other.fast_RESPONSESTypes;
+  snow_MLTypes = other.snow_MLTypes;
+  adiv_Types = other.adiv_Types;
   pondTypes = other.pondTypes;
   num_threads = other.num_threads;
 
@@ -77,11 +84,15 @@ dHRUM& dHRUM::operator=(const dHRUM& rhs) {
     interception_STORtypes = rhs.interception_STORtypes;
     surf_STORtypes = rhs.surf_STORtypes;
     fast_RESPONSESTypes = rhs.fast_RESPONSESTypes;
+    snow_MLTypes = rhs.snow_MLTypes;
+    adiv_Types = rhs.adiv_Types;
     pondTypes = rhs.pondTypes;
     NumFastRes = rhs.NumFastRes;
     num_threads = rhs.num_threads;
   }
+
   return *this;
+
 }
 
 /** \brief Initialization of vectors of single HM units
@@ -185,6 +196,20 @@ void dHRUM::initSnowMelMdltypeToAlldHrus(std::vector<std::pair<unsigned,snow_Mod
 
   return ;
 }
+
+void dHRUM::initAdivMdltypeToAlldHrus(std::vector<std::pair<unsigned,adiv_Model>>& adiv_Models){
+
+#pragma omp parallel for num_threads(num_threads)
+  for(unsigned int i=0; i<adiv_Models.size(); i++) {
+    dHruVec[adiv_Models[i].first].set_Adiv_MDL(adiv_Models[i].second);
+  }
+
+
+  return ;
+}
+
+
+
 
 void dHRUM::setParamsToAlldHrus(std::vector<std::pair<numberSel,par_HRUtype>> parsToLoad) {
   //  #pragma omp parallel
