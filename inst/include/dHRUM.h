@@ -71,6 +71,7 @@ class dHRUM {
   void initSoilStypeToAlldHrus(std::vector<std::pair<unsigned,soil_STORtype>>& soil_STORtypes);
   void initIntrcptnStypeToAlldHrus(std::vector<std::pair<unsigned,interception_STORtype>>& interception_STORtypes, std::vector<bool> updateLAI, std::vector<std::pair<unsigned,lai_SmaxModel>> SmaxLaiType);
   void initSnowMelMdltypeToAlldHrus(std::vector<std::pair<unsigned,snow_Model>>& snow_MLTModels);
+  void initAdivMdltypeToAlldHrus(std::vector<std::pair<unsigned,adiv_Model>>& adiv_Models);
   void initSurfaceStypeToAlldHrus(std::vector<std::pair<unsigned,surface_STORtype>>& surface_STORtype);
   void initFastResponsesToAlldHrus(std::vector<std::pair<unsigned,fast_Response>>& fast_RESPONSESTypes);
   void initPondToAlldHrus(std::vector<std::pair<unsigned,pond_type>>& pondTypes);
@@ -115,6 +116,8 @@ private:
   std::vector<interception_STORtype> interception_STORtypes;//!< The vector on interception storage types
   std::vector<surface_STORtype> surf_STORtypes;//!< The vector on surface retentions type in HRus
   std::vector<fast_Response> fast_RESPONSESTypes;//!< The vector on fast responses types in HRus
+  std::vector<snow_Model> snow_MLTypes;//!< The vector on snow mlet models in HRUs
+  std::vector<adiv_Model> adiv_Types;//!< The vector on adiv responses types in HRus
   std::vector<pond_type> pondTypes;//!< The vector on fast responses types in HRus
 
 

@@ -43,7 +43,7 @@
      for(unsigned it=0; it<numHruIdNames;it++ ){
        if ( std::find(ids.begin(), ids.end(), hruIdName[it]) == ids.end()) {
          Rcpp::Rcout << "\nSomething wrong on item " << (it+1) << "\n";
-         Rcpp::stop("\n Wrong names of Hru Id Values.\n");
+         Rcpp::stop("\n Wrong names of Hru Id Values looking at snow models.\n");
        }
      }
 

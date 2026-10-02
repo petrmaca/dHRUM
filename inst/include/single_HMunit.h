@@ -16,7 +16,7 @@
 
 #include "numberSel.h"
 #include "params.h"
-#include "parStructSels.h"
+// #include "parStructSels.h" //inluced through params.h
 #include "pondSel.h"
 #include "data_HB_1d.h"
 
@@ -214,6 +214,9 @@ class single_HMunit {
   //void current_configuration(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP );
   void current_configuration();
 
+  void updateSLowFastDivider();
+  void set_Adiv_MDL(adiv_Model _adiv_Model);
+  adiv_Model get_adiv_MDL();
 
 
 protected:
@@ -260,6 +263,7 @@ private:
   PondGWPerc_type  pondGWPERCout;//!< Type of percolation from pond to groundwater
   PondRouT_type  PondROUT;//!< Pond outlet method
   snow_Model Snow_MDL;//!< Snow melt model
+  adiv_Model Adiv_MDL;//!< adiv model on slow and fast runoff responce
 
   bool InstStLai;//!< Controsl for LAI impeemnted in interception models
   bool Wetland;//!< Control for Wetland presented in HRU

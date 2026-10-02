@@ -1,0 +1,19 @@
+adding a new structure and adding a param into the new structure
+00 at params::params(): numPars(1),see line   numPars = 44; be carefull by adding the pars you must increase the numpars
+
+1)parStructSel - par_HRUtype - lines 17, 21, 31 new par_HRUtype
+
+params.h params.cpp
+2)constructor params::params() pars up_pars low_pars
+3)void params::s_params(const numberSel& par_dta,par_HRUtype _parType) modify switch
+4)params::s_params(const std::pair <numberSel,par_HRUtype>& parDta) modify switch
+5)params::g_par(const par_HRUtype& _parType) modify switch
+6)s_default() add end of par
+7)params::g_par_low(const par_HRUtype& _parType) modify switch
+8)params::g_par_up(const par_HRUtype& _parType) modify switch
+9)update params::current_param(.......) adding to *.cpp and *.h
+10)print_par_list() modify switch
+11)params::par_HRUtype_to_string modify switch
+
+single_HMunit
+12)

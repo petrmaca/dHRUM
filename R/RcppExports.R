@@ -759,6 +759,25 @@ setNumFastResAlldHrus <- function(dHRUM_ptr, numFastRes, hruIds) {
 #'
 #'
 #' @param dHRUM_ptr pointer to dHRUM instance
+#' @param adivsModelTypes a charater vector of Surface retention type names
+#' @param hruIds ids on Hrus
+#' @export
+#' @examples
+#' nHrus <- 200
+#' Areas <- runif(nHrus,min = 1,max  = 10)
+#' IdsHrus <- paste0("ID",seq(1:length(Areas)))
+#' dhrus <- initdHruModel(nHrus,Areas,IdsHrus)
+#' setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus,adivsModelTypes=rep("CnstAdiv",times= length(Areas)),hruIds=IdsHrus)
+setFastSlowDivModeltypeToAlldHrus <- function(dHRUM_ptr, adivsModelTypes, hruIds) {
+    invisible(.Call(`_dHRUM_setFastSlowDivModeltypeToAlldHrus`, dHRUM_ptr, adivsModelTypes, hruIds))
+}
+
+#' Sets the types of snow melt models types to dHRU model for all single HRUs.
+#'
+#' Setting the snow melt type to dHRUM to all HRUs. Possibe types: \code{DFF}
+#'
+#'
+#' @param dHRUM_ptr pointer to dHRUM instance
 #' @param snowMeltModelTypes a charater vector of Surface retention type names
 #' @param hruIds ids on Hrus
 #' @export
