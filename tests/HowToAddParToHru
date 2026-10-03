@@ -1,5 +1,6 @@
-adding a new structure and adding a param into the new structure
-00 at params::params(): numPars(1),see line   numPars = 44; be carefull by adding the pars you must increase the numpars
+Adding a new parameter
+0) at params::params(): numPars(1), search line numPars = 44;
+be carefull by adding the pars you must increase the numpars
 
 1)parStructSel - par_HRUtype - lines 17, 21, 31 new par_HRUtype
 

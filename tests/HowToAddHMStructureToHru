@@ -1,0 +1,16 @@
+Adding a new Structure to HM
+parStructSels.h
+
+0) new enum class of single HM structure
+const vector of HMstructure
+const vector<std::string>
+enum class new_STURCTUREtype { NAM1, NAM2};
+const new_STRUCTUREtype all_new_STRUCTUREtype[]{ new_STURCTUREtype::NAM1,new_STURCTUREtype::NAM2};
+const std::vector<std::string> all_new_STRUCTUREtypeNames {"NAM1","NAM2"};
+
+1)implementation in singe HM_unit.h
+-one HRU has only one HMstructure
+-new private member
+-adding a getter
+-adding a setter
+-adding a print method
