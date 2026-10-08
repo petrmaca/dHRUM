@@ -4077,7 +4077,7 @@ numberSel single_HMunit::pond_ET(ETpond_type _etpond_type) {
         Etpond = 0;
       }
 
-      std::cout<<"Etpond:   "<<Etpond<<std::endl;
+      //std::cout<<"Etpond:   "<<Etpond<<std::endl;
 
       break;
     }
