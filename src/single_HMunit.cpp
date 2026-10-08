@@ -3840,13 +3840,23 @@ void single_HMunit::ponds(pond_type _pondtype) {
       RouT = pond_regular_out(PondROUT); // [m3/s]
       PoiN = (PoiS*pondArea*60*60*24)+(PoiG*pondArea*60*60*24)+(get_dta(tstRM,ts_type::TOTR))/1000*Area; //inputs converted to m3/day
 
-      PonS = get_dta(tstRM,ts_type::PONS)+PoiN;
-      //std::cout<<"ten PonS + PoiN  je teed:   "<<PonS<<std::endl;
+      //Ziskani predchoziho objemu
+      if (tstRM==0) {
+        PonS=0;
+      }
+      else {
+        PonS = get_dta(tstRM-1,ts_type::PONS);
+      }
+
+      PonS =PonS  +PoiN;
+      //std::cout<<"PonS + PoiN:   "<<PonS<<std::endl;
+
+
       OwfL = std::max((PonS - PonsMax),0.0);
-      //std::cout<<"ten PonS - PonsMax  je teed:   "<<PonS - PonsMax<<std::endl;
       PonS = PonS - OwfL;
 
       Etpond  = std::min(EtpO/1000*pondArea, PonS);
+
       PonS = PonS - Etpond;
 
       //sem dat extra odber?
@@ -3857,6 +3867,8 @@ void single_HMunit::ponds(pond_type _pondtype) {
       PoutRegular = std::min ((RouT + MRF)*60*60*24, PonS);
       PonS = PonS - PoutRegular;
 
+      //std::cout<<"PonS po PoutRegular:   "<<PoutRegular<<std::endl;
+
       //prusaky
       PoutToGW = std::min ((PouG*pondArea*60*60*24), PonS); // prusak celou plochou, to je ale blbě, měla by se měnit plocha a mělo by to být závislé na hloubce
       PonS = PonS - PoutToGW;
@@ -3864,12 +3876,19 @@ void single_HMunit::ponds(pond_type _pondtype) {
       PoutToSoil = std::min ((PouS*pondArea*60*60*24), PonS); // prusak celou plochou, to je ale blbě, mělo by se vsakovat jen po obvodu? ale do jaké hloubky?
       PonS = PonS - PoutToSoil;
 
+
+
       //zpetny navrat pretoku? to co jsem na zacatku urcil jako pretok zkusim vratit do nadrze,
       //abych ji naplnil. Myslím, že se to chová lépe, nádrž se tak dokáže dostat do stavu PonsMax.
+
+
+
       PonS=PonS+OwfL;
       OwfL = std::max((PonS - PonsMax),0.0);
       //std::cout<<"ten PonS - PonsMax  je teed:   "<<PonS - PonsMax<<std::endl;
       PonS = PonS - OwfL;
+
+      //std::cout<<"PonS zapisuju:   "<<PonS<<std::endl;
 
       //zapis promennych
       //POIS, POIG - taky ukladat?
@@ -4051,8 +4070,15 @@ numberSel single_HMunit::pond_ET(ETpond_type _etpond_type) {
   switch(_etpond_type) {
     case ETpond_type::ETpond1: {
       //BERAN, A., KAŠPÁREK, L., VIZINA, A. a ŠUHÁJKOVÁ, P. Ztráta vody výparem z volné vodní hladiny. Vodohospodářské technicko-ekonomické informace, 2019, roč. 61, č. 4, str. 12–18. ISSN 0322-8916.
+
+    if (get_dta(tstRM, ts_type::TEMP)>0){
       Etpond = 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP),1.289);
-      //std::cout<<"ETpond1"<<std::endl;
+      } else{
+        Etpond = 0;
+      }
+
+      std::cout<<"Etpond:   "<<Etpond<<std::endl;
+
       break;
     }
 
