@@ -50,7 +50,8 @@
 
      std::map<std::string, adiv_Model> s_mapStringToAdivtype_HRUtype = {
        {"CnstAdiv", adiv_Model::CnstAdiv},
-       {"adivSoilSat", adiv_Model::adivSoilSat}
+       {"adivSoilSat", adiv_Model::adivSoilSat},
+       {"adivSoilSat", adiv_Model::adivSoilSat2}
      };
 
      std::vector<unsigned> indexHru;
@@ -73,6 +74,9 @@
          break;
        case adiv_Model::adivSoilSat:
          adivModelTypesToLoad.push_back(std::make_pair(indexHru[id], adiv_Model::adivSoilSat));
+         break;
+       case adiv_Model::adivSoilSat2:
+         adivModelTypesToLoad.push_back(std::make_pair(indexHru[id], adiv_Model::adivSoilSat2));
          break;
        }
      }
