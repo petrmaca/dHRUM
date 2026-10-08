@@ -4637,7 +4637,11 @@ void single_HMunit::updateSLowFastDivider(){
            }
     adiv = std::pow( (curSoilState / Smax), get_par(par_HRUtype::ADIVexp));
     par_HRU.s_params(adiv,par_HRUtype::ADIV);
-
+    break;
+  case adiv_Model::adivSoilSat2:
+    curSoilState = get_dta(tstRM, ts_type::SOIS);
+    adiv = (get_par(par_HRUtype::ADIVa)) * (std::pow(curSoilState, get_par(par_HRUtype::ADIVexp))) / ( (get_par(par_HRUtype::ADIVa)) * (std::pow(curSoilState, get_par(par_HRUtype::ADIVexp))) + 1);
+    par_HRU.s_params(adiv,par_HRUtype::ADIV);
     break;
   }
 

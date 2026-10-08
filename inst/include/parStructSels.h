@@ -16,7 +16,7 @@ using pdata = std::valarray<numberSel>;
 
 enum class par_HRUtype {B_SOIL, C_MAX, B_EVAP, SMAXpdm, KS, KF, ADIV, CDIV, SDIV, CAN_ST, STEM_ST, CSDIV, TETR, DDFA, TMEL, \
                         RETCAP, L, D_BYPASS, B_EXP, KS2, THR, ALPHA, CMIN, FC, FOREST_FRACT, KF2, KF_NONLIN, C, INFR_MAX, RF, \
-                        WP, SMAX, RBAI, RBEI,KFR,INTstMax,CSfrac, INTstScale,WtlnFrac,SRFrac,Kinct,KwPe,Csnow,ADIVexp};
+                        WP, SMAX, RBAI, RBEI,KFR,INTstMax,CSfrac, INTstScale,WtlnFrac,SRFrac,Kinct,KwPe,Csnow,ADIVexp, ADIVa};
 
 const par_HRUtype all_pars[]{par_HRUtype::B_SOIL, par_HRUtype::C_MAX, par_HRUtype::B_EVAP, par_HRUtype::SMAXpdm, par_HRUtype::KS, par_HRUtype::KF,      \
                              par_HRUtype::ADIV, par_HRUtype::CDIV, par_HRUtype::SDIV, par_HRUtype::CAN_ST, par_HRUtype::STEM_ST, par_HRUtype::CSDIV,    \
@@ -26,14 +26,14 @@ const par_HRUtype all_pars[]{par_HRUtype::B_SOIL, par_HRUtype::C_MAX, par_HRUtyp
                              par_HRUtype::C, par_HRUtype::INFR_MAX, par_HRUtype::RF, par_HRUtype::WP, par_HRUtype::SMAX,    \
                              par_HRUtype::RBAI,par_HRUtype::RBEI,par_HRUtype::KFR,par_HRUtype::INTstMax, par_HRUtype::CSfrac, \
                              par_HRUtype::INTstScale,par_HRUtype::WtlnFrac, par_HRUtype::SRFrac,par_HRUtype::Kinct,par_HRUtype::KwPe,par_HRUtype::Csnow, \
-                             par_HRUtype::ADIVexp };
+                             par_HRUtype::ADIVexp, par_HRUtype::ADIVa };
 
 const std::vector<std::string> allParNames {"B_SOIL","C_MAX","B_EVAP", "SMAXpdm","KS","KF","ADIV","CDIV", \
                                             "SDIV","CAN_ST","CAN_ST","STEM_ST","CSDIV","TETR",            \
                                             "DDFA","TMEL","RETCAP","L", "D_BYPASS", "B_EXP", "KS2", "THR",
                                             "ALPHA","CMIN","FC","FOREST_FRACT", "KF2", "KF_NONLIN", "C", \
                                             "INFR_MAX", "RF", "WP", "SMAX", "RBAI", "RBEI", "KFR","INTstMax", "CSfrac", \
-                                            "INTstScale","WtlnFrac","SRFrac","Kinct","KwPe","Csnow","ADIVexp"};
+                                            "INTstScale","WtlnFrac","SRFrac","Kinct","KwPe","Csnow","ADIVexp", "ADIVa"};
 
 enum class gs_STORtype { LIN_RES, LINL_RES, LINBY_RES, POW_RES, EXP_RES, LIN_2SE, LIN_2PA, FLEX_RES,EXP_LOG};
 const gs_STORtype all_gs_STORs[]{ gs_STORtype::LIN_RES, gs_STORtype::LINL_RES, gs_STORtype::LINBY_RES,
@@ -71,9 +71,9 @@ enum class snow_Model {DDF};
 const snow_Model all_SnowMods[] { snow_Model::DDF};
 const std::vector<std::string> allSnowMdls {"DDF"};
 
-enum class adiv_Model {CnstAdiv,adivSoilSat};
-const adiv_Model all_AdivMods[] {adiv_Model::CnstAdiv, adiv_Model::adivSoilSat};
-const std::vector<std::string> allAdivMdls {"CnstAdiv","adivSoilSat"};
+enum class adiv_Model {CnstAdiv,adivSoilSat,adivSoilSat2};
+const adiv_Model all_AdivMods[] {adiv_Model::CnstAdiv, adiv_Model::adivSoilSat, adiv_Model::adivSoilSat2};
+const std::vector<std::string> allAdivMdls {"CnstAdiv","adivSoilSat","adivSoilSat2"};
 
 //srfs_STORAGE
 const std::list<par_HRUtype> L_SurfaceAll = {par_HRUtype::RETCAP };
