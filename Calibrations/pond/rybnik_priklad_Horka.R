@@ -3,25 +3,24 @@ library(data.table)
 
 #PRO TVORBU GRAFU
 library(dygraphs)
-library(xts) 
+library(xts)
 library(htmlwidgets)
 
-
-source("00_functions_00.R")
+source("C:/Users/Lenovo/Documents/dHRUM/Calibrations/pond/00_functions_00.R")
 
 ################## vstupni data #######################################################################
 # informace o povodich (LAT, LON,PLOCHA)
-INF <- as.data.table(readRDS("./input_data/INF.rds"))#
+INF <- as.data.table(readRDS("C:/Users/Lenovo/Documents/dHRUM/Calibrations/pond/input_data/INF.rds"))#
 # vstupni casove rady (teploty, srazky, LAI)
-INP <- as.data.table(readRDS('./input_data/INP.rds'))#
+INP <- as.data.table(readRDS('C:/Users/Lenovo/Documents/dHRUM/Calibrations/pond/input_data/INP.rds'))#
 #######################################################################################################
 
 
 LIST_POV=INF$chp_14_s
-SEL_POV=LIST_POV[1]
+SEL_POV=LIST_POV[4]
 
 #kalibracni info (parametry + struktura) pro zvolene povodi
-cal_dta=vyber_model(sel_pov=SEL_POV,hlavni_slozka = "./input_data/data_od_martina")
+cal_dta=vyber_model(sel_pov=SEL_POV,hlavni_slozka = "C:/Users/Lenovo/Documents/dHRUM/Calibrations/pond/input_data/data_od_martina")
 parametry=cal_dta[,25:36]
 par_names=names(parametry)
 par_values=as.numeric(parametry)
@@ -94,7 +93,7 @@ setParamsToAlldHrus(dHRUM_ptr = dhrus, as.numeric(par_values),par_names )
 
 PondArea_m2 = 45000
 PondVolume_m3 =45000
-MRF= 0 
+MRF= 0
 Coflw=0.03 # pokud dam coflw = 0 tak nejde vydet kolisani objemu nadrze. nadrz se naplni a je porad plna
 
 
@@ -109,8 +108,12 @@ outDF_sim_pond = data.frame(outDta_sim_pond$outDta)
 names(outDF_sim_pond) = outDta_sim_pond$VarsNams
 
 
-################################ srovnavaci grafy #############################################################################
 
+
+
+
+
+################################ srovnavaci grafy #############################################################################
 graf_porovnani_TOTR(outDF_sim_pond,PondArea_m2,CatchmentArea_m2=Areas,uloz_graf=TRUE)
 graf_porovnani_pritoku_zasoby(outDF_sim_pond,PondArea_m2,CatchmentArea_m2=Areas,uloz_graf=TRUE)
 graf_vypar_z_nadrze(outDF_sim_pond,PondArea_m2,uloz_graf=TRUE)
