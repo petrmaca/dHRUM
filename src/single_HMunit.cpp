@@ -3832,6 +3832,8 @@ void single_HMunit::ponds(pond_type _pondtype) {
       numberSel PoutToGW=0.0;
       numberSel PoutToSoil=0.0;
       numberSel PonS=0.0; // local variable
+      numberSel AET_after_pond=0.0;
+
 
       EtpO = pond_ET(ET_POND); //[mm/day]
       PoiS = pond_SOISperc(pondSOISPERCin); // inflow [m/s]
@@ -3839,7 +3841,8 @@ void single_HMunit::ponds(pond_type _pondtype) {
       PouS = pond_SOISperc(pondSOISPERCout); // outflow [m/s]
       PouG = pond_GWperc(pondGWPERCout); // outflow [m/s]
       RouT = pond_regular_out(PondROUT); // [m3/s]
-      PoiN = (PoiS*pondArea*60*60*24)+(PoiG*pondArea*60*60*24)+(get_dta(tstRM,ts_type::TOTR))/1000*Area; //inputs converted to m3/day
+      PoiN = ((get_dta(tstRM,ts_type::TOTR))/1000*Area)*(Area-pondArea)/Area;
+      PoiN = (PoiS*pondArea*60*60*24)+(PoiG*pondArea*60*60*24)+PoiN; //inputs converted to m3/day
 
       //Ziskani predchoziho objemu
       if (tstRM==0) {
@@ -3896,10 +3899,9 @@ void single_HMunit::ponds(pond_type _pondtype) {
       set_varValue(EtpO, tstRM,ts_type::ETPO);
       set_varValue(((PoutRegular+OwfL)/Area*1000), tstRM,ts_type::TOTR);
       set_varValue(PonS, tstRM,ts_type::PONS);
-      set_varValue((get_dta(tstRM,ts_type::AET)+(Etpond*pondArea/Area)), tstRM,ts_type::AET);
 
-
-
+      AET_after_pond=(get_dta(tstRM,ts_type::AET)*(Area-pondArea)/Area +((Etpond*1000/pondArea)*pondArea/Area));
+      set_varValue(AET_after_pond, tstRM,ts_type::AET);
 
     // POND1
     // Heaven pond
