@@ -2952,8 +2952,9 @@ void single_HMunit::run_HB() {
     slow_response(gs_STORAGE);
     helprm = (get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR));
     set_varValue(helprm ,tstRM,ts_type::TOTR);
-    ponds(pond);
     upadate_actualET();
+    ponds(pond);
+
     //    std::cout <<(get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR)) << " "<< get_dta(tstRM,ts_type::BASF) << " "<< get_dta(tstRM,ts_type::DIRR)<< "\n";
   }
   //  std::cout << "prev_Ground storage before zeros " << prev_Grou << std::endl;
