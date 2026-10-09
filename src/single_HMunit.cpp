@@ -3902,11 +3902,6 @@ void single_HMunit::ponds(pond_type _pondtype) {
 
       AET_after_pond=(get_dta(tstRM,ts_type::AET)*(Area-pondArea)/Area +((Etpond*1000/pondArea)*pondArea/Area));
 
-      std::cout<<"AET povodi_bez_rybniku:   "<<get_dta(tstRM,ts_type::AET)*(Area-pondArea)/Area<<std::endl;
-      std::cout<<"Vypar rybnik:   "<<(Etpond*1000/pondArea)*pondArea/Area<<std::endl;
-      std::cout<<"AET zapis po rybniku:   "<<AET_after_pond<<std::endl;
-
-
       set_varValue(AET_after_pond, tstRM,ts_type::AET);
 
     // POND1
