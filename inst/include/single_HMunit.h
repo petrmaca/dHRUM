@@ -248,6 +248,7 @@ private:
   numberSel PonsMax; //!< The maximum pond volume [m3]
   numberSel MRF; //!< Minimum residual flow (MZP) [m3/s]
   numberSel Coflw; //!< Constant user defined regular outflow (RouT) from pond [m3/s]
+  numberSel prev_Soiladiv; //!< Soil storage in time t-1 for dynamic adiv updates
 
   gs_STORtype gs_STORAGE;//!< Type of groundwater storage
   soil_STORtype soil_STORAGE;//!< Type of soil storage

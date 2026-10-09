@@ -71,9 +71,9 @@ enum class snow_Model {DDF};
 const snow_Model all_SnowMods[] { snow_Model::DDF};
 const std::vector<std::string> allSnowMdls {"DDF"};
 
-enum class adiv_Model {CnstAdiv,adivSoilSat,adivSoilSat2};
-const adiv_Model all_AdivMods[] {adiv_Model::CnstAdiv, adiv_Model::adivSoilSat, adiv_Model::adivSoilSat2};
-const std::vector<std::string> allAdivMdls {"CnstAdiv","adivSoilSat","adivSoilSat2"};
+enum class adiv_Model {CnstAdiv,adivSoilSat,adivSoilSat2,adivSoilChng};
+const adiv_Model all_AdivMods[] {adiv_Model::CnstAdiv, adiv_Model::adivSoilSat, adiv_Model::adivSoilSat2, adiv_Model::adivSoilChng};
+const std::vector<std::string> allAdivMdls {"CnstAdiv","adivSoilSat","adivSoilSat2", "adivSoilChng"};
 
 //srfs_STORAGE
 const std::list<par_HRUtype> L_SurfaceAll = {par_HRUtype::RETCAP };
@@ -112,7 +112,9 @@ const std::list<par_HRUtype> L_SerialLinResGWGrosSoilSois = { par_HRUtype::KFR, 
 const std::list<par_HRUtype> L_interception_snow = { par_HRUtype::TETR };
 const std::list<par_HRUtype> L_snow_melt = { par_HRUtype::DDFA, par_HRUtype::TMEL, par_HRUtype::Csnow };
 
+const std::list<par_HRUtype> L_CnstAdiv = { par_HRUtype::ADIV};
 const std::list<par_HRUtype> L_adivSoilSat = { par_HRUtype::ADIVexp};
+const std::list<par_HRUtype> L_adivSoilSat2 = { par_HRUtype::ADIVexp,par_HRUtype::ADIVa,par_HRUtype::ADIV};
 
 
 #endif // PARSTRUCTSELS_H

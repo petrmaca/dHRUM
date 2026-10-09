@@ -27,6 +27,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   PonsMax(0),
   MRF(0),
   Coflw(0),
+  prev_Soiladiv(0.0),
   gs_STORAGE{},
   soil_STORAGE{},
   intrc_STORAGE{},
@@ -89,6 +90,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   Wetland = false;
 
   et_demand = 0.0;
+  prev_Soiladiv = 0.0;
 
   unsigned ups;
   ups = Current_par_names.size();
@@ -139,6 +141,7 @@ pondArea(0),
 PonsMax(0),
 MRF(0),
 Coflw(0),
+prev_Soiladiv(0.0),
 gs_STORAGE{},
 soil_STORAGE{},
 intrc_STORAGE{},
@@ -183,6 +186,7 @@ Current_sHMu_configuration()
   PonsMax = other.PonsMax;//!< The maximum pond volume [m3]
   MRF = other.MRF; //!< Minimum residual flow (MZP) [m3/s]
   Coflw = other.Coflw; //!< Constant user defined regular outflow (RouT) from pond [m3/s]
+  prev_Soiladiv = other.prev_Soiladiv;
   gs_STORAGE = other.gs_STORAGE;
   soil_STORAGE = other.soil_STORAGE;
   intrc_STORAGE = other.intrc_STORAGE;
@@ -245,6 +249,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     PonsMax = rhs.PonsMax;//!< The maximum pond volume [m3]
     MRF = rhs.MRF; //!< Minimum residual flow (MZP) [m3/s]
     Coflw = rhs.Coflw; //!< Constant user defined regular outflow (RouT) from pond [m3/s]
+    prev_Soiladiv = rhs.prev_Soiladiv;
     gs_STORAGE = rhs.gs_STORAGE;//!< The type of groundwater storage
     soil_STORAGE = rhs.soil_STORAGE;
     intrc_STORAGE = rhs.intrc_STORAGE;
@@ -2954,6 +2959,7 @@ void single_HMunit::run_HB() {
     set_varValue(helprm ,tstRM,ts_type::TOTR);
     ponds(pond);
     upadate_actualET();
+    prev_Soiladiv = get_dta(tstRM,ts_type::SOIS);
     //    std::cout <<(get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR)) << " "<< get_dta(tstRM,ts_type::BASF) << " "<< get_dta(tstRM,ts_type::DIRR)<< "\n";
   }
   //  std::cout << "prev_Ground storage before zeros " << prev_Grou << std::endl;
@@ -4623,11 +4629,12 @@ adiv_Model single_HMunit::get_adiv_MDL(){
 
 void single_HMunit::updateSLowFastDivider(){
 
-  numberSel Smax = 0.0, curSoilState = 0.0, adiv = 0.0;
+  numberSel Smax = 0.0, curSoilState = 0.0, adiv = 0.0, diffSoilRel = 0.0, sgnM = 0.0;
 
   switch(Adiv_MDL) {
   case adiv_Model::CnstAdiv:
     //ADIV par controls fast runoff divider o percolation it is constant over the period
+    std::cout << "var adiv calibrated " << get_par(par_HRUtype::ADIV) << std::endl;
     break;
   case adiv_Model::adivSoilSat:
     curSoilState = get_dta(tstRM, ts_type::SOIS);
@@ -4637,17 +4644,40 @@ void single_HMunit::updateSLowFastDivider(){
            }
     adiv = std::pow( (curSoilState / Smax), get_par(par_HRUtype::ADIVexp));
     par_HRU.s_params(adiv,par_HRUtype::ADIV);
+    // std::cout << "var 1 var relative " << adiv << std::endl;
     break;
   case adiv_Model::adivSoilSat2:
     curSoilState = get_dta(tstRM, ts_type::SOIS);
     adiv = (get_par(par_HRUtype::ADIVa)) * (std::pow(curSoilState, get_par(par_HRUtype::ADIVexp))) / ( (get_par(par_HRUtype::ADIVa)) * (std::pow(curSoilState, get_par(par_HRUtype::ADIVexp))) + 1);
     par_HRU.s_params(adiv,par_HRUtype::ADIV);
+    // std::cout << "var2 var absolutes Soil" << adiv << std::endl;
+    break;
+  case adiv_Model::adivSoilChng:
+    if(soil_STORAGE ==soil_STORtype::PDM) Smax = get_par(par_HRUtype::SMAXpdm);
+    else { if(soil_STORAGE == soil_STORtype::PDM2) Smax = (get_par(par_HRUtype::C_MAX) / (get_par(par_HRUtype::B_SOIL)+1));
+      else Smax = get_par(par_HRUtype::SMAX);
+    }
+    // std::cout << "curSoilState1 " << curSoilState << std::endl;
+    curSoilState = get_dta(tstRM, ts_type::SOIS);
+    // std::cout << "curSoilState2 " << curSoilState << std::endl;
+    // std::cout << "diffSoilRel1 " << diffSoilRel << std::endl;
+    diffSoilRel = curSoilState - prev_Soiladiv / Smax;
+    // std::cout << "diffSoilRel2 " << diffSoilRel << std::endl;
+    std::cout << "signM1 " << sgnM << std::endl;
+    if (diffSoilRel <= 0.0) sgnM = 1.0;
+     else sgnM = -1.0;
+    std::cout << "signM2 " << sgnM << std::endl;
+    std::cout << "adiv1 " << get_par(par_HRUtype::ADIV) << std::endl;
+    adiv = get_par(par_HRUtype::ADIV) + sgnM * std::pow((std::abs(diffSoilRel)), get_par(par_HRUtype::ADIVexp));
+    std::cout << "adiv2 " << get_par(par_HRUtype::ADIV) << std::endl;
+    if (adiv > 1.0) adiv = 1.0;
+    if (adiv < 0.0) adiv = 0.0;
+    par_HRU.s_params(adiv,par_HRUtype::ADIV);
+    std::cout << "var3 changes in soil res " << get_par(par_HRUtype::ADIV) << std::endl;
     break;
   }
 
-
-
-
+  return ;
 
 }
 
