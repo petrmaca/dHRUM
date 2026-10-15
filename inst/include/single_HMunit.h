@@ -263,6 +263,7 @@ private:
   PondGWPerc_type  pondGWPERCin;//!< Type of percolation from   groundwater to pond
   PondGWPerc_type  pondGWPERCout;//!< Type of percolation from pond to groundwater
   PondRouT_type  PondROUT;//!< Pond outlet method
+  intrc_SNOWtype intrc_SNOW; //!< snow interception model
   snow_Model Snow_MDL;//!< Snow melt model
   adiv_Model Adiv_MDL;//!< adiv model on slow and fast runoff responce
 

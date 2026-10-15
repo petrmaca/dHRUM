@@ -30,7 +30,7 @@
      std::vector<std::string> snowMeltModelsnameStr = Rcpp::as<std::vector<std::string> >(snowMeltModelTypes);
 
      for(unsigned it=0; it<numSnowMeltModelTypes;it++ ){
-       if ( std::find(allSnowMdls.begin(), allSnowMdls.end(), snowMeltModelsnameStr[it]) == allSnowMdls.end()) {
+       if ( std::find(allSnowMdlsNames.begin(), allSnowMdlsNames.end(), snowMeltModelsnameStr[it]) == allSnowMdlsNames.end()) {
          Rcpp::Rcout << "\nSomething wrong on item " << (it+1) << "\n";
          Rcpp::stop("\n Wrong names of Snow Melt model Type Values.\n");
        }

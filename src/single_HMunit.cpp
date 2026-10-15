@@ -41,6 +41,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   pondGWPERCin{},
   pondGWPERCout{},
   PondROUT{},
+  intrc_SNOW{},
   Snow_MDL{},
   Adiv_MDL{},
   InstStLai{},
@@ -155,6 +156,7 @@ pondSOISPERCout{},
 pondGWPERCin{},
 pondGWPERCout{},
 PondROUT{},
+intrc_SNOW{},
 Snow_MDL{},
 Adiv_MDL{},
 InstStLai{},
@@ -200,6 +202,7 @@ Current_sHMu_configuration()
   pondGWPERCin = other.pondGWPERCin;
   pondGWPERCout = other.pondGWPERCout;
   PondROUT = other.PondROUT;
+  intrc_SNOW = other.intrc_SNOW;
   Snow_MDL = other.Snow_MDL;
   Adiv_MDL = other.Adiv_MDL;
 
@@ -263,6 +266,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     pondGWPERCin = rhs.pondGWPERCin;
     pondGWPERCout = rhs.pondGWPERCout;
     PondROUT = rhs.PondROUT;
+    intrc_SNOW = rhs.intrc_SNOW;
     Snow_MDL = rhs.Snow_MDL;
     Adiv_MDL = rhs.Adiv_MDL;
 
@@ -3782,7 +3786,8 @@ void single_HMunit::print_sHRU_settings() {
 
 void single_HMunit::current_params() {
 
-  par_HRU.current_param(gs_STORAGE,soil_STORAGE,intrc_STORAGE,srfs_STORAGE,fast_RESPONSE,Snow_MDL,Adiv_MDL);
+  par_HRU.current_param(gs_STORAGE,soil_STORAGE,intrc_STORAGE,srfs_STORAGE,fast_RESPONSE,intrc_SNOW, Snow_MDL,Adiv_MDL);
+
 
   // std::cout<<"velikost vectoru s names params: "<<par_HRU.Current_parameter_string.size()<<std::endl;
   // Current_par_names=par_HRU.Current_parameter_string;
@@ -4425,7 +4430,7 @@ std::vector<std::pair<std::string,std::string>> single_HMunit::get_sHMuConfig(){
 }
 
 
-//void single_HMunit::current_configuration(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP ) {
+//void single_HMunit::current_configuration(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP,intrc_SNOWtype intrc_SNOW,  snow_Model Snow_MDL, adiv_Model adiv_MDL ) {
 void single_HMunit::current_configuration() {
 
   Current_sHMu_configuration.clear();
@@ -4542,6 +4547,39 @@ void single_HMunit::current_configuration() {
     Current_sHMu_configuration.push_back(std::make_pair("pond_Rout","coming soon"));
     break;
   }
+
+  switch(intrc_SNOW) {
+  case intrc_SNOWtype::interception_snow:
+    Current_sHMu_configuration.push_back(std::make_pair("intrc_SNOWtype","interception_snow"));;
+    break;
+  }
+
+  switch(Snow_MDL) {
+  case snow_Model::DDF:
+    Current_sHMu_configuration.push_back(std::make_pair("snow_Model","DDF"));
+    break;
+  }
+
+  switch(Adiv_MDL) {
+  case adiv_Model::CnstAdiv:
+    Current_sHMu_configuration.push_back(std::make_pair("adiv_MDL","CnstAdiv"));
+    break;
+
+  case adiv_Model::adivSoilSat:
+    Current_sHMu_configuration.push_back(std::make_pair("adiv_MDL","adivSoilSat"));
+    break;
+
+  case adiv_Model::adivSoilSat2:
+    Current_sHMu_configuration.push_back(std::make_pair("adiv_MDL","adivSoilSat2"));
+    break;
+
+  case adiv_Model::adivSoilChng:
+    Current_sHMu_configuration.push_back(std::make_pair("adiv_MDL","adivSoilChng"));
+    break;
+
+  }
+
+
 }
 
 numberSel single_HMunit::LAI_INTstMax() {

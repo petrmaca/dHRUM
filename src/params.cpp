@@ -1182,7 +1182,7 @@ numberSel params::g_par_up(const par_HRUtype& _parType) {
   return value;
 }
 
-void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP, snow_Model Snow_MDL, adiv_Model adiv_MDL) {
+void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP,intrc_SNOWtype intrc_SNOW,  snow_Model Snow_MDL, adiv_Model adiv_MDL) {
 
   std::list<par_HRUtype> full_list;
   //std::cout<<"full list size v params BEGINING: "<<full_list.size()<<std::endl;
@@ -1291,8 +1291,39 @@ void params::current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,int
     break;
   }
 
-  full_list.insert(full_list.end(),L_interception_snow.begin(),L_interception_snow.end() );
-  full_list.insert(full_list.end(),L_snow_melt.begin(),L_snow_melt.end());
+
+
+  switch(intrc_SNOW) {
+  case intrc_SNOWtype::interception_snow:
+    full_list.insert(full_list.end(),L_interception_snow.begin(),L_interception_snow.end() );
+    break;
+  }
+
+  switch(Snow_MDL) {
+  case snow_Model::DDF:
+    full_list.insert(full_list.end(),L_DDF.begin(),L_DDF.end());
+    break;
+  }
+
+  switch(adiv_MDL) {
+  case adiv_Model::CnstAdiv:
+    full_list.insert(full_list.end(),L_CnstAdiv.begin(),L_CnstAdiv.end() );
+    break;
+
+  case adiv_Model::adivSoilSat:
+    full_list.insert(full_list.end(),L_adivSoilSat.begin(),L_adivSoilSat.end() );
+    break;
+
+  case adiv_Model::adivSoilSat2:
+    full_list.insert(full_list.end(),L_adivSoilSat2.begin(),L_adivSoilSat2.end());
+    break;
+
+  case adiv_Model::adivSoilChng:
+    full_list.insert(full_list.end(),L_adivSoilChng.begin(),L_adivSoilChng.end());
+    break;
+
+  }
+
 
   full_list.sort();
   full_list.unique();

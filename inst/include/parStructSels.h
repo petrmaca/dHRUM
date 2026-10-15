@@ -67,13 +67,17 @@ enum class fast_Response {SerialCascadeLinRes, SerialLinResGWGros,SerialLinResSo
 const fast_Response all_FastResponses[] {fast_Response::SerialCascadeLinRes, fast_Response::SerialLinResGWGros, fast_Response::SerialLinResSoilSois, fast_Response::SerialLinResGWGrosSoilSois};
 const std::vector<std::string> all_FastResponsesNames {"SerialCascadeLinRes", "SerialLinResGWGros","SerialLinResSoilSois", "SerialLinResGWGrosSoilSois"};
 
+enum class intrc_SNOWtype {interception_snow};
+const intrc_SNOWtype all_intrc_snows[] { intrc_SNOWtype::interception_snow};
+const std::vector<std::string> allintrcSnowsNames {"interceptionSnow"};
+
 enum class snow_Model {DDF};
 const snow_Model all_SnowMods[] { snow_Model::DDF};
-const std::vector<std::string> allSnowMdls {"DDF"};
+const std::vector<std::string> allSnowMdlsNames {"DDF"};
 
 enum class adiv_Model {CnstAdiv,adivSoilSat,adivSoilSat2,adivSoilChng};
 const adiv_Model all_AdivMods[] {adiv_Model::CnstAdiv, adiv_Model::adivSoilSat, adiv_Model::adivSoilSat2, adiv_Model::adivSoilChng};
-const std::vector<std::string> allAdivMdls {"CnstAdiv","adivSoilSat","adivSoilSat2", "adivSoilChng"};
+const std::vector<std::string> allAdivMdlsNames {"CnstAdiv","adivSoilSat","adivSoilSat2", "adivSoilChng"};
 
 //srfs_STORAGE
 const std::list<par_HRUtype> L_SurfaceAll = {par_HRUtype::RETCAP };
@@ -108,13 +112,15 @@ const std::list<par_HRUtype> L_SerialCascadeLinRes = { par_HRUtype::KFR, par_HRU
 const std::list<par_HRUtype> L_SerialLinResGWGros = { par_HRUtype::KFR, par_HRUtype::ADIV,par_HRUtype::RBEI };
 const std::list<par_HRUtype> L_SerialLinResSoilSois = { par_HRUtype::KFR, par_HRUtype::ADIV,par_HRUtype::RBAI };
 const std::list<par_HRUtype> L_SerialLinResGWGrosSoilSois = { par_HRUtype::KFR, par_HRUtype::ADIV,par_HRUtype::RBEI, par_HRUtype::RBAI };
-//other
+//snow interception
 const std::list<par_HRUtype> L_interception_snow = { par_HRUtype::TETR };
-const std::list<par_HRUtype> L_snow_melt = { par_HRUtype::DDFA, par_HRUtype::TMEL, par_HRUtype::Csnow };
-
+//snow_melt
+const std::list<par_HRUtype> L_DDF = { par_HRUtype::DDFA, par_HRUtype::TMEL, par_HRUtype::Csnow };
+//adiv
 const std::list<par_HRUtype> L_CnstAdiv = { par_HRUtype::ADIV};
 const std::list<par_HRUtype> L_adivSoilSat = { par_HRUtype::ADIVexp};
 const std::list<par_HRUtype> L_adivSoilSat2 = { par_HRUtype::ADIVexp,par_HRUtype::ADIVa,par_HRUtype::ADIV};
+const std::list<par_HRUtype> L_adivSoilChng = { par_HRUtype::SMAXpdm,par_HRUtype::C_MAX,par_HRUtype::B_SOIL, par_HRUtype::SMAX,par_HRUtype::ADIV,par_HRUtype::ADIVexp};
 
 
 #endif // PARSTRUCTSELS_H
