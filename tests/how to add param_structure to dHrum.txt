@@ -18,7 +18,9 @@ How to add/update new parameter into a printable parameter/structure list
 	- add structure into par_HRUtype_to_string()
 
 3) single_HMunit.cpp()
+  - update ctors (ctor, copy ctor a assignment operator) // only in the case of adding a new structure
 	- update/add new structure into current_configuration()
 
 3) xxx_R_RCPP.cpp
 	- adapt the R_RCCP method for the relevant structure
+
