@@ -22,9 +22,9 @@ IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 setSnowMeltModeltypeToAlldHrus(dHRUM_ptr = dhrus,snowMeltModelTypes=rep("DDF",times= length(Areas)),hruIds=IdsHrus)
 
-setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus, adivsModelTypes = rep("CnstAdiv",times= length(Areas)), hruIds = IdsHrus)
-setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus, adivsModelTypes = rep("adivSoilChng",times= length(Areas)), hruIds = IdsHrus)
-
+# setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus, adivsModelTypes = rep("CnstAdiv",times= length(Areas)), hruIds = IdsHrus)
+# setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus, adivsModelTypes = rep("adivSoilSat",times= length(Areas)), hruIds = IdsHrus)
+# setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus, adivsModelTypes = rep("adivSoilSat2",times= length(Areas)), hruIds = IdsHrus)
 setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus, adivsModelTypes = rep("adivSoilChng",times= length(Areas)), hruIds = IdsHrus)
 
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
@@ -36,7 +36,7 @@ setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",time
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Eliades",times= length(Areas)),hruIds=IdsHrus)
 setSurfaceStortypeToAlldHrus(dHRUM_ptr = dhrus,surfaceStorTypes=rep("SurfaceAll",times= length(Areas)),hruIds=IdsHrus)
 setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PDM",times= length(Areas)), hruIds = IdsHrus)
-setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus, adivsModelTypes = rep("CnstAdiv",times= length(Areas)), hruIds = IdsHrus)
+# setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus, adivsModelTypes = rep("CnstAdiv",times= length(Areas)), hruIds = IdsHrus)
 setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
 
@@ -87,6 +87,8 @@ names(outDF) <-c(outDta$VarsNams)
 outDF = as.data.table(outDF)
 
 plot(outDF$PERG)
+
+plot(outDF$PERC,outDF$PERG)
 #outDF$SOIS
 #outDF$AET
 #outDF$PET

@@ -31,8 +31,7 @@
      std::vector<std::string> adivModelsnameStr = Rcpp::as<std::vector<std::string> >(adivsModelTypes);
 
      for(unsigned it=0; it<numadivsModelTypes;it++ ){
-       if ( std::find(allAdivMdls.begin(), allAdivMdls.end(), adivModelsnameStr[it]) == allAdivMdls.end()) {
-       if ( std::find(allAdivMdlsNames.begin(), allAdivMdlsNames.end(), adivModelsnameStr[it]) == allAdivMdlsNames.end()) {
+      if ( std::find(allAdivMdlsNames.begin(), allAdivMdlsNames.end(), adivModelsnameStr[it]) == allAdivMdlsNames.end()) {
          Rcpp::Rcout << "\nSomething wrong on item " << (it+1) << "\n";
          Rcpp::stop("\n Wrong names of adiv slow/fast model Type Values.\n");
        }
