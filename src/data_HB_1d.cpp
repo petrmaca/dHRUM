@@ -45,6 +45,7 @@ data_HB_1d::data_HB_1d(): numTS(0),
   Trns(1,1),
   Subl(1,1),
   Refr(1,1),
+  Perg(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -185,6 +186,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Trns(1,1),
   Subl(1,1),
   Refr(1,1),
+  Perg(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -243,7 +245,8 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   InfL = other.InfL;//!< Infiltration to soil storage
   Trns = other.Trns;//!< The transpiration from wetland
   Subl = other.Subl;//!< The sublimation from snow cover
-  Refr = other.Refr;
+  Refr = other.Refr;//!< The water refreezing  from interception
+  Perg = other.Perg;//!< The percolation to groundwater
   init_SoiS = other.init_SoiS;//!< Initial value of soil storage
   init_GroS = other.init_GroS;//!< Initial value of groundwater storage
   init_CanS = other.init_CanS;//!< Initial value of Canopy Interception storage
@@ -309,6 +312,7 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     Trns = rhs.Trns;//!< The transpiration from wetland
     Subl = rhs.Subl;//!< Sublimation depth
     Refr = rhs.Refr;
+    Perg = rhs.Perg;//!< The percolation to groundwater
     init_SoiS = rhs.init_SoiS;//!< Initial value of soil storage
     init_GroS = rhs.init_GroS;//!< Initial value of groundwater storage
     init_CanS = rhs.init_CanS;//!< Initial value of Canopy Interception storage
@@ -472,6 +476,10 @@ void data_HB_1d::s_data(const hdata& dta,const ts_type& _tsType, bool updateNumT
     Refr = dta;
     //    std::cout << "New subl --> loaded\n";
     break;
+  case ts_type::PERG:
+    Perg = dta;
+    //    std::cout << "New subl --> loaded\n";
+    break;
   }
 //    //PRE.insert(PRE.begin(), data);
 //    if(!Erase) {
@@ -595,6 +603,11 @@ void data_HB_1d::s_varVal(const numberSel& dta, const unsigned& tst,const ts_typ
     Refr[tst] = dta;
     //    std::cout << "New subl --> loaded\n";
     break;
+  case ts_type::PERG:
+    Perg[tst] = dta;
+    //    std::cout << "New subl --> loaded\n";
+    break;
+
 }
   return ;
 
@@ -675,6 +688,10 @@ numberSel data_HB_1d::g_dta(const unsigned& tst,const ts_type& _tsType) {
     return Subl[tst];
   case ts_type::REFR:
     return Refr[tst];
+    //    std::cout << "New TRNS --> loaded\n";
+    break;
+  case ts_type::PERG:
+    return Perg[tst];
     //    std::cout << "New TRNS --> loaded\n";
     break;
   }
@@ -1323,6 +1340,8 @@ hdata data_HB_1d::get_HbTsData(const ts_type& _tsType) {
     return Subl;
   case ts_type::REFR:
     return Refr;
+  case ts_type::PERG:
+    return Perg;
   }
 
   hdata helpV(-9999,1);
@@ -1458,6 +1477,9 @@ void data_HB_1d::setOneTstoZero(const ts_type& _tsType) {
     break;
   case ts_type::REFR:
     Refr = 0.0;
+    break;
+  case ts_type::PERG:
+    Perg = 0.0;
     break;
   }
 

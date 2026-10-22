@@ -73,6 +73,8 @@ outDta <- dHRUMrun(dHRUM_ptr = dhrus)
 outDF <- data.frame(outDta$outDta)
 names(outDF) <-c(outDta$VarsNams)
 outDF = as.data.table(outDF)
+
+plot(outDF$PERG)
 #outDF$SOIS
 #outDF$AET
 #outDF$PET

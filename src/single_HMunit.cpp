@@ -90,9 +90,9 @@ single_HMunit::single_HMunit(): tstRM(0),
 
   et_demand = 0.0;
 
-  unsigned ups;
-  ups = Current_par_names.size();
-  ups = Current_sHMu_configuration.size();
+  // unsigned ups;
+  // ups = Current_par_names.size();
+  // ups = Current_sHMu_configuration.size();
   InstStLai = false;
 
 }
@@ -850,7 +850,6 @@ void single_HMunit::surface_RetWTLND_winter(){
 
 }
 
-
 // /** \brief Update all surface retention
 //  *
 //  */
@@ -913,6 +912,7 @@ void single_HMunit::surface_RetWTLND_winter(){
 //
 //   return ;
 // }
+
 void single_HMunit::pdm(){
 
   numberSel overFL = 0.0, evap = 0.0, c_init = 0.0, overFl1 = 0.0, ppInf = 0.0, c_prop = 0.0;
@@ -3033,6 +3033,7 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   set_data(dta,ts_type::ETSW);
   set_data(dta,ts_type::SUBL);
   set_data(dta,ts_type::REFR);
+  set_data(dta,ts_type::PERG);
   // std::cout << " tor ok\n";
   // get_numdta();
   // std::cout << "The total number of initialized time intervals is " << get_numdta() << " ." << std::endl;
