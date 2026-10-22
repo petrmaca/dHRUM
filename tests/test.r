@@ -88,8 +88,10 @@ outDF = as.data.table(outDF)
 
 plot(outDF$PERG)
 
-plot(outDF$PERC,outDF$PERG)
+plot(outDF$DIRS)
 
+plot(outDF$PERC,outDF$PERG)
+lines(outDF$GROS)
 plot(outDF$PERC-outDF$PERG)
 #outDF$SOIS
 #outDF$AET
