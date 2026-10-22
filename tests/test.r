@@ -21,6 +21,14 @@ Areas <- runif(nHrus,min = 38780000,max  = 38780050)
 IdsHrus <- paste0("ID",seq(1:length(Areas)))
 dhrus <- initdHruModel(nHrus,Areas,IdsHrus,ntreads)
 setSnowMeltModeltypeToAlldHrus(dHRUM_ptr = dhrus,snowMeltModelTypes=rep("DDF",times= length(Areas)),hruIds=IdsHrus)
+
+setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus, adivsModelTypes = rep("CnstAdiv",times= length(Areas)), hruIds = IdsHrus)
+setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus, adivsModelTypes = rep("adivSoilChng",times= length(Areas)), hruIds = IdsHrus)
+
+setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus, adivsModelTypes = rep("adivSoilChng",times= length(Areas)), hruIds = IdsHrus)
+
+setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
+
 # setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("Rutter_Gash",times= length(Areas)),hruIds=IdsHrus)
 setInterceptiontypeToAlldHrus(dHRUM_ptr = dhrus,intcptnTypes=rep("van_Dijk",times= length(Areas)),hruIds=IdsHrus,
                               InstStLai=rep(TRUE,times= length(Areas)),
@@ -32,6 +40,10 @@ setFastSlowDivModeltypeToAlldHrus(dHRUM_ptr = dhrus, adivsModelTypes = rep("Cnst
 setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
 setGWtypeToAlldHrus(dhrus,gwTypes = rep("LIN_RES", times =nHrus), IdsHrus)
 
+
+
+setFastResponsesToAlldHrus(dHRUM_ptr = dhrus,fastResponseTypes=rep("SerialCascadeLinRes",times= length(Areas)),hruIds=IdsHrus)
+setSoilStorTypeToAlldHrus(dHRUM_ptr = dhrus, soilTypes = rep("PDM",times= length(Areas)), hruIds = IdsHrus)
 
 #setPondToAlldHrus(dHRUM_ptr = dhrus,PondTypes=rep("Pond",times= length(Areas)),hruIds=IdsHrus)
 # pondDF1 = data.frame( PondArea = 40500, PonsMax= 45000, MRF= 0.039, Coflw=0.3)
@@ -47,7 +59,7 @@ ParDF = data.frame( B_SOIL = 1.6, C_MAX = 35, B_EVAP = 2.5,  KS = 0.01, KF = 0.0
                     SDIV = 0.2, CAN_ST = 2, STEM_ST = 1, CSDIV = 0.8, TETR = 0, DDFA = 0.75, TMEL = -2.0,
                     RETCAP = 10, D_BYPASS = 0.8, THR = 10, KS2 = 0.1, ALPHA = 0.5, FOREST_FRACT = 0.3, FC = 10,
                     KF_NONLIN = 10, KF2 = 0.01, C = 10, INFR_MAX = 10, RF = 0.5, WP = 0.3,CMIN =25,L=0.1, B_EXP = 0.3, KFR = 0.03,
-                    INTstMax = 2,INTstScale = 1, CSfrac = 1)
+                    INTstMax = 2,INTstScale = 1, CSfrac = 1, ADIVexp = 0.8, ADIVa =0.81)
 
 
 setParamsToAlldHrus(dHRUM_ptr = dhrus,as.numeric(ParDF[1,]),names(ParDF))

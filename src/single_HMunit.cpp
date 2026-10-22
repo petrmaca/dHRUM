@@ -27,6 +27,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   PonsMax(0),
   MRF(0),
   Coflw(0),
+  prev_Soiladiv(0.0),
   gs_STORAGE{},
   soil_STORAGE{},
   intrc_STORAGE{},
@@ -40,6 +41,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   pondGWPERCin{},
   pondGWPERCout{},
   PondROUT{},
+  intrc_SNOW{},
   Snow_MDL{},
   Adiv_MDL{},
   InstStLai{},
@@ -89,6 +91,7 @@ single_HMunit::single_HMunit(): tstRM(0),
   Wetland = false;
 
   et_demand = 0.0;
+  prev_Soiladiv = 0.0;
 
   // unsigned ups;
   // ups = Current_par_names.size();
@@ -139,6 +142,7 @@ pondArea(0),
 PonsMax(0),
 MRF(0),
 Coflw(0),
+prev_Soiladiv(0.0),
 gs_STORAGE{},
 soil_STORAGE{},
 intrc_STORAGE{},
@@ -152,6 +156,7 @@ pondSOISPERCout{},
 pondGWPERCin{},
 pondGWPERCout{},
 PondROUT{},
+intrc_SNOW{},
 Snow_MDL{},
 Adiv_MDL{},
 InstStLai{},
@@ -183,6 +188,7 @@ Current_sHMu_configuration()
   PonsMax = other.PonsMax;//!< The maximum pond volume [m3]
   MRF = other.MRF; //!< Minimum residual flow (MZP) [m3/s]
   Coflw = other.Coflw; //!< Constant user defined regular outflow (RouT) from pond [m3/s]
+  prev_Soiladiv = other.prev_Soiladiv;
   gs_STORAGE = other.gs_STORAGE;
   soil_STORAGE = other.soil_STORAGE;
   intrc_STORAGE = other.intrc_STORAGE;
@@ -196,6 +202,7 @@ Current_sHMu_configuration()
   pondGWPERCin = other.pondGWPERCin;
   pondGWPERCout = other.pondGWPERCout;
   PondROUT = other.PondROUT;
+  intrc_SNOW = other.intrc_SNOW;
   Snow_MDL = other.Snow_MDL;
   Adiv_MDL = other.Adiv_MDL;
 
@@ -245,6 +252,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     PonsMax = rhs.PonsMax;//!< The maximum pond volume [m3]
     MRF = rhs.MRF; //!< Minimum residual flow (MZP) [m3/s]
     Coflw = rhs.Coflw; //!< Constant user defined regular outflow (RouT) from pond [m3/s]
+    prev_Soiladiv = rhs.prev_Soiladiv;
     gs_STORAGE = rhs.gs_STORAGE;//!< The type of groundwater storage
     soil_STORAGE = rhs.soil_STORAGE;
     intrc_STORAGE = rhs.intrc_STORAGE;
@@ -258,6 +266,7 @@ single_HMunit& single_HMunit::operator=(const single_HMunit& rhs) {
     pondGWPERCin = rhs.pondGWPERCin;
     pondGWPERCout = rhs.pondGWPERCout;
     PondROUT = rhs.PondROUT;
+    intrc_SNOW = rhs.intrc_SNOW;
     Snow_MDL = rhs.Snow_MDL;
     Adiv_MDL = rhs.Adiv_MDL;
 
@@ -2955,6 +2964,7 @@ void single_HMunit::run_HB() {
     upadate_actualET();
     ponds(pond);
 
+    prev_Soiladiv = get_dta(tstRM,ts_type::SOIS);
     //    std::cout <<(get_dta(tstRM,ts_type::BASF) + get_dta(tstRM,ts_type::DIRR)) << " "<< get_dta(tstRM,ts_type::BASF) << " "<< get_dta(tstRM,ts_type::DIRR)<< "\n";
   }
   //  std::cout << "prev_Ground storage before zeros " << prev_Grou << std::endl;
@@ -3778,7 +3788,8 @@ void single_HMunit::print_sHRU_settings() {
 
 void single_HMunit::current_params() {
 
-  par_HRU.current_param(gs_STORAGE,soil_STORAGE,intrc_STORAGE,srfs_STORAGE,fast_RESPONSE,Snow_MDL,Adiv_MDL);
+  par_HRU.current_param(gs_STORAGE,soil_STORAGE,intrc_STORAGE,srfs_STORAGE,fast_RESPONSE,intrc_SNOW, Snow_MDL,Adiv_MDL);
+
 
   // std::cout<<"velikost vectoru s names params: "<<par_HRU.Current_parameter_string.size()<<std::endl;
   // Current_par_names=par_HRU.Current_parameter_string;
@@ -4450,7 +4461,7 @@ std::vector<std::pair<std::string,std::string>> single_HMunit::get_sHMuConfig(){
 }
 
 
-//void single_HMunit::current_configuration(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP ) {
+//void single_HMunit::current_configuration(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP,intrc_SNOWtype intrc_SNOW,  snow_Model Snow_MDL, adiv_Model adiv_MDL ) {
 void single_HMunit::current_configuration() {
 
   Current_sHMu_configuration.clear();
@@ -4567,6 +4578,39 @@ void single_HMunit::current_configuration() {
     Current_sHMu_configuration.push_back(std::make_pair("pond_Rout","coming soon"));
     break;
   }
+
+  switch(intrc_SNOW) {
+  case intrc_SNOWtype::interception_snow:
+    Current_sHMu_configuration.push_back(std::make_pair("intrc_SNOWtype","interception_snow"));;
+    break;
+  }
+
+  switch(Snow_MDL) {
+  case snow_Model::DDF:
+    Current_sHMu_configuration.push_back(std::make_pair("snow_Model","DDF"));
+    break;
+  }
+
+  switch(Adiv_MDL) {
+  case adiv_Model::CnstAdiv:
+    Current_sHMu_configuration.push_back(std::make_pair("adiv_MDL","CnstAdiv"));
+    break;
+
+  case adiv_Model::adivSoilSat:
+    Current_sHMu_configuration.push_back(std::make_pair("adiv_MDL","adivSoilSat"));
+    break;
+
+  case adiv_Model::adivSoilSat2:
+    Current_sHMu_configuration.push_back(std::make_pair("adiv_MDL","adivSoilSat2"));
+    break;
+
+  case adiv_Model::adivSoilChng:
+    Current_sHMu_configuration.push_back(std::make_pair("adiv_MDL","adivSoilChng"));
+    break;
+
+  }
+
+
 }
 
 numberSel single_HMunit::LAI_INTstMax() {
@@ -4654,11 +4698,12 @@ adiv_Model single_HMunit::get_adiv_MDL(){
 
 void single_HMunit::updateSLowFastDivider(){
 
-  numberSel Smax = 0.0, curSoilState = 0.0, adiv = 0.0;
+  numberSel Smax = 0.0, curSoilState = 0.0, adiv = 0.0, diffSoilRel = 0.0, sgnM = 0.0;
 
   switch(Adiv_MDL) {
   case adiv_Model::CnstAdiv:
     //ADIV par controls fast runoff divider o percolation it is constant over the period
+    std::cout << "var adiv calibrated " << get_par(par_HRUtype::ADIV) << std::endl;
     break;
   case adiv_Model::adivSoilSat:
     curSoilState = get_dta(tstRM, ts_type::SOIS);
@@ -4668,13 +4713,45 @@ void single_HMunit::updateSLowFastDivider(){
            }
     adiv = std::pow( (curSoilState / Smax), get_par(par_HRUtype::ADIVexp));
     par_HRU.s_params(adiv,par_HRUtype::ADIV);
+    // std::cout << "var 1 var relative " << adiv << std::endl;
+    break;
+  case adiv_Model::adivSoilSat2:
+    curSoilState = get_dta(tstRM, ts_type::SOIS);
+    adiv = (get_par(par_HRUtype::ADIVa)) * (std::pow(curSoilState, get_par(par_HRUtype::ADIVexp))) / ( (get_par(par_HRUtype::ADIVa)) * (std::pow(curSoilState, get_par(par_HRUtype::ADIVexp))) + 1);
+    par_HRU.s_params(adiv,par_HRUtype::ADIV);
+    // std::cout << "var2 var absolutes Soil" << adiv << std::endl;
+    break;
+  case adiv_Model::adivSoilChng:
 
+    std::cout << "var3 changes in soil res 1st adiv " << get_par(par_HRUtype::ADIV) << std::endl;
+
+    if(soil_STORAGE ==soil_STORtype::PDM) Smax = get_par(par_HRUtype::SMAXpdm);
+    else { if(soil_STORAGE == soil_STORtype::PDM2) Smax = (get_par(par_HRUtype::C_MAX) / (get_par(par_HRUtype::B_SOIL)+1));
+      else Smax = get_par(par_HRUtype::SMAX);
+    }
+    // std::cout << "curSoilState1 " << curSoilState << std::endl;
+    curSoilState = get_dta(tstRM, ts_type::SOIS);
+    // std::cout << "curSoilState2 " << curSoilState << std::endl;
+    // std::cout << "diffSoilRel1 " << diffSoilRel << std::endl;
+    diffSoilRel = curSoilState - prev_Soiladiv / Smax;
+    std::cout << "diffSoilRel2 " << diffSoilRel << std::endl;
+    std::cout << "signM1 " << sgnM << std::endl;
+    if (diffSoilRel <= 0.0) sgnM = -1.0;
+     else sgnM = 1.0;
+    std::cout << "signM2 " << sgnM << std::endl;
+    std::cout << "adivuu1 " << sgnM * std::pow((std::abs(diffSoilRel)), get_par(par_HRUtype::ADIVexp)) << std::endl;
+    std::cout << "adivuu1111 " << std::pow((std::abs(diffSoilRel)), get_par(par_HRUtype::ADIVexp)) << std::endl;
+    adiv = get_par(par_HRUtype::ADIV) + sgnM * std::pow((std::abs(diffSoilRel)), get_par(par_HRUtype::ADIVexp));
+    std::cout << "adiv2 " << get_par(par_HRUtype::ADIV) << std::endl;
+    if (adiv > 1.0) adiv = 1.0;
+    if (adiv < 0.0) adiv = 0.0;
+    par_HRU.s_params(adiv,par_HRUtype::ADIV);
+    std::cout << "var3 changes in soil res " << get_par(par_HRUtype::ADIV) << std::endl;
+    std::cout << "prev soil adiv " << prev_Soiladiv  << std::endl;
     break;
   }
 
-
-
-
+  return ;
 
 }
 

@@ -1,0 +1,26 @@
+How to add/update new parameter into a printable parameter/structure list
+
+1) parStructSel.h
+	- add / update enum class
+	- add / update parameter list
+
+2) params.cpp
+	- add paremeter (its value, up bound and low bound) into ctor
+	- update numPars into ctor
+	- add paremeter into s_params() //there are two s_params methods
+	- add paremeter into g_par()
+	- add paremeter into s_default()
+	- add paremeter into p_pars()
+	- add paremeter into g_par_low()
+	- add paremeter into g_par_up()
+	- add structure into current_param()
+	- add paremeter into print_par_list()
+	- add structure into par_HRUtype_to_string()
+
+3) single_HMunit.cpp()
+  - update ctors (ctor, copy ctor a assignment operator) // only in the case of adding a new structure
+	- update/add new structure into current_configuration()
+
+3) xxx_R_RCPP.cpp
+	- adapt the R_RCCP method for the relevant structure
+

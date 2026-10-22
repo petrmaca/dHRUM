@@ -32,6 +32,7 @@
 
      for(unsigned it=0; it<numadivsModelTypes;it++ ){
        if ( std::find(allAdivMdls.begin(), allAdivMdls.end(), adivModelsnameStr[it]) == allAdivMdls.end()) {
+       if ( std::find(allAdivMdlsNames.begin(), allAdivMdlsNames.end(), adivModelsnameStr[it]) == allAdivMdlsNames.end()) {
          Rcpp::Rcout << "\nSomething wrong on item " << (it+1) << "\n";
          Rcpp::stop("\n Wrong names of adiv slow/fast model Type Values.\n");
        }
@@ -50,7 +51,9 @@
 
      std::map<std::string, adiv_Model> s_mapStringToAdivtype_HRUtype = {
        {"CnstAdiv", adiv_Model::CnstAdiv},
-       {"adivSoilSat", adiv_Model::adivSoilSat}
+       {"adivSoilSat", adiv_Model::adivSoilSat},
+       {"adivSoilSat2", adiv_Model::adivSoilSat2},
+       {"adivSoilChng", adiv_Model::adivSoilChng}
      };
 
      std::vector<unsigned> indexHru;
@@ -73,6 +76,12 @@
          break;
        case adiv_Model::adivSoilSat:
          adivModelTypesToLoad.push_back(std::make_pair(indexHru[id], adiv_Model::adivSoilSat));
+         break;
+       case adiv_Model::adivSoilSat2:
+         adivModelTypesToLoad.push_back(std::make_pair(indexHru[id], adiv_Model::adivSoilSat2));
+         break;
+       case adiv_Model::adivSoilChng:
+         adivModelTypesToLoad.push_back(std::make_pair(indexHru[id], adiv_Model::adivSoilChng));
          break;
        }
      }

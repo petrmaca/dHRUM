@@ -248,6 +248,7 @@ private:
   numberSel PonsMax; //!< The maximum pond volume [m3]
   numberSel MRF; //!< Minimum residual flow (MZP) [m3/s]
   numberSel Coflw; //!< Constant user defined regular outflow (RouT) from pond [m3/s]
+  numberSel prev_Soiladiv; //!< Soil storage in time t-1 for dynamic adiv updates
 
   gs_STORtype gs_STORAGE;//!< Type of groundwater storage
   soil_STORtype soil_STORAGE;//!< Type of soil storage
@@ -262,6 +263,7 @@ private:
   PondGWPerc_type  pondGWPERCin;//!< Type of percolation from   groundwater to pond
   PondGWPerc_type  pondGWPERCout;//!< Type of percolation from pond to groundwater
   PondRouT_type  PondROUT;//!< Pond outlet method
+  intrc_SNOWtype intrc_SNOW; //!< snow interception model
   snow_Model Snow_MDL;//!< Snow melt model
   adiv_Model Adiv_MDL;//!< adiv model on slow and fast runoff responce
 

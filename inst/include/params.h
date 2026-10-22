@@ -37,6 +37,7 @@ class params {
 
   unsigned g_numPars();//!< Get the number of parameters
   void current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP, snow_Model Snow_MDL, adiv_Model adiv_MDL);
+  void current_param(gs_STORtype gs_STORAGE,soil_STORtype soil_STORAGE,interception_STORtype intrc_STORAGE,surface_STORtype srfs_STORAGE,fast_Response fast_RESP,intrc_SNOWtype intrc_SNOW, snow_Model Snow_MDL, adiv_Model adiv_MDL);
   std::vector<std::string> par_HRUtype_to_string(std::list<par_HRUtype> par_list);
   void print_par_list(std::list<par_HRUtype> par_list);
 
