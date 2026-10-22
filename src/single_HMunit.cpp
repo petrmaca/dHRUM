@@ -4691,6 +4691,9 @@ void single_HMunit::updateSLowFastDivider(){
     // std::cout << "var2 var absolutes Soil" << adiv << std::endl;
     break;
   case adiv_Model::adivSoilChng:
+
+    std::cout << "var3 changes in soil res 1st adiv " << get_par(par_HRUtype::ADIV) << std::endl;
+
     if(soil_STORAGE ==soil_STORtype::PDM) Smax = get_par(par_HRUtype::SMAXpdm);
     else { if(soil_STORAGE == soil_STORtype::PDM2) Smax = (get_par(par_HRUtype::C_MAX) / (get_par(par_HRUtype::B_SOIL)+1));
       else Smax = get_par(par_HRUtype::SMAX);
@@ -4700,18 +4703,20 @@ void single_HMunit::updateSLowFastDivider(){
     // std::cout << "curSoilState2 " << curSoilState << std::endl;
     // std::cout << "diffSoilRel1 " << diffSoilRel << std::endl;
     diffSoilRel = curSoilState - prev_Soiladiv / Smax;
-    // std::cout << "diffSoilRel2 " << diffSoilRel << std::endl;
+    std::cout << "diffSoilRel2 " << diffSoilRel << std::endl;
     std::cout << "signM1 " << sgnM << std::endl;
-    if (diffSoilRel <= 0.0) sgnM = 1.0;
-     else sgnM = -1.0;
+    if (diffSoilRel <= 0.0) sgnM = -1.0;
+     else sgnM = 1.0;
     std::cout << "signM2 " << sgnM << std::endl;
-    std::cout << "adiv1 " << get_par(par_HRUtype::ADIV) << std::endl;
+    std::cout << "adivuu1 " << sgnM * std::pow((std::abs(diffSoilRel)), get_par(par_HRUtype::ADIVexp)) << std::endl;
+    std::cout << "adivuu1111 " << std::pow((std::abs(diffSoilRel)), get_par(par_HRUtype::ADIVexp)) << std::endl;
     adiv = get_par(par_HRUtype::ADIV) + sgnM * std::pow((std::abs(diffSoilRel)), get_par(par_HRUtype::ADIVexp));
     std::cout << "adiv2 " << get_par(par_HRUtype::ADIV) << std::endl;
     if (adiv > 1.0) adiv = 1.0;
     if (adiv < 0.0) adiv = 0.0;
     par_HRU.s_params(adiv,par_HRUtype::ADIV);
     std::cout << "var3 changes in soil res " << get_par(par_HRUtype::ADIV) << std::endl;
+    std::cout << "prev soil adiv " << prev_Soiladiv  << std::endl;
     break;
   }
 
