@@ -46,6 +46,7 @@ data_HB_1d::data_HB_1d(): numTS(0),
   Subl(1,1),
   Refr(1,1),
   Perg(1,1),
+  DirS(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -187,6 +188,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Subl(1,1),
   Refr(1,1),
   Perg(1,1),
+  DirS(1,1),
   init_SoiS(0.0),
   init_GroS(0.0),
   init_CanS(0.0),
@@ -247,6 +249,7 @@ data_HB_1d::data_HB_1d(const data_HB_1d& other): numTS(0),
   Subl = other.Subl;//!< The sublimation from snow cover
   Refr = other.Refr;//!< The water refreezing  from interception
   Perg = other.Perg;//!< The percolation to groundwater
+  DirS = other.DirS;//!< The direct runoff total storage
   init_SoiS = other.init_SoiS;//!< Initial value of soil storage
   init_GroS = other.init_GroS;//!< Initial value of groundwater storage
   init_CanS = other.init_CanS;//!< Initial value of Canopy Interception storage
@@ -313,6 +316,7 @@ data_HB_1d& data_HB_1d::operator=(const data_HB_1d& rhs) {
     Subl = rhs.Subl;//!< Sublimation depth
     Refr = rhs.Refr;
     Perg = rhs.Perg;//!< The percolation to groundwater
+    DirS = rhs.DirS;
     init_SoiS = rhs.init_SoiS;//!< Initial value of soil storage
     init_GroS = rhs.init_GroS;//!< Initial value of groundwater storage
     init_CanS = rhs.init_CanS;//!< Initial value of Canopy Interception storage
@@ -480,6 +484,10 @@ void data_HB_1d::s_data(const hdata& dta,const ts_type& _tsType, bool updateNumT
     Perg = dta;
     //    std::cout << "New subl --> loaded\n";
     break;
+  case ts_type::DIRS:
+    DirS = dta;
+    //    std::cout << "New subl --> loaded\n";
+    break;
   }
 //    //PRE.insert(PRE.begin(), data);
 //    if(!Erase) {
@@ -607,7 +615,10 @@ void data_HB_1d::s_varVal(const numberSel& dta, const unsigned& tst,const ts_typ
     Perg[tst] = dta;
     //    std::cout << "New subl --> loaded\n";
     break;
-
+  case ts_type::DIRS:
+    DirS[tst] = dta;
+    //    std::cout << "New subl --> loaded\n";
+    break;
 }
   return ;
 
@@ -689,10 +700,14 @@ numberSel data_HB_1d::g_dta(const unsigned& tst,const ts_type& _tsType) {
   case ts_type::REFR:
     return Refr[tst];
     //    std::cout << "New TRNS --> loaded\n";
-    break;
+    // break;
   case ts_type::PERG:
     return Perg[tst];
     //    std::cout << "New TRNS --> loaded\n";
+  case ts_type::DIRS:
+    return DirS[tst];
+    //    std::cout << "New subl --> loaded\n";
+    // break;
     break;
   }
 
@@ -1342,6 +1357,8 @@ hdata data_HB_1d::get_HbTsData(const ts_type& _tsType) {
     return Refr;
   case ts_type::PERG:
     return Perg;
+  case ts_type::DIRS:
+    return DirS;
   }
 
   hdata helpV(-9999,1);
@@ -1480,6 +1497,9 @@ void data_HB_1d::setOneTstoZero(const ts_type& _tsType) {
     break;
   case ts_type::PERG:
     Perg = 0.0;
+    break;
+  case ts_type::DIRS:
+    DirS = 0.0;
     break;
   }
 

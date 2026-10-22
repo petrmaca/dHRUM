@@ -143,6 +143,7 @@ class data_HB_1d {
   hdata Refr;//!< The water refreezing  from interception
 
   hdata Perg;//!< The percolation to groundwater
+  hdata DirS;//!< The total direct runoff storage
 
   numberSel init_SoiS;//!< Initial value of soil storage
   numberSel init_GroS;//!< Initial value of groundwater storage

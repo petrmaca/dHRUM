@@ -1650,6 +1650,8 @@ void single_HMunit::slow_response(gs_STORtype _gs_STORtype) {
 
 void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
 
+  numberSel DirSt = 0.0;
+
   switch(_fast_RESPONSE) {
 
   case fast_Response::SerialCascadeLinRes: {
@@ -1667,9 +1669,12 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
       set_stateFastRes(help_State,ifrb);
       set_outFastRes(helpFastOut,ifrb);
     // std::cout << ifrb << " ifrb " << get_stateFastres(ifrb) << " state " << ifrb << " ifrb " << helpFastOut << " adivresc " << get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC) << std::endl;
+      DirSt = DirSt + help_State;
      }
 
      set_varValue(helpFastOut,tstRM,ts_type::DIRR);
+     set_varValue(DirSt,tstRM,ts_type::DIRS);
+
   }
     break;
 
@@ -1687,10 +1692,11 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
       } else help_State = help_State + get_outFastRes((ifrb-1))- helpFastOut;
       set_stateFastRes(help_State,ifrb);
       set_outFastRes(helpFastOut,ifrb);
+      DirSt = DirSt + help_State;
       // std::cout << ifrb << " ifrb " << get_stateFastres(ifrb) << " state " << ifrb << " ifrb " << helpFastOut << " adivresc " << get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC) << std::endl;
     }
     set_varValue((1-get_par(par_HRUtype::RBEI))*helpFastOut,tstRM,ts_type::DIRR);
-
+    set_varValue(DirSt,tstRM,ts_type::DIRS);
     //exmaple for getting the percoltion from fast response in river network to GW input GROS
     //it is necessary to implement the gwperc coefficient now 0.2
     numberSel helpGrosvar = 0.0;
@@ -1714,10 +1720,13 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
       if(ifrb == 0) {
         help_State = help_State + get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC)- helpFastOut;
       } else help_State = help_State + get_outFastRes((ifrb-1))- helpFastOut;
+
+      DirSt = DirSt + help_State;
       set_stateFastRes(help_State,ifrb);
       set_outFastRes(helpFastOut,ifrb);
       // std::cout << ifrb << " ifrb " << get_stateFastres(ifrb) << " state " << ifrb << " ifrb " << helpFastOut << " adivresc " << get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC) << std::endl;
     }
+    set_varValue(DirSt,tstRM,ts_type::DIRS);
     set_varValue((1-get_par(par_HRUtype::RBAI))*helpFastOut,tstRM,ts_type::DIRR);//20 procent ma jit do GW nutno implemenyovat promenlivy parametr 0.8
 
     numberSel helpSoisvar = 0.0;
@@ -1746,6 +1755,8 @@ void single_HMunit::fast_response(fast_Response _fast_RESPONSE) {
       // std::cout << ifrb << " ifrb " << get_stateFastres(ifrb) << " state " << ifrb << " ifrb " << helpFastOut << " adivresc " << get_par(par_HRUtype::ADIV) * get_dta(tstRM,ts_type::PERC) << std::endl;
     }
     set_varValue((1-(get_par(par_HRUtype::RBEI)+get_par(par_HRUtype::RBAI)))*helpFastOut,tstRM,ts_type::DIRR);
+    DirSt = DirSt + help_State;
+    set_varValue(DirSt,tstRM,ts_type::DIRS);
 
 
     numberSel helpSoisvar = 0.0;
@@ -3048,6 +3059,7 @@ void single_HMunit::init_inputs(numberSel val, unsigned numDTA) {
   set_data(dta,ts_type::SUBL);
   set_data(dta,ts_type::REFR);
   set_data(dta,ts_type::PERG);
+  set_data(dta,ts_type::DIRS);
   // std::cout << " tor ok\n";
   // get_numdta();
   // std::cout << "The total number of initialized time intervals is " << get_numdta() << " ." << std::endl;
