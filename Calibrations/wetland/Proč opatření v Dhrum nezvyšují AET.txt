@@ -1,0 +1,71 @@
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+Kontext: řeším zadávání wetlandů a pondů, a AET mi nefunguje jak si představuju. Zeptal jsem se tedy AI:
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Moje otázka pro claude:
+
+> pořád přemýšlím jak prezentovat to, že po přidání opatření se AET nemění, nebo dokonce snižuje. U rybníka i wetlandu bych cekal právě zvýšení AET. Oba mají totiž volnou hladinu a u ní předpokládám větší výpar, než kdyby tam hladina nebyla přítomná. Je tento můj předpoklad správný?
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Odpoveď:
+  Thought for 1m 30s
+
+Tvůj předpoklad je fyzikálně správný, ale jen na úrovni m², a u wetlandu platí slabší verze. A právě rozdíl mezi „na m²" a „na celé povodí" je klíč k prezentaci. Rozberu to:
+
+1. Je pravda, že volná hladina vypařuje víc než souš?
+
+Ano, ročně zhruba o 10–30 % — v ČR typicky:
+- volná hladina: ~550–700 mm/rok (ČSN 75 2411 uvádí průměr ~750 mm/rok, Beranova rovnice dává pro Horku ~467 mm/rok),
+- skutečná ET ze souše: ~450–550 mm/rok.
+
+Sezonní profil je ale jiný, než intuitivně čekáš:
+- v létě vypařuje hladina výrazně víc — souš je limitovaná vodou (půda vysychá, EVBS klesá), hladina ne,
+- na jaře naopak méně — voda se ohřívá pomalu (y), zatímco souš po roztátí vypařuje na plný PET.
+
+Takže pro rybník tvá intuice platí. Pro wetland platí slabě: to, co v modelu (a obecně) nazýváme wetlandem, není volná hladina, ale zamokřená vegetovaná plocha — její ET v vegetační sezoně odpovídá zhruba PET (vegetace čerpá, co je), takže na m² je srovnatelná s dobře zásobenou souší, ne s volnou hladinou.
+
+2. Proč na celém povodí AET skoro nezměníš, ani když je předpoklad správný
+
+Změna AET povodí = podíl plochy opatření × rozdíl ET na m². A to je tvrdý strop:
+
+┌──────────────┬────────┬───────────────────────────────────────────┬─────────────────────┐
+│   opatření   		│ plocha 	│          rozdíl ET na m² (ideál)          			│ efekt na AET povodí 		│
+├──────────────┼────────┼───────────────────────────────────────────┼─────────────────────┤
+│ rybník Horka 		│ 0,25 % 	│ ~+150–250 mm/rok                          			│ +0,4 až +0,6 mm/rok 		│
+├──────────────┼────────┼───────────────────────────────────────────┼─────────────────────┤
+│ wetland      		│ 10 %   	│ ~0 (vegetovaný)                           			│ ~0                  		│
+├──────────────┼────────┼───────────────────────────────────────────┼─────────────────────┤
+│ wetland      		│ 10 %   	│ (kdyby to byla čistá hladina) +200 mm/rok 			│ +20 mm/rok          		│
+└──────────────┴────────┴───────────────────────────────────────────┴─────────────────────┘
+Druhý strop: AET nemůže růst nad PET — opatření nevytváří energii navíc, jen přerozděluje vodu mezi ET, zásoby a odtok. Jediné, co může reálně přidat do AET, je voda, která by jinak odtekla (Q → ET). Proto je hlavní efekt takových malých opatření v odpovídající realitě na časování a zásobách odtoku, ne na ET povodí.
+
+3. Proč model ukazuje pokles, když realita ukazuje (slabý) vzrůst
+
+To už jsme rozklínili — nejsi to ty, je to formulace:
+
+- Rybník: 
+(a) Beranova rovnice v modelu dává 467 mm/rok, tj. míň než modelový AET půdy 490 mm/rok, protože půda vypařuje přes více kanálů (intercepce + retence + EVBS) — model tak nemůže ukázat zvýšení, byť fyzikálně hladina vypařuje víc; 
+(b) členy (Area−pondArea)/Area na řádcích 4006 a 4065 ještě knihu přepočítávají tak, že rybník AET mírně snižuje. Po smazání obou členů vyjde AET s rybníkem vyšší přesně o výpar z hladiny (~+1,2 mm/rok) — správný směr, realistická velikost pro 0,25 % plochy.
+
+- Wetland: 
+(a) Wetland rozděluje PET mezi evaporaci a transpiraci. V RetAll jde 100 % odpařené vody do ETSW. Ve wetlandu se poptávka dělí přes fVeg = 1 − exp(−Kinct·LAI) — část jde do TRNS, která se v ETSW neeviduje. Při Kinct=0.1, LAI=3 v létě je to ~26 % wetland poptávky.
+(b) KwPe = 0.4 rychle odčerpává zásobu. Wetland denně přepustí 40 % své části zásoby do INFL (půdy). RetAll vodu v retenci drží (jediné výstupy jsou výpar a přepad) — takže na Suchých dnech po dešti vypařuje plnou poptávku, zatímco wetland má po 1–2 dnech zásobu prázdnou a sfracE = S/RETCAP evaporaci lineárně dusí. Ukázkový letní den s plnou zásobou: ETSW téměř stejné (3.41 vs 3.50 mm), ale wetland navíc odvede 1.86 mm do INFL — a právě ten „dluh" se v suchých dnech hromadí.
+(c) 90 % povodí se nezměnilo. ETSW s opatřením = 0.9·(RetAll výpar) + výpar z 10 % wetlandu, který vypařuje méně, než by na téže ploše vypařoval RetAll (z důvodů 1 a 2).
+
+Kráčeně: voda nezmizela — přesunula se z ETSW do TRNS a hlavně do INFL (perkolace do půdní zóny). Na grafu celkového výparu povodí bude rozdíl menší, protože půda z INFL část vypařuje svojí rutinou; ETSW je jen výpar z povrchové retence.
+
+ETSW+TRNS se v AET sčítá, takže na 10 % plochy je to ±0; pokles dělá KwPe (voda ujde do půdy dřív, než se vypaří). Čím menší KwPe, tím menší pokles.
+
+4. Jak bych to prezentoval
+
+1. Ne prezentuj ΔAET povodí jako hlavní metriku malých opatření — je to číslo ~0 a bude vypadat, že opatření nefunguje. Místo toho:
+2. Dekompozice vodní bilance: kam každý mm srážky jde — Δ zásoby / ET / odtok, s opatřením a bez. Tam je vidět skutečný efekt (zadržení, vyrovnání odtoku, přeměna Q→ET na ploše opatření).
+3. Dvě měřítka vedle sebe: ET na m² opatření vs. AET povodí. Na m² řekni „hladina vypařuje ~600 mm/rok vs. 490 ze souše — předpoklad potvrzen"; na povodí „× 0,25 % plochy = +0,5 mm/rok — efekt na ET povodí je zanedbatelný z principu, ne defektem opatření".
+4. Transparentně model vs. realita: „model dával záporný efekt kvůli rovnici X a účetním členům Y; po opravě dává +1,2 mm/rok, což odpovídá teoretickému očekávání pro danou plochu".
+5. U wetlandu formuluj očekávání fyzikálně: vegetovaný wetland ~ET souše, efekt na AET ~0; jeho přidaná hodnota je retence, ne výpar.
+
+Jednoduché pravidlo na závěr: opatření zvyšuje ET povodí jen tehdy, když přeměňuje odtok na výpar, a nanejvýš o tolik, kolik vody zadrží × kolik z toho stihne vypařit. U 0,25% rybníka je to < 2 mm/rok, a to je poctivý výsledek, ne selhání.
+
+Chceš, abych už zapsal ty dvě opravy (řádky 4006 a 4065), překompiloval balíček a vygeneroval tabulku „před/po" na Horce, kterou bys mohl rovnou použít do prezentace?
+
+Chceš, abych už zapsal ty dvě opravy (řádky 400ček a vygeneroval tabulku „před/po" na Horce,kterou bys mohl rovnou použít do prezentace?

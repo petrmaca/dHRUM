@@ -742,35 +742,37 @@ void single_HMunit::surface_RetWTLND(){
 }
 void single_HMunit::surface_RetWTLND_summer(){
 
+  numberSel fW = get_par(par_HRUtype::WtlnFrac);   // wetland fraction 0-1
+  numberSel fR = 1.0 - fW;                         // RetAll fraction
+
   numberSel PET_WTLND = 0.0, fVeg = 0.0, Qinfl = 0.0, Qov = 0.0;
-  numberSel Pet_Trns = 0.0, Pet_Evpr=0.0, sfracE = 0.0, sfracT = 0.0;
+  numberSel Pet_Trns = 0.0, Pet_Evpr = 0.0, sfracE = 0.0, sfracT = 0.0;
   numberSel Evpr = 0.0, TrnsW = 0.0;
+  numberSel EvapSR = 0.0;
 
-  //adding the pref to wetland and calculating the Overflow
-  Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP) + get_dta(tstRM, ts_type::PREF)),0.0);
-  prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF) - Qov;
+  // --- srážka do společné zásoby, přepad nad RETCAP ---
+  prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF);
+  Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)), 0.0);
+  prev_SurS = prev_SurS - Qov;
 
-  //vegetation in wetland, evaporation transpiration
+  // --- wetland část: evaporace + transpirace z PET ---
   fVeg = 1 - std::exp(-get_par(par_HRUtype::Kinct) * get_dta(tstRM, ts_type::LAI));
 
   PET_WTLND = et_demand;
-  Pet_Trns = fVeg * PET_WTLND;
-  Pet_Evpr = (1-fVeg) * PET_WTLND;
+  Pet_Trns = fW * fVeg * PET_WTLND;
+  Pet_Evpr = fW * (1 - fVeg) * PET_WTLND;
 
-  sfracE = std::min((prev_SurS / get_par(par_HRUtype::RETCAP)),1.0);
-  Evpr = Pet_Evpr * sfracE;
-  Evpr = std::min(Evpr,prev_SurS);
+  sfracE = std::min((prev_SurS / get_par(par_HRUtype::RETCAP)), 1.0);
+  Evpr = std::min(Pet_Evpr * sfracE, fW * prev_SurS);
 
   numberSel help_EvapSR = update_ETDEMAND(Evpr, false);
   et_demand = update_ETDEMAND(Evpr, true);
   Evpr = help_EvapSR;
-  // std::cout << Evpr << "\n";
 
   prev_SurS = prev_SurS - Evpr;
 
-  sfracT  = std::min((prev_SurS / (0.2*get_par(par_HRUtype::RETCAP))),1.0);//0.2*get_par(par_HRUtype::RETCAP) is critical treshold for transpiration
-  TrnsW = Pet_Trns * sfracT;
-  TrnsW = std::min(TrnsW,prev_SurS);
+  sfracT = std::min((prev_SurS / (0.2 * get_par(par_HRUtype::RETCAP))), 1.0); // 0.2*RETCAP is critical threshold for transpiration
+  TrnsW = std::min(Pet_Trns * sfracT, fW * prev_SurS);
 
   numberSel help_EvapTR = update_ETDEMAND(TrnsW, false);
   et_demand = update_ETDEMAND(TrnsW, true);
@@ -778,39 +780,108 @@ void single_HMunit::surface_RetWTLND_summer(){
 
   prev_SurS = prev_SurS - TrnsW;
 
-  Qinfl = get_par(par_HRUtype::KwPe) * prev_SurS;
+  // --- RetAll část: empirická evaporace ---
+  EvapSR = fR * 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP), 1.289);
 
+  if((EvapSR < 0.0) || (std::isnan(EvapSR))) {
+    EvapSR = 0.0;
+  }
+  EvapSR = std::min(EvapSR, fR * prev_SurS);
+
+  if(EvapSR > 0.0){
+    numberSel help_EvapRA = update_ETDEMAND(EvapSR, false);
+    et_demand = update_ETDEMAND(EvapSR, true);
+    EvapSR = help_EvapRA;
+  }
+
+  prev_SurS = prev_SurS - EvapSR;
+
+  // --- perkolace jen z wetland části zásoby ---
+  Qinfl = fW * get_par(par_HRUtype::KwPe) * prev_SurS;
   prev_SurS = prev_SurS - Qinfl;
 
   set_varValue(prev_SurS, tstRM, ts_type::SURS);
-  set_varValue(Evpr, tstRM, ts_type::ETSW);
+  set_varValue((Evpr + EvapSR), tstRM, ts_type::ETSW);
   set_varValue(TrnsW, tstRM, ts_type::TRNS);
-  set_varValue((Qinfl + Qov),tstRM,ts_type::INFL);
+  set_varValue((Qinfl + Qov), tstRM, ts_type::INFL);
 
   return ;
-
 }
+
+
+
+  // numberSel PET_WTLND = 0.0, fVeg = 0.0, Qinfl = 0.0, Qov = 0.0;
+  // numberSel Pet_Trns = 0.0, Pet_Evpr=0.0, sfracE = 0.0, sfracT = 0.0;
+  // numberSel Evpr = 0.0, TrnsW = 0.0;
+  //
+  // //adding the pref to wetland and calculating the Overflow
+  // Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP) + get_dta(tstRM, ts_type::PREF)),0.0);
+  // prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF) - Qov;
+  //
+  // //vegetation in wetland, evaporation transpiration
+  // fVeg = 1 - std::exp(-get_par(par_HRUtype::Kinct) * get_dta(tstRM, ts_type::LAI));
+  //
+  // PET_WTLND = et_demand;
+  // Pet_Trns = fVeg * PET_WTLND;
+  // Pet_Evpr = (1-fVeg) * PET_WTLND;
+  //
+  // sfracE = std::min((prev_SurS / get_par(par_HRUtype::RETCAP)),1.0);
+  // Evpr = Pet_Evpr * sfracE;
+  // Evpr = std::min(Evpr,prev_SurS);
+  //
+  // numberSel help_EvapSR = update_ETDEMAND(Evpr, false);
+  // et_demand = update_ETDEMAND(Evpr, true);
+  // Evpr = help_EvapSR;
+  // // std::cout << Evpr << "\n";
+  //
+  // prev_SurS = prev_SurS - Evpr;
+  //
+  // sfracT  = std::min((prev_SurS / (0.2*get_par(par_HRUtype::RETCAP))),1.0);//0.2*get_par(par_HRUtype::RETCAP) is critical treshold for transpiration
+  // TrnsW = Pet_Trns * sfracT;
+  // TrnsW = std::min(TrnsW,prev_SurS);
+  //
+  // numberSel help_EvapTR = update_ETDEMAND(TrnsW, false);
+  // et_demand = update_ETDEMAND(TrnsW, true);
+  // TrnsW = help_EvapTR;
+  //
+  // prev_SurS = prev_SurS - TrnsW;
+  //
+  // Qinfl = get_par(par_HRUtype::KwPe) * prev_SurS;
+  //
+  // prev_SurS = prev_SurS - Qinfl;
+  //
+  // set_varValue(prev_SurS, tstRM, ts_type::SURS);
+  // set_varValue(Evpr, tstRM, ts_type::ETSW);
+  // set_varValue(TrnsW, tstRM, ts_type::TRNS);
+  // set_varValue((Qinfl + Qov),tstRM,ts_type::INFL);
+  //
+  // return ;
+  // }
 
 void single_HMunit::surface_RetWTLND_melt(){
 
+  numberSel fW = get_par(par_HRUtype::WtlnFrac);   // wetland fraction 0-1
+  numberSel fR = 1.0 - fW;                         // RetAll fraction
+
   numberSel PET_WTLND = 0.0, fVeg = 0.0, Qinfl = 0.0, Qov = 0.0;
-  numberSel Pet_Trns = 0.0, Pet_Evpr=0.0, sfracE = 0.0, sfracT = 0.0;
+  numberSel Pet_Trns = 0.0, Pet_Evpr = 0.0, sfracE = 0.0, sfracT = 0.0;
   numberSel Evpr = 0.0, TrnsW = 0.0;
+  numberSel EvapSR = 0.0;
 
-  //adding the pref to wetland and calculating the Overflow
-  Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP) + get_dta(tstRM, ts_type::PREF)),0.0);
-  prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF) - Qov;
+  // --- srážka do společné zásoby, přepad nad RETCAP ---
+  prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF);
+  Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP)), 0.0);
+  prev_SurS = prev_SurS - Qov;
 
-  //vegetation in wetland, evaporation transpiration
+  // --- wetland část: evaporace + transpirace z PET ---
   fVeg = 1 - std::exp(-get_par(par_HRUtype::Kinct) * get_dta(tstRM, ts_type::LAI));
 
   PET_WTLND = et_demand;
-  Pet_Trns = fVeg * PET_WTLND;
-  Pet_Evpr = (1-fVeg) * PET_WTLND;
+  Pet_Trns = fW * fVeg * PET_WTLND;
+  Pet_Evpr = fW * (1 - fVeg) * PET_WTLND;
 
-  sfracE = std::min((prev_SurS / get_par(par_HRUtype::RETCAP)),1.0);
-  Evpr = Pet_Evpr * sfracE;
-  Evpr = std::min(Evpr,prev_SurS);
+  sfracE = std::min((prev_SurS / get_par(par_HRUtype::RETCAP)), 1.0);
+  Evpr = std::min(Pet_Evpr * sfracE, fW * prev_SurS);
 
   numberSel help_EvapSR = update_ETDEMAND(Evpr, false);
   et_demand = update_ETDEMAND(Evpr, true);
@@ -818,9 +889,8 @@ void single_HMunit::surface_RetWTLND_melt(){
 
   prev_SurS = prev_SurS - Evpr;
 
-  sfracT  = std::min((prev_SurS / (0.2*get_par(par_HRUtype::RETCAP))),1.0);//0.2*get_par(par_HRUtype::RETCAP) is critical treshold for transpiration
-  TrnsW = Pet_Trns * sfracT;
-  TrnsW = std::min(TrnsW,prev_SurS);
+  sfracT = std::min((prev_SurS / (0.2 * get_par(par_HRUtype::RETCAP))), 1.0); // 0.2*RETCAP is critical threshold for transpiration
+  TrnsW = std::min(Pet_Trns * sfracT, fW * prev_SurS);
 
   numberSel help_EvapTR = update_ETDEMAND(TrnsW, false);
   et_demand = update_ETDEMAND(TrnsW, true);
@@ -828,18 +898,80 @@ void single_HMunit::surface_RetWTLND_melt(){
 
   prev_SurS = prev_SurS - TrnsW;
 
-  Qinfl = get_par(par_HRUtype::KwPe) * prev_SurS; // fixed storage coefficient for wetland inifltration/percolation
+  // --- RetAll část: empirická evaporace ---
+  EvapSR = fR * 0.0824 * std::pow(get_dta(tstRM, ts_type::TEMP), 1.289);
 
+  if((EvapSR < 0.0) || (std::isnan(EvapSR))) {
+    EvapSR = 0.0;
+  }
+  EvapSR = std::min(EvapSR, fR * prev_SurS);
+
+  if(EvapSR > 0.0){
+    numberSel help_EvapRA = update_ETDEMAND(EvapSR, false);
+    et_demand = update_ETDEMAND(EvapSR, true);
+    EvapSR = help_EvapRA;
+  }
+
+  prev_SurS = prev_SurS - EvapSR;
+
+  // --- perkolace jen z wetland části zásoby ---
+  Qinfl = fW * get_par(par_HRUtype::KwPe) * prev_SurS;
   prev_SurS = prev_SurS - Qinfl;
 
   set_varValue(prev_SurS, tstRM, ts_type::SURS);
-  set_varValue(Evpr, tstRM, ts_type::ETSW);
+  set_varValue((Evpr + EvapSR), tstRM, ts_type::ETSW);
   set_varValue(TrnsW, tstRM, ts_type::TRNS);
-  set_varValue((Qinfl + Qov),tstRM,ts_type::INFL);
+  set_varValue((Qinfl + Qov), tstRM, ts_type::INFL);
 
   return ;
-
 }
+
+  // numberSel PET_WTLND = 0.0, fVeg = 0.0, Qinfl = 0.0, Qov = 0.0;
+  // numberSel Pet_Trns = 0.0, Pet_Evpr=0.0, sfracE = 0.0, sfracT = 0.0;
+  // numberSel Evpr = 0.0, TrnsW = 0.0;
+  //
+  // //adding the pref to wetland and calculating the Overflow
+  // Qov = std::max((prev_SurS - get_par(par_HRUtype::RETCAP) + get_dta(tstRM, ts_type::PREF)),0.0);
+  // prev_SurS = prev_SurS + get_dta(tstRM, ts_type::PREF) - Qov;
+  //
+  // //vegetation in wetland, evaporation transpiration
+  // fVeg = 1 - std::exp(-get_par(par_HRUtype::Kinct) * get_dta(tstRM, ts_type::LAI));
+  //
+  // PET_WTLND = et_demand;
+  // Pet_Trns = fVeg * PET_WTLND;
+  // Pet_Evpr = (1-fVeg) * PET_WTLND;
+  //
+  // sfracE = std::min((prev_SurS / get_par(par_HRUtype::RETCAP)),1.0);
+  // Evpr = Pet_Evpr * sfracE;
+  // Evpr = std::min(Evpr,prev_SurS);
+  //
+  // numberSel help_EvapSR = update_ETDEMAND(Evpr, false);
+  // et_demand = update_ETDEMAND(Evpr, true);
+  // Evpr = help_EvapSR;
+  //
+  // prev_SurS = prev_SurS - Evpr;
+  //
+  // sfracT  = std::min((prev_SurS / (0.2*get_par(par_HRUtype::RETCAP))),1.0);//0.2*get_par(par_HRUtype::RETCAP) is critical treshold for transpiration
+  // TrnsW = Pet_Trns * sfracT;
+  // TrnsW = std::min(TrnsW,prev_SurS);
+  //
+  // numberSel help_EvapTR = update_ETDEMAND(TrnsW, false);
+  // et_demand = update_ETDEMAND(TrnsW, true);
+  // TrnsW = help_EvapTR;
+  //
+  // prev_SurS = prev_SurS - TrnsW;
+  //
+  // Qinfl = get_par(par_HRUtype::KwPe) * prev_SurS; // fixed storage coefficient for wetland inifltration/percolation
+  //
+  // prev_SurS = prev_SurS - Qinfl;
+  //
+  // set_varValue(prev_SurS, tstRM, ts_type::SURS);
+  // set_varValue(Evpr, tstRM, ts_type::ETSW);
+  // set_varValue(TrnsW, tstRM, ts_type::TRNS);
+  // set_varValue((Qinfl + Qov),tstRM,ts_type::INFL);
+  //
+  // return ;
+  // }
 
 void single_HMunit::surface_RetWTLND_winter(){
 
@@ -3869,7 +4001,8 @@ void single_HMunit::ponds(pond_type _pondtype) {
       PouS = pond_SOISperc(pondSOISPERCout); // outflow [m/s]
       PouG = pond_GWperc(pondGWPERCout); // outflow [m/s]
       RouT = pond_regular_out(PondROUT); // [m3/s]
-      PoiN = ((get_dta(tstRM,ts_type::TOTR))/1000*Area)*(Area-pondArea)/Area;
+      // PoiN = ((get_dta(tstRM,ts_type::TOTR))/1000*Area)*(Area-pondArea)/Area; // AI doporučuje člen odstranit, jeho zavedením se zanáší chyba
+      PoiN = ((get_dta(tstRM,ts_type::TOTR))/1000*Area);
       PoiN = (PoiS*pondArea*60*60*24)+(PoiG*pondArea*60*60*24)+PoiN; //inputs converted to m3/day
 
       //Ziskani predchoziho objemu
@@ -3928,7 +4061,8 @@ void single_HMunit::ponds(pond_type _pondtype) {
       set_varValue(((PoutRegular+OwfL)/Area*1000), tstRM,ts_type::TOTR);
       set_varValue(PonS, tstRM,ts_type::PONS);
 
-      AET_after_pond=(get_dta(tstRM,ts_type::AET)*(Area-pondArea)/Area +((Etpond*1000/pondArea)*pondArea/Area));
+      // AET_after_pond=(get_dta(tstRM,ts_type::AET)*(Area-pondArea)/Area +((Etpond*1000/pondArea)*pondArea/Area)); // AI doporučuje člen odstranit, jeho zavešdenim se generuje chyba stejné na řádku 4006
+      AET_after_pond=(get_dta(tstRM,ts_type::AET) +((Etpond*1000/pondArea)*pondArea/Area));
 
       set_varValue(AET_after_pond, tstRM,ts_type::AET);
 
