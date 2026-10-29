@@ -3,3 +3,4 @@
 ^\.positai$
 ^\.claude$
 ^AGENTS\.md$
+^\.posit/assistant$
