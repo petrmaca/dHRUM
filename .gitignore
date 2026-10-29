@@ -8,3 +8,4 @@ src/*.dll
 .positai
 .Rbuildignore
 Porovnání výparů z celého povodí .html
+.posit/assistant
