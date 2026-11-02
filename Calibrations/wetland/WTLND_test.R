@@ -96,6 +96,8 @@ calcPetToAllHrus(dHRUM_ptr = dhrus, Latitude = LAT, PetTypeStr = rep(SEL_PET,tim
 
 setParamsToAlldHrus(dHRUM_ptr = dhrus, as.numeric(wpar_values),wpar_names )
 
+getCurdHRUpars(dHRUM_ptr = dhrus,0)
+
 outDta_sim_measure = dHRUMrun(dHRUM_ptr = dhrus)
 outDF_sim_measure= data.frame(outDta_sim_measure$outDta)
 names(outDF_sim_measure) = outDta_sim_measure$VarsNams

@@ -83,7 +83,7 @@ const std::vector<std::string> allAdivMdlsNames {"CnstAdiv","adivSoilSat","adivS
 //srfs_STORAGE
 const std::list<par_HRUtype> L_SurfaceAll = {par_HRUtype::RETCAP };
 const std::list<par_HRUtype> L_SurfacePRTL = { par_HRUtype::SRFrac, par_HRUtype::RETCAP };
-const std::list<par_HRUtype> L_Wetland = {par_HRUtype::WtlnFrac, par_HRUtype::Kinct, par_HRUtype::KwPe};
+const std::list<par_HRUtype> L_Wetland = {par_HRUtype::RETCAP, par_HRUtype::WtlnFrac, par_HRUtype::Kinct, par_HRUtype::KwPe};
 //intrc_STORAGE
 const std::list<par_HRUtype> L_Rutter_Gash = { par_HRUtype::CDIV, par_HRUtype::SDIV, par_HRUtype::CAN_ST, par_HRUtype::STEM_ST,par_HRUtype::CSDIV };
 const std::list<par_HRUtype> L_van_Dijk = { par_HRUtype::INTstMax, par_HRUtype::CSfrac, par_HRUtype::INTstScale};

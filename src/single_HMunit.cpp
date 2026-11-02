@@ -4881,7 +4881,7 @@ void single_HMunit::updateSLowFastDivider(){
     curSoilState = get_dta(tstRM, ts_type::SOIS);
     // std::cout << "curSoilState2 " << curSoilState << std::endl;
     // std::cout << "diffSoilRel1 " << diffSoilRel << std::endl;
-    diffSoilRel = curSoilState - prev_Soiladiv / Smax;
+    diffSoilRel = (curSoilState - prev_Soiladiv) / Smax;
     // std::cout << "diffSoilRel2 " << diffSoilRel << std::endl;
     // std::cout << "signM1 " << sgnM << std::endl;
     if (diffSoilRel <= 0.0) sgnM = -1.0;
