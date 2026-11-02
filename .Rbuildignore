@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^\.positai$
 ^\.claude$
+^AGENTS\.md$
+^\.posit/assistant$
