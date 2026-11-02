@@ -107,7 +107,7 @@ graf_porovnani_vyparu_z_retence<-function(outDF_ref,outDF_sim_measure,uloz_graf)
 
   DTM=as.Date(paste(outDF_sim_measure$YEAR, outDF_sim_measure$MONTH, outDF_sim_measure$DAY, sep = "-"))
   measure  = outDF_sim_measure$ETSW+outDF_sim_measure$TRNS
-  NOmeasure  = outDF_ref$ETSW
+  NOmeasure  = outDF_ref$ETSW+outDF_ref$TRNS
 
   Vypar_s <- xts(x = measure, order.by = DTM)
   Vypar_bez <- xts(x = NOmeasure, order.by = DTM)
