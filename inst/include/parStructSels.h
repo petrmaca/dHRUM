@@ -119,10 +119,14 @@ const std::list<par_HRUtype> L_snow_melt = { par_HRUtype::DDFA, par_HRUtype::TME
 //snow_melt
 const std::list<par_HRUtype> L_DDF = { par_HRUtype::DDFA, par_HRUtype::TMEL, par_HRUtype::Csnow };
 //adiv
-const std::list<par_HRUtype> L_CnstAdiv = { par_HRUtype::ADIV};
-const std::list<par_HRUtype> L_adivSoilSat = { par_HRUtype::ADIVexp};
-const std::list<par_HRUtype> L_adivSoilSat2 = { par_HRUtype::ADIVexp,par_HRUtype::ADIVa,par_HRUtype::ADIV};
-const std::list<par_HRUtype> L_adivSoilChng = { par_HRUtype::SMAXpdm,par_HRUtype::C_MAX,par_HRUtype::B_SOIL, par_HRUtype::SMAX,par_HRUtype::ADIV,par_HRUtype::ADIVexp};
+// const std::list<par_HRUtype> L_CnstAdiv = { par_HRUtype::ADIV};
+// const std::list<par_HRUtype> L_adivSoilSat = { par_HRUtype::ADIVexp};
+// const std::list<par_HRUtype> L_adivSoilSat2 = { par_HRUtype::ADIVexp,par_HRUtype::ADIVa,par_HRUtype::ADIV};
+// const std::list<par_HRUtype> L_adivSoilChng = { par_HRUtype::SMAXpdm,par_HRUtype::C_MAX,par_HRUtype::B_SOIL, par_HRUtype::SMAX,par_HRUtype::ADIV,par_HRUtype::ADIVexp};
 
+const std::list<par_HRUtype> L_CnstAdiv = {};
+const std::list<par_HRUtype> L_adivSoilSat = { par_HRUtype::ADIVexp};
+const std::list<par_HRUtype> L_adivSoilSat2 = { par_HRUtype::ADIVexp,par_HRUtype::ADIVa};
+const std::list<par_HRUtype> L_adivSoilChng = {par_HRUtype::ADIVexp};
 
 #endif // PARSTRUCTSELS_H
